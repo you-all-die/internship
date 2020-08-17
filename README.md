@@ -1,4 +1,4 @@
-Intellij IDEA
-maven
-git
-postgresql
+- Intellij IDEA
+- maven
+- git
+- postgresql
