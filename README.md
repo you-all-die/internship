@@ -1,1 +1,4 @@
-# internship
+Intellij IDEA
+maven
+git
+postgresql
