@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Main Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+
+        <a href="/delete_all"> Удалить все </a>
+
+        <div th:if="${not #lists.isEmpty(textUserList)}">
+            <table>
+                <thead>
+                <tr>
+                    <th> Id </th>
+                    <th> Text </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="textUser : ${textUserList}">
+                    <td><span th:text="${textUser.id}"> Id </span></td>
+                    <td><span th:text="${textUser.value}"> Value </span></td>
+                    <td><a th:href="@{'/delete?id=' + ${textUser.id}}"> Удалить </a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form action="#" th:action="@{/add_text}" th:object="${textUser}" method="post">
+            <p><input type="text" th:field="*{value}"></p>
+            <p><input type="submit" value="Сохранить"></p>
+        </form>
+
+    </body>
+</html>
