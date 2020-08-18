@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Напрасные Слова...</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    </head>
+    <body>
+        <div class="ui container segment">
+            <h1 class="ui header">Список словей (словов?)</h1>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>
+                            <form class="ui form" method="post" action="#" th:action="@{/insert}" th:object="${word}">
+                                <div class="inline field">
+                                    <label class="ui label" th:for="${#ids.next('value')}">Новое слово:</label>
+                                    <input type="text" id="value" name="value" placeholder="Введите слово">
+                                    <button class="ui button" type="submit">Сохранить</button>
+                                </div>
+                            </form>
+                        </th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="word: ${words}">
+                        <td th:text="${word.value}">Value</td>
+                        <!--                    <td><a class="ui red button" th:href="@{/delete(id=${word.id})}">Удалить</a></td>-->
+                        <td>
+                            <a class="ui red icon button" th:href="@{/delete(id=${word.id})}">
+                                <i class="trash alternate icon"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="ui button" th:href="@{/delete-all}">Очистить список</a>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    </body>
+</html>
