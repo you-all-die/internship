@@ -22,9 +22,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+    private String address;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "order_product",

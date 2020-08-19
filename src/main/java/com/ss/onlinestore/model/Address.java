@@ -31,4 +31,8 @@ public class Address {
     @Column(name = "post_code", nullable = false)
     private String postCode;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

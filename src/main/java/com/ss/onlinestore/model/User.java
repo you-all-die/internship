@@ -40,10 +40,7 @@ public class User {
     @Email
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_address",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "address_id")})
+    @OneToMany(mappedBy = "user")
     private List<Address> addresses;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
