@@ -26,19 +26,14 @@
             </column>
 
 
+            <column name="amount" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
 
-            <column name="version" type="INTEGER" defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="update" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+            <column name="price" type="BIGINT">
+                <constraints nullable="true"/>
             </column>
         </createTable>
-
-
 
         <addForeignKeyConstraint baseTableName="order_product" baseColumnNames="order_id"
                                  constraintName="order_product_order_id_fk"

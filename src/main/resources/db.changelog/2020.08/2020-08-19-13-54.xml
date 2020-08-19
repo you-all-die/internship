@@ -24,20 +24,9 @@
                     <constraints nullable="false"/>
                 </column>
 
-                <column name="amount" type="INTEGER">
-                    <constraints nullable="true"/>
-                </column>
 
 
-                <column name="version" type="INTEGER" defaultValue="0">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                    <constraints nullable="false"/>
-                </column>
-                <column name="update" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                    <constraints nullable="false"/>
-                </column>
+
             </createTable>
 
             <addForeignKeyConstraint baseTableName="order" baseColumnNames="user_id"
