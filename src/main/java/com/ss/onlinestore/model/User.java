@@ -40,8 +40,11 @@ public class User {
     @Email
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Address> address;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_address",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "address_id")})
+    private List<Address> addresses;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;

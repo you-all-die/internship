@@ -27,7 +27,7 @@ public class Order {
     private Address address;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_order",
+    @JoinTable(name = "order_product",
             joinColumns = {@JoinColumn(name = "order_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private List<Product> products;
