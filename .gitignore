@@ -24,3 +24,5 @@ hs_err_pid*
 
 #Exclude idea folder
 .idea/
+/target/
+/.mvn/
