@@ -1,0 +1,26 @@
+<html>
+
+<body>
+    <div>
+        <form method="post" action="/insert">
+            <input type="text" name="value" placeholder="Введите текст"/>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+    <div>Таблица строк</div>
+    {{#textRows}}
+        <div>
+            <b>{{id}}</b>
+            <span>{{value}}</span>
+            <button type="submit">
+                <a href="delete?id= + {{id}}">Удалить</a>
+            </button>
+        </div>
+    {{/textRows}}
+    <div>
+        <button type="submit">
+            <a href="/deleteAll">Удалить всё</a>
+        </button>
+    </div>
+</body>
+</html>
