@@ -1,0 +1,5 @@
+docker run \
+    --name postgres \
+    -p5432:5432 \
+    -v ~/.postgresql/data:/var/lib/postgresql/data \
+    -d postgres:12
