@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="2020-08-20-13-25" author="Roman Karavashkin">
+        <preConditions>
+            <not>
+                <tableExists tableName="test_db"/>
+            </not>
+        </preConditions>
+        <comment>Create table testValue-db</comment>
+        <createTable tableName="test_db">
+            
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            
+            
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
