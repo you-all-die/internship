@@ -1,13 +1,13 @@
-package com.example.demosite;
+package com.ss.internetstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MainApplication {
+public class InternetstoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MainApplication.class, args);
+		SpringApplication.run(InternetstoreApplication.class, args);
 	}
 
 }
