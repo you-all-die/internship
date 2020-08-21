@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     </head>
     <body>
-        <div class="ui container">
+        <div class="ui container" style="padding: 8px">
             <h1 class="ui header">Customer List</h1>
         </div>
 
@@ -21,17 +21,22 @@
                         <th>Password</th>
                         <th>Phone</th>
                         <th>Email</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="customer : ${customers}">
-                        <td th:text="*{customer.id}">0</td>
-                        <td th:text="*{customer.lastName}">Samyual</td>
-                        <td th:text="*{customer.firstName}">George</td>
-                        <td th:text="*{customer.middleName}">Alex</td>
-                        <td th:text="*{customer.password}">qwerty</td>
-                        <td th:text="*{customer.phone}">+1 322-22-33-22</td>
-                        <td th:text="*{customer.email}">nobody@nowhere.com</td>
+                        <td th:text="${customer.id}">0</td>
+                        <td th:text="${customer.lastName}">Samyual</td>
+                        <td th:text="${customer.firstName}">George</td>
+                        <td th:text="${customer.middleName}">Alex</td>
+                        <td th:text="${customer.password}">qwerty</td>
+                        <td th:text="${customer.phone}">+1 322-22-33-22</td>
+                        <td th:text="${customer.email}">nobody@nowhere.com</td>
+                        <td class="ui two button">
+                            <a class="ui blue button" th:href="@{/customer/edit(id=${customer.id})}">Edit</a>
+                            <a class="ui red button" th:href="@{/customer/delete(id=${customer.id})}">Delete</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
