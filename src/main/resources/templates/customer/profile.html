@@ -6,6 +6,42 @@
         <link rel="stylesheet" type="text/css" th:href="@{~/css/semantic.min.css}">
     </head>
     <body>
+        <div class="ui container">
+            <h1 class="ui header">Customer Profile</h1>
+        </div>
+
+        <div class="ui container segment">
+            <form class="ui form" th:action="@{/customer/save}" th:object="${customer}" method="post">
+                <div class="field">
+                    <label>First Name</label>
+                    <input type="text" th:field="*{firstName}">
+                </div>
+                <div class="field">
+                    <label>Middle Name</label>
+                    <input type="text" th:field="*{middleName}">
+                </div>
+                <div class="field">
+                    <label>Last Name</label>
+                    <input type="text" th:field="*{lastName}">
+                </div>
+                <div class="required field">
+                    <label>Password</label>
+                    <input type="text" th:field="*{password}">
+                </div>
+                <div class="field">
+                    <label>Phone</label>
+                    <input type="text" th:field="*{phone}">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="text" th:field="*{email}">
+                </div>
+                <div class="ui two button">
+                    <button class="ui blue button" type="submit">Save</button>
+                    <a class="ui red button" th:href="@{/customer/delete(id=*{id})}">Delete</a>
+                </div>
+            </form>
+        </div>
 
         <script th:src="@{~/js/jquery.min.js}"></script>
         <script th:src="@{~/js/semantic.min.js}"></script>

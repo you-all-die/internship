@@ -21,7 +21,7 @@
                         <th>Password</th>
                         <th>Phone</th>
                         <th>Email</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +35,7 @@
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
                         <td class="ui two button">
                             <a class="ui blue button" th:href="@{/customer/edit(id=${customer.id})}">Edit</a>
-                            <a class="ui red button" th:href="@{/customer/delete(id=${customer.id})}">Delete</a>
+<!--                            <a class="ui red button" th:href="@{/customer/delete(id=${customer.id})}">Delete</a>-->
                         </td>
                     </tr>
                 </tbody>
