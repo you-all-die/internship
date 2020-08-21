@@ -18,6 +18,4 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
-    @OneToMany(mappedBy = "addresses")
-    private Set<Address> addresses;
 }

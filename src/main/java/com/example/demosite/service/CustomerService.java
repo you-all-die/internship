@@ -1,17 +1,23 @@
 package com.example.demosite.service;
 
 import com.example.demosite.entity.Customer;
+import com.example.demosite.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Service
 public class CustomerService {
+
     @Autowired
-    private CustomerService customerService;
+    private CustomerRepository customerRepository;
 
     public final Iterable<Customer> getAll() {
-        return customerService.getAll();
+        return customerRepository.findAll();
     }
 
-    public final Customer getById(final long id) {
-        return customerService.getById(id);
+    public final Optional<Customer> getById(final long id) {
+        return customerRepository.findById(id);
     }
 }
