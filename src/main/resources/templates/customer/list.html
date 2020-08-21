@@ -1,9 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>Customer List</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     </head>
     <body>
+        <div class="ui container">
+            <h1 class="ui header">Customer List</h1>
+        </div>
+
+        <div class="ui container segment">
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Middle Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="customer : ${customers}">
+                        <td th:text="*{id}">0</td>
+                        <td th:text="*{lastName}">Samyual</td>
+                        <td th:text="*{firstName}">George</td>
+                        <td th:text="*{middleName}">Alex</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script
+                src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+                crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     </body>
 </html>
