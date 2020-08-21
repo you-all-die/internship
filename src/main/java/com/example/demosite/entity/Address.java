@@ -19,7 +19,6 @@ public class Address {
     private String district;
     private String street;
     private String house;
-    @Column(name = "appartment")
     private String apartment;
     private String Comment;
 }
