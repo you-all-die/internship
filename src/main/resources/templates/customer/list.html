@@ -18,14 +18,20 @@
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Middle Name</th>
+                        <th>Password</th>
+                        <th>Phone</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="customer : ${customers}">
-                        <td th:text="*{id}">0</td>
-                        <td th:text="*{lastName}">Samyual</td>
-                        <td th:text="*{firstName}">George</td>
-                        <td th:text="*{middleName}">Alex</td>
+                        <td th:text="*{customer.id}">0</td>
+                        <td th:text="*{customer.lastName}">Samyual</td>
+                        <td th:text="*{customer.firstName}">George</td>
+                        <td th:text="*{customer.middleName}">Alex</td>
+                        <td th:text="*{customer.password}">qwerty</td>
+                        <td th:text="*{customer.phone}">+1 322-22-33-22</td>
+                        <td th:text="*{customer.email}">nobody@nowhere.com</td>
                     </tr>
                 </tbody>
             </table>
