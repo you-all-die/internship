@@ -33,9 +33,10 @@
                         <td th:text="${customer.password}">qwerty</td>
                         <td th:text="${customer.phone}">+1 322-22-33-22</td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
-                        <td class="ui two button">
-                            <a class="ui blue button" th:href="@{/customer/edit(id=${customer.id})}">Edit</a>
-<!--                            <a class="ui red button" th:href="@{/customer/delete(id=${customer.id})}">Delete</a>-->
+                        <td>
+                            <a class="ui icon button" th:href="@{/customer/edit(id=${customer.id})}">
+                                <i class="edit icon"></i>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

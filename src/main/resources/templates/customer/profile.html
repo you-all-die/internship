@@ -12,6 +12,7 @@
 
         <div class="ui container segment">
             <form class="ui form" th:action="@{/customer/save}" th:object="${customer}" method="post">
+                <input type="hidden" th:field="*{id}">
                 <div class="field">
                     <label>First Name</label>
                     <input type="text" th:field="*{firstName}">
