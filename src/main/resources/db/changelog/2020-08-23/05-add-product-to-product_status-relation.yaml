@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add product to product_status relation
+      author: Sergey Lapshin
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_products_product_status
+            baseTableName: product
+            baseColumnNames: status_id
+            referencedTableName: product_status
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'
