@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 2020-08-21-05
-      author: lapshin
+      id: Create product_status table
+      author: Sergey Lapshin
       changes:
         - createTable:
-            tableName: category
+            tableName: product_status
             columns:
               - column:
                   name: id
@@ -19,8 +19,4 @@ databaseChangeLog:
                   constraints:
                     - unique: true
                     - nullable: false
-              - column:
-                  name: parent_id
-                  type: BIGINT
-                  constraints:
-                    - nullable: true
+
