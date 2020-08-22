@@ -39,7 +39,9 @@
                 </div>
                 <div class="ui two button">
                     <button class="ui blue button" type="submit">Save</button>
-                    <a class="ui red button" th:href="@{/customer/delete(id=*{id})}">Delete</a>
+                    <span th:if="*{id}">
+                        <a class="ui red button" th:href="@{/customer/delete(id=*{id})}">Delete</a>
+                    </span>
                 </div>
             </form>
         </div>

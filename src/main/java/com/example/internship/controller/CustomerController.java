@@ -24,8 +24,14 @@ public class CustomerController {
         return "customer/list";
     }
 
+    @GetMapping("/add")
+    public String addCustomer(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "customer/profile";
+    }
+
     @GetMapping("/edit")
-    public String editCustomer(@RequestParam(name = "id", required = true) long id, Model model) {
+    public String editCustomer(@RequestParam(name = "id") long id, Model model) {
         Optional<Customer> customer = customerService.getById(id);
         if (customer.isPresent()) {
             model.addAttribute("customer", customer.get());
@@ -41,7 +47,7 @@ public class CustomerController {
     }
 
     @GetMapping("/delete")
-    public String deleteCustomer(@RequestParam(name = "id", required = true) long id, Model model) {
+    public String deleteCustomer(@RequestParam(name = "id") long id, Model model) {
         customerService.delete(id);
         return "redirect:/customer/list";
     }
