@@ -2,25 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Customer List</title>
+        <title th:text="#{customer.list.page_title}">Customer List</title>
         <link rel="stylesheet" type="text/css" th:href="@{~/css/semantic.min.css}">
     </head>
     <body>
         <div class="ui container" style="padding: 8px">
-            <h1 class="ui header">Customer List</h1>
+            <h1 class="ui header" th:text="#{customer.list.page_title}">Customer List</h1>
         </div>
 
         <div class="ui container segment">
             <table class="ui table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Password</th>
-                        <th>Phone</th>
-                        <th>Email</th>
+                        <th th:text="#{customer.list.id}">Id</th>
+                        <th th:text="#{customer.list.last_name}">Last Name</th>
+                        <th th:text="#{customer.list.first_name}">First Name</th>
+                        <th th:text="#{customer.list.middle_name}">Middle Name</th>
+                        <th th:text="#{customer.list.password}">Password</th>
+                        <th th:text="#{customer.list.phone}">Phone</th>
+                        <th th:text="#{customer.list.email}">Email</th>
                         <th>
                             <a class="ui icon button" href="#" th:href="@{/customer/add}">
                                 <i class="plus icon"></i>
