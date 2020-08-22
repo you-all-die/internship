@@ -17,4 +17,8 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
+
+    public final String getFullName() {
+        return String.join(" ", lastName, firstName, middleName);
+    }
 }

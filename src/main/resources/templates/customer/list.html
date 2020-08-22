@@ -15,9 +15,10 @@
                 <thead>
                     <tr>
                         <th th:text="#{customer.list.id}">Id</th>
-                        <th th:text="#{customer.list.last_name}">Last Name</th>
-                        <th th:text="#{customer.list.first_name}">First Name</th>
-                        <th th:text="#{customer.list.middle_name}">Middle Name</th>
+<!--                        <th th:text="#{customer.list.last_name}">Last Name</th>-->
+<!--                        <th th:text="#{customer.list.first_name}">First Name</th>-->
+<!--                        <th th:text="#{customer.list.middle_name}">Middle Name</th>-->
+                        <th th:text="#{customer.list.full_name}">Full Name</th>
                         <th th:text="#{customer.list.password}">Password</th>
                         <th th:text="#{customer.list.phone}">Phone</th>
                         <th th:text="#{customer.list.email}">Email</th>
@@ -31,9 +32,10 @@
                 <tbody>
                     <tr th:each="customer : ${customers}">
                         <td th:text="${customer.id}">0</td>
-                        <td th:text="${customer.lastName}">Samyual</td>
-                        <td th:text="${customer.firstName}">George</td>
-                        <td th:text="${customer.middleName}">Alex</td>
+<!--                        <td th:text="${customer.lastName}">Samyual</td>-->
+<!--                        <td th:text="${customer.firstName}">George</td>-->
+<!--                        <td th:text="${customer.middleName}">Alex</td>-->
+                        <td th:text="${customer.fullName}">Rambo Silverster Stallonovich</td>
                         <td th:text="${customer.password}">qwerty</td>
                         <td th:text="${customer.phone}">+1 322-22-33-22</td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
