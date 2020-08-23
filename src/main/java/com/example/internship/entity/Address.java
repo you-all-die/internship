@@ -21,4 +21,8 @@ public class Address {
     private String house;
     private String apartment;
     private String Comment;
+
+    public final String getFullAddress() {
+        return String.join(", ", region, city, district, street, house, apartment);
+    }
 }

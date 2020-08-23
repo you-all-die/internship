@@ -19,7 +19,7 @@
                         <th th:text="#{customer.list.phone}">Phone</th>
                         <th th:text="#{customer.list.email}">Email</th>
                         <th>
-                            <a class="ui icon button" href="#" th:href="@{/customer/add}">
+                            <a class="ui green icon button" href="#" th:href="@{/customer/add}">
                                 <i class="plus icon"></i>
                             </a>
                         </th>
@@ -32,7 +32,7 @@
                         <td th:text="${customer.phone}">+1 322-22-33-22</td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
                         <td>
-                            <a class="ui icon button" th:href="@{/customer/edit(id=${customer.id})}">
+                            <a class="ui blue icon button" th:href="@{/customer/edit(id=${customer.id})}">
                                 <i class="edit icon"></i>
                             </a>
                         </td>

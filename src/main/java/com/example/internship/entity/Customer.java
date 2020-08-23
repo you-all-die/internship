@@ -18,7 +18,7 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Address> addresses;
 
     public final String getFullName() {
