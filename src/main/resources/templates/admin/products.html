@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Все Товары</title>
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="ui container segment">
+    <h1 class="ui header">Список товаров</h1>
+    <table class="ui table">
+        <tbody>
+        <tr>
+            <td>
+                <button class="ui button" th:href="@{/addProduct}">
+                    Добавить товар
+                 </button>
+            </td>
+
+            <td align="right">
+                <form action="#" th:action="@{/admin/products}">
+                     <div class="ui input">
+                        <input placeholder="Название..." th:name="name" type="text" />
+                     </div>
+                    <input class="ui button" type="submit" value="Найти" />
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ui table">
+        <tbody>
+        <tr th:each="product: ${productList}">
+            <td th:text="${product.name}">Name</td>
+            <td th:text="${product.category}">Category</td>
+            <td th:text="${product.description}">Description</td>
+            <td th:text="${product.status}">Status</td>
+            <td>
+                <a class="ui green icon button" th:href="@{/edit(id=${product.id})}">
+                    <i class="pen square icon"></i>
+                </a>
+            </td>
+            <td>
+                <a class="ui red icon button" th:href="@{/hide(id=${product.id})}">
+                    <i class="low vision icon"></i>
+                </a>
+            </td>
+            <td>
+                <a class="ui red icon button" th:href="@{/delete(id=${product.id})}">
+                    <i class="trash alternate icon"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>
