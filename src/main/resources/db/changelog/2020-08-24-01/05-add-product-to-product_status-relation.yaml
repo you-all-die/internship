@@ -2,6 +2,14 @@ databaseChangeLog:
   - changeSet:
       id: Add product to product_status relation
       author: Sergey Lapshin
+      preConditions:
+          - onFail: WARN
+            not:
+                or:
+                    tableExists:
+                        tableName: product
+                    tableExists:
+                        tableName: product_status
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_products_product_status

@@ -23,4 +23,8 @@ databaseChangeLog:
                   name: parent_id
                   type: BIGINT
                   constraints:
+                    - unique: true
                     - nullable: true
+      rollback:
+        - dropTable:
+            tableName: category

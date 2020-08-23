@@ -2,6 +2,14 @@ databaseChangeLog:
   - changeSet:
       id: Add product to category relation
       author: Sergey Lapshin
+      preConditions:
+          - onFail: WARN
+            not:
+                and:
+                    tableExists:
+                        tableName: product
+                    tableExists:
+                        tableName: category
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_products_categories

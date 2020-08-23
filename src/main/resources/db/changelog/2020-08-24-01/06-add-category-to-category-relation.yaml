@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add category to category relation
+      author: Sergey Lapshin
+      preConditions:
+          - onFail: WARN
+            not:
+                tableExists:
+                    tableName: category
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_category_category
+            baseTableName: category
+            baseColumnNames: id
+            referencedTableName: category
+            referencedColumnNames: parent_id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'

@@ -14,9 +14,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: name
+                  name: description
                   type: VARCHAR(64)
                   constraints:
                     - unique: true
                     - nullable: false
+      rollback:
+        - dropTable:
+            tableName: product_status
 
