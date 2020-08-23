@@ -6,38 +6,40 @@
         <link rel="stylesheet" type="text/css" th:href="@{~/css/semantic.min.css}">
     </head>
     <body>
-        <div class="ui container">
-            <h1 class="ui header" th:text="#{customer.profile.page_title}">Customer Profile</h1>
-        </div>
-
         <div class="ui container segment">
             <form class="ui form" th:action="@{/customer/save}" th:object="${customer}" method="post">
+
+                <h3 class="ui dividing header" th:text="#{customer.profile.page_title}">Customer profile</h3>
+
                 <input type="hidden" th:field="*{id}">
-                <div class="field">
-                    <label th:text="#{customer.profile.first_name}">First Name</label>
-                    <input type="text" th:field="*{firstName}">
+
+                <div class="ui three fields">
+                    <div class="field">
+                        <label th:text="#{customer.profile.first_name}">First Name</label>
+                        <input type="text" th:field="*{firstName}" autofocus>
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.middle_name}">Middle Name</label>
+                        <input type="text" th:field="*{middleName}">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.last_name}">Last Name</label>
+                        <input type="text" th:field="*{lastName}">
+                    </div>
                 </div>
-                <div class="field">
-                    <label th:text="#{customer.profile.middle_name}">Middle Name</label>
-                    <input type="text" th:field="*{middleName}">
+
+                <div class="ui two fields">
+                    <div class="field">
+                        <label th:text="#{customer.profile.phone}">Phone</label>
+                        <input type="text" th:field="*{phone}">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.email}">Email</label>
+                        <input type="text" th:field="*{email}">
+                    </div>
                 </div>
-                <div class="field">
-                    <label th:text="#{customer.profile.last_name}">Last Name</label>
-                    <input type="text" th:field="*{lastName}">
-                </div>
-                <div class="required field">
-                    <label th:text="#{customer.profile.password}">Password</label>
-                    <input type="text" th:field="*{password}">
-                </div>
-                <div class="field">
-                    <label th:text="#{customer.profile.phone}">Phone</label>
-                    <input type="text" th:field="*{phone}">
-                </div>
-                <div class="field">
-                    <label th:text="#{customer.profile.email}">Email</label>
-                    <input type="text" th:field="*{email}">
-                </div>
-                <div class="ui two button">
+
+                <div class="ui two buttons">
                     <button class="ui blue button" type="submit" th:text="#{customer.profile.save}">Save</button>
                     <a th:if="*{id}"
                        class="ui red button"
