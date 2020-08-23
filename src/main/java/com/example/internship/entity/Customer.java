@@ -3,6 +3,7 @@ package com.example.internship.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -17,6 +18,8 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    private List<Address> addresses;
 
     public final String getFullName() {
         return String.join(" ", lastName, firstName, middleName);
