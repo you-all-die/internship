@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Все Категории</title>
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="ui container segment">
+    <h1 class="ui header">Список категорий</h1>
+    <table class="ui table">
+        <tbody>
+        <tr>
+            <td>
+                <button class="ui button" th:href="@{/addCategory}">
+                    Добавить категорию
+                </button>
+            </td>
+
+            <td align="right">
+                <form action="#" th:action="@{/admin/categories}">
+                    <div class="ui input">
+                        <input placeholder="Имя..." th:name="name" type="text" />
+                    </div>
+                    <input class="ui button" type="submit" value="Найти" />
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ui table">
+        <tbody>
+        <tr th:each="category: ${categoryList}">
+            <td th:text="${category.name}">Name</td>
+            <td th:text="${category.subcategory}">Subcategory</td>
+            <td>
+                <a class="ui green icon button" th:href="@{/edit(id=${category.id})}">
+                    <i class="pen square icon"></i>
+                </a>
+            </td>
+            <td>
+                <a class="ui red icon button" th:href="@{/delete(id=${category.id})}">
+                    <i class="trash alternate icon"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>
