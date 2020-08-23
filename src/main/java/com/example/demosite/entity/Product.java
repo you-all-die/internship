@@ -6,18 +6,20 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "category")
+@Table(name = "product")
 @Data
-public class Category {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "id")
-    private Category id;
-    @OneToMany(mappedBy = "categoryId")
-    private Set<Product> products;
+    private Category categoryId;
     private String name;
-    @OneToMany(mappedBy = "id")
-    private Set<Category> parentId;
+    private String description;
+    private String picture;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private ProductStatus statusId;
 
 }

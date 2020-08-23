@@ -1,7 +1,11 @@
 databaseChangeLog:
   - changeSet:
+<<<<<<< HEAD
       id: 2020-08-25-01
       comment: Create category table
+=======
+      id: Create category table
+>>>>>>> ef7052d... Создание сущностей Category, Product, ProductStatus.  Добавление зависимистей в product_status таблицу
       author: Sergey Lapshin
       changes:
         - createTable:
@@ -24,6 +28,10 @@ databaseChangeLog:
                   name: parent_id
                   type: BIGINT
                   constraints:
+<<<<<<< HEAD
+=======
+                    - unique: true
+>>>>>>> ef7052d... Создание сущностей Category, Product, ProductStatus.  Добавление зависимистей в product_status таблицу
                     - nullable: true
       rollback:
         - dropTable:
