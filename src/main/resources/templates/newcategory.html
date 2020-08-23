@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Electronic Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div class="container mt-5 mb-5" >
+    <h1>Добавление новой категории</h1>
+    <form enctype="multipart/form-data" action="/newcategory" method="post">
+        <input type="text" name="name" placeholder="Название категории" class="form-control"><BR>
+        <input type="text" name="parent_Id" placeholder="Родительская категория" class="form-control"><BR>
+        <button type="submit" class="btn btn-success">Добавить</button>
+    </form>
+</div>
+</body>
+</html>

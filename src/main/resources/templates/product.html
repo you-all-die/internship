@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Electronic Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div class="container mt-5">
+    <h1>Описание товара</h1>
+    <div th:each="pr : ${product}" class="alert alert-info mt-2">
+        <h3 th:text="${pr.name}"/></h3>
+        <h6>Артикул:</h6>
+        <p th:text="${pr.id}"/>
+        <h6>Цена:</h6>
+        <p th:text="${pr.price} + ' руб.'"/>
+        <h6>Характеристики:</h6>
+        <p th:text="${pr.description}"/>
+        <h6>Категория:</h6>
+        <p th:text="${pr.category_Id}"/>
+        <h6>Изображение:</h6>
+        <p><img th:src="'/images/' + ${pr.picture}" width="300" height="300" border="0"/></p>
+        <form th:action="'/product/' + ${pr.id} + '/delete'" method="post">
+            <button type="submit" class="btn btn-warning">Удалить</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

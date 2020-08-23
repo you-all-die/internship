@@ -3,31 +3,20 @@
 <head>
     <title>Online Electronic Store</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Online Electronic Store</h5>
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="#">Каталог</a>
-        <a class="p-2 text-dark" href="#">Корзина</a>
-        <a class="p-2 text-dark" href="#">Поддержка</a>
-        <a class="p-2 text-dark" href="#">Контакты</a>
-    </nav>
-    <a class="btn btn-outline-primary" href="#">Вход</a>
-</div>
-<div class="container mt-5 mb-5" >
-    <h1>Тестовая корзина</h1>
-    <form action="/" method="addnewproduct">
-        <input type="text" name="newvalue" placeholder="Введите значение" class="form-control"><BR>
-        <button type="submit" class="btn btn-success">Добавить</button>
-    </form>
-</div>
-<div>
-    <button type="submit" name="delall" class="btn btn-success">Удалить все записи</button>
-</div>
-    <div th:each="${value}">
-        <h3 th:text="${value}"/>
+<header th:insert="blocks/header :: header"></header>
+<div class="container mt-5">
+    <h1>Популярные товары</h1>
+    <div th:each="pr, iter : ${products}" class="alert alert-info mt-2" th:if="${iter.index}<5">
+            <h3><a th:href="'product/' + ${pr.id}" th:text="${pr.name}"/></h3>
+            <p th:text="'Цена: ' + ${pr.price} + ' руб.'"/>
+            <p><a th:href="'product/' + ${pr.id}"><img th:src="'/images/' + ${pr.picture}"  width="150" height="150" border="0"></a></p>
     </div>
+
+
+</div>
+
 </body>
 </html>
