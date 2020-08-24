@@ -29,13 +29,13 @@
                 </div>
 
                 <div class="ui two fields">
+                    <div class="required field">
+                        <label th:text="#{customer.profile.email}">Email</label>
+                        <input type="text" th:field="*{email}">
+                    </div>
                     <div class="field">
                         <label th:text="#{customer.profile.phone}">Phone</label>
                         <input type="text" th:field="*{phone}">
-                    </div>
-                    <div class="field">
-                        <label th:text="#{customer.profile.email}">Email</label>
-                        <input type="text" th:field="*{email}">
                     </div>
                 </div>
 

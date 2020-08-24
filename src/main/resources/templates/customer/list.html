@@ -6,18 +6,15 @@
         <link rel="stylesheet" type="text/css" th:href="@{~/css/semantic.min.css}">
     </head>
     <body>
-        <div class="ui container" style="padding: 8px">
-            <h1 class="ui header" th:text="#{customer.list.page_title}">Customer List</h1>
-        </div>
-
         <div class="ui container segment">
+            <h3 class="ui dividing header" th:text="#{customer.list.page_title}">Customer List</h3>
             <table class="ui table">
                 <thead>
                     <tr>
                         <th th:text="#{customer.list.id}">Id</th>
                         <th th:text="#{customer.list.full_name}">Full Name</th>
-                        <th th:text="#{customer.list.phone}">Phone</th>
                         <th th:text="#{customer.list.email}">Email</th>
+                        <th th:text="#{customer.list.phone}">Phone</th>
                         <th>
                             <a class="ui green icon button" href="#" th:href="@{/customer/add}">
                                 <i class="plus icon"></i>
@@ -29,8 +26,8 @@
                     <tr th:each="customer : ${customers}">
                         <td th:text="${customer.id}">0</td>
                         <td th:text="${customer.fullName}">Rambo Silverster Stallonovich</td>
-                        <td th:text="${customer.phone}">+1 322-22-33-22</td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
+                        <td th:text="${customer.phone}">+1 322-22-33-22</td>
                         <td>
                             <a class="ui blue icon button" th:href="@{/customer/edit(id=${customer.id})}">
                                 <i class="edit icon"></i>

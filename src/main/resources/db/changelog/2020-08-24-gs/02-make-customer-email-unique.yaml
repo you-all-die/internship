@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-24-02
+      author: George Samyual
+      changes:
+        - createIndex:
+            tableName: customers
+            unique: true
+            columns:
+              - column:
+                  name: email

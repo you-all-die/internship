@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-24-01
+      author: George Samyual
+      changes:
+        - addNotNullConstaint:
+            tableName: customers
+            columnName: email
