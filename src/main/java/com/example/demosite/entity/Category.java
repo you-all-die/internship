@@ -11,13 +11,14 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private Category id;
-    @OneToMany(mappedBy = "categoryId")
-    private Set<Product> products;
+    private Long id;
+//    @ManyToOne
+//    @JoinColumn(name = "id")
+//    private Category category;
+//    @OneToMany(mappedBy = "category")
+//    private Product product;
     private String name;
     @OneToMany(mappedBy = "id")
-    private Set<Category> parentId;
+    private Category parent;
 
 }

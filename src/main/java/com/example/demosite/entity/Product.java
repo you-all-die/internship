@@ -13,13 +13,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id")
-    private Category categoryId;
+    @JoinColumn(name = "category_id")
+    private Category category;
     private String name;
     private String description;
     private String picture;
     @ManyToOne
-    @JoinColumn(name = "id")
-    private ProductStatus statusId;
-
+    @JoinColumn(name = "status_id")
+    private ProductStatus status;
 }

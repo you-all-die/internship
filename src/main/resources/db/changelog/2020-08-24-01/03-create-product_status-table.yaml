@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: Create product_status table
+      id: 2020-08-25-03
+      comment: Create product_status table
       author: Sergey Lapshin
       changes:
         - createTable:

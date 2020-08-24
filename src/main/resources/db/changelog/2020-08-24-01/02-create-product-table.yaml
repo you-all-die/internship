@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: Create product table
+      id: 2020-08-25-02
+      comment: Create product table
       author: Sergey Lapshin
       changes:
         - createTable:

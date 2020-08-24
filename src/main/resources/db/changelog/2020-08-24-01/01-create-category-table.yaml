@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: Create category table
+      id: 2020-08-25-01
+      comment: Create category table
       author: Sergey Lapshin
       changes:
         - createTable:
@@ -23,7 +24,6 @@ databaseChangeLog:
                   name: parent_id
                   type: BIGINT
                   constraints:
-                    - unique: true
                     - nullable: true
       rollback:
         - dropTable:

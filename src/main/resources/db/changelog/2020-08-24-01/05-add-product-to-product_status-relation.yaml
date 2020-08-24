@@ -1,21 +1,22 @@
 databaseChangeLog:
   - changeSet:
-      id: Add product to product_status relation
+      id: 2020-08-25-05
+      comment: Add product to product_status relation
       author: Sergey Lapshin
       preConditions:
           - onFail: WARN
-            not:
-                or:
-                    tableExists:
-                        tableName: product
-                    tableExists:
-                        tableName: product_status
+          and:
+              tableExists:
+                  tableName: product
+          and:
+              tableExists:
+                  tableName: product_status
       changes:
-        - addForeignKeyConstraint:
-            constraintName: fk_products_product_status
-            baseTableName: product
-            baseColumnNames: status_id
-            referencedTableName: product_status
-            referencedColumnNames: id
-            onDelete: 'CASCADE'
-            onUpdate: 'RESTRICT'
+          - addForeignKeyConstraint:
+              constraintName: fk_products_product_status
+              baseTableName: product
+              baseColumnNames: status_id
+              referencedTableName: product_status
+              referencedColumnNames: id
+              onDelete: 'CASCADE'
+              onUpdate: 'RESTRICT'
