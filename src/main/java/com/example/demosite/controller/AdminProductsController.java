@@ -5,19 +5,17 @@ import com.example.demosite.repository.ProductRepository;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminProductsController {
     private final ProductRepository productRepository = new ProductRepository();
     final static Logger logger = Logger.getLogger(AdminProductsController.class);
 
-    @GetMapping({"/admin/products"})
+    @GetMapping({"/products"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String productName) {
         List<Product> list;
         if (productName == null) {
@@ -28,30 +26,30 @@ public class AdminProductsController {
             logger.info("Name: " + productName + " List size: " + list.size());
         }
         model.addAttribute("productList", list);
-        return "admin/products";
+        return "/admin/products";
     }
 
-    @RequestMapping(value="/delete", method= RequestMethod.GET)
-    public String deleteProduct(@RequestParam("id") String productId, Model model) {
+    @PostMapping(value="/product/delete{productId}")
+    public String deleteProduct(@PathVariable(name = "productId") String id, Model model) {
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
-        productRepository.removeProduct(productId);
+        productRepository.removeProduct(Long.parseLong(id));
         return "redirect:/admin/products";
     }
 
     @RequestMapping(value="/edit", method= RequestMethod.GET)
     public String editProduct(@RequestParam("id") String productId, Model model) {
-        return "redirect:/admin/edit?id=" + productId;
+        return "redirect:/edit?id=" + productId;
     }
 
     @RequestMapping(value="/hide", method= RequestMethod.GET)
     public String hideProduct(@RequestParam("id") String productId, Model model) {
         Product product = productRepository.getProductById(productId);
         product.setStatus("Скрыт");
-        return "redirect:/admin/products";
+        return "redirect:/products";
     }
 
     @RequestMapping(value="/addProduct", method= RequestMethod.GET)
     public String addProduct(Model model) {
-        return "redirect:/admin/products";
+        return "redirect:/products";
     }
 }

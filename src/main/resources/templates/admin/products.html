@@ -46,9 +46,13 @@
                 </a>
             </td>
             <td>
-                <a class="ui red icon button" th:href="@{/delete(id=${product.id})}">
-                    <i class="trash alternate icon"></i>
-                </a>
+                <!--form action="#" th:action="@{/admin/product/delete}" th:object="*{id}" method="post">
+                    <input type="submit" value="Submit" class="trash alternate icon" />
+                </form-->
+
+                <form method="POST" th:action="@{/admin/product/delete(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="link-button">DELETE</button>
+                </form>
             </td>
         </tr>
         </tbody>

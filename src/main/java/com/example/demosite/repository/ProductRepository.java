@@ -31,8 +31,8 @@ public class ProductRepository {
         return new ArrayList<>(products.values());
     }
 
-    public void removeProduct(String id) {
-        products.remove(Long.parseLong(id));
+    public void removeProduct(long id) {
+        products.remove(id);
     }
 
     public void addProduct(Product product) {
