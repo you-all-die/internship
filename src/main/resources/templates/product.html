@@ -20,7 +20,7 @@
         <h6>Категория:</h6>
         <p th:text="${pr.category_Id}"/>
         <h6>Изображение:</h6>
-        <p><img th:src="'/images/' + ${pr.picture}" width="300" height="300" border="0"/></p>
+        <p><img th:src="'/img/' + ${pr.picture}" width="300" height="300" border="0"/></p>
         <form th:action="'/product/' + ${pr.id} + '/delete'" method="post">
             <button type="submit" class="btn btn-warning">Удалить</button>
         </form>

@@ -23,10 +23,6 @@ public class ProductController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
-
     //Добавление нового товара
     @PostMapping("/newproduct")
     public String addnewproduct(@RequestParam int category_Id, @RequestParam String name,
@@ -36,6 +32,7 @@ public class ProductController {
                                 Model model) throws IOException {
         Product product = new Product(category_Id, name,price, description);
         if (picturefile != null){
+            String uploadPath = System.getProperty("user.dir") + "/img_product/";
             File imgDir = new File(uploadPath);
             if(!imgDir.exists()){
                 imgDir.mkdir();

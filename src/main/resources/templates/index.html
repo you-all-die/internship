@@ -12,7 +12,7 @@
     <div th:each="pr, iter : ${products}" class="alert alert-info mt-2" th:if="${iter.index}<5">
             <h3><a th:href="'product/' + ${pr.id}" th:text="${pr.name}"/></h3>
             <p th:text="'Цена: ' + ${pr.price} + ' руб.'"/>
-            <p><a th:href="'product/' + ${pr.id}"><img th:src="'/images/' + ${pr.picture}"  width="150" height="150" border="0"></a></p>
+            <p><a th:href="'product/' + ${pr.id}"><img th:src="'/img/' + ${pr.picture}"  width="150" height="150" border="0"></a></p>
     </div>
 
 
