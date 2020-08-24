@@ -11,8 +11,8 @@ import java.util.Set;
 public class ProductStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToMany(mappedBy = "statusId")
-    private Set<Product> id;
+    private Long id;
+    @OneToMany(mappedBy = "status")
+    private Product product;
     private String description;
-
 }
