@@ -10,6 +10,27 @@
         <script th:src="@{js/semantic.min.js}"></script>
     </head>
     <body>
+        <div th:fragment="header">
+            <div class="ui menu">
+                <div class="header item">
+                    <img src="#" th:src="@{images/rocket.png}" alt="Logo">
+                    <h3>Interstellar Ship Internet Shop</h3>
+                </div>
+                <a class="item" th:href="@{/about}">
+                    About Us
+                </a>
+                <div class="right item">
+                    <div class="item">
+                        <div class="ui action left icon input">
+                            <i class="search icon"></i>
+                            <input type="text" placeholder="Search">
+                            <button class="ui button">Search</button>
+                        </div>
+                    </div>
+                    <a class="item ui button" th:href="@{/login}">Login</a>
+                </div>
+            </div>
+        </div>
         <div th:fragment="footer">
             <footer>
                 2020 &copy; Interstellar Ship Internet Shop by Simbirsoft probation command

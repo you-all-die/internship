@@ -4,7 +4,10 @@
         <title>Interstellar Ship Internet Shop - Home Page</title>
     </head>
     <body>
-        <h1>Hello, people!</h1>
-        <div th:include="common/main :: footer"></div>
+        <div class="ui container">
+            <div th:replace="common/main :: header"></div>
+            <h1>Hello, people!</h1>
+            <div th:include="common/main :: footer"></div>
+        </div>
     </body>
 </html>
