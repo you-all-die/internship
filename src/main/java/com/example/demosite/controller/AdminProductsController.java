@@ -29,27 +29,32 @@ public class AdminProductsController {
         return "/admin/products";
     }
 
-    @PostMapping(value="/product/delete{productId}")
-    public String deleteProduct(@PathVariable(name = "productId") String id, Model model) {
+    @PostMapping(value="/products")
+    public String findProduct(@RequestParam("name") String name, Model model) {
+        return "redirect:/admin/products?name=" + name;
+    }
+
+    @PostMapping(value="/product/delete")
+    public String deleteProduct(@RequestParam("productId") Long id, Model model) {
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
-        productRepository.removeProduct(Long.parseLong(id));
+        productRepository.removeProduct(id);
         return "redirect:/admin/products";
     }
 
-    @RequestMapping(value="/edit", method= RequestMethod.GET)
-    public String editProduct(@RequestParam("id") String productId, Model model) {
-        return "redirect:/edit?id=" + productId;
+    @PostMapping(value="/product/edit")
+    public String editProduct(@RequestParam("productId") Long id, Model model) {
+        return "redirect:/admin/product/edit?id=" + id;
     }
 
-    @RequestMapping(value="/hide", method= RequestMethod.GET)
-    public String hideProduct(@RequestParam("id") String productId, Model model) {
-        Product product = productRepository.getProductById(productId);
+    @PostMapping(value="/product/hide")
+    public String hideProduct(@RequestParam("productId") Long id, Model model) {
+        Product product = productRepository.getProductById(id);
         product.setStatus("Скрыт");
-        return "redirect:/products";
+        return "redirect:/admin/products";
     }
 
-    @RequestMapping(value="/addProduct", method= RequestMethod.GET)
+    @PostMapping(value="/product/add")
     public String addProduct(Model model) {
-        return "redirect:/products";
+        return "redirect:/admin/product/add";
     }
 }

@@ -23,8 +23,8 @@ public class ProductRepository {
         index = 5;
     }
 
-    public Product getProductById(String id) {
-        return products.get(Long.parseLong(id));
+    public Product getProductById(Long id) {
+        return products.get(id);
     }
 
     public List<Product> findAll() {

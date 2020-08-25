@@ -12,15 +12,17 @@
         <tbody>
         <tr>
             <td>
-                <button class="ui button" th:href="@{/addProduct}">
+                <form method="POST" action="#" th:action="@{/admin/product/add}">
+                <button class="ui button">
                     Добавить товар
                  </button>
+                </form>
             </td>
 
             <td align="right">
-                <form action="#" th:action="@{/admin/products}">
+                <form method="POST" action="#" th:action="@{/admin/products}">
                      <div class="ui input">
-                        <input placeholder="Название..." th:name="name" type="text" />
+                        <input placeholder="Название..." th:name="name" name="name" id="name" type="text" />
                      </div>
                     <input class="ui button" type="submit" value="Найти" />
                 </form>
@@ -36,22 +38,24 @@
             <td th:text="${product.description}">Description</td>
             <td th:text="${product.status}">Status</td>
             <td>
-                <a class="ui green icon button" th:href="@{/edit(id=${product.id})}">
-                    <i class="pen square icon"></i>
-                </a>
+                <form method="POST" th:action="@{/admin/product/edit(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="ui green icon button">
+                        <i class="pen square icon"></i>
+                    </button>
+                </form>
             </td>
             <td>
-                <a class="ui red icon button" th:href="@{/hide(id=${product.id})}">
-                    <i class="low vision icon"></i>
-                </a>
+                <form method="POST" th:action="@{/admin/product/hide(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="ui red icon button">
+                        <i class="low vision icon"></i>
+                    </button>
+                </form>
             </td>
             <td>
-                <!--form action="#" th:action="@{/admin/product/delete}" th:object="*{id}" method="post">
-                    <input type="submit" value="Submit" class="trash alternate icon" />
-                </form-->
-
                 <form method="POST" th:action="@{/admin/product/delete(productId=${product.id})}">
-                    <button type="submit" name="submit" value="value" class="link-button">DELETE</button>
+                    <button type="submit" name="submit" value="value" class="ui red icon button">
+                        <i class="trash alternate icon"></i>
+                    </button>
                 </form>
             </td>
         </tr>
