@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="common_header(title)">
+        <meta charset="UTF-8">
+        <title th:replace="${title}">Title</title>
+
+        <!-- Common styles and scripts -->
+        <link rel="stylesheet" type="text/css" th:href="@{css/semantic.min.css}">
+        <script th:src="@{js/jquery.min.js}"></script>
+        <script th:src="@{js/semantic.min.js}"></script>
+    </head>
+    <body>
+        <div th:fragment="footer">
+            <footer>
+                2020 &copy; Interstellar Ship Internet Shop by Simbirsoft probation command
+            </footer>
+        </div>
+    </body>
+</html>
