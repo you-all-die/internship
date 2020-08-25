@@ -1,4 +1,4 @@
-package com.example.demosite.configuration;
+package com.example.internship.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
