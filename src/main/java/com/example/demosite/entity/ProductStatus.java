@@ -12,7 +12,6 @@ public class ProductStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "status")
-    private Product product;
+
     private String description;
 }
