@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="common_header(title)">
+        <meta charset="UTF-8">
+        <title th:replace="${title}">Title</title>
+
+        <!-- Common styles and scripts -->
+        <link rel="stylesheet" type="text/css" th:href="@{css/semantic.min.css}">
+        <style>
+            .main.container {
+                margin-top: 7em;
+            }
+            footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 60px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                background-color: #f5f5f5;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+
+
+        </style>
+        <script th:src="@{js/jquery.min.js}"></script>
+        <script th:src="@{js/semantic.min.js}"></script>
+    </head>
+    <body>
+        <div th:fragment="header">
+            <div class="ui fixed inverted menu">
+                <div class="ui container">
+                    <div class="header item">
+                        <img src="#" th:src="@{images/rocket.png}" alt="Logo">
+                        <h3>Interstellar Ship Internet Shop</h3>
+                    </div>
+                    <a class="item" th:href="@{/about}">
+                        About Us
+                    </a>
+                    <div class="right item">
+                        <div class="item">
+                            <div class="ui action left icon input">
+                                <i class="search icon"></i>
+                                <input type="text" placeholder="Search">
+                                <button class="ui button">Search</button>
+                            </div>
+                        </div>
+                        <a class="item ui button" th:href="@{/login}">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer th:fragment="footer">
+            <div class="ui container">
+                2020 &copy; Interstellar Ship Internet Shop by Simbirsoft probation command
+            </div>
+        </footer>
+    </body>
+</html>
