@@ -1,3 +1,5 @@
 databaseChangeLog:
-  - includeAll:
-      path: db/changelog/changes/
+  - include:
+      file: db/changelog/changes/v_0.0.1.yaml
+  - include:
+      file: db/changelog/changes/v_0.0.2.yaml

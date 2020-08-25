@@ -1,0 +1,14 @@
+databaseChangeLog:
+  -
+  - include:
+      file: db/changelog/2020-08-24-01/01-create-category-table.yaml
+  - include:
+      file: db/changelog/2020-08-24-01/02-create-product-table.yaml
+  - include:
+      file: db/changelog/2020-08-24-01/03-create-product_status-table.yaml
+  - include:
+      file: db/changelog/2020-08-24-01/04-add-product-to-category-relation.yaml
+  - include:
+      file: db/changelog/2020-08-24-01/05-add-product-to-product_status-relation.yaml
+  - include:
+      file: db/changelog/2020-08-24-01/06-add-category-to-category-relation.yaml

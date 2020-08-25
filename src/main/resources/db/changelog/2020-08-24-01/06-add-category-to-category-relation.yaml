@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 2020-08-25-06
       comment: Add category to category relation
       author: Sergey Lapshin
-      preConditions:
-          - onFail: WARN
-              tableExists:
-                  tableName: category
+#      preConditions:
+#          - onFail: WARN
+#              tableExists:
+#                  tableName: category
       changes:
           - addForeignKeyConstraint:
               constraintName: fk_category_category
