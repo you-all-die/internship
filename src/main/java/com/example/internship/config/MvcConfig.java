@@ -1,4 +1,4 @@
-package com.ss.internetstore.config;
+package com.example.internship.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

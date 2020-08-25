@@ -1,6 +1,5 @@
-package com.ss.internetstore.controllers;
-import com.ss.internetstore.models.Product;
-import com.ss.internetstore.repo.ProductRepository;
+package com.example.internship.controllers;
+import com.example.internship.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
     @Autowired
-    private ProductRepository productRepository;
+    ProductService productService;
+
 
     @GetMapping("/")
     public String index(Model model) {
-        Iterable<Product> products = productRepository.findAll();
-        model.addAttribute("products", products);
+        model.addAttribute("products", productService.find_all());
         return "index";
     }
 

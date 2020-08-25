@@ -1,4 +1,4 @@
-package com.ss.internetstore.models;
+package com.example.internship.entity;
 
 import javax.persistence.Id;
 import javax.persistence.Entity;
