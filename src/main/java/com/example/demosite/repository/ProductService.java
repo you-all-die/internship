@@ -1,18 +1,20 @@
 package com.example.demosite.repository;
 
 import com.example.demosite.model.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-public class ProductRepository {
+@Service
+public class ProductService {
     private final Map<Long, Product> products;
     private long index;
 
-    public ProductRepository(Map<Long, Product> products) {
+    public ProductService(Map<Long, Product> products) {
         this.products = products;
     }
 
-    public ProductRepository() {
+    public ProductService() {
         products = new HashMap<>();
         products.put(0L, new Product(0, "Смартфоны", "Iphone 7", "Описание Iphone 7", "", "В наличии"));
         products.put(1L, new Product(1, "Смартфоны", "Iphone 8", "Описание Iphone 8", "", "В наличии"));
