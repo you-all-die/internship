@@ -3,50 +3,57 @@
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>Все Категории</title>
-    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div class="ui container segment">
-    <h1 class="ui header">Список категорий</h1>
-    <table class="ui table">
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="h1 row justify-content-center">Список категорий</h1>
+    <table class="table">
         <tbody>
         <tr>
             <td>
-                <button class="ui button" th:href="@{/addCategory}">
-                    Добавить категорию
-                </button>
+                <form method="POST" action="#" th:action="@{/admin/category/add}">
+                    <button class="btn btn-primary">
+                        Добавить категорию
+                    </button>
+                </form>
             </td>
 
             <td align="right">
-                <form action="#" th:action="@{/admin/categories}">
-                    <div class="ui input">
-                        <input placeholder="Имя..." th:name="name" type="text" />
+                <form method="POST" class="form-horizontal" action="#" th:action="@{/admin/categories}">
+                    <div class="form-group row justify-content-end">
+                        <input placeholder="Имя..." th:name="name" name="name" id="name" type="text" class="form-control col-md-3"/>
+                        <input type="submit" value="Найти" class="btn btn-light col-md-3"/>
                     </div>
-                    <input class="ui button" type="submit" value="Найти" />
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-    <table class="ui table">
+    <table class="table">
         <tbody>
         <tr th:each="category: ${categoryList}">
             <td th:text="${category.name}">Name</td>
             <td th:text="${category.subcategory}">Subcategory</td>
             <td>
-                <a class="ui green icon button" th:href="@{/edit(id=${category.id})}">
-                    <i class="pen square icon"></i>
-                </a>
+                <form method="POST" th:action="@{/admin/category/edit(categoryId=${category.id})}">
+                    <button type="submit" name="submit" value="value" class="btn btn-success">
+                        Редактировать
+                    </button>
+                </form>
             </td>
             <td>
-                <a class="ui red icon button" th:href="@{/delete(id=${category.id})}">
-                    <i class="trash alternate icon"></i>
-                </a>
+                <form method="POST" th:action="@{/admin/category/delete(categoryId=${category.id})}">
+                    <button type="submit" name="submit" value="value" class="btn btn-danger">
+                        Удалить
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 </body>
 </html>
