@@ -1,5 +1,7 @@
 package com.example.internship.filter;
 
+import com.example.internship.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,10 @@ import java.util.Arrays;
 // Фильтр будет срабатывать первым
 @Order(1)
 public class CookieFilter implements Filter {
+
+    @Autowired
+    private CustomerService customerService;
+
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -23,15 +29,13 @@ public class CookieFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         // Получаем куки из запроса
         Cookie[] cookies = httpRequest.getCookies();
-        if (cookies != null) {
-            // Если в куках не записан id покупателя
-            if (Arrays.stream(cookies)
-                    .filter(x -> x.getName().equals("customerId")).findFirst().orElse(null) == null) {
-                //TODO создание нового покупателя и получение его id
-                Long newUserId = System.currentTimeMillis();
-                // Записываем id покупателя в куки
-                httpResponse.addCookie(new Cookie("customerId", newUserId.toString()));
-            }
+        // Если куки чистые или в куках не записан id покупателя
+        if (cookies == null || Arrays.stream(cookies)
+                .filter(x -> x.getName().equals("customerId")).findFirst().orElse(null) == null) {
+
+            // Создаем нового анонимного покупателя и записываем его id в куки
+            httpResponse.addCookie(new Cookie("customerId",
+                    customerService.createAnonymousCustomer().toString()));
         }
         // Завершаем работу фильтра
         filterChain.doFilter(servletRequest, servletResponse);
