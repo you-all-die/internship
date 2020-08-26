@@ -1,9 +1,8 @@
-package com.example.demosite.entity;
+package com.example.internship.entity;
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "product_status")
