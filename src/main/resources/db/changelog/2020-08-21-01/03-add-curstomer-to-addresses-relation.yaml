@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-21-03
+      author: Samokhvalov
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_customer_addresses
+            baseTableName: addresses
+            baseColumnNames: customer_id
+            referencedTableName: customers
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'

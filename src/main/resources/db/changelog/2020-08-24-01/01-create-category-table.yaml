@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-25-01
+      comment: Create category table
+      author: Sergey Lapshin
+      changes:
+        - createTable:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(64)
+                  constraints:
+                    - unique: true
+                    - nullable: false
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    - nullable: true
+      rollback:
+        - dropTable:
+            tableName: category

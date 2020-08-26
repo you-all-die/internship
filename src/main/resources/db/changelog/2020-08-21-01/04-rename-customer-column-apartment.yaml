@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-21-04
+      author: Samokhvalov
+      changes:
+        - renameColumn:
+            tableName: addresses
+            oldColumnName: appartment
+            newColumnName: apartment
