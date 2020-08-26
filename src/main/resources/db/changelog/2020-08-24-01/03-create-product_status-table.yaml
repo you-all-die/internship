@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-25-03
+      comment: Create product_status table
+      author: Sergey Lapshin
+      changes:
+        - createTable:
+            tableName: product_status
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(64)
+                  constraints:
+                    - unique: true
+                    - nullable: false
+      rollback:
+        - dropTable:
+            tableName: product_status
+
