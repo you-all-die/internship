@@ -44,7 +44,8 @@
                     <a th:if="*{id}"
                        class="ui red button"
                        th:text="#{customer.profile.delete}"
-                       th:href="@{/customer/delete/{id}(id=*{id})}">Delete</a>
+                       th:href="@{/customer/{id}/delete(id=*{id})}">Delete
+                    </a>
                 </div>
             </form>
         </div>

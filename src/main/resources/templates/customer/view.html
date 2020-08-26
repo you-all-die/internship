@@ -5,11 +5,13 @@
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
+
         <div class="ui main container">
-            <h4 class="ui horizontal divider header" th:text="#{customer.view.header}">
-                <i class="user cycle icon"></i>
+
+            <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
                 Header
             </h4>
+
             <table class="ui definition table">
                 <tbody>
                     <tr>

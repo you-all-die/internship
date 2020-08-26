@@ -43,7 +43,7 @@ public class CustomerController {
         return "customer/profile";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String editCustomer(@PathVariable Long id, Model model) {
         Optional<Customer> customer = customerService.getById(id);
         if (customer.isPresent()) {
@@ -60,7 +60,7 @@ public class CustomerController {
         return "redirect:/customer";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteCustomer(@PathVariable Long id) {
         customerService.delete(id);
         return "redirect:/customer";
