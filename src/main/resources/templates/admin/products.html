@@ -1,61 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>Все Товары</title>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+<head th:replace="common/main :: common_header(~{::title})">
+    <title>Interstellar Ship Internet Shop - Products</title>
 </head>
 <body>
-<div th:replace="fragments/header :: header">&nbsp;</div>
-<div class="container">
-    <h1 class="h1 row justify-content-center">Список товаров</h1>
-    <table class="table">
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <h1 class="ui center aligned header">Список товаров</h1>
+    <table class="ui celled table">
         <tbody>
         <tr>
             <td>
                 <form method="POST" action="#" th:action="@{/admin/product/add}">
-                <button class="btn btn-primary">
+                <button class="ui primary button">
                     Добавить товар
                  </button>
                 </form>
             </td>
 
-            <td align="right">
-                <form method="POST" class="form-horizontal" action="#" th:action="@{/admin/products}">
-                    <div class="form-group row justify-content-end">
-                                <input placeholder="Название..." th:name="name" name="name" id="name" type="text" class="form-control col-md-3"/>
-                                <input type="submit" value="Найти" class="btn btn-light col-md-3"/>
+            <td align="right aligned">
+                <form method="POST" class="ui two column stackable grid" action="#" th:action="@{/admin/products}">
+                    <div class="column">
+                        <div class="ui input">
+                                <input class="ui input" placeholder="Название..." th:name="name" name="name" id="name" type="text"/>
+                        </div>
+                    </div>
+                    <div class="column">
+                                <input class="ui button" type="submit" value="Найти"/>
                     </div>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-    <table class="table">
+    <table class="ui celled table">
         <tbody>
         <tr th:each="product: ${productList}">
             <td th:text="${product.name}">Name</td>
-            <td th:text="${product.category}">Category</td>
+            <td th:text="${product.category.name}">Category</td>
             <td th:text="${product.description}">Description</td>
-            <td th:text="${product.status}">Status</td>
+            <td th:text="${product.status.description}">Status</td>
             <td>
                 <form method="POST" th:action="@{/admin/product/edit(productId=${product.id})}">
-                    <button type="submit" name="submit" value="value" class="btn btn-success">
+                    <button type="submit" name="submit" value="value" class="ui green button">
                         Редактировать
                     </button>
                 </form>
             </td>
             <td>
                 <form method="POST" th:action="@{/admin/product/hide(productId=${product.id})}">
-                    <button type="submit" name="submit" value="value" class="btn btn-info">
+                    <button type="submit" name="submit" value="value" class="ui teal button">
                         Скрыть
                     </button>
                 </form>
             </td>
             <td>
                 <form method="POST" th:action="@{/admin/product/delete(productId=${product.id})}">
-                    <button type="submit" name="submit" value="value" class="btn btn-danger">
+                    <button type="submit" name="submit" value="value" class="ui red button">
                         Удалить
                     </button>
                 </form>
@@ -64,5 +65,6 @@
         </tbody>
     </table>
 </div>
+<footer th:replace="common/main::footer"></footer>
 </body>
 </html>

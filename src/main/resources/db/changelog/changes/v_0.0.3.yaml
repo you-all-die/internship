@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2020-08-26-01/03-insert-categories.yaml
+  - include:
+      file: db/changelog/2020-08-26-01/02-insert-product-statuses.yaml
+  - include:
+      file: db/changelog/2020-08-26-01/01-insert-products.yaml

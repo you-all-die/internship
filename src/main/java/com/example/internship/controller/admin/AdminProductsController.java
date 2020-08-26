@@ -1,7 +1,7 @@
-package com.example.internship.controller;
+package com.example.internship.controller.admin;
 
-import com.example.internship.model.Product;
-import com.example.internship.repository.ProductService;
+import com.example.internship.entity.Product;
+import com.example.internship.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,8 +46,7 @@ public class AdminProductsController {
 
     @PostMapping(value="/product/hide")
     public String hideProduct(@RequestParam("productId") Long id, Model model) {
-        Product product = productService.getProductById(id);
-        product.setStatus("Скрыт");
+        productService.hideProduct(id);
         return "redirect:/admin/products";
     }
 
