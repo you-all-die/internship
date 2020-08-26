@@ -28,7 +28,7 @@
                     <tr th:each="customer : ${customers}">
                         <td>
                             <a href="#" style="cursor:pointer"
-                               th:href="@{customer/{id}(id=${customer.id})}"
+                               th:href="@{customer/edit/{id}(id=${customer.id})}"
                                th:text="${customer.fullName}">
                                 Незнайкин Незнам Незнамович
                             </a>

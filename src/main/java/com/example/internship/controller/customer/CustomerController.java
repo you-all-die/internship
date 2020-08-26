@@ -30,7 +30,7 @@ public class CustomerController {
         Optional<Customer> customer = customerService.getById(id);
         if (customer.isPresent()) {
             model.addAttribute("customer", customer.get());
-            return "customer/profile";
+            return "customer/view";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
@@ -41,6 +41,17 @@ public class CustomerController {
         Customer customer = new Customer();
         model.addAttribute("customer", customer);
         return "customer/profile";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editCustomer(@PathVariable Long id, Model model) {
+        Optional<Customer> customer = customerService.getById(id);
+        if (customer.isPresent()) {
+            model.addAttribute("customer", customer.get());
+            return "customer/profile";
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+        }
     }
 
     @PostMapping("")
