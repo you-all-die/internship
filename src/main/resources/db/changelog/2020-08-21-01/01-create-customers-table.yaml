@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-21-01
+      author: Samokhvalov
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: customers_pkey
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: true
+              - column:
+                  name: middle_name
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: true
+              - column:
+                  name: last_name
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(32)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullabel: true
+              - column:
+                  name: email
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: true

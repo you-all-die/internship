@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-25-04
+      comment: Add product to category relation
+      author: Sergey Lapshin
+#      preConditions:
+#          - onFail: WARN
+#          and:
+#              tableExists:
+#                  tableName: product
+#          and:
+#              tableExists:
+#                  tableName: category
+      changes:
+          - addForeignKeyConstraint:
+              constraintName: fk_products_categories
+              baseTableName: product
+              baseColumnNames: category_id
+              referencedTableName: category
+              referencedColumnNames: id
+              onDelete: 'CASCADE'
+              onUpdate: 'RESTRICT'
