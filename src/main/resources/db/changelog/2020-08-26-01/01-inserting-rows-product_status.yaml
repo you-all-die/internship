@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001Insert
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product_status
+      changes:
+        - sql:
+            sql: INSERT INTO product_status (description) VALUES
+                 ('CASCADE'),
+                 ('RESTRICT');

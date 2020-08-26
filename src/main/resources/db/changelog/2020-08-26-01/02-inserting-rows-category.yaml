@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002Insert
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from category
+      changes:
+        - sql:
+            sql: INSERT INTO category (name, parent_id) VALUES
+                 ('Smartphones', 1),
+                 ('TVS', 2),
+                 ('Tablets', 2);

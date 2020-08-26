@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003Insert
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product
+      changes:
+        - sql:
+            sql: INSERT INTO product (category_id, name, description ,picture , status_id) VALUES
+                  (1, 'Smartphone Xiaomi', 'LTE, 32GB', 'test.jpg', 1),
+                  (2, 'TV LG', 'Smart TV', 'test.jpg', 1),
+                  (3, 'Tablet Apple', 'LTE, 128GB', 'test.jpg', 1),
+                  (1, 'Smartphone Sumsung', 'LTE, 32GB', 'test.jpg', 1),
+                  (2, 'TV Sony', 'Smart TV', 'test.jpg', 1),
+                  (3, 'Tablet Asus', 'LTE, 128GB', 'test.jpg', 1);

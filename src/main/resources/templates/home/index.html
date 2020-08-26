@@ -5,8 +5,14 @@
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
+
         <div class="ui main container">
-            <h1>Hello, people!</h1>
+            <h1 class="ui header">Популярные товары</h1>
+            <div th:each="pr, iter : ${products}" class="ui container" th:if="${iter.index}<5">
+                <h3><a th:href="'product/' + ${pr.id}" th:text="${pr.name}"/></h3>
+                <p th:text="'Характеристики: ' + ${pr.description}"/>
+                <p><a th:href="'product/' + ${pr.id}"><img th:src="'/img/' + ${pr.picture}"  width="150" height="150" border="0"></a></p>
+            </div>
         </div>
         <footer th:replace="common/main::footer"></footer>
     </body>
