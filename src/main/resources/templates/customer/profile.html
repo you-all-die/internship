@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Customer Profile</title>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="common/main :: common_header(~{:: title})">
+        <title th:text="#{customer.profile.page_title}">Customer Profile Page</title>
     </head>
     <body>
+        <div th:replace="common/main :: header"></div>
 
+        <div class="ui main container segment">
+            <form class="ui form" th:action="@{/customer}" th:object="${customer}" method="post">
+
+                <h3 class="ui dividing header" th:text="#{customer.profile.header}">Customer profile</h3>
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="ui three fields">
+                    <div class="field">
+                        <label th:text="#{customer.profile.last_name}">Last Name</label>
+                        <input type="text" th:field="*{lastName}" autofocus>
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.first_name}">First Name</label>
+                        <input type="text" th:field="*{firstName}">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.middle_name}">Middle Name</label>
+                        <input type="text" th:field="*{middleName}">
+                    </div>
+                </div>
+
+                <div class="ui two fields">
+                    <div class="required field">
+                        <label th:text="#{customer.profile.email}">Email</label>
+                        <input type="text" th:field="*{email}">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{customer.profile.phone}">Phone</label>
+                        <input type="text" th:field="*{phone}">
+                    </div>
+                </div>
+
+                <div class="ui two buttons">
+                    <button class="ui blue button" type="submit" th:text="#{customer.profile.save}">Save</button>
+                    <a th:if="*{id}"
+                       class="ui red button"
+                       th:text="#{customer.profile.delete}"
+                       th:href="@{/customer/delete/{id}(id=*{id})}">Delete</a>
+                </div>
+            </form>
+        </div>
     </body>
 </html>

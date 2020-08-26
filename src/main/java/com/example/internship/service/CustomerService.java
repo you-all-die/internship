@@ -21,6 +21,14 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
+    public final void save(Customer customer) {
+        customerRepository.save(customer);
+    }
+
+    public final void delete(long id) {
+        customerRepository.deleteById(id);
+    }
+
     // создание нового анонимного покупателя
     public Long createAnonymousCustomer() {
         return customerRepository.save(new Customer()).getId();

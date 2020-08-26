@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="common/main :: common_header(~{:: title})">
-        <title>Customer List</title>
+        <title th:text="#{customer.list.page_title}">Customer List</title>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
         <div class="ui main container">
-            <h3 class="ui dividing header">Customer List</h3>
+
+            <h3 class="ui dividing header"
+                th:text="#{customer.list.header}">Customer List Page
+            </h3>
+
             <table class="ui table">
                 <thead>
                     <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
+                        <th th:text="#{customer.list.full_name}">Full Name</th>
+                        <th th:text="#{customer.list.email}">Email</th>
+                        <th th:text="#{customer.list.phone}">Phone</th>
+                        <th>
+                            <a class="ui green icon button" th:href="@{/customer/add}">
+                                <i class="plus icon"></i>
+                            </a>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="customer : ${customers}">
                         <td>
-                            <a href="#"
-                               th:href="@{/customer/{id}(id=${customer.id})}"
-                               th:text="${customer.fullName}">Незнайкин Незнам Незнамович</a>
+                            <a href="#" style="cursor:pointer"
+                               th:href="@{customer/{id}(id=${customer.id})}"
+                               th:text="${customer.fullName}">
+                                Незнайкин Незнам Незнамович
+                            </a>
                         </td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
                         <td th:text="${customer.phone}">322-33-22</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
