@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="common/main :: common_header(~{:: title})">
+        <title>Customer List</title>
+    </head>
+    <body>
+        <div th:replace="common/main :: header"></div>
+        <div class="ui main container">
+            <h3 class="ui dividing header">Customer List</h3>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="customer : ${customers}">
+                        <td>
+                            <a href="#"
+                               th:href="@{/customer/{id}(id=${customer.id})}"
+                               th:text="${customer.fullName}">Незнайкин Незнам Незнамович</a>
+                        </td>
+                        <td th:text="${customer.email}">nobody@nowhere.com</td>
+                        <td th:text="${customer.phone}">322-33-22</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
