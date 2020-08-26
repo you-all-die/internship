@@ -1,6 +1,7 @@
 package com.example.demosite.entity;
 
 import lombok.Data;
+import org.springframework.jdbc.datasource.AbstractDriverBasedDataSource;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,6 +19,6 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
-    @OneToMany(mappedBy = "addresses")
+    @OneToMany(mappedBy = "customer")
     private Set<Address> addresses;
 }
