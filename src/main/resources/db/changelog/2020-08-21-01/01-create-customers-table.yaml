@@ -28,12 +28,12 @@ databaseChangeLog:
                   name: last_name
                   type: VARCHAR(64)
                   constraints:
-                    - nullable: false
+                    - nullable: true
               - column:
                   name: password
                   type: VARCHAR(32)
                   constraints:
-                    - nullable: false
+                    - nullable: true
               - column:
                   name: phone
                   type: VARCHAR(64)
