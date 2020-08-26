@@ -1,5 +1,4 @@
 databaseChangeLog:
-  -
   - include:
       file: db/changelog/2020-08-24-01/01-create-category-table.yaml
   - include:
