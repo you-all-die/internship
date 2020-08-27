@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title})">
+    <title>Регистрация нового покупателя</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <form class="ui form" method="post" action="#" th:action="@{/registration}" th:object="${customerDto}">
+        <h4 class="ui dividing header">Регистрация нового покупателя</h4>
+        <div class="field">
+            <div class="three fields">
+                <div class="field">
+                    <label>Фамилия</label>
+                    <input type="text" name="lastName" placeholder="Фамилия" th:field="*{lastName}">
+                    <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></td>
+                </div>
+                <div class="field">
+                    <label>Имя</label>
+                    <input type="text" name="firstName" placeholder="Имя" th:field="*{firstName}">
+                    <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></td>
+                </div>
+                <div class="field">
+                    <label>Отчество</label>
+                    <input type="text" name="middleName" placeholder="Отчество" th:field="*{middleName}">
+                    <td th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></td>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label>Почта</label>
+                    <input type="email" name="email" placeholder="joe@schmoe.com" th:field="*{email}">
+                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
+                </div>
+                <div class="field">
+                    <label>Телефон</label>
+                    <input type="tel" name="phone" placeholder="+7 999 999 999" th:field="*{phone}">
+                    <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></td>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Пароль</label>
+            <div class="two fields">
+                <div class="field">
+                    <input type="password" name="password" placeholder="Пароль">
+                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+                </div>
+                <div class="field">
+                    <input type="password" name="passwordConfirm" placeholder="Подтвердите пароль">
+                </div>
+            </div>
+        </div>
+        <div class="ui form error" th:if="${errorMessage}">
+            <div class="ui error message">
+                <div class="header">Ошибка регистрации</div>
+                <p th:text="${errorMessage}"></p>
+            </div>
+        </div>
+        <br>
+        <input type="submit" class="ui submit button" value="Зарегестрироваться">
+    </form>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
