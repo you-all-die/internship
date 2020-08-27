@@ -15,9 +15,13 @@ public class AboutController {
     @Value("${yandex.maps.apikey}")
     private String yandexMapsApiKey;
 
+    @Value("${yandex.maps.mode:release}")
+    private String yandexMapsMode;
+
     @GetMapping("")
     public String showAboutPage(Model model) {
         model.addAttribute("apikey", yandexMapsApiKey);
+        model.addAttribute("mode", yandexMapsMode);
         return "about/index";
     }
 }

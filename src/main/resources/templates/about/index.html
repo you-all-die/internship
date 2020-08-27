@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header (~{this :: title}, _, ~{this :: script})">
+    <head th:replace="common/main :: common_header (~{::title}, _, ~{::script})">
         <title>О нас</title>
-        <script th:scr="@{https://api-maps.yandex.ru/2.1/?apikey=${apikey}}"></script>
+
+        <script th:src="@{https://api-maps.yandex.ru/2.1(apikey=${apikey},mode=${mode},load=package.full,lang=ru_RU)}"></script>
+        <script th:src="@{js/about/yandex-maps.js}"></script>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
+
         <div class="ui main container">
             <div>
                 <h2>
                     Мы - команда Interstellar Ship Internet Shop!
                 </h2>
             </div>
+            <div id="map" class="ui placeholder segment" style="width:450px; height:350px;"></div>
         </div>
-        <!-- TODO перенести скрипт в заголовок, для этого надо переписать его -->
+
+        <!-- Yandex Map -->
+
     </body>
 </html>
