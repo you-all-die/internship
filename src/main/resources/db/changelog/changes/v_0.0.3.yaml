@@ -1,0 +1,130 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-26-003
+      author: Murashov Alexey
+      comment: Inserting some statuses
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from category
+      changes:
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "Смартфоны"
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: name
+                  value: "Планшеты"
+  - changeSet:
+      id: 2020-08-26-002
+      author: Murashov Alexey
+      comment: Inserting some statuses
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product_status
+      changes:
+        - insert:
+            tableName: product_status
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: description
+                  value: "В наличии"
+        - insert:
+            tableName: product_status
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: description
+                  value: "Нет в наличии"
+  - changeSet:
+      id: 2020-08-26-001
+      author: Murashov Alexey
+      comment: Inserting some products
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product
+      changes:
+        - insert:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: category_id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "IPhone 7"
+              - column:
+                  name: description
+                  value: "IPhone 7 description"
+              - column:
+                  name: picture
+                  value: ""
+              - column:
+                  name: status_id
+                  value: "1"
+        - insert:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: category_id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "IPhone 8"
+              - column:
+                  name: description
+                  value: "IPhone 8 description"
+              - column:
+                  name: picture
+                  value: ""
+              - column:
+                  name: status_id
+                  value: "1"
+        - insert:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: category_id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "IPhone 10"
+              - column:
+                  name: description
+                  value: "IPhone 10 description"
+              - column:
+                  name: picture
+                  value: ""
+              - column:
+                  name: status_id
+                  value: "2"
