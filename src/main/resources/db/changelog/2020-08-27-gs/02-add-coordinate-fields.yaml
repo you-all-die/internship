@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-27
+      author: Yury Samokhvalov
+      comment: Add longitude and lattitude to outlet table
+      changes:
+        - addColumn:
+            tableName: outlet
+            columns:
+              - column:
+                  name: longitude
+                  type: FLOAT
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: latitude
+                  type: FLOAT
+                  constraints:
+                    - nullable: false
