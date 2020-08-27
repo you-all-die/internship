@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header (~{this :: title})">
+    <head th:replace="common/main :: common_header (~{this :: title}, _, ~{this :: script})">
         <title>О нас</title>
+        <script th:scr="@{https://api-maps.yandex.ru/2.1/?apikey=${apikey}}"></script>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
@@ -13,6 +14,5 @@
             </div>
         </div>
         <!-- TODO перенести скрипт в заголовок, для этого надо переписать его -->
-        <script th:scr="https://api-maps.yandex.ru/2.1/?apikey=${apikey}"></script>
     </body>
 </html>
