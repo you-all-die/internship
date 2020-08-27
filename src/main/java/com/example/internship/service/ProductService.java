@@ -25,14 +25,7 @@ public class ProductService {
     }
 
     public List<Product> findByName(String name) {
-        List<Product> result = new ArrayList<>();
-
-        productRepository.findAll().forEach(product -> {
-            if (product.getName().toLowerCase().contains(name.toLowerCase())) {
-                result.add(product);
-            }
-        });
-        return result;
+        return productRepository.findByNameContainsIgnoreCase(name);
     }
 
     public void hideProduct(long id) {
