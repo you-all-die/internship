@@ -3,22 +3,17 @@
     <head th:replace="common/main :: common_header (~{::title}, _, ~{::script})">
         <title>О нас</title>
 
-        <script th:src="@{https://api-maps.yandex.ru/2.1(apikey=${apikey},mode=${mode},load=package.full,lang=ru_RU)}"></script>
+        <script th:src="@{https://api-maps.yandex.ru/2.1(apikey=${apikey},mode=${mode},lang=ru_RU)}"></script>
         <script th:src="@{js/about/yandex-maps.js}"></script>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
 
         <div class="ui main container">
-            <div>
-                <h2>
-                    Мы - команда Interstellar Ship Internet Shop!
-                </h2>
-            </div>
-            <div id="map" class="ui placeholder segment" style="width:450px; height:350px;"></div>
-        </div>
 
-        <!-- Yandex Map -->
+            <!-- Yandex Map -->
+            <div id="map" class="ui placeholder segment" style="width:100%; height:640px;"></div>
+        </div>
 
     </body>
 </html>
