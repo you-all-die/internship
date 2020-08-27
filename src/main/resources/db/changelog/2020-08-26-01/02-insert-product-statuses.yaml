@@ -1,8 +1,13 @@
 databaseChangeLog:
   - changeSet:
-      id: 2020-08-26
+      id: 2020-08-26-002
       author: Murashov Alexey
       comment: Inserting some statuses
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product_status
       changes:
         - insert:
             tableName: product_status
