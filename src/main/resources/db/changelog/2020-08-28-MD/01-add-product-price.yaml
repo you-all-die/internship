@@ -9,5 +9,5 @@ databaseChangeLog:
               - column:
                   afterColumn: picture
                   name: price
-                  type: numeric(15, 10)
+                  type: numeric(15, 2)
             tableName: product
