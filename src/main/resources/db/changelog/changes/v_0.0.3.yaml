@@ -128,3 +128,15 @@ databaseChangeLog:
               - column:
                   name: status_id
                   value: "2"
+  - changeSet:
+      id: 2020-08-27-05
+      author: Aleksey Romodin
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 0
+                sql: select count(*) from product;
+      changes:
+        - sql: update product set picture='popular.jpg';
+

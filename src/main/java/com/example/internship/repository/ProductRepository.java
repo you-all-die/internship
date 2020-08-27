@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
+public interface ProductRepository extends CrudRepository<Product, Long>, ProductPopularRepository<Product> {
     List<Product> findByNameContainsIgnoreCase(String name);
 }
