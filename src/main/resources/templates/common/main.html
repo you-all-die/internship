@@ -27,7 +27,7 @@
 
         <script th:src="@{js/jquery.min.js}"></script>
         <script th:src="@{js/semantic.min.js}"></script>
-        <th:block th:replace="${scripts}}"/>
+        <th:block th:replace="${scripts}"/>
     </head>
     <body>
         <div th:fragment="header">
@@ -59,12 +59,15 @@
                         <i class="user icon"></i>
 
                         <div class="menu">
+                            <!-- ссылка на вход в систему -->
                             <a class="item" th:href="@{/}" sec:authorize="isAnonymous()">
                                 Log in
                             </a>
+                            <!-- ссылка на выход из системы -->
                             <a class="item" th:href="@{/}" sec:authorize="isAuthenticated()">
                                 Log out
                             </a>
+                            <!-- ссылка на регистрацию в систему -->
                             <a class="item" th:href="@{/}" sec:authorize="isAnonymous()">
                                 Registration
                             </a>
