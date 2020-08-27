@@ -1,7 +1,42 @@
 databaseChangeLog:
-  - include:
-      file: db/changelog/2020-08-26-01/01-inserting-rows-product_status.yaml
-  - include:
-      file: db/changelog/2020-08-26-01/02-inserting-rows-category.yaml
-  - include:
-      file: db/changelog/2020-08-26-01/03-inserting-rows-product.yaml
+  - changeSet:
+      id: 2020-08-26-01
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product_status
+      changes:
+        - sql:
+            sql: INSERT INTO product_status (description) VALUES
+              ('CASCADE'),
+              ('RESTRICT');
+  - changeSet:
+      id: 2020-08-26-02
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from category
+      changes:
+        - sql:
+            sql: INSERT INTO category (name, parent_id) VALUES
+              ('Smartphones', 1),
+              ('TVS', 2),
+              ('Tablets', 2);
+  - changeSet:
+      id: 2020-08-26-03
+      author: Aleksey Romodin
+      preConditions:
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from product
+      changes:
+        - sql:
+            sql: INSERT INTO product (category_id, name, description ,picture , status_id) VALUES
+              (1, 'Smartphone Xiaomi', 'LTE, 32GB', 'test.jpg', 1),
+              (2, 'TV LG', 'Smart TV', 'test.jpg', 1),
+              (3, 'Tablet Apple', 'LTE, 128GB', 'test.jpg', 1),
+              (1, 'Smartphone Sumsung', 'LTE, 32GB', 'test.jpg', 1),
+              (2, 'TV Sony', 'Smart TV', 'test.jpg', 1),
+              (3, 'Tablet Asus', 'LTE, 128GB', 'test.jpg', 1);
