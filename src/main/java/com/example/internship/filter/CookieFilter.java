@@ -30,12 +30,9 @@ public class CookieFilter implements Filter {
         // Получаем куки из запроса
         Cookie[] cookies = httpRequest.getCookies();
         // Если куки чистые или в куках не записан id покупателя
-        if (cookies == null || Arrays.stream(cookies)
-                .filter(x -> x.getName().equals("customerId")).findFirst().orElse(null) == null) {
-
-            // Создаем нового анонимного покупателя и записываем его id в куки
-            httpResponse.addCookie(new Cookie("customerId",
-                    customerService.createAnonymousCustomer().toString()));
+        if (customerService.customerIdFromCookie(httpRequest).isEmpty()) {
+            // Создаем анонимного покупателя и добавляем его id в куки
+            customerService.customerIdAddToCookie(httpResponse, customerService.createAnonymousCustomer());
         }
         // Завершаем работу фильтра
         filterChain.doFilter(servletRequest, servletResponse);
