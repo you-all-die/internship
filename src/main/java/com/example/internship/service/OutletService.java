@@ -3,6 +3,7 @@ package com.example.internship.service;
 import com.example.internship.entity.Outlet;
 import com.example.internship.repository.OutletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,6 +28,10 @@ public class OutletService {
 
     public void delete(long id) {
         outletRepository.deleteById(id);
+    }
+
+    public Iterable<String> getCities() {
+        return outletRepository.findCities();
     }
 
     public Iterable<Outlet> getByCity(String city) {

@@ -20,9 +20,9 @@
                         <div class="field">
                             <select class="ui dropdown">
                                 <option value="">Все</option>
-                                <option value="Москва">Москва</option>
-                                <option value="Ульяновск">Ульяновск</option>
-                                <option value="Краснодар">Краснодар</option>
+                                <th:block th:each="city : ${cities}">
+                                    <option value="${city}" th:text="${city}">City</option>
+                                </th:block>
                             </select>
                         </div>
                     </div>

@@ -26,6 +26,7 @@ public class AboutController {
 
     @GetMapping("")
     public String showAboutPage(Model model) {
+        model.addAttribute("cities", outletService.getCities());
         model.addAttribute("outlets", outletService.getAll());
         model.addAttribute("version", yandexMapsApiVersion);
         model.addAttribute("apikey", yandexMapsApiKey);
