@@ -3,14 +3,15 @@ package com.example.internship.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "product")
 @Data
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @ManyToOne
@@ -22,6 +23,8 @@ public class Product {
     private String description;
 
     private String picture;
+
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
