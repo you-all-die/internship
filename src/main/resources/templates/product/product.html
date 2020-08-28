@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Product</title>
+</head>
+<body>
+<div th:each="product : ${product}"/>
+<div class="id product" th:text="${product?.id}"> <p> id</p></div>
+<div class="name product" th:text="${product?.name}"> <p>name</p></div>
+<div class="price" th:text="${product?.price}"><p>price</p></div>
+<div class="description" th:text="${product?.description}"><p>description</p></div>
+<img th:src="@{images/headerLogo.png}"/>
+
+
+</div>
+</body>
+</html>
+
+
+
