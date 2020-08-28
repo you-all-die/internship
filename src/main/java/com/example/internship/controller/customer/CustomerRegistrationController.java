@@ -2,7 +2,6 @@ package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.service.CustomerService;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/registration")
@@ -31,13 +30,13 @@ public class CustomerRegistrationController {
     // Регистрация нового покупателя
     @PostMapping
     public String newCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult, Model model,
-                              HttpServletRequest request, HttpServletResponse response) {
+                              @RequestParam Map<String,String> allParams) {
         // Если неверно заполнены поля
         if (bindingResult.hasErrors()) {
             return "customer/registration";
         }
         // Если пароли не совпадают
-        if (!request.getParameter("password").equals(request.getParameter("passwordConfirm"))) {
+        if (!allParams.get("password").equals(allParams.get("passwordConfirm"))) {
             model.addAttribute("errorMessage", "Пароли не совпадают.");
             return "customer/registration";
         }
