@@ -34,9 +34,11 @@
                             <div th:with="outletItemId = ${'outlet' + stat.index}">
                                 <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer">
                                     <script th:inline="javascript">
+
+                                        // При клике сместить карту на магазин
                                         $('#[(${outletItemId})]').click(function() {
                                             var outlet = /*[[${outlet}]]*/ null;
-                                            ymaps.markAndGo(outlet);
+                                            ymaps.showOutlet(outlet);
                                         });
                                     </script>
                                     <h3 class="header" th:text="${outlet.name}">Outlet</h3>
