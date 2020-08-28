@@ -3,7 +3,7 @@ package com.example.internship.controller.customer;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.service.CustomerService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,9 +17,9 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/registration")
+@AllArgsConstructor
 public class CustomerRegistrationController {
 
-    @Autowired
     private CustomerService customerService;
 
     @GetMapping
@@ -43,7 +43,7 @@ public class CustomerRegistrationController {
         }
 
         // регистрация покупателя и редирект на страницу его профиля
-        return "redirect:/customer?id=" + customerService.registrationCustomer(customerDto, request, response);
+        return "redirect:/customer?id=" + customerService.registrationCustomer(customerDto).getId();
     }
 
 }
