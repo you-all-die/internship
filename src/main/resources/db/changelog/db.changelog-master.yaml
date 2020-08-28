@@ -1,8 +1,9 @@
 databaseChangeLog:
-
   - include:
-      file: src/main/resources/db/changelog/2020-08-21-01/01-create-customers-table.yaml
+      file: db/changelog/changes/v_0.0.1.yaml
   - include:
-      file: src/main/resources/db/changelog/2020-08-21-01/02-create-addresses-table.yaml
+      file: db/changelog/changes/v_0.0.2.yaml
   - include:
-      file: src/main/resources/db/changelog/2020-08-21-01/03-add-curstomer-to-addresses-relation.yaml
+      file: db/changelog/changes/v_0.0.3.yaml
+  - include:
+      file: db/changelog/changes/v_0.0.5.yaml
