@@ -3,31 +3,34 @@ package com.example.internship.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "adress_shop")
-public class AdressShop {
+@Table(name = "address_shop")
+public class AddressShop {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long shop_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shop_id")
+    private Long shopId;
 
+    @Column(name = "address")
     private String address;
+    @Column(name = "schedule")
     private String schedule;
 
-    public Long getShop_id() {
-        return shop_id;
+    public Long getShopId() {
+        return shopId;
     }
 
-    public void setShop_id(Long shop_id) {
-        this.shop_id = shop_id;
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
-    public AdressShop(Long id, String address, String schedule) {
-        this.shop_id = id;
+    public AddressShop(Long shopId, String address, String schedule) {
+        this.shopId = shopId;
         this.address = address;
         this.schedule = schedule;
     }
 
-    public AdressShop(){
+    public AddressShop(){
 
     }
 

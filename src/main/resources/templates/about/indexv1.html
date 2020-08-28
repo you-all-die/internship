@@ -23,7 +23,7 @@
 </nav>
 <div class="container mt-3">
     <h5>Адреса магазинов:</h5>
-    <div th:each="element:${adressShops}" class="alert alert-light mt-0">
+    <div th:each="element:${addressShops}" class="alert alert-light mt-0">
         <span class="letter" th:text="${element.address}"/></br>
         График работы: </br>
         <span class="timesNewLeha" th:text="${element.schedule}"/>

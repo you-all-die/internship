@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+     id: 2020-08-28-02
+     author: Aleksey Moiseychev
+     comment: "add 2 shops"
+     changes:
+       - insert:
+           tableName: address_shop
+           columns:
+             - column:
+                 name: address
+                 value: "г.Ульяновск, ул.Гончарова, д.3"
+             - column:
+                 name: schedule
+                 value: "08:00-17:00"
+       - insert:
+           tableName: address_shop
+           columns:
+             - column:
+                 name: address
+                 value: "г.Ульяновск, ул.Кольцевая, д.3"
+             - column:
+                 name: schedule
+                 value: "08:00-16:00"
