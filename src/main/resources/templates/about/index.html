@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header(~{::title})">
+    <head th:replace="common/main :: common_header(~{::title},_,_)">
         <meta charset="UTF-8">
-        <title>О нас</title>
+        <title>About us</title>
     </head>
     <body>
         <div th:replace="common/main::header"></div>
         <div class="ui main container">
-            <div>
-                <h2>
-                    Мы - команда Interstellar Ship Internet Shop!
-                </h2>
-            </div>
+
+            <h2 class="ui center aligned icon header">
+                <i class="users icon"></i>
+                Мы - команда Interstellar Ship!
+            </h2>
+
         </div>
         <footer th:replace="common/main::footer"></footer>
     </body>

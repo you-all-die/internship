@@ -1,11 +1,14 @@
 package com.example.internship.controller.admin;
 
-import com.example.internship.entity.Product;
+import com.example.internship.dto.ProductDto;
 import com.example.internship.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ public class AdminProductsController {
 
     @GetMapping({"/products"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String productName) {
-        List<Product> list;
+        List<ProductDto> list;
         if (productName == null) {
             list = productService.findAll();
         } else {
@@ -46,7 +49,7 @@ public class AdminProductsController {
 
     @PostMapping(value="/product/hide")
     public String hideProduct(@RequestParam("productId") Long id, Model model) {
-        productService.hideProduct(id);
+        //productService.hideProduct(id);
         return "redirect:/admin/products";
     }
 

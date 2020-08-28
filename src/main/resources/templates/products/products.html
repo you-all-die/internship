@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Products</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <div class="container">
+        <h2 class="ui red center aligned icon header" th:if="${products.isEmpty()}">
+            <i class="ambulance icon"></i>
+            Oops.... Houston we have a problem! No products available!
+        </h2>
+    </div>
+
+    <div class="ui three column grid">
+
+        <div class="column" th:each="product : ${products}">
+            <div class="ui fluid card">
+                <div class="image">
+                    <img th:src="@{images/headerLogo.png}">
+                </div>
+                <div class="content">
+                    <div class="header" th:text="${product?.name}"></div>
+                    <div class="description" th:text="${product?.description}">
+                    </div>
+                </div>
+                <div class="content">
+
+                    <div class="left floated">
+                        <div class="ui tiny statistic">
+
+                            <div class="value">
+                                <span th:text="${product?.price?.setScale(0)}"></span>
+                                <i class="small ruble sign icon"></i>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <form method="post" th:action="@{/products/addToCart}">
+                        <div class="right floated">
+                            <input type="hidden" name="productId" th:value="${product?.id}"/>
+
+                            <button type="submit" class="ui teal animated button" tabindex="0">
+                                <div class="hidden content">Add</div>
+                                <div class="visible content">
+                                    <i class="cart plus icon"></i>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

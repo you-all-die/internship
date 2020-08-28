@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-01
+      comment:  Add product price
+      author: Modenov Danil
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  afterColumn: picture
+                  name: price
+                  type: numeric(15, 2)
+            tableName: product
