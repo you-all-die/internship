@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title})">
+    <title>Interstellar Ship Internet Shop - Products</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <h1 class="ui center aligned header">Список товаров</h1>
+    <table class="ui celled table">
+        <tbody>
+        <tr>
+            <td>
+                <form method="POST" action="#" th:action="@{/admin/product/add}">
+                <button class="ui primary button">
+                    Добавить товар
+                 </button>
+                </form>
+            </td>
+
+            <td align="right aligned">
+                <form method="POST" class="ui two column stackable grid" action="#" th:action="@{/admin/products}">
+                    <div class="column">
+                        <div class="ui input">
+                                <input class="ui input" placeholder="Название..." th:name="name" name="name" id="name" type="text"/>
+                        </div>
+                    </div>
+                    <div class="column">
+                                <input class="ui button" type="submit" value="Найти"/>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ui celled table">
+        <tbody>
+        <tr th:each="product: ${productList}">
+            <td th:text="${product.name}">Name</td>
+            <td th:text="${product.category.name}">Category</td>
+            <td th:text="${product.description}">Description</td>
+            <td th:text="${product.status.description}">Status</td>
+            <td>
+                <form method="POST" th:action="@{/admin/product/edit(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="ui green button">
+                        Редактировать
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" th:action="@{/admin/product/hide(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="ui teal button">
+                        Скрыть
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" th:action="@{/admin/product/delete(productId=${product.id})}">
+                    <button type="submit" name="submit" value="value" class="ui red button">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
