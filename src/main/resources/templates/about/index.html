@@ -4,11 +4,17 @@
         <title th:text="#{about.index.title}">About</title>
 
         <script th:src="@{https://api-maps.yandex.ru/{version}(version=${version},apikey=${apikey},mode=${mode},lang=ru_RU)}"></script>
-        <script th:src="@{js/about/yandex-maps.js}"></script>
-        <script>
+        <script th:src="@{/js/about/yandex-maps.js}"></script>
+        <script th:inline="javascript">
             function onCityChange (select) {
-                var selectedCity = select.options[select.selectedIndex].value;
-                alert(selectedCity + ' выбран!');
+                var url = select.options[select.selectedIndex].value;
+                console.log('Вызов по URL ' + url);
+                $.ajax({
+                    url: url
+                }).then(function (data) {
+                    alert('Получен ответ сервера');
+                    console.log('data=' + data);
+                });
             }
         </script>
     </head>
@@ -27,7 +33,7 @@
                             <select class="ui dropdown" onchange="onCityChange(this)">
                                 <option value="">Все</option>
                                 <th:block th:each="city : ${cities}">
-                                    <option th:value="${city}" th:text="${city}">City</option>
+                                    <option th:value="@{/about(city=${city})}" th:text="${city}">City</option>
                                 </th:block>
                             </select>
                         </div>

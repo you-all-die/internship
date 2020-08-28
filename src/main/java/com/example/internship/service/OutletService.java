@@ -4,6 +4,7 @@ import com.example.internship.entity.Outlet;
 import com.example.internship.repository.OutletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class OutletService {
         return outletRepository.findCities();
     }
 
-    public Iterable<Outlet> getByCity(String city) {
+    public Iterable<Outlet> getOutlets(String city) {
         if (null == city || city.isEmpty()) {
             return outletRepository.findAll();
         }
