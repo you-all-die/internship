@@ -1,5 +1,6 @@
 package com.example.internship.controller.about;
 
+import com.example.internship.entity.Outlet;
 import com.example.internship.service.OutletService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,12 +31,13 @@ public class AboutController {
     private OutletService outletService;
 
     @GetMapping("")
-    public String showAboutPage(@NotNull Model model, @RequestParam(required = false, defaultValue = "") String city) {
+    public String showAboutPage(@NotNull Model model) {
         model.addAttribute("cities", outletService.getCities());
-        model.addAttribute("outlets", outletService.getOutlets(city));
+        model.addAttribute("outlets", outletService.getAll());
         model.addAttribute("version", version);
         model.addAttribute("apikey", apikey);
         model.addAttribute("mode", mode);
         return "about/index";
     }
+
 }
