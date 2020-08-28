@@ -1,0 +1,113 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-01
+      author: Yury Samokhvalov
+      comment: We need more outlets!
+      preconditions:
+        - onFail: MARK_RUN
+        - sqlCheck:
+            expectedResult: 2
+            sql: select count(*) from outlet
+      changes:
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: city
+                  value: "Ульяновск"
+              - column:
+                  name: name
+                  value: "ТЦ Аквамолл"
+              - column:
+                  name: address
+                  value: "г. Ульяновск, Московское ш., д. 108"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 22:00"
+              - column:
+                  name: longitude
+                  value: "54.306386"
+              - column:
+                  name: latitude
+                  value: "48.359144"
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "4"
+              - column:
+                  name: city
+                  value: "Ульяновск"
+              - column:
+                  name: name
+                  value: "ЦУМ"
+              - column:
+                  name: address
+                  value: "г. Ульяновск, ул. Гончарова, д. 21"
+              - column:
+                  name: phone
+                  value: "+7 (8422) 58-66-25"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 21:00"
+              - column:
+                  name: longitude
+                  value: "54.318388"
+              - column:
+                  name: latitude
+                  value: "48.396840"
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "5"
+              - column:
+                  name: city
+                  value: "Самара"
+              - column:
+                  name: name
+                  value: "ТЦ МЕГА"
+              - column:
+                  name: address
+                  value: "г. Самара, Московское ш., 24-й км"
+              - column:
+                  name: phone
+                  value: "+7 (800) 707-10-44"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 22:00"
+              - column:
+                  name: longitude
+                  value: "53.325196"
+              - column:
+                  name: latitude
+                  value: "50.305042"
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "6"
+              - column:
+                  name: city
+                  value: "Самара"
+              - column:
+                  name: name
+                  value: "ТЦ Мир"
+              - column:
+                  name: address
+                  value: "г. Самара, ул. Мира, 9А"
+              - column:
+                  name: opening_hours
+                  value: "09:00 - 21:00"
+              - column:
+                  name: longitude
+                  value: "53.316036"
+              - column:
+                  name: latitude
+                  value: "50.303172"
