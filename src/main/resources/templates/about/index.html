@@ -9,7 +9,7 @@
     <body>
         <div th:replace="common/main :: header"></div>
 
-        <div class="ui main container">
+        <div class="ui container">
 
             <div class="ui grid">
 
@@ -30,26 +30,34 @@
                     <!-- Список магазинов -->
                     <div class="ui list">
                         <div class="ui header" th:text="#{about.index.outlets}">Outlets</div>
-                        <div class="item" th:each="outlet : ${outlets}">
-                            <div class="content">
-                                <div class="header" th:text="${outlet.name}">Oz Mall</div>
-                                <div class="description">
-                                    <table class="ui definition table">
-                                        <tbody>
-                                            <tr>
-                                                <td th:text="#{about.index.address}">Address</td>
-                                                <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
-                                            </tr>
-                                            <tr>
-                                                <td th:text="#{about.index.phone}">Phone</td>
-                                                <td th:text="${outlet.phone}">322-33-22</td>
-                                            </tr>
-                                            <tr>
-                                                <td th:text="#{about.index.opening_hours}">Opening hours</td>
-                                                <td th:text="${outlet.openingHours}">00:00 - 24:00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                        <div class="item" th:each="outlet, stat : ${outlets}">
+                            <div th:with="outletItemId = ${'outlet' + stat.index}">
+                                <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer">
+                                    <script th:inline="javascript">
+                                        $('#[(${outletItemId})]').click(function() {
+                                            var outlet = /*[[${outlet}]]*/ null;
+                                            ymaps.markAndGo(outlet);
+                                        });
+                                    </script>
+                                    <h3 class="header" th:text="${outlet.name}">Outlet</h3>
+                                    <div class="description">
+                                        <table class="ui definition table">
+                                            <tbody>
+                                                <tr>
+                                                    <td th:text="#{about.index.address}">Address</td>
+                                                    <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
+                                                </tr>
+                                                <tr>
+                                                    <td th:text="#{about.index.phone}">Phone</td>
+                                                    <td th:text="${outlet.phone}">322-33-22</td>
+                                                </tr>
+                                                <tr>
+                                                    <td th:text="#{about.index.opening_hours}">Opening hours</td>
+                                                    <td th:text="${outlet.openingHours}">00:00 - 24:00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
