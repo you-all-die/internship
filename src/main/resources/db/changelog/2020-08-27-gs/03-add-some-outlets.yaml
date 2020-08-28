@@ -36,3 +36,30 @@ databaseChangeLog:
               - column:
                   name: latitude
                   value: "39.121717"
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: city
+                  value: "Краснодар"
+              - column:
+                  name: name
+                  value: "ТЦ Красная Площадь"
+              - column:
+                  name: address
+                  value: "г. Краснодар, ул. Дзержинского, д. 100"
+              - column:
+                  name: phone
+                  value: "+7 (861) 253-78-77"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 22:00"
+              - column:
+                  name: longitude
+                  value: "45.102333"
+              - column:
+                  name: latitude
+                  value: "38.983852"
