@@ -14,7 +14,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class CookieFilter implements Filter {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @Override
     public void doFilter(ServletRequest servletRequest,
