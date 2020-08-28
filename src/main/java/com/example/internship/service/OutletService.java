@@ -35,6 +35,9 @@ public class OutletService {
     }
 
     public Iterable<Outlet> getByCity(String city) {
+        if (null == city || city.isEmpty()) {
+            return outletRepository.findAll();
+        }
         return outletRepository.findAllByCity(city);
     }
 }
