@@ -22,5 +22,6 @@ public class ShowProductController {
                 productService.getProductById(id));
 
         return "product/product";
+        //dawdawd
     }
 }
