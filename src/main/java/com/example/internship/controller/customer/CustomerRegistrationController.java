@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CustomerRegistrationController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @GetMapping
     public String registration(CustomerDto customerDto) {
