@@ -26,12 +26,12 @@ public class ProductController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("product/{id}")
     public String showProduct(@PathVariable("id") long id, Model model){
         model.addAttribute("product",
                 productService.getProductById(id));
 
-        return "product/product";
-        //dawdawd
+        return "products/product/product";
+
     }
 }
