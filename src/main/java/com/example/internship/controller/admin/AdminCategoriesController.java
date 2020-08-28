@@ -1,8 +1,7 @@
-package com.example.demosite.controller;
+package com.example.internship.controller.admin;
 
-import com.example.demosite.model.Category;
-import com.example.demosite.repository.CategoryService;
-import org.apache.log4j.Logger;
+import com.example.internship.entity.Category;
+import com.example.internship.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,22 +9,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/admin")
 public class AdminCategoriesController {
     @Autowired
     private CategoryService categoryService;
-    final static Logger logger = Logger.getLogger(AdminCategoriesController.class);
 
     @GetMapping({"/categories"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
         List<Category> list;
         if (categoryName == null) {
             list = categoryService.findAll();
-            logger.info("List size: " + list.size());
         } else {
             list = categoryService.findByName(categoryName);
-            logger.info("Name: " + categoryName + " List size: " + list.size());
         }
         model.addAttribute("categoryList", list);
         return "admin/categories";

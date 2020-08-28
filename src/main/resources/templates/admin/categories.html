@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>Все Категории</title>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Interstellar Ship Internet Shop - Categories</title>
 </head>
 <body>
-<div th:replace="fragments/header :: header">&nbsp;</div>
-<div class="container">
-    <h1 class="h1 row justify-content-center">Список категорий</h1>
-    <table class="table">
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <h1 class="ui center aligned header">Список категорий</h1>
+    <table class="ui celled table">
         <tbody>
         <tr>
             <td>
                 <form method="POST" action="#" th:action="@{/admin/category/add}">
-                    <button class="btn btn-primary">
+                    <button class="ui primary button">
                         Добавить категорию
                     </button>
                 </form>
             </td>
 
             <td align="right">
-                <form method="POST" class="form-horizontal" action="#" th:action="@{/admin/categories}">
-                    <div class="form-group row justify-content-end">
-                        <input placeholder="Имя..." th:name="name" name="name" id="name" type="text" class="form-control col-md-3"/>
-                        <input type="submit" value="Найти" class="btn btn-light col-md-3"/>
+                <form method="POST" class="ui two column stackable grid" action="#" th:action="@{/admin/categories}">
+                    <div class="column">
+                        <div class="ui input">
+                            <input class="ui input" placeholder="Имя..." th:name="name" name="name" id="name" type="text"/>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <input class="ui button" type="submit" value="Найти"/>
                     </div>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-    <table class="table">
+    <table class="ui celled table">
         <tbody>
         <tr th:each="category: ${categoryList}">
             <td th:text="${category.name}">Name</td>
-            <td th:text="${category.subcategory}">Subcategory</td>
+            <td th:text="${category?.parent?.name}">Subcategory</td>
             <td>
                 <form method="POST" th:action="@{/admin/category/edit(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="btn btn-success">
+                    <button type="submit" name="submit" value="value" class="ui green button">
                         Редактировать
                     </button>
                 </form>
             </td>
             <td>
                 <form method="POST" th:action="@{/admin/category/delete(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="btn btn-danger">
+                    <button type="submit" name="submit" value="value" class="ui red button">
                         Удалить
                     </button>
                 </form>
