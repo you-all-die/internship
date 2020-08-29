@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
     <head th:replace="common/main :: common_header (~{::title}, _, ~{::script})">
         <title th:text="#{about.index.title}">About</title>
 
         <script th:src="@{https://api-maps.yandex.ru/{version}(version=${version},apikey=${apikey},mode=${mode},lang=ru_RU)}"></script>
         <script th:src="@{/js/about/yandex-maps.js}"></script>
-        <script th:inline="javascript">
-            function onCityChange (select) {
-                var url = select.options[select.selectedIndex].value;
-                console.log('Вызов по URL ' + url);
-                $.ajax({
-                    url: url,
-                    method: 'POST'
-                }).then(function (data) {
-                    alert('Получен ответ сервера');
-                    console.log('data=' + data);
-                });
-            }
-        </script>
     </head>
+
     <body>
         <div th:replace="common/main :: header"></div>
 
@@ -47,7 +36,6 @@
                             <div th:with="outletItemId = ${'outlet' + stat.index}">
                                 <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer">
                                     <script th:inline="javascript">
-
                                         // При клике сместить карту на магазин
                                         $('#[(${outletItemId})]').click(function(event) {
                                             var outlet = /*[[${outlet}]]*/ null;

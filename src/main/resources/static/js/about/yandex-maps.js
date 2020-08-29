@@ -15,3 +15,16 @@ ymaps.setPlacemark = function (outlet) {
 ymaps.showOutlet = function(outlet) {
     map.panTo([outlet.longitude, outlet.latitude], {duration: 2000});
 }
+
+function onCityChange (select) {
+    var url = select.options[select.selectedIndex].value;
+    console.log('Вызов по URL ' + url);
+    $.ajax({
+        url: url,
+        method: 'POST'
+    }).then(function (data) {
+        alert('Получен ответ сервера');
+        console.log('data=' + data);
+    });
+}
+
