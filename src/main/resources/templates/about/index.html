@@ -30,10 +30,8 @@
                     </div>
 
                     <!-- Список магазинов -->
-                    <div class="ui list">
-
-                        <div class="ui header" th:text="#{about.index.outlets}">Outlets</div>
-
+                    <div class="ui header" style="paddingTop:1em" th:text="#{about.index.outlets}">Outlets</div>
+                    <div class="ui list" style="height:55%; overflow:auto;">
                         <div class="item" th:each="outlet : ${outlets}">
                             <!-- Формируется уникальный идентификатор -->
                             <div th:with="outletItemId = ${'outlet' + outlet.id}">
@@ -47,6 +45,7 @@
                                             ymaps.showOutlet(outlet);
                                             event.preventDefault();
                                         });
+
                                     </script>
 
                                     <h3 class="header" th:text="${outlet.name}">Outlet</h3>
