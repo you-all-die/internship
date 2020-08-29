@@ -47,15 +47,15 @@
                                     <div class="description">
                                         <table class="ui definition table">
                                             <tbody>
-                                                <tr>
+                                                <tr th:if="${outlet.address}">
                                                     <td th:text="#{about.index.address}">Address</td>
                                                     <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
                                                 </tr>
-                                                <tr>
+                                                <tr th:if="${outlet.phone}">
                                                     <td th:text="#{about.index.phone}">Phone</td>
                                                     <td th:text="${outlet.phone}">322-33-22</td>
                                                 </tr>
-                                                <tr>
+                                                <tr th:if="outlet.openingHours">
                                                     <td th:text="#{about.index.opening_hours}">Opening hours</td>
                                                     <td th:text="${outlet.openingHours}">00:00 - 24:00</td>
                                                 </tr>
