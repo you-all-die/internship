@@ -1,9 +1,11 @@
 package com.example.internship.entity;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "customers")
@@ -20,4 +22,18 @@ public class Customer {
     private String email;
     @OneToMany(mappedBy = "customer")
     private Set<Address> addresses;
+
+    public final String getFullName() {
+        StringBuilder sb = new StringBuilder();
+        if (null != lastName) {
+            sb.append(lastName);
+        }
+        if (null != firstName) {
+            sb.append(" ").append(firstName);
+        }
+        if (null != middleName) {
+            sb.append(" ").append(middleName);
+        }
+        return sb.toString().trim();
+    }
 }

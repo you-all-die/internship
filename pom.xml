@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<modelmapper.version>2.3.5</modelmapper.version>
 	</properties>
 
 	<dependencies>
@@ -73,11 +74,18 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- Luiqibase -->
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -86,7 +94,7 @@
             <scope>compile</scope>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>

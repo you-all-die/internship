@@ -1,35 +1,17 @@
 package com.example.internship.service;
 
-import com.example.internship.entity.Product;
-import com.example.internship.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.internship.dto.ProductDto;
 
-import java.util.*;
+import java.util.List;
 
-@Service
-public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
 
-    public List<Product> findAll() {
-        return (List<Product>) productRepository.findAll();
-    }
+public interface ProductService {
 
-    public void removeProduct(long id) {
-        productRepository.deleteById(id);
-    }
+    List<ProductDto> findAll();
 
-    public void addProduct(Product product) {
-        productRepository.save(product);
-    }
+    void removeProduct(Long id);
 
-    public List<Product> findByName(String name) {
-        return productRepository.findByNameContainsIgnoreCase(name);
-    }
+    void addProduct(ProductDto productDto);
 
-    public void hideProduct(long id) {
-
-    }
-
+    List<ProductDto> findByName(String name);
 }
