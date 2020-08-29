@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-    <head th:replace="common/main :: common_header (~{::title}, _, ~{::script})">
+    <head th:replace="common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
         <title th:text="#{about.index.title}">About</title>
+
+        <link rel="stylesheet" th:href="@{/css/about/styles.css}"/>
 
         <script th:src="@{https://api-maps.yandex.ru/{version}(version=${version},apikey=${apikey},mode=${mode},lang=ru_RU)}"></script>
         <script th:src="@{/js/about/yandex-maps.js}"></script>
@@ -11,7 +13,7 @@
     <body>
         <div th:replace="common/main :: header"></div>
 
-        <div class="ui container">
+        <div class="ui container about-content">
 
             <div class="ui grid">
 
@@ -30,8 +32,8 @@
                     </div>
 
                     <!-- Список магазинов -->
-                    <div class="ui header" style="paddingTop:1em" th:text="#{about.index.outlets}">Outlets</div>
-                    <div class="ui list" style="height:55%; overflow:auto;">
+                    <div class="ui header outlet-list-header" th:text="#{about.index.outlets}">Outlets</div>
+                    <div class="ui list outlet-list">
                         <div class="item" th:each="outlet : ${outlets}">
                             <!-- Формируется уникальный идентификатор -->
                             <div th:with="outletItemId = ${'outlet' + outlet.id}">
@@ -45,7 +47,6 @@
                                             ymaps.showOutlet(outlet);
                                             event.preventDefault();
                                         });
-
                                     </script>
 
                                     <h3 class="header" th:text="${outlet.name}">Outlet</h3>
@@ -54,7 +55,7 @@
                                         <table class="ui definition table">
                                             <tbody>
                                                 <tr th:if="${outlet.address}">
-                                                    <td th:text="#{about.index.address}">Address</td>
+                                                    <td th:text="#{about.index.address}" class="ui four wide column">Address</td>
                                                     <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
                                                 </tr>
                                                 <tr th:if="${outlet.phone}">
@@ -76,7 +77,7 @@
 
                 <!-- Карта местности -->
                 <div class="ten wide column">
-                    <div id="map" class="ui placeholder segment" style="width:100%; height:640px;"></div>
+                    <div id="map" class="ui placeholder segment map-container"></div>
                 </div>
             </div>
         </div>

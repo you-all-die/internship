@@ -18,7 +18,6 @@ ymaps.showOutlet = function(outlet) {
 
 function onCityChange (select) {
     var url = select.options[select.selectedIndex].value;
-    console.log('Вызов по URL ' + url);
     $.ajax({
         url: url,
         method: 'POST'

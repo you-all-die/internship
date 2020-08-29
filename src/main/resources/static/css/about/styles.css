@@ -1,0 +1,17 @@
+.about-content {
+    height: 70%;
+}
+
+.outlet-list-header {
+    padding-top: 1em;
+}
+
+.outlet-list {
+    height: 55%;
+    overflow: auto;
+}
+
+.map-container {
+    width: 100%;
+    height: 640px;
+}
