@@ -23,8 +23,13 @@ function onCityChange (select) {
         url: url,
         method: 'POST'
     }).then(function (data) {
-        alert('Получен ответ сервера');
-        console.log('data=' + data);
+        /* Сначала все магазине в списке прячем */
+        $(".outlet-item").hide();
+        /* Теперь показываем магазины, полученные в ответе сервера */
+        data.map(outlet => {
+            var id = 'outlet' + outlet.id;
+            $('#' + id).show();
+        });
     });
 }
 

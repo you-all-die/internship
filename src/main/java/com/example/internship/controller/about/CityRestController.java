@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/about")
-public class CityController {
+public class CityRestController {
 
     @Autowired
     private OutletService outletService;
 
     @PostMapping("")
-    public Iterable<Outlet> showOutletsFromCity(@RequestParam String city) {
+    public Iterable<Outlet> showOutletsFromCity(@RequestParam(name = "city", required = false) String city) {
         return outletService.getOutlets(city);
     }
 }
