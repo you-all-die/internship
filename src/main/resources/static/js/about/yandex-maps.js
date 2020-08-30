@@ -1,4 +1,5 @@
 /* Самохвалов Юрий Алексеевич */
+
 var map;
 var geolocation;
 

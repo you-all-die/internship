@@ -22,7 +22,7 @@ public class OutletServiceImpl implements OutletService {
     private final OutletRepository outletRepository;
     private final ModelMapper modelMapper;
 
-    public List<OutletDto.Response.Full> getAll() {
+    public List<OutletDto.Response.Full> getOutlets() {
         return outletRepository.findAll().stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class OutletServiceImpl implements OutletService {
         return outletRepository.findCities();
     }
 
-    public Iterable<Outlet> getOutlets(String city) {
+    public List<Outlet> getOutlets(String city) {
         if (null == city || city.isEmpty()) {
             return outletRepository.findAll();
         }

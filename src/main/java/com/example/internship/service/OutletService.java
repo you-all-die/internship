@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public interface OutletService {
 
-    List<OutletDto.Response.Full> getAll();
+    List<OutletDto.Response.Full> getOutlets();
 
     public Optional<Outlet> getById(long id);
 
@@ -21,7 +21,7 @@ public interface OutletService {
 
     public List<String> getCities();
 
-    public Iterable<Outlet> getOutlets(String city);
+    public List<Outlet> getOutlets(String city);
 
     public List<OutletDto.Response.OnlyCoordinates> getAllCoordinates();
 }

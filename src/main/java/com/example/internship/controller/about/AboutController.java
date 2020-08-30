@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -58,14 +56,6 @@ public class AboutController {
             @CookieValue(name = LONGITUDE_COOKIE_NAME, required = false, defaultValue = "") String longitude,
             @CookieValue(name = LATITUDE_COOKIE_NAME, required = false, defaultValue = "") String latitude
     ) {
-        /* Проверить наличие нужной куки и создать, если отсутствует */
-        Optional<Cookie> cityFilterCookie = Arrays.stream(request.getCookies()).filter(
-                cookie -> cookie.getName().equals(CITY_FILTER_COOKIE_NAME)
-        ).findFirst();
-        if (cityFilterCookie.isEmpty()) {
-            response.addCookie(new Cookie(CITY_FILTER_COOKIE_NAME, cityFilter));
-        }
-
         /* Куки с координатами не бывает пустой */
         if (longitude.isBlank()) {
             longitude = defaultLongitude;
@@ -80,7 +70,7 @@ public class AboutController {
         model.addAttribute("longitude", longitude);
         model.addAttribute("latitude", latitude);
         model.addAttribute("cities", outletService.getCities());
-        model.addAttribute("outlets", outletService.getAll());
+        model.addAttribute("outlets", outletService.getOutlets());
         model.addAttribute("version", version);
         model.addAttribute("apikey", apikey);
         model.addAttribute("mode", mode);
