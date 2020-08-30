@@ -1,34 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="common/main :: common_header(~{::title},_,_)">
     <meta charset="UTF-8">
     <title>О нас</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <style>
-   .letter {
-    color: black; /* Цвет символа */
-    font-size: 140%; /* Размер шрифта */
-   }
-   .timesNewLeha {
-    color: black; /* Цвет символа */
-    font-size: 100%; /* Размер шрифта */
-   }
-
-    </style>
-
 </head>
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3">Интернет-магазин электроники</a>
-</nav>
-<div class="container mt-3">
-    <h5>Адреса магазинов:</h5>
-    <div th:each="element:${addressShops}" class="alert alert-light mt-0">
-        <span class="letter" th:text="${element.address}"/></br>
-        График работы: </br>
-        <span class="timesNewLeha" th:text="${element.schedule}"/>
+
+<div th:replace="common/main::header"></div>
+
+<div class="ui left aligned container">
+    <h2>Адреса магазинов:</h2>
+    <div class="ui left aligned container" th:each="element:${addressShops}">
+        <h3><p th:text="${element.address}"></p></h3>
+        <p>График работы: <td th:text="${element.schedule}"></td></p><br>
     </div>
 </div>
+
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>
