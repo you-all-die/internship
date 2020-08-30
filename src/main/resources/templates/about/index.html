@@ -18,8 +18,10 @@
 
             <div class="ui grid">
 
-                <!-- Выбор городов -->
+                <!-- Колонка с селектором городов и списком магазинов -->
                 <div class="six wide column">
+
+                    <!-- Выбор городов -->
                     <div class="ui form">
                         <div class="ui header" th:text="#{about.index.cities}">Cities</div>
                         <div class="field">
@@ -42,19 +44,8 @@
                             <!-- Формируется уникальный идентификатор -->
                             <div th:with="outletItemId = ${'outlet' + outlet.id}">
                                 <!-- Идентификатор для доступа из javascript -->
-                                <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer">
-                                    <!-- Подключается обработчик событий (щелчок) -->
-                                    <script th:inline="javascript">
-                                        /* При клике сместить карту на магазин */
-                                        $('#[(${outletItemId})]').click(function(event) {
-                                            var outlet = /*[[${outlet}]]*/ null;
-                                            centerOutlet(outlet);
-                                            event.preventDefault();
-                                        });
-
-
-
-                                    </script>
+                                <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer"
+                                     th:onclick="|centerMap(${outlet.longitude},${outlet.latitude})|">
 
                                     <h3 class="header" th:text="${outlet.name}">Outlet</h3>
 
@@ -86,11 +77,12 @@
 
                 <!-- Карта местности -->
                 <div class="ten wide column">
-                    <div class="ui active dimmer">
-                        <div class="ui loader">
+                    <div id="map" class="ui placeholder segment map-container">
+                        <div class="ui active dimmer">
+                            <div class="ui loader">
+                            </div>
                         </div>
                     </div>
-                    <div id="map" class="ui placeholder segment map-container"></div>
                 </div>
             </div>
         </div>

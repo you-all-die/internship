@@ -55,17 +55,6 @@ ymaps.ready(function () {
     });
 });
 
-/* Сместить карту по координатам магазина.
-   Записать новые координаты в куки */
-var centerOutlet = function (outlet) {
-    map.panTo([outlet.longitude, outlet.latitude], {
-        flying: true,
-        duration: 2000
-    });
-    setCookie('longitudeCookie', outlet.longitude);
-    setCookie('latitudeCookie', outlet.latitude);
-}
-
 /* Показать магазины, выбранные в фильтре */
 var onCityChange = function (select) {
     let city = select.options[select.selectedIndex].value;
@@ -88,14 +77,26 @@ var onCityChange = function (select) {
     });
 }
 
-var getCookie = function (cookieName) {
-    var results = document.cookie.match('(^|;) ?' + cookieName + '=([^;]*)(;|$)');
+/*
+Сместить карту по координатам.
+Записать новые координаты в куки.
+*/
+var centerMap = function (longitude, latitude) {
+    map.panTo([longitude, latitude], { flying: true, duration: 3000 });
+    setCookie('longitudeCookie', longitude);
+    setCookie('latitudeCookie', latitude);
+}
+
+/* Получить значение куки */
+var getCookie = function (name) {
+    var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     if (results) {
         return unescape(results[2]);
     }
     return null;
 }
 
+/* Сохранить куку */
 var setCookie = function (name, value) {
     document.cookie = name + '=' + value;
 }
