@@ -11,6 +11,25 @@ ymaps.ready(function () {
     });
     geolocation = ymaps.geolocation;
 
+    /* Добавить метки для магазинов */
+    $.ajax({
+        url: 'http://localhost:8080/about',
+        method: 'POST'
+    }).then(function (outlets) {
+        console.log('outlets = ' + outlets);
+        outlets.map(outlet => {
+            let longitude = outlet.longitude;
+            let latitude = outlet.latitude;
+            console.log('Магазин ' + outlet.name + ' в ' + outlet.city + ' [' + outlet.longitude + ',' + outlet.latitude + ']')
+            let placemark = new ymaps.Placemark([longitude, latitude], {}, {
+                preset: 'islands#redDotIcon'
+            });
+            map.geoObjects.add(placemark);
+        });
+    }).catch(function (error) {
+        console.log(error);
+    });
+
     /* Положение пользователя по IP */
     geolocation.get({
         provider: 'yandex',
@@ -34,20 +53,14 @@ ymaps.ready(function () {
     });
 });
 
-function setPlacemark (outlet) {
-    var outletPlacemark = new ymaps.Placemark([outlet.longitude, outlet.latitude]);
-    map.getObjects.add(outletPlacemark);
-}
-
-function addPlacemarks(outlets) {
-    console.log('Вызвана функция addPlacemarks с аргументом ' + outlets);
-}
-
-function centerOutlet (outlet) {
+/* Сместить карту по координатам магазина */
+var centerOutlet = function (outlet) {
+    console.log('Переход на магазин ' + outlet.name);
     map.panTo([outlet.longitude, outlet.latitude], {duration: 2000});
 }
 
-function onCityChange (select) {
+/* Показать магазины, выбранные в фильтре */
+var onCityChange = function (select) {
     var url = select.options[select.selectedIndex].value;
     $.ajax({
         url: url,
@@ -60,5 +73,7 @@ function onCityChange (select) {
             var id = 'outlet' + outlet.id;
             $('#' + id).show();
         });
+    }).catch(function (error) {
+        console.log(error);
     });
 }
