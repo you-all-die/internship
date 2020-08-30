@@ -51,14 +51,14 @@ public class OutletServiceImpl implements OutletService {
         return outletRepository.findAllByCity(city);
     }
 
-    public List<OutletDto.Response.OnlyCoordinates> getAllCoordinates() {
+    public List<OutletDto.Response.Coordinates> getAllCoordinates() {
         return outletRepository.findAll().stream()
                 .map(this::convertToOnlyCoordinatesDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private OutletDto.Response.OnlyCoordinates convertToOnlyCoordinatesDto(Outlet outlet) {
-        return modelMapper.map(outlet, OutletDto.Response.OnlyCoordinates.class);
+    private OutletDto.Response.Coordinates convertToOnlyCoordinatesDto(Outlet outlet) {
+        return modelMapper.map(outlet, OutletDto.Response.Coordinates.class);
     }
 
     private OutletDto.Response.Full convertToFullDto(Outlet outlet) {

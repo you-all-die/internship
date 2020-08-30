@@ -27,7 +27,7 @@ public class CityRestController {
     }
 
     @PostMapping("/coordinates")
-    public List<OutletDto.Response.OnlyCoordinates> getCoordinates() {
+    public List<OutletDto.Response.Coordinates> getCoordinates() {
         return outletService.getAllCoordinates();
     }
 }

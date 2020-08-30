@@ -8,34 +8,22 @@ import lombok.Data;
 public enum OutletDto {
     ;
 
-    private interface Id {
+    private interface AllButCoordinates {
         long getId();
         void setId(long id);
-    }
-
-    private interface City {
         String getCity();
         void setCity(String city);
-    }
-
-    private interface Name {
         String getName();
         void setName(String name);
-    }
-
-    private interface AddressAndPhone {
         String getAddress();
         void setAddress(String address);
         String getPhone();
         void setPhone(String phone);
-    }
-
-    private interface OpeningHours {
         String getOpeningHours();
         void setOpeningHours(String openingHours);
     }
 
-    private interface Coordinates {
+    private interface CoordinatesOnly {
         double getLongitude();
         void setLongitude(double longitude);
         double getLatitude();
@@ -46,7 +34,7 @@ public enum OutletDto {
         ;
 
         @Data
-        public static class Full implements Id, City, Name, AddressAndPhone, OpeningHours, Coordinates {
+        public static class Full implements AllButCoordinates, CoordinatesOnly {
             private long id;
             private String city;
             private String name;
@@ -58,7 +46,7 @@ public enum OutletDto {
         }
 
         @Data
-        public static class OnlyCoordinates implements Coordinates {
+        public static class Coordinates implements CoordinatesOnly {
             private double longitude;
             private double latitude;
         }

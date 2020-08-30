@@ -23,5 +23,5 @@ public interface OutletService {
 
     public List<Outlet> getOutlets(String city);
 
-    public List<OutletDto.Response.OnlyCoordinates> getAllCoordinates();
+    public List<OutletDto.Response.Coordinates> getAllCoordinates();
 }
