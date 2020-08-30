@@ -1,6 +1,6 @@
 package com.example.internship.controller.about;
 
-import com.example.internship.dto.about.OutletDto;
+import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
 import com.example.internship.service.OutletService;
 import org.springframework.beans.factory.annotation.Autowired;

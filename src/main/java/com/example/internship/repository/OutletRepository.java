@@ -1,6 +1,6 @@
 package com.example.internship.repository;
 
-import com.example.internship.dto.about.OutletDto;
+import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

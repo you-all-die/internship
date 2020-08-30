@@ -1,6 +1,6 @@
 package com.example.internship.service.outlet;
 
-import com.example.internship.dto.about.OutletDto;
+import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
 import com.example.internship.repository.OutletRepository;
 import com.example.internship.service.OutletService;
@@ -22,8 +22,10 @@ public class OutletServiceImpl implements OutletService {
     private final OutletRepository outletRepository;
     private final ModelMapper modelMapper;
 
-    public Iterable<Outlet> getAll() {
-        return outletRepository.findAll();
+    public List<OutletDto.Response.Full> getAll() {
+        return outletRepository.findAll().stream()
+                .map(this::convertToFullDto)
+                .collect(Collectors.toList());
     }
 
     public Optional<Outlet> getById(long id) {
@@ -38,8 +40,10 @@ public class OutletServiceImpl implements OutletService {
         outletRepository.deleteById(id);
     }
 
-    public Iterable<String> getCities() {
-        return outletRepository.findCities();
+    public List<OutletDto.Response.OnlyCities> getCities() {
+        return outletRepository.findCities().stream()
+                .map(this::convertToOnlyCitiesDto)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public Iterable<Outlet> getOutlets(String city) {
@@ -57,5 +61,13 @@ public class OutletServiceImpl implements OutletService {
 
     private OutletDto.Response.OnlyCoordinates convertToOnlyCoordinatesDto(Outlet outlet) {
         return modelMapper.map(outlet, OutletDto.Response.OnlyCoordinates.class);
+    }
+
+    private OutletDto.Response.Full convertToFullDto(Outlet outlet) {
+        return modelMapper.map(outlet, OutletDto.Response.Full.class);
+    }
+
+    private OutletDto.Response.OnlyCities convertToOnlyCitiesDto(String city) {
+        return modelMapper.map(city, OutletDto.Response.OnlyCities.class);
     }
 }

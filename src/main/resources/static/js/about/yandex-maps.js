@@ -16,7 +16,6 @@ ymaps.ready(function () {
         url: 'http://localhost:8080/about/coordinates',
         method: 'POST'
     }).then(function (outlets) {
-        console.log('outlets = ' + outlets);
         outlets.map(outlet => {
             let longitude = outlet.longitude;
             let latitude = outlet.latitude;

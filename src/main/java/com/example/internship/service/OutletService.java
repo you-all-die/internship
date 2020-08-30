@@ -1,6 +1,6 @@
 package com.example.internship.service;
 
-import com.example.internship.dto.about.OutletDto;
+import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public interface OutletService {
 
-    Iterable<Outlet> getAll();
+    List<OutletDto.Response.Full> getAll();
 
     public Optional<Outlet> getById(long id);
 
@@ -19,7 +19,7 @@ public interface OutletService {
 
     public void delete(long id);
 
-    public Iterable<String> getCities();
+    public List<OutletDto.Response.OnlyCities> getCities();
 
     public Iterable<Outlet> getOutlets(String city);
 
