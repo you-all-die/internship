@@ -42,10 +42,6 @@ public enum OutletDto {
         void setLatitude(double latitude);
     }
 
-    public enum Request {
-        ;
-    }
-
     public enum Response {
         ;
 
@@ -65,11 +61,6 @@ public enum OutletDto {
         public static class OnlyCoordinates implements Coordinates {
             private double longitude;
             private double latitude;
-        }
-
-        @Data
-        public static class OnlyCities implements City {
-            private String city;
         }
     }
 }
