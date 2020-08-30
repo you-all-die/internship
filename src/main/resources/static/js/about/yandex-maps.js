@@ -4,8 +4,10 @@ var geolocation;
 
 /* Инициализация карты, определение местоположения пользователя */
 ymaps.ready(function () {
+    let longitude = parseFloat(getCookie('longitudeCookie'));
+    let latitude = parseFloat(getCookie('latitudeCookie'));
     map = new ymaps.Map('map', {
-        center: [54.314192, 48.403123],
+        center: [longitude, latitude],
         zoom: 16,
         controls: ['geolocationControl']
     });
@@ -30,8 +32,7 @@ ymaps.ready(function () {
 
     /* Положение пользователя по IP */
     geolocation.get({
-        provider: 'yandex',
-        mapStateAutoApply: true
+        provider: 'yandex'
     }).then(function (result) {
         result.geoObjects.options.set('preset', 'islands#redCircleIcon');
         result.geoObjects.get(0).properties.set({
@@ -39,21 +40,17 @@ ymaps.ready(function () {
         });
         map.geoObjects.add(result.geoObjects);
     });
-
-    /*  Положение пользователя по данным браузера.
-        Если браузер не поддерживает эту функцию, синяя метка не появится. */
-    geolocation.get({
-        provider: 'browser',
-        mapStateAutoApply: true
-    }).then(function (result) {
-        result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
-        map.geoObjects.add(result.geoObjects);
-    });
 });
 
-/* Сместить карту по координатам магазина */
+/* Сместить карту по координатам магазина.
+   Записать новые координаты в куки */
 var centerOutlet = function (outlet) {
-    map.panTo([outlet.longitude, outlet.latitude], {duration: 2000});
+    map.panTo([outlet.longitude, outlet.latitude], {
+        flying: true,
+        duration: 2000
+    });
+    setCookie('longitudeCookie', outlet.longitude);
+    setCookie('latitudeCookie', outlet.latitude);
 }
 
 /* Показать магазины, выбранные в фильтре */
@@ -73,4 +70,16 @@ var onCityChange = function (select) {
     }).catch(function (error) {
         console.log(error);
     });
+}
+
+var getCookie = function (cookieName) {
+    var results = document.cookie.match('(^|;) ?' + cookieName + '=([^;]*)(;|$)');
+    if (results) {
+        return unescape(results[2]);
+    }
+    return null;
+}
+
+var setCookie = function (name, value) {
+    document.cookie = name + '=' + value;
 }

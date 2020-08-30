@@ -23,8 +23,8 @@
                     <div class="ui form">
                         <div class="ui header" th:text="#{about.index.cities}">Cities</div>
                         <div class="field">
-                            <select class="ui dropdown" onchange="onCityChange(this)">
-                                <option value="">Все</option>
+                            <select class="ui dropdown" onchange="onCityChange(this)" th:value="${cityFilter}">
+                                <option th:value="@{/about}">Все</option>
                                 <th:block th:each="city : ${cities}">
                                     <option th:value="@{/about(city=${city})}"
                                             th:text="${city}">City
