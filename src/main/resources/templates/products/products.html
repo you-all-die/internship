@@ -18,7 +18,7 @@
         <div class="column" th:each="product : ${products}">
             <div class="ui fluid card">
                 <div class="image">
-                    <img th:src="@{images/headerLogo.png}">
+                    <img th:src="'/img/' + ${product.picture}">
                 </div>
                 <div class="content">
                     <div class="header" th:text="${product?.name}"></div>
