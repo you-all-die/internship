@@ -8,21 +8,21 @@
 <div class="ui main container">
     <form class="ui large form" method="POST" action="#" th:action="@{/admin/category/save}" th:object="${category}">
         <h1 class="ui center aligned header" th:text="${category} ? 'Создать категорию' : 'Редактирование категории'"></h1>
+        <input type="hidden" th:field="*{id}">
         <div class="ui stacked segment">
-            <div class="field">
+            <div class="required field">
                 <div class="ui input">
-                    <input type="text" name="name" th:text="${category?.name}" placeholder="Имя..." th:field="*{name}">
+                    <input type="text" name="name" th:field="*{name}" placeholder="Имя...">
                 </div>
             </div>
             <div class="field">
-                <select th:field="${category.parent}">
-                    <option th:each="parentCat : ${parentCategories}" th:value="${parentCat}" th:text="${parentCat.name}">
+                <select th:field="*{parent.id}">
+                    <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
+                            th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
                     </option>
                 </select>
-                <!--div class="ui selection dropdown">
-                </div-->
             </div>
-            <button type="submit" value="Submit" class="ui fluid large teal submit button">Сохранить</button>
+            <button type="submit" value="Submit" class="ui primary button">Сохранить</button>
         </div>
     </form>
 </div>

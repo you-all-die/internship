@@ -22,7 +22,7 @@ public class AdminCategoriesController {
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
         List<Category> list;
         if (categoryName == null) {
-            list = categoryService.findAll();
+            list = categoryService.findAllSortById();
         } else {
             list = categoryService.findByName(categoryName);
         }
@@ -44,7 +44,7 @@ public class AdminCategoriesController {
 
     @PostMapping(value="/category/edit")
     public String editCategory(@RequestParam("categoryId") Long id, Model model) {
-        return "redirect:/admin/category/edit?id=" + id;
+        return "redirect:/admin/category/edit?categoryId=" + id;
     }
 
     @PostMapping(value="/category/add")
@@ -63,9 +63,19 @@ public class AdminCategoriesController {
         return "/admin/category";
     }
 
+    @GetMapping({"/category/edit"})
+    public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
+        Category category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        Category defaultParent = new Category((long) -1, "Без категории", null );
+        List<Category> parentCategories = categoryService.findAll();
+        parentCategories.add(0, defaultParent);
+        model.addAttribute("parentCategories", parentCategories);
+        return "/admin/category";
+    }
+
     @PostMapping(value="/category/save")
     public String saveCategory(@ModelAttribute("category") Category category, BindingResult result, Model model) {
-        System.out.println(category.toString());
         categoryService.addCategory(category);
         return "redirect:/admin/categories";
     }
