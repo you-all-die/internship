@@ -1,44 +1,27 @@
 package com.example.internship.service;
 
+import com.example.internship.dto.about.OutletDto;
 import com.example.internship.entity.Outlet;
-import com.example.internship.repository.OutletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Streamable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-@Service
-public class OutletService {
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
+public interface OutletService {
 
-    @Autowired
-    private OutletRepository outletRepository;
+    Iterable<Outlet> getAll();
 
-    public Iterable<Outlet> getAll() {
-        return outletRepository.findAll();
-    }
+    public Optional<Outlet> getById(long id);
 
-    public Optional<Outlet> getById(long id) {
-        return outletRepository.findById(id);
-    }
+    public void save(Outlet outlet);
 
-    public void save(Outlet outlet) {
-        outletRepository.save(outlet);
-    }
+    public void delete(long id);
 
-    public void delete(long id) {
-        outletRepository.deleteById(id);
-    }
+    public Iterable<String> getCities();
 
-    public Iterable<String> getCities() {
-        return outletRepository.findCities();
-    }
+    public Iterable<Outlet> getOutlets(String city);
 
-    public Iterable<Outlet> getOutlets(String city) {
-        if (null == city || city.isEmpty()) {
-            return outletRepository.findAll();
-        }
-        return outletRepository.findAllByCity(city);
-    }
+    public List<OutletDto.Response.OnlyCoordinates> getAllCoordinates();
 }

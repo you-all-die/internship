@@ -13,14 +13,13 @@ ymaps.ready(function () {
 
     /* Добавить метки для магазинов */
     $.ajax({
-        url: 'http://localhost:8080/about',
+        url: 'http://localhost:8080/about/coordinates',
         method: 'POST'
     }).then(function (outlets) {
         console.log('outlets = ' + outlets);
         outlets.map(outlet => {
             let longitude = outlet.longitude;
             let latitude = outlet.latitude;
-            console.log('Магазин ' + outlet.name + ' в ' + outlet.city + ' [' + outlet.longitude + ',' + outlet.latitude + ']')
             let placemark = new ymaps.Placemark([longitude, latitude], {}, {
                 preset: 'islands#redDotIcon'
             });
@@ -55,7 +54,6 @@ ymaps.ready(function () {
 
 /* Сместить карту по координатам магазина */
 var centerOutlet = function (outlet) {
-    console.log('Переход на магазин ' + outlet.name);
     map.panTo([outlet.longitude, outlet.latitude], {duration: 2000});
 }
 
