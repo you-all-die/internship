@@ -1,6 +1,5 @@
 package com.example.internship.controller.about;
 
-import com.example.internship.entity.Outlet;
 import com.example.internship.service.OutletService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -9,10 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Controller
 @RequestMapping("/about")
 @Slf4j

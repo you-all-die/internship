@@ -1,18 +1,50 @@
+/* Самохвалов Юрий Алексеевич */
 var map;
+var geolocation;
 
+/* Инициализация карты, определение местоположения пользователя */
 ymaps.ready(function () {
     map = new ymaps.Map('map', {
         center: [54.314192, 48.403123],
-        zoom: 16
+        zoom: 16,
+        controls: ['geolocationControl']
+    });
+    geolocation = ymaps.geolocation;
+
+    /* Положение пользователя по IP */
+    geolocation.get({
+        provider: 'yandex',
+        mapStateAutoApply: true
+    }).then(function (result) {
+        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+        result.geoObjects.get(0).properties.set({
+            balloonContentBody: 'Вы здесь!'
+        });
+        map.geoObjects.add(result.geoObjects);
+    });
+
+    /*  Положение пользователя по данным браузера.
+        Если браузер не поддерживает эту функцию, синей метки не появится.
+    */
+    geolocation.get({
+        provider: 'browser',
+        mapStateAutoApply: true
+    }).then(function (result) {
+        result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+        map.geoObjects.add(result.geoObjects);
     });
 });
 
-ymaps.setPlacemark = function (outlet) {
+function setPlacemark (outlet) {
     var outletPlacemark = new ymaps.Placemark([outlet.longitude, outlet.latitude]);
     map.getObjects.add(outletPlacemark);
 }
 
-ymaps.showOutlet = function(outlet) {
+function addPlacemarks(outlets) {
+    console.log('Вызвана функция addPlacemarks с аргументом ' + outlets);
+}
+
+function centerOutlet (outlet) {
     map.panTo([outlet.longitude, outlet.latitude], {duration: 2000});
 }
 
@@ -31,4 +63,3 @@ function onCityChange (select) {
         });
     });
 }
-
