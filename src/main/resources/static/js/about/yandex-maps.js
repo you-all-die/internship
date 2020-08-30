@@ -2,16 +2,26 @@
 var map;
 var geolocation;
 
-/* Инициализация карты, определение местоположения пользователя */
+/*
+Первоначальная загрузка.
+- инициализация карты с установкой последней позиции,
+- фильтрация списка магазино по последему выбранному городу,
+- определение местоположения пользователя,
+*/
 ymaps.ready(function () {
+
     let longitude = parseFloat(getCookie('longitudeCookie'));
     let latitude = parseFloat(getCookie('latitudeCookie'));
+
     map = new ymaps.Map('map', {
         center: [longitude, latitude],
         zoom: 16,
         controls: ['geolocationControl']
     });
     geolocation = ymaps.geolocation;
+
+    /* Имитировать событие onChange селектора городов для принудительной фильтрации */
+    onCityChange($('#citySelector').get(0));
 
     /* Добавить метки для магазинов */
     $.ajax({
@@ -55,9 +65,9 @@ var centerOutlet = function (outlet) {
 
 /* Показать магазины, выбранные в фильтре */
 var onCityChange = function (select) {
-    var url = select.options[select.selectedIndex].value;
+    let city = select.options[select.selectedIndex].value;
     $.ajax({
-        url: url,
+        url: '/about?city=' + unescape(city),
         method: 'POST'
     }).then(function (data) {
         /* Сначала все магазине в списке прячем */
@@ -67,6 +77,9 @@ var onCityChange = function (select) {
             var id = 'outlet' + outlet.id;
             $('#' + id).show();
         });
+        /* Сохранить город в куки фильтра */
+        setCookie('cityFilterCookie', city);
+        $('#outletList').show();
     }).catch(function (error) {
         console.log(error);
     });
