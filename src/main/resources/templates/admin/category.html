@@ -7,7 +7,7 @@
 <div th:replace="common/main :: header"></div>
 <div class="ui main container">
     <form class="ui large form" method="POST" action="#" th:action="@{/admin/category/save}" th:object="${category}">
-        <h1 class="ui center aligned header" th:text="${category} ? 'Создать категорию' : 'Редактирование категории'"></h1>
+        <h1 class="ui center aligned header" th:text="*{id==null} ? 'Создать категорию' : 'Редактирование категории'"></h1>
         <input type="hidden" th:field="*{id}">
         <div class="ui stacked segment">
             <div class="required field">
@@ -22,7 +22,7 @@
                     </option>
                 </select>
             </div>
-            <button type="submit" value="Submit" class="ui primary button">Сохранить</button>
+            <button type="submit" value="Submit" class="ui fluid primary button">Сохранить</button>
         </div>
     </form>
 </div>
