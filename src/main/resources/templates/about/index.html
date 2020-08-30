@@ -51,6 +51,9 @@
                                             centerOutlet(outlet);
                                             event.preventDefault();
                                         });
+
+
+
                                     </script>
 
                                     <h3 class="header" th:text="${outlet.name}">Outlet</h3>
@@ -59,7 +62,9 @@
                                         <table class="ui definition table">
                                             <tbody>
                                                 <tr th:if="${outlet.address}">
-                                                    <td th:text="#{about.index.address}" class="ui four wide column">Address</td>
+                                                    <td th:text="#{about.index.address}" class="ui four wide column">
+                                                        Address
+                                                    </td>
                                                     <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
                                                 </tr>
                                                 <tr th:if="${outlet.phone}">
@@ -81,6 +86,10 @@
 
                 <!-- Карта местности -->
                 <div class="ten wide column">
+                    <div class="ui active dimmer">
+                        <div class="ui loader">
+                        </div>
+                    </div>
                     <div id="map" class="ui placeholder segment map-container"></div>
                 </div>
             </div>

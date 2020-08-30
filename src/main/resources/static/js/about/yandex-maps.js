@@ -6,7 +6,7 @@ var geolocation;
 /*
 Первоначальная загрузка:
 - инициализация карты с установкой последней позиции;
-- фильтрация списка магазинов по последему выбранному городу;
+- фильтрация списка магазинов по последнему выбранному городу;
 - нанесение меток магазинов на карту;
 - определение местоположения пользователя по IP.
 */
@@ -25,6 +25,17 @@ ymaps.ready(function () {
     /* Имитировать событие onChange селектора городов для принудительной фильтрации */
     onCityChange($('#citySelector').get(0));
 
+    /* Положение пользователя по IP */
+    geolocation.get({
+        provider: 'yandex'
+    }).then(function (result) {
+        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+        result.geoObjects.get(0).properties.set({
+            balloonContentBody: 'Вы здесь!'
+        });
+        map.geoObjects.add(result.geoObjects);
+    });
+
     /* Добавить метки для магазинов */
     $.ajax({
         url: 'http://localhost:8080/about/coordinates',
@@ -38,19 +49,9 @@ ymaps.ready(function () {
             });
             map.geoObjects.add(placemark);
         });
+        $('.dimmer').removeClass('active');
     }).catch(function (error) {
         console.log(error);
-    });
-
-    /* Положение пользователя по IP */
-    geolocation.get({
-        provider: 'yandex'
-    }).then(function (result) {
-        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
-        result.geoObjects.get(0).properties.set({
-            balloonContentBody: 'Вы здесь!'
-        });
-        map.geoObjects.add(result.geoObjects);
     });
 });
 
