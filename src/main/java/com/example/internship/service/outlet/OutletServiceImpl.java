@@ -40,10 +40,8 @@ public class OutletServiceImpl implements OutletService {
         outletRepository.deleteById(id);
     }
 
-    public List<OutletDto.Response.OnlyCities> getCities() {
-        return outletRepository.findCities().stream()
-                .map(this::convertToOnlyCitiesDto)
-                .collect(Collectors.toUnmodifiableList());
+    public List<String> getCities() {
+        return outletRepository.findCities();
     }
 
     public Iterable<Outlet> getOutlets(String city) {
@@ -65,9 +63,5 @@ public class OutletServiceImpl implements OutletService {
 
     private OutletDto.Response.Full convertToFullDto(Outlet outlet) {
         return modelMapper.map(outlet, OutletDto.Response.Full.class);
-    }
-
-    private OutletDto.Response.OnlyCities convertToOnlyCitiesDto(String city) {
-        return modelMapper.map(city, OutletDto.Response.OnlyCities.class);
     }
 }

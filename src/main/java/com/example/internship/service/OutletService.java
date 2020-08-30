@@ -19,7 +19,7 @@ public interface OutletService {
 
     public void delete(long id);
 
-    public List<OutletDto.Response.OnlyCities> getCities();
+    public List<String> getCities();
 
     public Iterable<Outlet> getOutlets(String city);
 

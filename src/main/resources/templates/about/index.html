@@ -26,7 +26,9 @@
                             <select class="ui dropdown" onchange="onCityChange(this)">
                                 <option value="">Все</option>
                                 <th:block th:each="city : ${cities}">
-                                    <option th:value="@{/about(city=${city})}" th:text="${city}">City</option>
+                                    <option th:value="@{/about(city=${city})}"
+                                            th:text="${city}">City
+                                    </option>
                                 </th:block>
                             </select>
                         </div>
