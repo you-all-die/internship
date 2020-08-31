@@ -1,10 +1,19 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.entity.Customer;
 
 import java.util.Optional;
 
 public interface CustomerService {
+
+    Iterable<Customer> getAll();
+
+    Optional<Customer> getById(long id);
+
+    void save(Customer customer);
+
+    void delete(long id);
     // Создание нового анонимного покупателя
     CustomerDto createAnonymousCustomer();
     // Регистрация покупателя

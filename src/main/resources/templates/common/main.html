@@ -22,18 +22,18 @@
             }
         </style>
 
-        <link rel="stylesheet" type="text/css" th:href="@{css/semantic.min.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}">
         <th:block th:replace="${links}"/>
 
-        <script th:src="@{js/jquery.min.js}"></script>
-        <script th:src="@{js/semantic.min.js}"></script>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/semantic.min.js}"></script>
         <th:block th:replace="${scripts}"/>
     </head>
     <body>
         <div th:fragment="header">
             <div class="ui huge secondary  menu">
                 <div class="item">
-                    <img class="Medium" src="#" th:src="@{images/headerLogo.png}" alt="Logo">
+                    <img class="Medium" src="#" th:src="@{/images/headerLogo.png}" alt="Logo">
                 </div>
                 <a class="item"  th:href="@{/}">
                     Home
