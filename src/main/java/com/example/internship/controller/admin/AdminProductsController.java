@@ -2,6 +2,7 @@ package com.example.internship.controller.admin;
 
 import com.example.internship.dto.ProductDto;
 import com.example.internship.service.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@AllArgsConstructor
 public class AdminProductsController {
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
     @GetMapping({"/products"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String productName) {

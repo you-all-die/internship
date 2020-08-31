@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-30-001
+      author: Murashov Alexey
+      comment: sequence fix
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: SELECT setval('category_id_seq', (SELECT max(id) FROM category));
+  - changeSet:
+      id: 2020-08-30-002
+      author: Murashov Alexey
+      comment: sequence fix
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: SELECT setval('product_id_seq', (SELECT max(id) FROM product));
