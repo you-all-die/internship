@@ -25,13 +25,15 @@ public class ProductController {
         return "products/products";
     }
 
-
+    /**
+     * @Author Роман Каравашкин
+     */
     @GetMapping("product/{id}")
     public String showProduct(@PathVariable("id") long id, Model model){
         model.addAttribute("product",
                 productService.getProductById(id));
 
-        return "products/product/product";
+        return "products/product";
 
     }
 }

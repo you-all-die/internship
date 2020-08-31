@@ -1,18 +1,29 @@
+<!-- Роман Каравашкин-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/main :: common_header(~{::title},_,_)">
-    <title>Product</title>
+    <title>Product id</title>
 </head>
 <body>
-<div th:replace="common/main :: header"></div>
+<div th:replace="/common/main :: header"></div>
+
+
 <div class="ui main container">
     <div class="container">
         <div th:each="product : ${product}"/>
-        <div class="name product" th:text="${product?.name}"> <p>name</p></div>
-        <img th:src="@{images/headerLogo.png}"/>
-        <div class="id product" th:text="${product?.id}"> <p> id</p></div>
-        <div class="price" th:text="${product?.price}"><p>price</p></div>
-        <div class="description" th:text="${product?.description}"><p>description</p></div>
+        <div class="name product" th:text="${product?.name}">
+            <p>name</p>
+        </div>
+        <img th:src="@{/images/headerLogo.png}"/>
+        <div class="id product" th:text="${product?.id}">
+            <p> id</p>
+        </div>
+        <div class="price" th:text="${product?.price}">
+            <p>price</p>
+        </div>
+        <div class="description" th:text="${product?.description}">
+            <p>description</p>
+        </div>
     </div>
 
     <form method="post" th:action="@{/products/addToCart}">
@@ -27,16 +38,8 @@
             </button>
         </div>
     </form>
+
 </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
