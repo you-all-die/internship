@@ -18,15 +18,17 @@
                 </form>
             </td>
 
-            <td align="right">
-                <form method="POST" class="ui two column stackable grid" action="#" th:action="@{/admin/categories}">
-                    <div class="column">
+            <td class="right aligned collapsing">
+                <form method="POST" class="ui form" action="#" th:action="@{/admin/categories}">
+                    <div class="fields">
+                    <div class="field">
                         <div class="ui input">
                             <input class="ui input" placeholder="Имя..." th:name="name" name="name" id="name" type="text"/>
                         </div>
                     </div>
-                    <div class="column">
+                    <div class="field">
                         <input class="ui button" type="submit" value="Найти"/>
+                    </div>
                     </div>
                 </form>
             </td>
@@ -34,18 +36,24 @@
         </tbody>
     </table>
     <table class="ui celled table">
+        <thead>
+        <tr><th>Название</th>
+            <th>Родительская категория</th>
+            <th colspan="2">Действия</th>
+        </tr>
+        </thead>
         <tbody>
         <tr th:each="category: ${categoryList}">
             <td th:text="${category.name}">Name</td>
             <td th:text="${category?.parent?.name}">Subcategory</td>
-            <td>
+            <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/category/edit(categoryId=${category.id})}">
                     <button type="submit" name="submit" value="value" class="ui green button">
                         Редактировать
                     </button>
                 </form>
             </td>
-            <td>
+            <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/category/delete(categoryId=${category.id})}">
                     <button type="submit" name="submit" value="value" class="ui red button">
                         Удалить
