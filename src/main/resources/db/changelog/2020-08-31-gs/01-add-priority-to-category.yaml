@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-priority-to-category
+      author: Самохвалов Юрий Алексеевич
+      comment: Добавлено поле prioriry в таблицу category
+      changes:
+        - addColumn:
+            tableName: category
+            columns:
+              - column:
+                  name: priority
+                  type: BIGINT
+                  constraints:
+                    - nullable: true
