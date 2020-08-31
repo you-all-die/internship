@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class CartServiceImpl implements CartService {
     public boolean add(Product product, String customerId) {
         Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
 
-        if (customer.isEmpty()) return false;
+        if (customer.isEmpty() || customer.get().getCart() == null) return false;
 
         Cart cart = customer.get().getCart();
 
@@ -104,7 +105,7 @@ public class CartServiceImpl implements CartService {
     public List<OrderLineDto> findAll(String customerId) {
         Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
 
-        if (customer.isEmpty()) return new ArrayList<>();
+        if (customer.isEmpty() || customer.get().getCart() == null) return new ArrayList<>();
 
         return customer.get().getCart().getOrderLines().stream().map(this::convertToDto).collect(Collectors.toList());
     }
@@ -113,7 +114,7 @@ public class CartServiceImpl implements CartService {
     public BigDecimal getTotalPrice(String customerId) {
         Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
 
-        if (customer.isEmpty()) return BigDecimal.ZERO;
+        if (customer.isEmpty() || customer.get().getCart() == null) return BigDecimal.ZERO;
 
         List<OrderLine> orderLines = customer.get().getCart().getOrderLines();
 
