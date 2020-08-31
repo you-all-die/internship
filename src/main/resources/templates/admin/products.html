@@ -18,15 +18,17 @@
                 </form>
             </td>
 
-            <td align="right aligned">
-                <form method="POST" class="ui two column stackable grid" action="#" th:action="@{/admin/products}">
-                    <div class="column">
+            <td class="right aligned collapsing">
+                <form method="POST" class="ui form" action="#" th:action="@{/admin/products}">
+                    <div class="fields">
+                    <div class="field">
                         <div class="ui input">
                                 <input class="ui input" placeholder="Название..." th:name="name" name="name" id="name" type="text"/>
                         </div>
                     </div>
-                    <div class="column">
-                                <input class="ui button" type="submit" value="Найти"/>
+                    <div class="field">
+                        <input class="ui button" type="submit" value="Найти"/>
+                    </div>
                     </div>
                 </form>
             </td>
@@ -34,27 +36,35 @@
         </tbody>
     </table>
     <table class="ui celled table">
+        <thead>
+        <tr><th>Название</th>
+            <th>Категория</th>
+            <th>Описание</th>
+            <th>Статус</th>
+            <th colspan="3">Действия</th>
+        </tr>
+        </thead>
         <tbody>
         <tr th:each="product: ${productList}">
             <td th:text="${product.name}">Name</td>
             <td th:text="${product.category.name}">Category</td>
             <td th:text="${product.description}">Description</td>
             <td th:text="${product.status.description}">Status</td>
-            <td>
+            <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/product/edit(productId=${product.id})}">
                     <button type="submit" name="submit" value="value" class="ui green button">
                         Редактировать
                     </button>
                 </form>
             </td>
-            <td>
+            <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/product/hide(productId=${product.id})}">
                     <button type="submit" name="submit" value="value" class="ui teal button">
                         Скрыть
                     </button>
                 </form>
             </td>
-            <td>
+            <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/product/delete(productId=${product.id})}">
                     <button type="submit" name="submit" value="value" class="ui red button">
                         Удалить
