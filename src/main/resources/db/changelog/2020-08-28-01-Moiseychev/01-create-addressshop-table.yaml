@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-01
+      comment: Create adreesshop table
+      author: Aleksey Moiseychev
+      changes:
+        - createTable:
+            tableName: address_shop
+            columns:
+              - column:
+                  name: shop_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: schedule
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
