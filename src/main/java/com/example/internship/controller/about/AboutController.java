@@ -31,7 +31,7 @@ public class AboutController {
     @Value("${yandex.maps.version:2.1}")
     private String version;
 
-    @Value("${yandex.maps.apikey}")
+    @Value("${yandex.maps.apikey:dummer-kopf}")
     private String apikey;
 
     @Value("${yandex.maps.mode:release}")
