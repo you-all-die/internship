@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2020-08-27-gs/01-create-outlet-table.yaml
+  - include:
+      file: db/changelog/2020-08-27-gs/02-add-coordinate-fields.yaml
+  - include:
+      file: db/changelog/2020-08-27-gs/03-add-some-outlets.yaml
+  - include:
+      file: db/changelog/2020-08-28-gs/01-add-more-outlets.yaml
+  - include:
+      file: db/changelog/2020-08-29-gs/01-more-and-more-outlets.yaml

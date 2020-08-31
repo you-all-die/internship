@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: more-and-more-outlets
+      author: Самохвалов Юрий Алексеевич
+      comment: Народу нужно больше наших магазинов!
+      preconditions:
+        - onFail: MARK_RUN
+        - sqlCheck:
+            expectedResult: 6
+            sql: select count(*) from outlet
+      changes:
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "7"
+              - column:
+                  name: city
+                  value: "Краснодар"
+              - column:
+                  name: name
+                  value: "ТЦ Галерея"
+              - column:
+                  name: address
+                  value: "г. Краснодар, ул. Головатого, 313"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 22:00"
+              - column:
+                  name: longitude
+                  value: "45.039566"
+              - column:
+                  name: latitude
+                  value: "38.974351"
+        - insert:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  value: "8"
+              - column:
+                  name: city
+                  value: "Краснодар"
+              - column:
+                  name: name
+                  value: "ТЦ Центр Города"
+              - column:
+                  name: address
+                  value: "г. Краснодар, ул. Красная, 176"
+              - column:
+                  name: phone
+                  value: "+7 (861) 201-20-88"
+              - column:
+                  name: opening_hours
+                  value: "10:00 - 22:00"
+              - column:
+                  name: longitude
+                  value: "45.039566"
+              - column:
+                  name: latitude
+                  value: "38.974351"

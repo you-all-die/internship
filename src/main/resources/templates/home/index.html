@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header(~{::title})">
-        <title>Interstellar Ship Internet Shop - Home Page</title>
+    <head th:replace="common/main :: common_header(~{::title},_,_)">
+        <title>Interstellar Ship</title>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
         <div class="ui main container">
-            <h1>Hello, people!</h1>
+            <h2 class="ui header">Популярные товары</h2>
+            <div class="ui five column grid">
+                <div th:each="pr: ${products}" class="column">
+                    <h4><a th:href="'product/' + ${pr.id}" th:text="${pr.name}"/></h4>
+                    <p th:text="'Характеристики: ' + ${pr.description}"/>
+                    <p><a th:href="'product/' + ${pr.id}"><img th:src="'/img/' + ${pr.picture}"  width="120" height="120" border="0"></a></p>
+                </div>
+            </div>
         </div>
         <footer th:replace="common/main::footer"></footer>
     </body>
