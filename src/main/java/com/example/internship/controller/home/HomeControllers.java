@@ -22,8 +22,6 @@ public class HomeControllers {
         return "home/index";
     }
 
-    @GetMapping("about")
-    public String aboutPage() {
-        return "about/index";
-    }
+    @GetMapping("login")
+    public String loginPage() { return "login/index"; }
 }

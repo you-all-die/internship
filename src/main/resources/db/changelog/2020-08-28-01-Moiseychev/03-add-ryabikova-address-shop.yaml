@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-03
+      author: Aleksey Moiseychev
+      comment: "add shop on ryabikova"
+      changes:
+        - insert:
+            tableName: address_shop
+            columns:
+              - column:
+                  name: address
+                  value: "г.Ульяновск, ул.Рябикова, д.3"
+              - column:
+                  name: schedule
+                  value: "08:00-18:00"

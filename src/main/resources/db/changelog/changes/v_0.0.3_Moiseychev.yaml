@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2020-08-28-01-Moiseychev/01-create-addressshop-table.yaml
+  - include:
+      file: db/changelog/2020-08-28-01-Moiseychev/02-add-address-shop.yaml
+  - include:
+      file: db/changelog/2020-08-28-01-Moiseychev/03-add-ryabikova-address-shop.yaml
