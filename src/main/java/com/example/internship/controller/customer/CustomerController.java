@@ -11,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {

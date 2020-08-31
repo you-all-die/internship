@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-27-01
+      comment: Create outlet table
+      author: Yury Samokhvalov
+      changes:
+        - createTable:
+            tableName: outlet
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    - primaryKey: true
+                    - nullable: false
+              - column:
+                  name: city
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(64)
+              - column:
+                  name: opening_hours
+                  type: VARCHAR(32)
+
+

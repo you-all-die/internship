@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.StringJoiner;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Entity
 @Table(name = "customers")
 @Data

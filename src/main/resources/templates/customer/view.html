@@ -1,12 +1,13 @@
+<!-- Самохвалов Юрий Алексеевич -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header(~{:: title})">
+    <head th:replace="common/main :: common_header (~{::title, _, _})">
         <title th:text="#{customer.view.page_title}">Customer Profile</title>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
 
-        <div class="ui main container">
+        <div class="ui container">
 
             <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
                 Header
