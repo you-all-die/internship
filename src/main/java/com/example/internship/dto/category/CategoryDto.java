@@ -28,17 +28,26 @@ public enum CategoryDto {
         void setPriority(long priority);
     }
 
-    @Data
-    public static class Full implements Id, Name, ParentId, Priority {
-        private long id;
-        private String name;
-        private long parentId;
-        private long priority;
+    /* Пока пустой, но при необходимости допишем */
+    public enum Request {
+        ;
     }
 
-    @Data
-    public static class IdAndName implements Id, Name {
-        private long id;
-        private String name;
+    public enum Response {
+        ;
+
+        @Data
+        public static class Full implements Id, Name, ParentId, Priority {
+            private long id;
+            private String name;
+            private long parentId;
+            private long priority;
+        }
+
+        @Data
+        public static class IdAndName implements Id, Name {
+            private long id;
+            private String name;
+        }
     }
 }
