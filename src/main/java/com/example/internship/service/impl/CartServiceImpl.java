@@ -1,5 +1,6 @@
 package com.example.internship.service.impl;
 
+import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.OrderLine;
@@ -100,12 +101,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<OrderLine> findAll(String customerId) {
+    public List<OrderLineDto> findAll(String customerId) {
         Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
 
         if (customer.isEmpty()) return new ArrayList<>();
 
-        return customer.get().getCart().getOrderLines();
+        return customer.get().getCart().getOrderLines().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -119,5 +120,9 @@ public class CartServiceImpl implements CartService {
         return orderLines.stream()
                 .map(value -> value.getProduct().getPrice().multiply(BigDecimal.valueOf(value.getProductQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private OrderLineDto convertToDto(OrderLine orderLine) {
+        return mapper.map(orderLine, OrderLineDto.class);
     }
 }

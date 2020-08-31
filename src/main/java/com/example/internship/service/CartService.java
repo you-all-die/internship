@@ -1,5 +1,6 @@
 package com.example.internship.service;
 
+import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 
@@ -17,7 +18,7 @@ public interface CartService {
 
     boolean remove(Product product, String customerId);
 
-    List<OrderLine> findAll(String customerId);
+    List<OrderLineDto> findAll(String customerId);
 
     BigDecimal getTotalPrice(String customerId);
 }

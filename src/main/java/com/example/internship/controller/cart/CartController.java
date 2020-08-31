@@ -1,6 +1,6 @@
 package com.example.internship.controller.cart;
 
-import com.example.internship.entity.OrderLine;
+import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class CartController {
 
     @GetMapping()
     public String showCart(@CookieValue(value = "customerId", defaultValue = "") String customerId, Model model) {
-        List<OrderLine> orderLines = cartService.findAll(customerId);
+        List<OrderLineDto> orderLines = cartService.findAll(customerId);
         BigDecimal totalPrice = cartService.getTotalPrice(customerId);
 
 
