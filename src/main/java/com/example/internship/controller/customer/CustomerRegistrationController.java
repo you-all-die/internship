@@ -42,7 +42,7 @@ public class CustomerRegistrationController {
         }
 
         // регистрация покупателя и редирект на страницу его профиля
-        return "redirect:/customer?id=" + customerService.registrationCustomer(customerDto).getId();
+        return "redirect:/customer/" + customerService.registrationCustomer(customerDto).getId();
     }
 
 }

@@ -29,6 +29,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final HttpServletResponse response;
 
+    public final Iterable<Customer> getAll() {
+        return customerRepository.findAll();
+    }
+
+    public final Optional<Customer> getById(long id) {
+        return customerRepository.findById(id);
+    }
+
+    public final void save(Customer customer) {
+        customerRepository.save(customer);
+    }
+
+    public final void delete(long id) {
+        customerRepository.deleteById(id);
+    }
+
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));
