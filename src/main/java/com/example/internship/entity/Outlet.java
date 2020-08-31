@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Entity
 @Table(name = "outlet")
 @Data
