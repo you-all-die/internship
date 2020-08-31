@@ -13,14 +13,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
 
     private final ModelMapper mapper;
-
 
     @Override
     public List<ProductDto> findAll() {
@@ -29,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void removeProduct(Long id) {
-        productRepo.deleteById(id);
+        if (productRepo.existsById(id)) productRepo.deleteById(id);
     }
 
     @Override
@@ -46,6 +44,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> findById(Long id) {
+        return productRepo.findById(id)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
     public ProductDto getProductById(Long id) {
 
         return convertToDto(productRepo.findById(id).get());
@@ -58,5 +66,4 @@ public class ProductServiceImpl implements ProductService {
     private Product convertToModel(ProductDto productDto) {
         return mapper.map(productDto, Product.class);
     }
-
 }
