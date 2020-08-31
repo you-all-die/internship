@@ -1,6 +1,7 @@
 package com.example.internship.service.impl;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
@@ -47,7 +48,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
-        return convertToDto(customerRepository.save(new Customer()));
+        Customer customer = new Customer();
+        customer.setCart(new Cart());
+        return convertToDto(customerRepository.save(customer));
     }
 
     // Регистрация покупателя

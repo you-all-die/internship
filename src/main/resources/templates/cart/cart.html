@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Cart</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+
+    <div class="ui container" th:if="${orderLines.isEmpty()}">
+        <div class="ui placeholder segment">
+            <div class="ui icon header">
+                <i class="shopping cart icon"></i>
+                Cart is empty!
+            </div>
+            <form method="get" th:action="@{/products}">
+                <div class="inline">
+                    <button type="submit" class="ui button">
+                        Go to products!
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="ui container" th:if="${!orderLines.isEmpty()}">
+
+        <div class="ui segment">
+
+            <div class="ui divided items">
+                <div class="item" th:each="orderLine : ${orderLines}">
+                    <div class="image">
+                        <img th:src="@{/images/headerLogo.png}">
+                    </div>
+                    <div class="content">
+                        <a class="header" th:text="${orderLine?.product?.name}"></a>
+                        <div class="meta">
+                            <span th:text="${orderLine?.product?.price}"></span>
+                            <i class="small ruble sign icon"></i>
+                        </div>
+                        <div class="description">
+                            <p th:text="${orderLine?.product?.description}"></p>
+                        </div>
+                        <div class="extra">
+                                <div class="ui right floated">
+                                <form method="post" th:action="@{/cart/remove}">
+                                    <input type="hidden" th:name="productId" th:value="${orderLine.product.id}">
+                                    <button class="ui black icon button">
+                                        <i class="trash icon"></i>
+                                    </button>
+                                </form>
+                                </div>
+                            <form method="post" th:action="@{/cart/update}">
+                            <div class="ui right floated">
+                                <div class="ui action input">
+                                    <input type="text" name="productQuantity" th:value="${orderLine?.productQuantity}">
+                                    <input type="hidden" th:name="productId" th:value="${orderLine.product.id}">
+                                    <button class="ui teal right labeled icon button">
+                                        Items
+                                        <i class="redo icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui left floated horizontal statistic">
+            <div class="value" th:text="${totalPrice.setScale(0)}">
+            </div>
+            <div class="label">
+                Total Price
+            </div>
+        </div>
+        <button class="ui right floated positive button">Checkout</button>
+    </div>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
