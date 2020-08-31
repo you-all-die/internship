@@ -21,4 +21,7 @@ public class HomeControllers {
         model.addAttribute("products", productPopularRepository.findProductPopular(limit));
         return "home/index";
     }
+
+    @GetMapping("login")
+    public String loginPage() { return "login/index"; }
 }

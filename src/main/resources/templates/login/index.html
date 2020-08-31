@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Interstellar Ship Internet Shop - Home Page</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main grid">
+    <div class="four wide column centered row">
+        <div class="column left aligned">
+            <div th:if="${param.error}">
+                <div class="ui warning message">
+                    Invalid username or password.
+                </div>
+            </div>
+            <div  th:if="${param.logout}">
+                <div class="ui warning message">
+                    You have been logged out.
+                </div>
+            </div>
+
+            <form class="ui form" th:action="@{/login}" method="post">
+                <div class="field">
+                    <label> User Name : <input type="text" name="username" placeholder="username" autofocus="autofocus"/> </label>
+                </div>
+                <div class="field">
+                    <label> Password: <input type="password" name="password" placeholder="password"/> </label>
+                </div>
+                <button class="ui primary button" type="submit">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
