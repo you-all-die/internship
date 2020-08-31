@@ -1,36 +1,29 @@
 package com.example.internship.service;
 
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
-import com.example.internship.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
-public class CustomerService {
+public interface CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    Iterable<Customer> getAll();
 
-    public final Iterable<Customer> getAll() {
-        return customerRepository.findAll();
-    }
+    Optional<Customer> getById(long id);
 
-    public final Optional<Customer> getById(long id) {
-        return customerRepository.findById(id);
-    }
+    void save(Customer customer);
 
-    public final void save(Customer customer) {
-        customerRepository.save(customer);
-    }
-
-    public final void delete(long id) {
-        customerRepository.deleteById(id);
-    }
-
-    // создание нового анонимного покупателя
-    public Long createAnonymousCustomer() {
-        return customerRepository.save(new Customer()).getId();
-    }
+    void delete(long id);
+    // Создание нового анонимного покупателя
+    CustomerDto createAnonymousCustomer();
+    // Регистрация покупателя
+    CustomerDto registrationCustomer(CustomerDto customerDto);
+    // Получение id покупателя из куки
+    Optional<Long> customerIdFromCookie();
+    // Удаление id покупателя из куки
+    void customerIdDeleteFromCookie();
+    // Запись (перезапись) id покупателя в куки
+    void customerIdAddToCookie(Long customerId);
+    // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
+    boolean isAnonymousCustomer(Long customerId);
 }
