@@ -1,4 +1,4 @@
-package com.example.internship.controller.home.aboutController;
+package com.example.internship.controller.about;
 
 import com.example.internship.entity.AddressShop;
 
@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AboutController {
+public class AboutControllerv2 {
 
     @Autowired
     private AddressShopRepository addressShopRepository;
