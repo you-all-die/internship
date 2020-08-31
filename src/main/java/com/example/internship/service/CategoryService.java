@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -40,4 +40,6 @@ public class CategoryService {
     public List<Category> findByName(String name) {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
+
+    public Optional<Category> findByIdOptional(Long id) {return categoryRepository.findById((long) id);}
 }

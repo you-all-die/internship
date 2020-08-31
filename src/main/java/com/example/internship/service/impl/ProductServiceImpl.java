@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void removeProduct(Long id) {
-        productRepo.deleteById(id);
+        if (productRepo.existsById(id)) productRepo.deleteById(id);
     }
 
     @Override
@@ -42,6 +42,16 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductDto> findById(Long id) {
+        return productRepo.findById(id)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+
+
     private ProductDto convertToDto(Product product) {
         return mapper.map(product, ProductDto.class);
     }
@@ -49,4 +59,5 @@ public class ProductServiceImpl implements ProductService {
     private Product convertToModel(ProductDto productDto) {
         return mapper.map(productDto, Product.class);
     }
+
 }

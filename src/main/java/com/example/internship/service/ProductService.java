@@ -14,4 +14,7 @@ public interface ProductService {
     void addProduct(ProductDto productDto);
 
     List<ProductDto> findByName(String name);
+
+    List<ProductDto> findById(Long id);
+
 }
