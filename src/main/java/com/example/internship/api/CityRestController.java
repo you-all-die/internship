@@ -1,4 +1,4 @@
-package com.example.internship.controller.about;
+package com.example.internship.api;
 
 import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author Самохвалов Юрий Алексеевич
  */
 @RestController
-@RequestMapping("/about")
+@RequestMapping("/api/about")
 public class CityRestController {
 
     @Autowired
