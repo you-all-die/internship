@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-09-01-01
+      author: Sergey Lapshin
+      comment: remove test customers
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - delete:
+            tableName: customers
+            where: email='ivanov@gmail.com'
+        - delete:
+            tableName: customers
+            where: email='sidorov@gmail.com'
