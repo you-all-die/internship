@@ -23,4 +23,6 @@ public interface ProductService {
 
     Long findMaxProduct();
 
+    ProductDto getProductById(Long id);
+
 }

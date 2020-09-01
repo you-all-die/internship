@@ -59,6 +59,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepo.findMaxIdProduct();
     }
 
+    @Override
+    public ProductDto getProductById(Long id) {
+        return convertToDto(productRepo.findById(id).get());
+    }
+
     private ProductDto convertToDto(Product product) {
         return mapper.map(product, ProductDto.class);
     }
