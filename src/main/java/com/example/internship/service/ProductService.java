@@ -1,8 +1,10 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductService {
