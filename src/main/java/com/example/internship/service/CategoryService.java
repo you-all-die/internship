@@ -3,7 +3,6 @@ package com.example.internship.service;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,5 +40,4 @@ public class CategoryService {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
 
-    public Optional<Category> findByIdOptional(Long id) {return categoryRepository.findById((long) id);}
 }

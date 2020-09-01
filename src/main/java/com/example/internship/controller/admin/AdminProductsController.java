@@ -1,11 +1,10 @@
 package com.example.internship.controller.admin;
 
-import com.example.internship.dto.ProductDto;
+
 import com.example.internship.entity.Product;
-import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.CategoryService;
+import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
-import com.example.internship.service.impl.ProductServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,21 +13,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminProductsController {
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
     private final CategoryService categoryService;
     private final ProductStatusService productStatusService;
-    private final ProductRepository productRepository;
 
     @GetMapping({"/products"})
-    public String saveDataForm(Model model) {
+    public String findProductAll(Model model) {
         model.addAttribute("products", productService.findAll());
         return "/admin/products";
     }
@@ -46,39 +41,6 @@ public class AdminProductsController {
         return "redirect:/admin/products";
     }
 
-    @PostMapping(value="/product/edit/{productId}")
-    public String editProduct(@PathVariable(value = "productId") Long id,
-                              @RequestParam Long category_id,
-                              @RequestParam String name,
-                              @RequestParam String description,
-                              @RequestParam("picture_file") MultipartFile picturefile,
-                              @RequestParam BigDecimal price,
-                              @RequestParam Long product_status,
-                              Model model) throws IOException {
-
-        //Проверка файла, создание директории, сохранение в папку /img_product/
-        if (picturefile != null) {
-            String uploadPath = System.getProperty("user.dir") + "/img_product/";
-            File imgDir = new File(uploadPath);
-            if (!imgDir.exists()) {
-                imgDir.mkdir();
-            }
-            String uiD = UUID.randomUUID().toString();
-            String filename = uiD + picturefile.getOriginalFilename();
-            picturefile.transferTo(new File(uploadPath + filename));
-
-            Product product = productRepository.findById(id).orElseThrow();
-            product.setCategory(categoryService.findByIdOptional(category_id).get());
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(price);
-            product.setStatus(productStatusService.findById(product_status).get());
-            product.setPicture(filename);
-            productRepository.save(product);
-        }
-        return "redirect:/admin/products";
-    }
-
 
     @PostMapping(value="/product/hide")
     public String hideProduct(@RequestParam("productId") Long id, Model model) {
@@ -89,49 +51,82 @@ public class AdminProductsController {
     //Форма редактирования существующего продукта
     @GetMapping(value="/product/{productId}/edit")
     public String editOldProduct(@PathVariable(value = "productId") Long id, Model model) {
-        model.addAttribute("product", productService.findById(id));
+        Product product = productService.findById(id);
+        model.addAttribute("product",product);
         model.addAttribute("product_status", productStatusService.findAll());
-        model.addAttribute("category", categoryService.findAll());
-        return "admin/productedit";
+        model.addAttribute("selectcategory", categoryService.findAllSortById());
+        return "admin/productsave";
     }
 
     //Форма добавления нового продукта
     @GetMapping(value="/addnewproduct")
     public String addNewProduct(Model model) {
+        Product product = new Product();
+        model.addAttribute("product", product);
         model.addAttribute("product_status", productStatusService.findAll());
-        model.addAttribute("category", categoryService.findAll());
-        return "admin/productadd";
+        model.addAttribute("selectcategory", categoryService.findAllSortById());
+        return "admin/productsave";
     }
 
-    //Метод добавление нового товара
-    @PostMapping(value="/product/add")
-    public String addProduct(@RequestParam Long category_id,
-                             @RequestParam String name,
-                             @RequestParam String description,
-                             @RequestParam("picture_file") MultipartFile picturefile,
-                             @RequestParam BigDecimal price,
-                             @RequestParam Long product_status,
-                             Model model) throws IOException {
+    //Общий метод на добавление и редактирование товара
+    @PostMapping(value="/product/save")
+    public String saveProduct(@ModelAttribute("product") Product product,
+                              @RequestParam("picture_file") MultipartFile pictureNew,
+                              Model model) throws IOException {
 
-        //Проверка файла, создание директории, сохранение в папку /img_product/
-        if (picturefile != null){
-            String uploadPath = System.getProperty("user.dir") + "/img_product/";
+        String filePicturename = "default.jpg";
+        Boolean renamePicture = false;
+        String expansionFile = null;
+        String uploadPath = System.getProperty("user.dir") + "/img_product/";
+
+        //Определение расширения файла(изображение товара)
+        if (pictureNew.getSize() > 0){
+            expansionFile = pictureNew.getOriginalFilename();
+            int index = expansionFile.lastIndexOf('.');
+            expansionFile = expansionFile.substring(index);
+        }
+
+        //Если ID есть->редактирование, иначе добавление нового товара
+        //Генерация имени файла
+        //Удаление старого файла из папки
+        if (product.getId() != null){
+            if (pictureNew.getSize() > 0){
+                filePicturename = product.getId() + "_" + product.getCategory().getId() + "_" +
+                                  product.getName() + expansionFile;
+
+                if (!product.getPicture().equals("default.jpg")){
+                    File oldPicture = new File(uploadPath + product.getPicture());
+                        if(oldPicture.exists()) {
+                            oldPicture.delete();
+                        }
+                }
+            }
+            else filePicturename = product.getPicture();
+        }
+        else {
+             renamePicture = true;
+        }
+
+            product.setPicture(filePicturename);
+            productService.saveProduct(product);
+
+            //Переименование названия фото в БД
+            if (renamePicture & (pictureNew.getSize() > 0)){
+                long prId = productService.findMaxProduct();
+                product = productService.findById(prId);
+                filePicturename = product.getId() + "_" + product.getCategory().getId() + "_" +
+                                  product.getName()+expansionFile;
+                product.setPicture(filePicturename);
+                productService.saveProduct(product);
+            }
+
+       //Cоздание директории /img_product/, сохранение файла
+        if (pictureNew.getSize() > 0) {
             File imgDir = new File(uploadPath);
-            if(!imgDir.exists()){
+            if (!imgDir.exists()) {
                 imgDir.mkdir();
             }
-            String uiD = UUID.randomUUID().toString();
-            String filename = uiD+picturefile.getOriginalFilename();
-            picturefile.transferTo(new File(uploadPath + filename));
-
-             ProductDto productDto = new ProductDto();
-             productDto.setCategory(categoryService.findByIdOptional(category_id).get());
-             productDto.setName(name);
-             productDto.setDescription(description);
-             productDto.setPrice(price);
-             productDto.setStatus(productStatusService.findById(product_status).get());
-             productDto.setPicture(filename);
-             productService.addProduct(productDto);
+            pictureNew.transferTo(new File(uploadPath + filePicturename));
         }
         return "redirect:/admin/products";
     }
