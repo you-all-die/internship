@@ -26,6 +26,4 @@ public interface CustomerService {
     void customerIdAddToCookie(Long customerId);
     // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
     boolean isAnonymousCustomer(Long customerId);
-
-    Optional<Customer> checkCustomerCart(String customerId);
 }

@@ -31,7 +31,7 @@ public class ProductController {
     public String addToCart(@CookieValue(value = "customerId", defaultValue = "") String customerId,
                             @RequestParam("productId") Product product) {
 
-        cartService.add(product, customerId);
+        cartService.add(product, Long.valueOf(customerId));
 
         return "redirect:/products";
     }

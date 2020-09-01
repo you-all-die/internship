@@ -12,13 +12,13 @@ import java.util.List;
  */
 public interface CartService {
 
-    boolean add(Product product, String customerId);
+    boolean add(Product product, Long customerId);
 
-    boolean updateQuantity(Product product,Integer productQuantity, String customerId);
+    boolean updateQuantity(Product product,Integer productQuantity, Long customerId);
 
-    boolean remove(Product product, String customerId);
+    boolean remove(Product product, Long customerId);
 
-    List<OrderLineDto> findAll(String customerId);
+    List<OrderLineDto> findAll(Long customerId);
 
-    BigDecimal getTotalPrice(String customerId);
+    BigDecimal getTotalPrice(Long customerId);
 }

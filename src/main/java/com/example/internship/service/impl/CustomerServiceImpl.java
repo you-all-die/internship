@@ -1,7 +1,6 @@
 package com.example.internship.service.impl;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
@@ -113,26 +112,6 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
         return customer != null && customer.getEmail() == null;
-    }
-
-    @Override
-    public Optional<Customer> checkCustomerCart(String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
-
-        if (customer.isEmpty()) return Optional.empty();
-
-        if (customer.get().getCart() == null){
-            log.error("Cart for customer: " + customerId + "not exist!");
-            customer.get().setCart(new Cart());
-            customerRepository.save(customer.get());
-            return Optional.empty();
-        }
-
-        if (customer.get().getCart().getOrderLines() == null) {
-            return Optional.empty();
-        }
-
-        return customer;
     }
 
     private CustomerDto convertToDto(Customer customer) {
