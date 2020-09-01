@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-31-001
+      author: Murashov Alexey
+      comment: sequence fix
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: SELECT setval('customers_id_seq', (SELECT max(id) FROM customers));
