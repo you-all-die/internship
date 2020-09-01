@@ -23,4 +23,6 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
+
+    private Long priority;
 }

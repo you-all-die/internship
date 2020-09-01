@@ -16,12 +16,12 @@
                 </div>
             </div>
             <div class="field">
-                <select th:field="*{parent.id}">
-                    <option value="" th:value="null">Без категории</option>
+                <select th:field="*{parentId}">
+                    <option value=null th:selected="${parent}==null">Без категории</option>
                     <th:block th:each="parentCat : ${parentCategories}">
-                        <option th:value="${parentCat.id}"
-                                th:selected="${parentCat.id==parent?.id}"
-                                th:text="${parentCat.name}">City
+                        <option th:value="${parentCat.parentId}"
+                                th:selected="${parentCat.parentId==parentId}"
+                                th:text="${parentCat.parentName}">City
                         </option>
                     </th:block>
                 </select>

@@ -13,7 +13,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<Category> findAll() {
-        return (List<Category>) categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     public Category findById(Long id) {
@@ -29,9 +29,6 @@ public class CategoryService {
     }
 
     public void addCategory(Category category) {
-        if (category.getParent() != null && category.getParent().getId() == (long) -1) {
-            category.setParent(null);
-        }
         categoryRepository.save(category);
     }
 

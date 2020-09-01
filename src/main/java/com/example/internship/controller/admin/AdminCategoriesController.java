@@ -1,7 +1,8 @@
 package com.example.internship.controller.admin;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Category;
-import com.example.internship.service.CategoryService;
+import com.example.internship.service.impl.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +16,13 @@ import java.util.List;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminCategoriesController {
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryService;
 
     @GetMapping({"/categories"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
-        List<Category> list;
+        List<CategoryDto.Response.Full> list;
         if (categoryName == null) {
-            list = categoryService.findAllSortById();
+            list = categoryService.findAll();
         } else {
             list = categoryService.findByName(categoryName);
         }
@@ -55,9 +56,7 @@ public class AdminCategoriesController {
     public String addNewCategory(Model model) {
         Category category = new Category();
         model.addAttribute("category", category);
-        Category defaultParent = new Category((long) -1, "Без категории", null );
-        List<Category> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
+        List<CategoryDto.Response.Full> parentCategories = categoryService.findAll();
         model.addAttribute("parentCategories", parentCategories);
         return "/admin/category";
     }
@@ -66,15 +65,14 @@ public class AdminCategoriesController {
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
         Category category = categoryService.findById(id);
         model.addAttribute("category", category);
-        Category defaultParent = new Category((long) -1, "Без категории", null );
-        List<Category> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
+        List<CategoryDto.Response.Full> parentCategories = categoryService.findAll();
         model.addAttribute("parentCategories", parentCategories);
         return "/admin/category";
     }
 
     @PostMapping(value="/category/save")
     public String saveCategory(@ModelAttribute("category") Category category, BindingResult result, Model model) {
+        System.out.println(category);
         categoryService.addCategory(category);
         return "redirect:/admin/categories";
     }

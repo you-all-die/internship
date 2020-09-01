@@ -1,6 +1,7 @@
 package com.example.internship.dto.category;
 
-import lombok.Data;
+import com.example.internship.entity.Category;
+import lombok.*;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -19,8 +20,13 @@ public enum CategoryDto {
     }
 
     private interface ParentId {
-        long getParentId();
-        void setParentId(long parentId);
+        Long getParentId();
+        void setParentId(Long parentId);
+    }
+
+    private interface ParentName {
+        String getParentName();
+        void setParentName(String parentName);
     }
 
     private interface Priority {
@@ -40,7 +46,16 @@ public enum CategoryDto {
         public static class Full implements Id, Name, ParentId, Priority {
             private long id;
             private String name;
-            private long parentId;
+            private Long parentId;
+            private long priority;
+        }
+
+        @Data
+        public static class FullWithParentName implements Id, Name, ParentId, ParentName, Priority {
+            private long id;
+            private String name;
+            private Long parentId;
+            private String parentName;
             private long priority;
         }
 
