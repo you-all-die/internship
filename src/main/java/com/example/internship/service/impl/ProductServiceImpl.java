@@ -5,6 +5,7 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +13,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
 
     private final ModelMapper mapper;
+
 
     @Override
     public List<ProductDto> findAll() {
@@ -42,6 +45,12 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ProductDto getProductById(Long id) {
+
+        return convertToDto(productRepo.findById(id).get());
+    }
+
     private ProductDto convertToDto(Product product) {
         return mapper.map(product, ProductDto.class);
     }
@@ -49,4 +58,5 @@ public class ProductServiceImpl implements ProductService {
     private Product convertToModel(ProductDto productDto) {
         return mapper.map(productDto, Product.class);
     }
+
 }
