@@ -1,3 +1,12 @@
 databaseChangeLog:
   - include:
       file: db/changelog/2020-08-31-gs/01-add-priority-to-category.yaml
+  - changeSet:
+      id: 2020-08-31-001
+      author: Murashov Alexey
+      comment: sequence fix
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: SELECT setval('customers_id_seq', (SELECT max(id) FROM customers));
