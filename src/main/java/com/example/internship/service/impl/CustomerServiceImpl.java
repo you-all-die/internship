@@ -50,9 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
-        Customer customer = new Customer();
-        customer.setCart(new Cart());
-        return convertToDto(customerRepository.save(customer));
+        return convertToDto(customerRepository.save(new Customer()));
     }
 
     // Регистрация покупателя
@@ -71,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
         // Сохраняем значение в БД для нашего покупателя
         customerDto.setId(customerId);
 
-        //связывание корзины при регистрации 
+        //связывание корзины при регистрации
         customerDto.setCart(customerRepository.findById(customerId).get().getCart());
         customerRepository.save(convertToModel(customerDto));
 

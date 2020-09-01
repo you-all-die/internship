@@ -1,6 +1,8 @@
 package com.example.internship.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -10,11 +12,9 @@ import javax.validation.constraints.Min;
  */
 @Entity
 @Table(name = "order_line")
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderLine {
 
     @Id

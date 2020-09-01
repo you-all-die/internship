@@ -6,7 +6,6 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
-import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CartService;
 import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
@@ -28,8 +27,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    private final CustomerRepository customerRepository;
-
     private final CustomerService customerService;
 
     private final CartRepository cartRepository;
@@ -43,41 +40,33 @@ public class CartServiceImpl implements CartService {
         if (customer.isEmpty()) return false;
 
         Cart cart = customer.get().getCart();
+        List<OrderLine> orderLines = cart.getOrderLines();
+        Optional<OrderLine> checkOrderLine = getOrderLineByProduct(orderLines, product);
 
-        if (cart.getOrderLines().stream().filter(orderLine -> orderLine.getProduct().equals(product))
-                                         .findFirst().orElse(null) != null) {
-
-            cart.setOrderLines(cart.getOrderLines().stream().peek(orderLine -> {
-                if (orderLine.getProduct().equals(product)) {
-                    orderLine.setProductQuantity(orderLine.getProductQuantity() + 1);
-                }
-            }).collect(Collectors.toList()));
-            cartRepository.save(cart);
+        if (checkOrderLine.isPresent()) {
+           cart.setOrderLines(updateProductQuantity(orderLines, checkOrderLine.get(),
+                   checkOrderLine.get().getProductQuantity() + 1));
+           cartRepository.save(cart);
             return true;
         }
 
-        cart.getOrderLines().add(OrderLine.builder().product(product).productQuantity(1).build());
+        cart.getOrderLines().add(new OrderLine(null, product, 1));
         cartRepository.save(cart);
-
         return true;
     }
 
     @Override
-    public boolean updateQuantity(Product product,Integer productQuantity, String customerId) {
+    public boolean updateQuantity(Product product, Integer productQuantity, String customerId) {
         Optional<Customer> customer = customerService.checkCustomerCart(customerId);
 
         if (customer.isEmpty() || productQuantity <= 0) return false;
 
         Cart cart = customer.get().getCart();
+        List<OrderLine> orderLines = cart.getOrderLines();
+        Optional<OrderLine> checkOrderLine = getOrderLineByProduct(orderLines, product);
 
-        if (cart.getOrderLines().stream().filter(orderLine -> orderLine.getProduct().equals(product))
-                .findFirst().orElse(null) != null) {
-
-            cart.setOrderLines(cart.getOrderLines().stream().peek(orderLine -> {
-                if (orderLine.getProduct().equals(product)) {
-                    orderLine.setProductQuantity(productQuantity);
-                }
-            }).collect(Collectors.toList()));
+        if (checkOrderLine.isPresent()) {
+            cart.setOrderLines(updateProductQuantity(orderLines, checkOrderLine.get(), productQuantity));
             cartRepository.save(cart);
             return true;
         }
@@ -92,9 +81,7 @@ public class CartServiceImpl implements CartService {
         if (customer.isEmpty()) return false;
 
         Cart cart = customer.get().getCart();
-
-        Optional<OrderLine> orderLine = cart.getOrderLines()
-                .stream().filter(value -> value.getProduct().equals(product)).findFirst();
+        Optional<OrderLine> orderLine = getOrderLineByProduct(cart.getOrderLines(), product);
 
         if (orderLine.isPresent()) {
             cart.getOrderLines().remove(orderLine.get());
@@ -131,5 +118,18 @@ public class CartServiceImpl implements CartService {
 
     private OrderLineDto convertToDto(OrderLine orderLine) {
         return mapper.map(orderLine, OrderLineDto.class);
+    }
+
+    private Optional<OrderLine> getOrderLineByProduct(List<OrderLine> orderLines, Product product) {
+       return orderLines.stream().filter(orderLine -> orderLine.getProduct().equals(product)).findFirst();
+    }
+
+    private List<OrderLine> updateProductQuantity(List<OrderLine> orderLines, OrderLine orderLine,
+                                                  Integer productQuantity) {
+        return orderLines.stream().peek(value -> {
+                if (value.equals(orderLine)) {
+                    value.setProductQuantity(productQuantity);
+                }
+        }).collect(Collectors.toList());
     }
 }
