@@ -70,6 +70,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerDto.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         // Сохраняем значение в БД для нашего покупателя
         customerDto.setId(customerId);
+
+        //связывание корзины при регистрации 
+        customerDto.setCart(customerRepository.findById(customerId).get().getCart());
         customerRepository.save(convertToModel(customerDto));
 
         return customerDto;
