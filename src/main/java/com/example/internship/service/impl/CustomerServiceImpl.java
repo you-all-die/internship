@@ -6,6 +6,7 @@ import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
@@ -110,6 +112,26 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
         return customer != null && customer.getEmail() == null;
+    }
+
+    @Override
+    public Optional<Customer> checkCustomerCart(String customerId) {
+        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+
+        if (customer.isEmpty()) return Optional.empty();
+
+        if (customer.get().getCart() == null){
+            log.error("Cart for customer: " + customerId + "not exist!");
+            customer.get().setCart(new Cart());
+            customerRepository.save(customer.get());
+            return Optional.empty();
+        }
+
+        if (customer.get().getCart().getOrderLines() == null) {
+            return Optional.empty();
+        }
+
+        return customer;
     }
 
     private CustomerDto convertToDto(Customer customer) {

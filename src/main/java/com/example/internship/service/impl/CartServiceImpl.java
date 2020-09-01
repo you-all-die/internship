@@ -8,14 +8,15 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CartService;
+import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,10 +24,13 @@ import java.util.stream.Collectors;
  * @author Modenov D.A
  */
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
 
     private final CustomerRepository customerRepository;
+
+    private final CustomerService customerService;
 
     private final CartRepository cartRepository;
 
@@ -34,9 +38,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean add(Product product, String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+        Optional<Customer> customer = customerService.checkCustomerCart(customerId);
 
-        if (customer.isEmpty() || customer.get().getCart() == null) return false;
+        if (customer.isEmpty()) return false;
 
         Cart cart = customer.get().getCart();
 
@@ -60,7 +64,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean updateQuantity(Product product,Integer productQuantity, String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+        Optional<Customer> customer = customerService.checkCustomerCart(customerId);
 
         if (customer.isEmpty() || productQuantity <= 0) return false;
 
@@ -83,7 +87,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean remove(Product product, String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+        Optional<Customer> customer = customerService.checkCustomerCart(customerId);;
 
         if (customer.isEmpty()) return false;
 
@@ -103,22 +107,24 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<OrderLineDto> findAll(String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+        Optional<Customer> customer =  customerService.checkCustomerCart(customerId);
 
-        if (customer.isEmpty() || customer.get().getCart() == null) return new ArrayList<>();
+        if (customer.isEmpty()) return new ArrayList<>();
 
         return customer.get().getCart().getOrderLines().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public BigDecimal getTotalPrice(String customerId) {
-        Optional<Customer> customer = customerRepository.findById(Long.valueOf(customerId));
+        Optional<Customer> customer = customerService.checkCustomerCart(customerId);
 
-        if (customer.isEmpty() || customer.get().getCart() == null) return BigDecimal.ZERO;
+        if (customer.isEmpty()) return BigDecimal.ZERO;
 
         List<OrderLine> orderLines = customer.get().getCart().getOrderLines();
 
         return orderLines.stream()
+                .filter(value -> value.getProduct().getPrice() != null &&
+                        value.getProduct().getPrice().compareTo(BigDecimal.ZERO) > 0 )
                 .map(value -> value.getProduct().getPrice().multiply(BigDecimal.valueOf(value.getProductQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
