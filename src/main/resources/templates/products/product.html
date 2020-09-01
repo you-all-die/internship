@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <form method="post" th:action="@{/products/addToCart}">
+    <form method="post" th:action="@{/cart/add}">
         <div class="right floated">
             <input type="hidden" name="productId" th:value="${product?.id}"/>
 

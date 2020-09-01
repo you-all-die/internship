@@ -7,7 +7,7 @@
 <div th:replace="common/main :: header"></div>
 <div class="ui main container">
 
-    <div class="ui container" th:if="${orderLines.isEmpty()}">
+    <div class="ui container" th:if="${orderLines?.isEmpty()}">
         <div class="ui placeholder segment">
             <div class="ui icon header">
                 <i class="shopping cart icon"></i>
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="ui container" th:if="${!orderLines.isEmpty()}">
+    <div class="ui container" th:if="${!orderLines?.isEmpty()}">
 
         <div class="ui segment">
 

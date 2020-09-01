@@ -8,8 +8,6 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CartService;
-import com.example.internship.service.CustomerService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -126,9 +124,10 @@ public class CartServiceImpl implements CartService {
 
         if (customer.get().getCart() == null){
             log.error("Cart for customer: " + customerId + "not exist!");
-            customer.get().setCart(new Cart());
-            customerRepository.save(customer.get());
-            return Optional.empty();
+            Cart cart  = new Cart();
+            cart.setOrderLines(new ArrayList<>());
+            customer.get().setCart(cart);
+            return Optional.of(customerRepository.save(customer.get()));
         }
 
         if (customer.get().getCart().getOrderLines() == null) {
