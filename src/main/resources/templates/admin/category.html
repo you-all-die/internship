@@ -17,9 +17,13 @@
             </div>
             <div class="field">
                 <select th:field="*{parent.id}">
-                    <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
-                            th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
-                    </option>
+                    <option value="" th:value="null" th:text="Без категории"></option>
+                    <th:block th:each="parentCat : ${parentCategories}">
+                        <option th:value="${parentCat.id}"
+                                th:selected="${parentCat.id}=={parent?.id}"
+                                th:text="${parentCat.name}">City
+                        </option>
+                    </th:block>
                 </select>
             </div>
             <button type="submit" value="Submit" class="ui fluid primary button">Сохранить</button>

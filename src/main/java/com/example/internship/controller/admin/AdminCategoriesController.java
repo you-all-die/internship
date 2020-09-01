@@ -2,8 +2,7 @@ package com.example.internship.controller.admin;
 
 import com.example.internship.entity.Category;
 import com.example.internship.service.CategoryService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +13,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminCategoriesController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping({"/categories"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
