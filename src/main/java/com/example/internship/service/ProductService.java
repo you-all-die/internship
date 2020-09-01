@@ -13,7 +13,12 @@ public interface ProductService {
 
     void addProduct(ProductDto productDto);
 
+    void saveProduct(Product product);
+
     List<ProductDto> findByName(String name);
 
-    ProductDto getProductById(Long id);
+    Product findById(Long id);
+
+    Long findMaxProduct();
+
 }

@@ -7,9 +7,11 @@ import com.example.internship.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findAll() {
-        return productRepo.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+        return productRepo.findAll(Sort.by("id")).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -36,6 +38,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void saveProduct(Product product) {
+        productRepo.save(product);
+    }
+
+    @Override
     public List<ProductDto> findByName(String name) {
         return productRepo.findByNameContainsIgnoreCase(name)
                 .stream()
@@ -43,15 +50,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ProductDto> findById(Long id) {
-        return productRepo.findById(id)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+
+    public Product findById(Long id) {
+        return productRepo.findById(id).orElseThrow();
     }
 
-
+    public Long findMaxProduct(){
+        return productRepo.findMaxIdProduct();
+    }
 
     @Override
     public ProductDto getProductById(Long id) {
