@@ -39,13 +39,15 @@
         <thead>
         <tr><th>Название</th>
             <th>Родительская категория</th>
+            <th>Приоритет</th>
             <th colspan="2">Действия</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="category: ${categoryList}">
             <td th:text="${category.name}">Name</td>
-            <td th:text="${category?.parentId}">Subcategory</td>
+            <td th:text="${category?.parentName}">Subcategory</td>
+            <td th:text="${category?.priority}">Subcategory</td>
             <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/category/edit(categoryId=${category.id})}">
                     <button type="submit" name="submit" value="value" class="ui green button">

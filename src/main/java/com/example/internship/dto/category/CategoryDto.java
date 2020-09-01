@@ -10,8 +10,8 @@ public enum CategoryDto {
     ;
 
     private interface Id {
-        long getId();
-        void setId(long id);
+        Long getId();
+        void setId(Long id);
     }
 
     private interface Name {
@@ -30,38 +30,46 @@ public enum CategoryDto {
     }
 
     private interface Priority {
-        long getPriority();
-        void setPriority(long priority);
+        Long getPriority();
+        void setPriority(Long priority);
     }
 
     /* Пока пустой, но при необходимости допишем */
     public enum Request {
         ;
+
+        @Data
+        public static class Full implements Id, Name, ParentId, Priority {
+            private Long id;
+            private String name;
+            private Long parentId;
+            private Long priority;
+        }
     }
 
     public enum Response {
         ;
 
         @Data
-        public static class Full implements Id, Name, ParentId, Priority {
-            private long id;
-            private String name;
-            private Long parentId;
-            private long priority;
-        }
-
-        @Data
-        public static class FullWithParentName implements Id, Name, ParentId, ParentName, Priority {
-            private long id;
+        public static class Full implements Id, Name, ParentId, ParentName, Priority {
+            private Long id;
             private String name;
             private Long parentId;
             private String parentName;
-            private long priority;
+            private Long priority;
+        }
+
+        @Data
+        public static class FullNoParentName implements Id, Name, ParentId, Priority {
+            private Long id;
+            private String name;
+            private Long parentId;
+            private Long priority;
         }
 
         @Data
         public static class IdAndName implements Id, Name {
-            private long id;
+            private Long id;
             private String name;
         }
     }
