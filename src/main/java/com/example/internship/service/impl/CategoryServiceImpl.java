@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,12 +50,14 @@ public class CategoryServiceImpl {
     }
 
     private CategoryDto.Response.Full convertToFullDto(Category category) {
-        configureMapper();
         return modelMapper.map(category, CategoryDto.Response.Full.class);
     }
 
+    @PostConstruct
     private void configureMapper() {
+        System.out.println("1");
         TypeMap<Category, CategoryDto.Response.Full> typeMap = modelMapper.createTypeMap(Category.class, CategoryDto.Response.Full.class);
+        System.out.println("2");
         typeMap.addMapping(src -> src.getParent() == null ? null : src.getParent().getId(), CategoryDto.Response.Full::setId);
     }
 }
