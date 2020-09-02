@@ -29,7 +29,7 @@ public class ProductController {
      * @Author Роман Каравашкин
      */
     @GetMapping("product/{id}")
-    public String showProduct(@PathVariable("id") long id, Model model){
+    public String showProduct(@PathVariable("id") long id, Model model) {
         model.addAttribute("product",
                 productService.getProductById(id));
 
