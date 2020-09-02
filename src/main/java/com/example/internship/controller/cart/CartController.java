@@ -35,12 +35,11 @@ public class CartController {
 
     @PostMapping("/add")
     public String addToCart(@CookieValue(value = "customerId", defaultValue = "") String customerId,
-                            @RequestParam("productId") Product product, HttpServletRequest request) {
+                            @RequestParam("source") String source, @RequestParam("productId") Product product) {
 
         cartService.add(product, Long.valueOf(customerId));
 
-        return "redirect:" + StringUtils.substringAfter(request.getHeader("referer"),
-                "http://localhost:8080");
+        return "redirect:/products";
     }
 
     @PostMapping("/remove")
