@@ -7,7 +7,6 @@ import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
