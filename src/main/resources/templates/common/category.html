@@ -8,12 +8,10 @@
     <body>
         <div th:fragment="tree (categories)">
             <ul>
-                <li>1</li>
-                <li>2</li>
-                <ul>
-                    <li>2.1</li>
-                    <li>2.2</li>
-                </ul>
+                <li th:each="category : ${categories}"></li>
+                <th:block th:if="${category.hasSubcategories}">
+                    <div th:replace="common/category::tree (category.subCategories)"></div>
+                </th:block>
             </ul>
         </div>
     </body>
