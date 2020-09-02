@@ -8,10 +8,12 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+@Service("productServiceImpl")
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
@@ -40,6 +42,31 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<com.example.internship.dto.product.ProductDto.Response.Full> getAll() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public void save(com.example.internship.dto.product.ProductDto.Response.Full productDto) {
+
+    }
+
+    @Override
+    public List<com.example.internship.dto.product.ProductDto.Response.Full> getByName(String name) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Optional<com.example.internship.dto.product.ProductDto.Response.Full> getById(Long id) {
+        return Optional.empty();
     }
 
     private ProductDto convertToDto(Product product) {

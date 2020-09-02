@@ -3,6 +3,7 @@ package com.example.internship.controller.products;
 import com.example.internship.dto.ProductDto;
 import com.example.internship.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/")
 @AllArgsConstructor
 public class ProductController {
-
+    @Qualifier("productServiceImpl")
     private final ProductService productService;
 
     @GetMapping("products")

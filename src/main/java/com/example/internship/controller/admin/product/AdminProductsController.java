@@ -1,8 +1,9 @@
 package com.example.internship.controller.admin.product;
 
 import com.example.internship.dto.product.ProductDto;
-import com.example.internship.service.NewProductService;
-import lombok.AllArgsConstructor;
+import com.example.internship.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +15,19 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin/product")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminProductsController {
-    private final NewProductService productService;
+
+    @Qualifier("productDtoServiceImpl")
+    private final ProductService productService;
 
     @GetMapping(value="")
     public String showProducts(Model model, @RequestParam(value = "name", required = false) String productName) {
         List<ProductDto.Response.Full> list;
         if (productName == null) {
-            list = productService.findAll();
+            list = productService.getAll();
         } else {
-            list = productService.findByName(productName);
+            list = productService.getByName(productName);
         }
         model.addAttribute("productList", list);
         return "/admin/products";
