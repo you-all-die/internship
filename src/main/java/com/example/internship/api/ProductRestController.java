@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Ivan Gubanov
@@ -35,51 +36,19 @@ public class ProductRestController {
                     "- categoryId поиск по id категории\n" +
                     "- searchText - поиск по наименованию",
             response = ProductDto.class)
-    public List<ProductDto> productSearch(@RequestParam(name = "searchText", required = false) String searchText,
-                                          @RequestParam(name = "categoryId", required = false) Long categoryId,
-                                          @RequestParam(name = "priceFrom", required = false) BigDecimal priceFrom,
-                                          @RequestParam(name = "priceTo", required = false) BigDecimal priceTo,
+    public List<ProductDto> productSearch(@RequestParam(name = "searchText", required = false)
+                                                  Optional<String> searchText,
+                                          @RequestParam(name = "categoryId", required = false)
+                                                  Optional<Long> categoryId,
+                                          @RequestParam(name = "priceFrom", required = false)
+                                                  Optional<BigDecimal> priceFrom,
+                                          @RequestParam(name = "priceTo", required = false)
+                                                  Optional<BigDecimal> priceTo,
                                           @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                   Integer pageSize,
-                                          @RequestParam(name = "pageNumber", required = false, defaultValue = "1")
+                                          @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
                                                   Integer pageNumber) {
-        List<ProductDto> response;
-        // Поиск по имение и категории
-        if (searchText != null && categoryId != null) {
-            response = productService.findByNameAndAndCategoryId(searchText, categoryId);
-            // Поиск только по имени
-        } else if (searchText != null) {
-            response = productService.findByName(searchText);
-            // Поиск только по категории
-        } else if (categoryId != null) {
-            response = productService.findByCategoryId(categoryId);
-            // Все товары
-        } else {
-            response = productService.findAll();
-        }
-        // Форматируем по количеству и цене
-        if (response != null) {
-            // Диапазон цен ОТ и ДО
-            if (priceFrom != null && priceTo != null) {
-                response = productService.filterByPrice(response, priceFrom, priceTo);
-                // Диапазон цен ОТ
-            } else if (priceFrom != null) {
-                response = productService.filterByPrice(response, priceFrom);
-                // Диапазон цен ДО
-            } else if (priceTo != null) {
-                response = productService.filterByPrice(response, new BigDecimal(0), priceTo);
-            }
-            // Если количество продуктов больше размера страницы
-            if (response.size() > pageSize) {
-                // Если это последняя страница, то количество элементов для нее не может быть больше размера коллекции
-                if (pageNumber * pageSize > response.size()) {
-                    response = response.subList((pageNumber * pageSize) - pageSize, response.size());
-                } else {
-                    response = response.subList((pageNumber * pageSize) - pageSize, pageNumber * pageSize);
-                }
-            }
-        }
 
-        return response;
+        return productService.search(searchText, categoryId, priceFrom, priceTo, pageSize, pageNumber);
     }
 }

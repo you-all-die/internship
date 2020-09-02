@@ -4,6 +4,7 @@ import com.example.internship.dto.ProductDto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductService {
@@ -17,12 +18,7 @@ public interface ProductService {
     List<ProductDto> findByName(String name);
     // Продукт по id
     ProductDto findById(Long id);
-    // Продукт по id его категории
-    List<ProductDto> findByCategoryId(Long categoryId);
-    // Продукт по названию и id его категории
-    List<ProductDto> findByNameAndAndCategoryId(String name, Long categoryId);
-    // Возвращает продукты только с ценой ОТ и ДО
-    List<ProductDto> filterByPrice(List<ProductDto> products, BigDecimal priceFrom, BigDecimal priceTo);
-    // Возвращает продукты только с ценой ОТ
-    List<ProductDto> filterByPrice(List<ProductDto> products, BigDecimal priceFrom);
+    // Поиск по условиям
+    List<ProductDto> search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
+                         Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
 }

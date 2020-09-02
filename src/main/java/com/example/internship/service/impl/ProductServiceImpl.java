@@ -4,12 +4,16 @@ import com.example.internship.dto.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
+import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,47 +54,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    // Продукт по id его категории
-    public List<ProductDto> findByCategoryId(Long categoryId) {
-        return productRepo.findByCategoryId(categoryId)
-                .stream()
+    public List<ProductDto> search(Optional<String> name, Optional<Long> categoryId,
+                                   Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo,
+                                   Integer pageSize, Integer pageNumber) {
+        // Формируем условия для запроса к БД
+        Specification<Product> specification = Specification.where(
+                // Поиск по имени
+                new ProductSpecification("name", name.orElse("")))
+                // Поиск по цене ОТ
+                .and(new ProductSpecification("priceFrom", priceFrom.orElse(new BigDecimal(0))));
+        // Поиск по цене ДО
+        if (priceTo.isPresent()) {
+            specification = specification.and(new ProductSpecification("priceTo", priceTo.get()));
+        }
+        // Поиск по id катероии
+        if (categoryId.isPresent()) {
+            specification = specification.and(new ProductSpecification("categoryId", categoryId.get()));
+        }
+
+        return productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    // Продукт по названию и id его категории
-    public List<ProductDto> findByNameAndAndCategoryId(String name, Long categoryId) {
-        return productRepo.findByNameContainsIgnoreCaseAndAndCategoryId(name, categoryId)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    // Возвращает продукты только с ценой ОТ и ДО
-    public List<ProductDto> filterByPrice(List<ProductDto> products, BigDecimal priceFrom, BigDecimal priceTo) {
-        if (products != null) {
-            return products.stream()
-                    .filter(p -> p.getPrice().compareTo(priceFrom) >= 0 && p.getPrice().compareTo(priceTo) <= 0)
-                    .collect(Collectors.toList());
-        }
-
-        return null;
-    }
-
-    @Override
-    // Возвращает продукты только с ценой ОТ
-    public List<ProductDto> filterByPrice(List<ProductDto> products, BigDecimal priceFrom) {
-        if (products != null) {
-            return products.stream()
-                    .filter(p -> p.getPrice().compareTo(priceFrom) >= 0)
-                    .collect(Collectors.toList());
-        }
-
-        return null;
-    }
-
 
     private ProductDto convertToDto(Product product) {
         return mapper.map(product, ProductDto.class);
