@@ -64,13 +64,17 @@
             </td>
             <td th:text="${pr.status.id} + '-> ' + ${pr.status.description}"/>
             <td>
-                <form th:action="@{'/admin/product/' + ${pr.id} + '/edit'}" method="post">
-                    <button class="ui primary basic button" type="submit">Редактировать</button>
+                <form th:action="@{'/admin/product/edit'}" method="post">
+                    <button class="ui primary basic button" type="submit" name="productId" th:value="${pr.id}">
+                        Редактировать
+                    </button>
                 </form>
             </td>
             <td>
-                <form th:action="@{'/admin/product/' + ${pr.id} + '/delete'}" method="post">
-                    <button class="ui negative basic button" type="submit">Удалить</button>
+                <form th:action="@{'/admin/product/delete'}" method="post">
+                    <button class="ui negative basic button" type="submit" name="productId" th:value="${pr.id}">
+                        Удалить
+                    </button>
                 </form>
             </td>
         </tr>

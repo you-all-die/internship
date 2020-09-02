@@ -61,8 +61,8 @@ public class AdminProductsController {
     }
 
     //Форма редактирования существующего продукта
-    @GetMapping(value="/product/{productId}/edit")
-    public String editProduct(@PathVariable(value = "productId") Long id, Model model) {
+    @GetMapping(value="/product/edit")
+    public String editProduct(@RequestParam(value = "productId") Long id, Model model) {
         Product product = productService.findById(id);
         model.addAttribute("product",product);
         model.addAttribute("product_status", productStatusService.findAll());
@@ -70,9 +70,14 @@ public class AdminProductsController {
         return "admin/productsave";
     }
 
+    @PostMapping(value="/product/edit")
+    public String editProduct(@RequestParam("productId") String id, Model model) {
+        return "redirect:/admin/product/edit?productId=" + id;
+    }
+
     //Форма добавления нового продукта
     @GetMapping(value="/add")
-    public String addNewProduct(Model model) {
+    public String addNewProductForm(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
         model.addAttribute("product_status", productStatusService.findAll());
