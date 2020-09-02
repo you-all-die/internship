@@ -3,12 +3,13 @@ package com.example.internship.controller.cart;
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class CartController {
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("orderLines", orderLines);
         return "cart/cart";
+    }
+
+    @PostMapping("/add")
+    public String addToCart(@CookieValue(value = "customerId", defaultValue = "") String customerId,
+                            @RequestParam("productId") Product product, HttpServletRequest request) {
+
+        cartService.add(product, Long.valueOf(customerId));
+
+        return "redirect:" + StringUtils.substringAfter(request.getHeader("referer"),
+                "http://localhost:8080");
     }
 
     @PostMapping("/remove")

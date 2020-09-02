@@ -44,8 +44,7 @@ public class CartServiceImpl implements CartService {
         Optional<OrderLine> checkOrderLine = getOrderLineByProduct(orderLines, product);
 
         if (checkOrderLine.isPresent()) {
-           cart.setOrderLines(updateProductQuantity(orderLines, checkOrderLine.get(),
-                   checkOrderLine.get().getProductQuantity() + 1));
+            checkOrderLine.get().setProductQuantity(checkOrderLine.get().getProductQuantity() + 1);
            cartRepository.save(cart);
             return true;
         }
@@ -66,7 +65,7 @@ public class CartServiceImpl implements CartService {
         Optional<OrderLine> checkOrderLine = getOrderLineByProduct(orderLines, product);
 
         if (checkOrderLine.isPresent()) {
-            cart.setOrderLines(updateProductQuantity(orderLines, checkOrderLine.get(), productQuantity));
+            checkOrderLine.get().setProductQuantity(productQuantity);
             cartRepository.save(cart);
             return true;
         }
@@ -143,14 +142,5 @@ public class CartServiceImpl implements CartService {
 
     private Optional<OrderLine> getOrderLineByProduct(List<OrderLine> orderLines, Product product) {
        return orderLines.stream().filter(orderLine -> orderLine.getProduct().equals(product)).findFirst();
-    }
-
-    private List<OrderLine> updateProductQuantity(List<OrderLine> orderLines, OrderLine orderLine,
-                                                  Integer productQuantity) {
-        return orderLines.stream().peek(value -> {
-                if (value.equals(orderLine)) {
-                    value.setProductQuantity(productQuantity);
-                }
-        }).collect(Collectors.toList());
     }
 }
