@@ -6,6 +6,7 @@ import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service("productDtoServiceImpl")
+@Service
+@Qualifier("productDtoServiceImpl")
 @RequiredArgsConstructor
 public class ProductDtoServiceImpl implements ProductService {
     private final ProductRepository productRepository;

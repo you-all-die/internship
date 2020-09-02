@@ -2,7 +2,6 @@ package com.example.internship.controller.admin.product;
 
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +14,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin/product")
-@RequiredArgsConstructor
 public class AdminProductsController {
 
-    @Qualifier("productDtoServiceImpl")
     private final ProductService productService;
+
+    public AdminProductsController(
+            @Qualifier("productDtoServiceImpl") ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping(value="")
     public String showProducts(Model model, @RequestParam(value = "name", required = false) String productName) {
