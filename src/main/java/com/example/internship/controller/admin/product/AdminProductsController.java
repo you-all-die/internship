@@ -1,4 +1,4 @@
-package com.example.internship.controller.admin;
+package com.example.internship.controller.admin.product;
 
 import com.example.internship.dto.ProductDto;
 import com.example.internship.service.ProductService;

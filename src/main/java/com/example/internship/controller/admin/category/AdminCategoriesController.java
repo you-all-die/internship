@@ -1,4 +1,4 @@
-package com.example.internship.controller.admin;
+package com.example.internship.controller.admin.category;
 
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.service.CategoryService;
@@ -10,17 +10,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/category")
 @RequiredArgsConstructor
 public class AdminCategoriesController {
     private final CategoryService categoryService;
 
-    @GetMapping({"/categories"})
+    @GetMapping({""})
     public String showCategories(Model model, @RequestParam(value = "name", required = false) String categoryName) {
         List<CategoryDto.Response.Full> list;
         if (categoryName == null) {
@@ -32,29 +32,29 @@ public class AdminCategoriesController {
         return "admin/categories";
     }
 
-    @PostMapping(value="/categories")
+    @PostMapping(value="")
     public String findCategory(@RequestParam("name") String name, Model model) {
-        return "redirect:/admin/categories?name=" + name;
+        return "redirect:/admin/category?name=" + name;
     }
 
-    @PostMapping(value="/category/delete")
+    @PostMapping(value="/delete")
     public String deleteCategory(@RequestParam("categoryId") Long id, Model model) {
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
-        categoryService.removeCategory(id);
-        return "redirect:/admin/categories";
+        categoryService.delete(id);
+        return "redirect:/admin/category";
     }
 
-    @PostMapping(value="/category/edit")
+    @PostMapping(value="/edit")
     public String editCategory(@RequestParam("categoryId") Long id, Model model) {
         return "redirect:/admin/category/edit?categoryId=" + id;
     }
 
-    @PostMapping(value="/category/add")
+    @PostMapping(value="/add")
     public String addCategory(Model model) {
         return "redirect:/admin/category/add";
     }
 
-    @GetMapping({"/category/add"})
+    @GetMapping({"/add"})
     public String addNewCategory(Model model) {
         CategoryDto.Response.Full category = new CategoryDto.Response.Full();
         model.addAttribute("category", category);
@@ -63,30 +63,30 @@ public class AdminCategoriesController {
         return "/admin/category";
     }
 
-    @GetMapping({"/category/edit"})
+    @GetMapping({"/edit"})
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
-        try {
-            CategoryDto.Response.Full category = categoryService.findById(id);
-            model.addAttribute("category", category);
+            Optional<CategoryDto.Response.Full> category = categoryService.findById(id);
+        if(category.isPresent()) {
+            model.addAttribute("category", category.get());
             List<CategoryDto.Response.IdAndName> parentCategories = categoryService.getIdAndName();
             model.addAttribute("parentCategories", parentCategories);
             return "/admin/category";
         }
-        catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.toString());
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
     }
 
-    @PostMapping(value="/category/save")
+    @PostMapping(value="/save")
     public String saveCategory(@ModelAttribute("category") CategoryDto.Request.Full category, BindingResult result, Model model) {
-        categoryService.addCategory(category);
-        return "redirect:/admin/categories";
+        categoryService.save(category);
+        return "redirect:/admin/category";
     }
 
-    @GetMapping({"/category/{id}/subcategories"})
+    @GetMapping({"/{id}/subcategories"})
     public String showSubCategories(Model model, @PathVariable(value = "id", required = false) Long parentId) {
         List<CategoryDto.Response.Full> list = categoryService.findSubcategories(parentId);
         System.out.println(list);
-        return "redirect:/admin/categories";
+        return "redirect:/admin/category";
     }
 }

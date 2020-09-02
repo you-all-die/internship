@@ -42,13 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto.Response.Full findById(Long id) throws EntityNotFoundException {
+    public Optional<CategoryDto.Response.Full> findById(Long id) throws EntityNotFoundException {
         Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
-            return convertToFullDto(category.get());
-        } else {
-            throw new EntityNotFoundException("There is no category with id " + id);
-        }
+        return category.map(this::convertToFullDto);
     }
 
     public List<Category> findAllSortById() {
@@ -56,12 +52,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void removeCategory(Long id) {
+    public void delete(Long id) {
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public void addCategory(CategoryDto.Request.Full category) {
+    public void save(CategoryDto.Request.Full category) {
         categoryRepository.save(modelMapper.map(category, Category.class));
     }
 
