@@ -18,7 +18,7 @@
         <div class="column" th:each="product : ${products}">
             <div class="ui fluid card">
                 <div class="image">
-                    <img th:src="@{images/headerLogo.png}">
+                    <img th:src="@{/images/headerLogo.png}">
                 </div>
                 <div class="content">
                     <div class="header" th:text="${product?.name}"></div>
@@ -38,10 +38,13 @@
                         </div>
                     </div>
 
-                    <form method="post" th:action="@{/products/addToCart}">
+                    <div class="right floated">
+                        <a th:href="@{/product/{id}(id=${product.id})}" class="ui black button" tabindex="0"> More </a>
+                    </div>
+
+                    <form method="post" th:action="@{/cart/add}">
                         <div class="right floated">
                             <input type="hidden" name="productId" th:value="${product?.id}"/>
-
                             <button type="submit" class="ui teal animated button" tabindex="0">
                                 <div class="hidden content">Add</div>
                                 <div class="visible content">
@@ -57,5 +60,6 @@
     </div>
 
 </div>
+<footer th:replace="common/main::footer"></footer>
 </body>
 </html>

@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-04
+      comment:  Add order line to product relation
+      author: Modenov Danil
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_order_line_to_product_id
+            baseTableName: order_line
+            baseColumnNames: product_id
+            referencedTableName: product
+            referencedColumnNames: id
+            onDelete: 'RESTRICT'
+            onUpdate: 'CASCADE'
+
+# отношения ордер лайна к продукту

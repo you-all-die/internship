@@ -7,7 +7,7 @@
 <body>
 
 <div th:replace="common/main::header"></div>
-
+<div class="ui main container">
 <div class="ui left aligned container">
     <h2>Адреса магазинов:</h2>
     <div class="ui left aligned container" th:each="element:${addressShops}">
@@ -15,7 +15,7 @@
         <p>График работы: <td th:text="${element.schedule}"></td></p><br>
     </div>
 </div>
-
+</div>
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>
