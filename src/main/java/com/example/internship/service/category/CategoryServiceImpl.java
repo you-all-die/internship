@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<CategoryDto.Response.Full> findById(Long id) throws EntityNotFoundException {
+    public Optional<CategoryDto.Response.Full> findById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         return category.map(this::convertToFullDto);
     }
@@ -79,8 +79,10 @@ public class CategoryServiceImpl implements CategoryService {
     @PostConstruct
     private void configureMapper() {
         modelMapper.createTypeMap(Category.class, CategoryDto.Response.Full.class)
-                .addMappings(mapper -> mapper.map(src -> src.getParent().getName(), CategoryDto.Response.Full::setParentName))
-                .addMappings(mapper -> mapper.map(src -> src.getParent().getId(), CategoryDto.Response.Full::setParentId));
+                .addMappings(mapper -> {
+                    mapper.map(src -> src.getParent().getName(), CategoryDto.Response.Full::setParentName);
+                    mapper.map(src -> src.getParent().getId(), CategoryDto.Response.Full::setParentId);
+                });
 
         modelMapper.createTypeMap(CategoryDto.Request.Full.class, Category.class)
                 .addMappings(mapper -> mapper.<Long>map(CategoryDto.Request.Full::getParentId, (target, v) -> target.getParent().setId(v)));

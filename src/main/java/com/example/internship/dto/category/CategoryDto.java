@@ -1,6 +1,5 @@
 package com.example.internship.dto.category;
 
-import com.example.internship.entity.Category;
 import lombok.*;
 
 /**
