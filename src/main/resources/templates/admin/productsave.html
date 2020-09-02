@@ -18,11 +18,11 @@
 
                 <div class="item">
                     <div class="ui icon input">
-                        <input type="text" placeholder="Search..." name="search_name">
+                        <input type="text" placeholder="Search..." name="searchname">
                         <i class="search link icon"></i>
                     </div>
                 </div>
-            <a th:href="@{/admin/products}" class="ui item">Найти</a>
+            <a th:href="@{/admin/products${searchname}}" class="ui item">Найти</a>
         </div>
     </div><br>
 </div>

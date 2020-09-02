@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="common/main :: common_header(~{::title},_,_)">
     <title>Interstellar Ship Internet Shop - Products</title>
 </head>
@@ -13,23 +13,29 @@
         <a th:href="@{/admin/products}" class="item">Товары</a>
         <a th:href="@{/admin/categories}" class="item">Категории</a>
         <a th:href="@{/admin/productstatus}" class="item">Статус товара</a>
-        <a th:href="@{/admin/addnewproduct}" class="item">Новый товар</a>
+        <a th:href="@{/admin/add}" class="item">Новый товар</a>
         <div class="right menu">
-            <form th:action="@{/admin/products}">
                 <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
+                    <form th:action="@{/admin/products}" method="post">
+                    <div class="ui action input">
+                        <input type="text" placeholder="Search..." name="search">
+                        <button class="ui icon button" type="submit">
+                            <i class="search icon"></i>
+                        </button>
                     </div>
+                    </form>
                 </div>
-            </form>
-            <a th:href="@{/admin/products}" class="ui item">Найти</a>
         </div>
     </div><br>
 </div>
 
-<div class="ui container">
-    <table class="ui celled table">
+<div class="ui container" th:if="${#arrays.isEmpty(products)}">
+    <h4>По вашему запросу ничего не найдено...</h4>
+    <a th:href="@{/admin/products}">Показать все товары</a><br>
+</div>
+
+<div class="ui container" th:unless="${#arrays.isEmpty(products)}">
+    <table class="ui celled table" >
         <thead>
         <tr>
             <th>Артикул</th>
@@ -47,7 +53,7 @@
         <tr th:each="pr: ${products}">
             <td th:text="${pr.id}"/>
             <td th:text="${pr.name}"/>
-            <td th:text="${pr.category.id} + '->' + ${pr.category.name}"/>
+            <td th:text="${pr.category.id} + '-> ' + ${pr.category.name}"/>
             <td th:text="${pr.description}"/>
             <td th:text="${pr.price}"/>
             <td>
@@ -56,17 +62,21 @@
                     <div class="sub header" th:text="${pr.picture}"/>
                 </div>
             </td>
-            <td th:text="${pr.status.id} + '->' + ${pr.status.description}"/>
-            <td class="selectable positive">
-                <a th:href="@{'/admin/product/' + ${pr.id} + '/edit'}">Редактировать данные</a>
+            <td th:text="${pr.status.id} + '-> ' + ${pr.status.description}"/>
+            <td>
+                <form th:action="@{'/admin/product/' + ${pr.id} + '/edit'}" method="post">
+                    <button class="ui primary basic button" type="submit">Редактировать</button>
+                </form>
             </td>
-            <td class="selectable negative">
-                <a th:href="@{'/admin/product/' + ${pr.id} + '/delete'}">Удалить товар</a>
+            <td>
+                <form th:action="@{'/admin/product/' + ${pr.id} + '/delete'}" method="post">
+                    <button class="ui negative basic button" type="submit">Удалить</button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
-</div>
+</div><br>
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>

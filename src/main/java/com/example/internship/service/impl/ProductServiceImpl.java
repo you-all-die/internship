@@ -5,13 +5,11 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,13 +48,8 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-
     public Product findById(Long id) {
         return productRepo.findById(id).orElseThrow();
-    }
-
-    public Long findMaxProduct(){
-        return productRepo.findMaxIdProduct();
     }
 
     @Override

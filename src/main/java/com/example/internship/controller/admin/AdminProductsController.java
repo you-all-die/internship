@@ -21,36 +21,48 @@ public class AdminProductsController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final ProductStatusService productStatusService;
+    private static final String DEFAULT_FILE_PICTURE_NAME = "default.jpg";
 
-    @GetMapping({"/products"})
-    public String findProductAll(Model model) {
-        model.addAttribute("products", productService.findAll());
+    //Генерация имени файла
+    private String generationFileName(Product product, MultipartFile pictureName){
+        String filePictureName;
+        String fileExtension;
+
+        fileExtension = pictureName.getOriginalFilename();
+        int index = fileExtension.lastIndexOf('.');
+        fileExtension = fileExtension.substring(index);
+        filePictureName = product.getId() + "_" + product.getCategory().getId() + fileExtension;
+        return filePictureName;
+    }
+
+
+    @GetMapping(value="/products")
+    public String findProduct(@RequestParam(value = "search", required = false) String searchName, Model model) {
+        if (searchName==null){
+            model.addAttribute("products", productService.findAll());
+        }
+        else{
+                model.addAttribute("products", productService.findByName(searchName));
+        }
         return "/admin/products";
     }
 
     @PostMapping(value="/products")
-    public String findProduct(@RequestParam(value = "search_name", required = false) String name, Model model) {
-        return "redirect:/admin/products?name=" + name;
+    public String searchProduct(@RequestParam("search") String searchName, Model model) {
+        return "redirect:/admin/products?search=" + searchName;
     }
 
     //Удаление товара
-    @GetMapping(value="/product/{productId}/delete")
-    public String deleteProduct(@PathVariable(value = "productId") Long id, Model model) {
+    @PostMapping(value="/product/delete")
+    public String deleteProduct(@RequestParam("productId") Long id, Model model) {
         productService.removeProduct(id);
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
         return "redirect:/admin/products";
     }
 
-
-    @PostMapping(value="/product/hide")
-    public String hideProduct(@RequestParam("productId") Long id, Model model) {
-        //productService.hideProduct(id);
-        return "redirect:/admin/products";
-    }
-
     //Форма редактирования существующего продукта
     @GetMapping(value="/product/{productId}/edit")
-    public String editOldProduct(@PathVariable(value = "productId") Long id, Model model) {
+    public String editProduct(@PathVariable(value = "productId") Long id, Model model) {
         Product product = productService.findById(id);
         model.addAttribute("product",product);
         model.addAttribute("product_status", productStatusService.findAll());
@@ -59,7 +71,7 @@ public class AdminProductsController {
     }
 
     //Форма добавления нового продукта
-    @GetMapping(value="/addnewproduct")
+    @GetMapping(value="/add")
     public String addNewProduct(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
@@ -74,51 +86,39 @@ public class AdminProductsController {
                               @RequestParam("picture_file") MultipartFile pictureNew,
                               Model model) throws IOException {
 
-        String filePicturename = "default.jpg";
+        String filePictureName = DEFAULT_FILE_PICTURE_NAME;
+        String defaultPictureName = DEFAULT_FILE_PICTURE_NAME;
         Boolean renamePicture = false;
-        String expansionFile = null;
         String uploadPath = System.getProperty("user.dir") + "/img_product/";
-
-        //Определение расширения файла(изображение товара)
-        if (pictureNew.getSize() > 0){
-            expansionFile = pictureNew.getOriginalFilename();
-            int index = expansionFile.lastIndexOf('.');
-            expansionFile = expansionFile.substring(index);
-        }
 
         //Если ID есть->редактирование, иначе добавление нового товара
         //Генерация имени файла
         //Удаление старого файла из папки
         if (product.getId() != null){
             if (pictureNew.getSize() > 0){
-                filePicturename = product.getId() + "_" + product.getCategory().getId() + "_" +
-                                  product.getName() + expansionFile;
-
-                if (!product.getPicture().equals("default.jpg")){
+                filePictureName = generationFileName(product, pictureNew);
+                if (!product.getPicture().equals(defaultPictureName)){
                     File oldPicture = new File(uploadPath + product.getPicture());
                         if(oldPicture.exists()) {
                             oldPicture.delete();
                         }
                 }
             }
-            else filePicturename = product.getPicture();
+            else filePictureName = product.getPicture();
         }
         else {
              renamePicture = true;
         }
 
-            product.setPicture(filePicturename);
-            productService.saveProduct(product);
+        product.setPicture(filePictureName);
+        productService.saveProduct(product);
 
-            //Переименование названия фото в БД
-            if (renamePicture & (pictureNew.getSize() > 0)){
-                long prId = productService.findMaxProduct();
-                product = productService.findById(prId);
-                filePicturename = product.getId() + "_" + product.getCategory().getId() + "_" +
-                                  product.getName()+expansionFile;
-                product.setPicture(filePicturename);
-                productService.saveProduct(product);
-            }
+        //Переименование названия фото в БД
+        if (renamePicture & (pictureNew.getSize() > 0)){
+            filePictureName = generationFileName(product,pictureNew);
+            product.setPicture(filePictureName);
+            productService.saveProduct(product);
+        }
 
        //Cоздание директории /img_product/, сохранение файла
         if (pictureNew.getSize() > 0) {
@@ -126,8 +126,9 @@ public class AdminProductsController {
             if (!imgDir.exists()) {
                 imgDir.mkdir();
             }
-            pictureNew.transferTo(new File(uploadPath + filePicturename));
+            pictureNew.transferTo(new File(uploadPath + filePictureName));
         }
         return "redirect:/admin/products";
     }
 }
+

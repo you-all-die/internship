@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.entity.Product;
 
 import java.util.List;
 
@@ -19,6 +20,6 @@ public interface ProductService {
 
     Product findById(Long id);
 
-    Long findMaxProduct();
+    ProductDto getProductById(Long id);
 
 }

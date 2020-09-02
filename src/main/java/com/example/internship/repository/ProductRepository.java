@@ -10,6 +10,4 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameContainsIgnoreCase(String name);
 
-    @Query(value = "SELECT max(product.id) FROM Product product", nativeQuery = true)
-    Long findMaxIdProduct();
 }
