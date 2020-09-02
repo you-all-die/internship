@@ -1,9 +1,8 @@
 package com.example.internship.controller.admin.product;
 
-import com.example.internship.dto.ProductDto;
-import com.example.internship.service.ProductService;
+import com.example.internship.dto.product.ProductDto;
+import com.example.internship.service.NewProductService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/product")
 @AllArgsConstructor
 public class AdminProductsController {
-    private final ProductService productService;
+    private final NewProductService productService;
 
-    @GetMapping({"/products"})
-    public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String productName) {
-        List<ProductDto> list;
+    @GetMapping(value="")
+    public String showProducts(Model model, @RequestParam(value = "name", required = false) String productName) {
+        List<ProductDto.Response.Full> list;
         if (productName == null) {
             list = productService.findAll();
         } else {
@@ -31,16 +30,16 @@ public class AdminProductsController {
         return "/admin/products";
     }
 
-    @PostMapping(value="/products")
+    @PostMapping(value="")
     public String findProduct(@RequestParam("name") String name, Model model) {
-        return "redirect:/admin/products?name=" + name;
+        return "redirect:/admin/product?name=" + name;
     }
 
     @PostMapping(value="/product/delete")
     public String deleteProduct(@RequestParam("productId") Long id, Model model) {
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
-        productService.removeProduct(id);
-        return "redirect:/admin/products";
+        productService.delete(id);
+        return "redirect:/admin/product";
     }
 
     @PostMapping(value="/product/edit")
@@ -51,7 +50,7 @@ public class AdminProductsController {
     @PostMapping(value="/product/hide")
     public String hideProduct(@RequestParam("productId") Long id, Model model) {
         //productService.hideProduct(id);
-        return "redirect:/admin/products";
+        return "redirect:/admin/product";
     }
 
     @PostMapping(value="/product/add")
