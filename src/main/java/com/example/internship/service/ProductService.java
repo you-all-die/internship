@@ -4,6 +4,7 @@ import com.example.internship.dto.ProductDto;
 import com.example.internship.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductService {
@@ -19,6 +20,8 @@ public interface ProductService {
     List<ProductDto> findByName(String name);
 
     Product findById(Long id);
+
+    ProductDto getProductById(Long id);
 
     ProductDto getProductById(Long id);
 

@@ -54,7 +54,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getProductById(Long id) {
-
         return convertToDto(productRepo.findById(id).get());
     }
 
