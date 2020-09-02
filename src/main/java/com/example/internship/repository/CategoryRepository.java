@@ -12,6 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByNameContainsIgnoreCase(String name);
     List<Category> findAllByOrderByIdAscParentIdAsc();
     List<Category> findByParentId(Long parentId);
+    List<Category> findByParentIdIsNull();
 
     @Query("SELECT c.id, c.name FROM Category c")
     List<CategoryDto.Response.IdAndName> getIdAndName();

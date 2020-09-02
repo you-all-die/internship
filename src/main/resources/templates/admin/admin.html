@@ -9,7 +9,7 @@
 <div class="ui main container">
     <div class="ui two column stackable grid">
         <div class="column">
-            <form action="#" th:action="@{/admin/products}">
+            <form action="#" th:action="@{/admin/product}">
                 <button class="ui button" type="submit">
                     Управление товарами
                 </button>
@@ -24,5 +24,6 @@
         </div>
     </div>
 </div>
+<footer th:replace="common/main::footer"></footer>
 </body>
 </html>

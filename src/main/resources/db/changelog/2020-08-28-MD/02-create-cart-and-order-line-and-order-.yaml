@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-02
+      comment:  Create cart, order_line, add cart column to customers
+      author: Modenov Danil
+      changes:
+        - createTable:
+            tableName: cart
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_cart
+                    nullable: false
+        - createTable:
+            tableName: order_line
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_order_line
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_quantity
+                  type: INT
+        - createTable:
+            tableName: cart_order_line
+            columns:
+              - column:
+                  name: cart_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_line_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            columns:
+              - column:
+                  afterColumn: email
+                  name: cart_id
+                  type: BIGINT
+            tableName: customers

@@ -10,11 +10,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Мурашов Алексей
+ */
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -64,6 +66,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto.Response.Full> findByName(String name) {
         return categoryRepository.findByNameContainsIgnoreCase(name).stream()
+                .map(this::convertToFullDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDto.Response.Full> findTopLevelCategories() {
+        return categoryRepository.findByParentIdIsNull().stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
     }

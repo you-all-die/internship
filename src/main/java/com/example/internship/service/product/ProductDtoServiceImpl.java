@@ -1,25 +1,54 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.NewProductService;
+import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Мурашов Алексей
+ */
 @Service
+@Qualifier("productDtoServiceImpl")
 @RequiredArgsConstructor
-public class NewProductServiceImpl implements NewProductService {
+public class ProductDtoServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
     @Override
-    public List<ProductDto.Response.Full> findAll() {
+    public List<com.example.internship.dto.ProductDto> findAll() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void removeProduct(Long id) {
+
+    }
+
+    @Override
+    public void addProduct(com.example.internship.dto.ProductDto productDto) {
+
+    }
+
+    @Override
+    public List<com.example.internship.dto.ProductDto> findByName(String name) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ProductDto.Response.Full> getAll() {
         return productRepository.findAll().stream()
                 .map(this::convertToFullDto).collect(Collectors.toUnmodifiableList());
     }
@@ -35,9 +64,30 @@ public class NewProductServiceImpl implements NewProductService {
     }
 
     @Override
-    public List<ProductDto.Response.Full> findByName(String name) {
+    public List<ProductDto.Response.Full> getByName(String name) {
         return productRepository.findByNameContainsIgnoreCase(name).stream()
                 .map(this::convertToFullDto).collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public Optional<ProductDto.Response.Full> getById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.map(this::convertToFullDto);
+    }
+
+    @Override
+    public com.example.internship.dto.ProductDto getProductById(Long id) {
+        return new com.example.internship.dto.ProductDto();
+    }
+
+    @Override
+    public Optional<com.example.internship.dto.ProductDto> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber) {
+        return new ProductSearchResult();
     }
 
     @PostConstruct

@@ -3,6 +3,7 @@ package com.example.internship.controller.admin.category;
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +14,16 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * @author Мурашов Алексей
+ */
 @Controller
 @RequestMapping("/admin/category")
 @RequiredArgsConstructor
-public class AdminCategoriesController {
+public class CategoriesController {
     private final CategoryService categoryService;
 
-    @GetMapping({""})
+    @GetMapping(value = "")
     public String showCategories(Model model, @RequestParam(value = "name", required = false) String categoryName) {
         List<CategoryDto.Response.Full> list;
         if (categoryName == null) {
@@ -86,6 +89,13 @@ public class AdminCategoriesController {
     @GetMapping({"/{id}/subcategories"})
     public String showSubCategories(Model model, @PathVariable(value = "id", required = false) Long parentId) {
         List<CategoryDto.Response.Full> list = categoryService.findSubcategories(parentId);
+        System.out.println(list);
+        return "redirect:/admin/category";
+    }
+
+    @GetMapping(value = "/top")
+    public String showTopLevelCategories(Model model) {
+        List<CategoryDto.Response.Full> list = categoryService.findTopLevelCategories();
         System.out.println(list);
         return "redirect:/admin/category";
     }

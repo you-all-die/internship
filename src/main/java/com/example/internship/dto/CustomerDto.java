@@ -1,6 +1,7 @@
 package com.example.internship.dto;
 
 import com.example.internship.entity.Address;
+import com.example.internship.entity.Cart;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -24,4 +25,5 @@ public class CustomerDto {
     @NotEmpty
     private String email;
     private Set<Address> addresses;
+    private Cart cart;
 }

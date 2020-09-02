@@ -19,7 +19,7 @@
             </td>
 
             <td class="right aligned collapsing">
-                <form method="POST" class="ui form" action="#" th:action="@{/admin/products}">
+                <form method="POST" class="ui form" action="#" th:action="@{/admin/product}">
                     <div class="fields">
                     <div class="field">
                         <div class="ui input">
@@ -47,9 +47,9 @@
         <tbody>
         <tr th:each="product: ${productList}">
             <td th:text="${product.name}">Name</td>
-            <td th:text="${product.category.name}">Category</td>
+            <td th:text="${product.categoryName}">Category</td>
             <td th:text="${product.description}">Description</td>
-            <td th:text="${product.status.description}">Status</td>
+            <td th:text="${product.statusDescription}">Status</td>
             <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/admin/product/edit(productId=${product.id})}">
                     <button type="submit" name="submit" value="value" class="ui green button">
