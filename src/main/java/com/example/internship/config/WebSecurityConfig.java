@@ -1,5 +1,7 @@
 package com.example.internship.config;
 
+import com.example.internship.security.CustomAuthenticationSuccessHandler;
+import com.example.internship.security.CustomLogoutSuccessHandler;
 import com.example.internship.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 
 @Configuration
@@ -19,6 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailServiceImpl userDetailsService;
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler = new CustomAuthenticationSuccessHandler();
+
+    @Autowired
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler = new CustomLogoutSuccessHandler();
+
+//    @Autowired
+//    private RdirectToOriginalUrlAuthenticationSuccessHandler rdirectToOriginalUrlAuthenticationSuccessHandler;
 
     /*
 	 	Кодирование пароля пользователей - с помощью BCrypt.
@@ -33,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity
                 .csrf()
                 .disable()
@@ -41,16 +56,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/", false)
+                .permitAll()
+//                    Устанавливаем хэндлер для обработки логики после успешной авторизации
+                .successHandler(customAuthenticationSuccessHandler)
                 .and()
-//                Если явно не указано, при loguot переходим не страницу login
-                .logout();
-//                    .logoutUrl("/logout");
-        // Перенарпавление на главную страницу после успешного входа
-
+//                Если явно не указано, при logout переходим не страницу login
+                .logout()
+//                    Устанавливаем хэндлер для обработки логики после успешной авторизации
+                .logoutSuccessHandler(customLogoutSuccessHandler)
+//                    После logout удаляем куку с сессией
+                .deleteCookies("JSESSIONID");
 
     }
 
