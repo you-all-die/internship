@@ -1,5 +1,6 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +73,21 @@ public class ProductDtoServiceImpl implements ProductService {
     public Optional<ProductDto.Response.Full> getById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         return product.map(this::convertToFullDto);
+    }
+
+    @Override
+    public com.example.internship.dto.ProductDto getProductById(Long id) {
+        return new com.example.internship.dto.ProductDto();
+    }
+
+    @Override
+    public Optional<com.example.internship.dto.ProductDto> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber) {
+        return new ProductSearchResult();
     }
 
     @PostConstruct

@@ -5,24 +5,42 @@
     <title th:replace="${title}">Interstellar Ship</title>
 
     <!-- Common styles and scripts -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}">
     <style>
         .main.container {
-            margin-top: 7em;
+            margin-top: 5em;
+            flex: 1 1 100%
+        }
+
+        header {
+            flex: 0 0 auto;
         }
         footer {
-            position: absolute;
             bottom: 0;
             width: 100%;
             height: 60px;
             padding-top: 20px;
             padding-bottom: 20px;
             background-color: #f5f5f5;
-            margin-top: 0;
+            margin-top: 5em;
             margin-bottom: 0;
+            flex: 0 0 auto;
         }
+
+        html {
+            height: 100%;
+            display: flex;
+        }
+        body {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 100%;
+        }
+
+
     </style>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}">
     <th:block th:replace="${links}"/>
 
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -30,7 +48,7 @@
     <th:block th:replace="${scripts}"/>
 </head>
 <body>
-<div th:fragment="header">
+<header th:fragment="header">
     <div class="ui huge secondary  menu">
         <div class="item">
             <img class="Medium" src="#" th:src="@{/images/headerLogo.png}" alt="Logo">
@@ -45,13 +63,14 @@
         </a>
 
         <div class="right menu">
-            <div class="item ">
+            <div class="item">
                 <div class="ui icon input disabled">
                     <input type="text" placeholder="Search...">
                     <i class="search link icon"></i>
                 </div>
             </div>
-            <a class="item">
+
+            <a class="item" th:href="@{/cart}">
                 <i class="shopping cart icon"></i>
             </a>
 
@@ -61,23 +80,20 @@
                 <div class="menu">
                     <!-- ссылка на вход в систему -->
                     <a class="item" th:href="@{/login}" sec:authorize="isAnonymous()">
+                        <i class="sign-in icon"></i>
                         Log in
                     </a>
-
-                    <!-- если пользователь авторизован -->
-                    <div sec:authorize="isAuthenticated()">
-                        <!-- ссылка на профиль пользователя -->
+                    <!-- ссылка на выход из системы -->
+                    <a class="item" th:href="@{/logout}" sec:authorize="isAuthenticated()">
                         <a class="item" th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">
                             <span th:text="${#authentication.principal.getUsername()}"></span>
                         </a>
-                        <!--                                 ссылка на выход из системы-->
-                        <a class="item" th:href="@{/logout}">
-                            Log out
-                        </a>
-                    </div>
-
+                        <i class="sign-in icon"></i>
+                        Log out
+                    </a>
                     <!-- ссылка на регистрацию в систему -->
-                    <a class="item" th:href="@{/}" sec:authorize="isAnonymous()">
+                    <a class="item" th:href="@{/registration}" sec:authorize="isAnonymous()">
+                        <i class="user plus icon"></i>
                         Registration
                     </a>
                 </div>
@@ -88,7 +104,7 @@
     </div>
 
     <script>$('.ui.dropdown').dropdown();</script>
-</div>
+</header>
 
 <footer th:fragment="footer">
     <div class="ui container">

@@ -5,6 +5,7 @@ import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
@@ -65,6 +67,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerDto.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         // Сохраняем значение в БД для нашего покупателя
         customerDto.setId(customerId);
+
+        //связывание корзины при регистрации
+        customerDto.setCart(customerRepository.findById(customerId).get().getCart());
         customerRepository.save(convertToModel(customerDto));
 
         return customerDto;

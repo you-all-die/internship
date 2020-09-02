@@ -14,17 +14,24 @@ import java.util.StringJoiner;
 @Table(name = "customers")
 @Data
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String firstName;
     private String middleName;
     private String lastName;
     private String password;
     private String phone;
     private String email;
+
     @OneToMany(mappedBy = "customer")
     private Set<Address> addresses;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     public final String getFullName() {
         StringBuilder sb = new StringBuilder();

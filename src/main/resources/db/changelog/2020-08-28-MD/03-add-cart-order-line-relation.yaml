@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-08-28-03
+      comment: Add cart to order line relation
+      author: Modenov Danil
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_cart_to_order_line_id
+            baseTableName: cart_order_line
+            baseColumnNames: order_line_id
+            referencedTableName: order_line
+            referencedColumnNames: id
+            onDelete: 'RESTRICT'
+            onUpdate: 'CASCADE'
+        - addForeignKeyConstraint:
+            constraintName: fk_order_line_to_cart_id
+            baseTableName: cart_order_line
+            baseColumnNames: cart_id
+            referencedTableName: cart
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'CASCADE'
+
+#Отношение корзины к ордер лайнам
