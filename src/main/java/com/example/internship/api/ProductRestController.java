@@ -22,7 +22,7 @@ public class ProductRestController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = ProductDto.class)
-    public ProductDto productData(@PathVariable Long id) {
+    public Optional<ProductDto> productData(@PathVariable Long id) {
         return productService.findById(id);
     }
 

@@ -52,8 +52,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     // Продукт по id
-    public ProductDto findById(Long id) {
-        return convertToDto(productRepo.findById(id).orElse(null));
+    public Optional<ProductDto> findById(Long id) {
+        if (productRepo.findById(id).isPresent()) {
+            return Optional.ofNullable(convertToDto(productRepo.findById(id).get()));
+        }
+        return Optional.empty();
     }
 
     @Override

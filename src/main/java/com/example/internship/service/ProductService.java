@@ -18,7 +18,7 @@ public interface ProductService {
 
     List<ProductDto> findByName(String name);
     // Продукт по id
-    ProductDto findById(Long id);
+    Optional<ProductDto> findById(Long id);
     // Поиск по условиям
     ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
                                Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
