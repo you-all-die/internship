@@ -4,6 +4,7 @@ import com.example.internship.dto.ProductDto;
 import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.service.ProductService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,17 +38,23 @@ public class ProductRestController {
                     "- searchText - поиск по наименованию",
             response = ProductSearchResult.class)
     public ProductSearchResult productSearch(@RequestParam(name = "searchText", required = false)
-                                                  Optional<String> searchText,
+                                             @ApiParam(value = "поиск по наименованию")
+                                                     Optional<String> searchText,
                                              @RequestParam(name = "categoryId", required = false)
-                                                  Optional<Long> categoryId,
+                                             @ApiParam(value = "поиск id категории продукта")
+                                                     Optional<Long> categoryId,
                                              @RequestParam(name = "priceFrom", required = false)
-                                                  Optional<BigDecimal> priceFrom,
+                                             @ApiParam(value = "поиск по минимальной цене")
+                                                     Optional<BigDecimal> priceFrom,
                                              @RequestParam(name = "priceTo", required = false)
-                                                  Optional<BigDecimal> priceTo,
+                                             @ApiParam(value = "поиск по максимальной цене")
+                                                     Optional<BigDecimal> priceTo,
                                              @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                                  Integer pageSize,
+                                             @ApiParam(value = "размер страницы")
+                                                     Integer pageSize,
                                              @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                                  Integer pageNumber) {
+                                             @ApiParam(value = "номер страницы")
+                                                     Integer pageNumber) {
 
         return productService.search(searchText, categoryId, priceFrom, priceTo, pageSize, pageNumber);
     }
