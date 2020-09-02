@@ -17,9 +17,13 @@ public interface ProductService {
     void addProduct(ProductDto productDto);
 
     List<ProductDto> findByName(String name);
+
+    ProductDto getProductById(Long id);
+
     // Продукт по id
     Optional<ProductDto> findById(Long id);
     // Поиск по условиям
     ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
                                Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
+
 }
