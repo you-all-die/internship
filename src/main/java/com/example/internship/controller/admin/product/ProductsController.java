@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * @author Мурашов Алексей
+ */
 @Controller
 @RequestMapping("/admin/product")
-public class AdminProductsController {
+public class ProductsController {
 
     private final ProductService productService;
 
-    public AdminProductsController(
+    public ProductsController(
             @Qualifier("productDtoServiceImpl") ProductService productService) {
         this.productService = productService;
     }

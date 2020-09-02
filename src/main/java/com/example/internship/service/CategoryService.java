@@ -14,4 +14,5 @@ public interface CategoryService {
     void delete(Long id);
     void save(CategoryDto.Request.Full category);
     List<CategoryDto.Response.Full> findByName(String name);
+    List<CategoryDto.Response.Full> findTopLevelCategories();
 }
