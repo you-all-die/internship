@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isPresent()) {
             return convertToFullDto(category.get());
         } else {
-            throw new EntityNotFoundException("There is no category with id" + id);
+            throw new EntityNotFoundException("There is no category with id " + id);
         }
     }
 
