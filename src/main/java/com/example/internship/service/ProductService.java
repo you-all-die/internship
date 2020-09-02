@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.dto.ProductSearchResult;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +20,6 @@ public interface ProductService {
     // Продукт по id
     ProductDto findById(Long id);
     // Поиск по условиям
-    List<ProductDto> search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
-                         Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
+    ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
+                               Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
 }

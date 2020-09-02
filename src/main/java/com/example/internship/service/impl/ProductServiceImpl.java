@@ -1,6 +1,7 @@
 package com.example.internship.service.impl;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
@@ -23,6 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepo;
 
     private final ModelMapper mapper;
+
+    private final ProductSearchResult searchResult;
 
     @Override
     public List<ProductDto> findAll() {
@@ -54,9 +57,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> search(Optional<String> name, Optional<Long> categoryId,
-                                   Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo,
-                                   Integer pageSize, Integer pageNumber) {
+    public ProductSearchResult search(Optional<String> name, Optional<Long> categoryId,
+                                      Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo,
+                                      Integer pageSize, Integer pageNumber) {
         // Формируем условия для запроса к БД
         Specification<Product> specification = Specification.where(
                 // Поиск по имени
@@ -71,10 +74,15 @@ public class ProductServiceImpl implements ProductService {
         if (categoryId.isPresent()) {
             specification = specification.and(new ProductSpecification("categoryId", categoryId.get()));
         }
-
-        return productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream()
+        // Формируем результат поиска
+        searchResult.setProducts(productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        searchResult.setPageNumber(pageNumber);
+        searchResult.setPageSize(pageSize);
+        searchResult.setTotalProducts(productRepo.findAll(specification).size());
+
+        return searchResult;
     }
 
     private ProductDto convertToDto(Product product) {

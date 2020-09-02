@@ -1,13 +1,13 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.service.ProductService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,18 +35,18 @@ public class ProductRestController {
                     "- priceTo максимальная цена продукта\n" +
                     "- categoryId поиск по id категории\n" +
                     "- searchText - поиск по наименованию",
-            response = ProductDto.class)
-    public List<ProductDto> productSearch(@RequestParam(name = "searchText", required = false)
+            response = ProductSearchResult.class)
+    public ProductSearchResult productSearch(@RequestParam(name = "searchText", required = false)
                                                   Optional<String> searchText,
-                                          @RequestParam(name = "categoryId", required = false)
+                                             @RequestParam(name = "categoryId", required = false)
                                                   Optional<Long> categoryId,
-                                          @RequestParam(name = "priceFrom", required = false)
+                                             @RequestParam(name = "priceFrom", required = false)
                                                   Optional<BigDecimal> priceFrom,
-                                          @RequestParam(name = "priceTo", required = false)
+                                             @RequestParam(name = "priceTo", required = false)
                                                   Optional<BigDecimal> priceTo,
-                                          @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                             @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                   Integer pageSize,
-                                          @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                             @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
                                                   Integer pageNumber) {
 
         return productService.search(searchText, categoryId, priceFrom, priceTo, pageSize, pageNumber);
