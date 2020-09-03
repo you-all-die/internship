@@ -4,12 +4,10 @@ import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 

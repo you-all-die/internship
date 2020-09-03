@@ -1,4 +1,4 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.user;
 
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;

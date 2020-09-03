@@ -1,6 +1,6 @@
 package com.example.internship.controller.products;
 
-import com.example.internship.dto.ProductDto;
+import com.example.internship.dto.product.ProductDto;
 import com.example.internship.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping("products")
     public String getProducts(Model model) {
-        List<ProductDto> products = productService.findAll();
+        List<ProductDto.Response.All> products = productService.findAll();
         model.addAttribute("products", products);
         return "products/products";
     }
@@ -33,10 +33,7 @@ public class ProductController {
      */
     @GetMapping("product/{id}")
     public String showProduct(@PathVariable("id") long id, Model model) {
-        model.addAttribute("product",
-                productService.getProductById(id));
-
+        model.addAttribute("product", productService.findById(id));
         return "products/product";
-
     }
 }

@@ -2,17 +2,24 @@ package com.example.internship.service;
 
 import com.example.internship.dto.category.CategoryDto;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    List<CategoryDto.Response.Full> findAll();
-    List<CategoryDto.Response.Full> findSubcategories(Long parentId);
-    List<CategoryDto.Response.IdAndName> getIdAndName();
-    Optional<CategoryDto.Response.Full> findById(Long id);
+
+    List<CategoryDto.Response.All> findAll();
+
+    List<CategoryDto.Response.All> findSubcategories(Long parentId);
+
+    List<CategoryDto.Response.IdAndName> findIdAndName();
+
+    List<CategoryDto.Response.All> findByName(String name);
+
+    Optional<CategoryDto.Response.All> findById(Long id);
+
+    List<CategoryDto.Response.All> findTopLevelCategories();
+
     void delete(Long id);
-    void save(CategoryDto.Request.Full category);
-    List<CategoryDto.Response.Full> findByName(String name);
-    List<CategoryDto.Response.Full> findTopLevelCategories();
+
+    void save(CategoryDto.Request.All category);
 }

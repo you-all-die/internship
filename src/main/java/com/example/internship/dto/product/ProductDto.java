@@ -65,7 +65,7 @@ public enum ProductDto {
         ;
 
         @Data
-        public static class Full implements Id, Name, CategoryId, CategoryName, Description, Picture, Price, StatusId, StatusDescription  {
+        public static class All implements Id, Name, CategoryId, CategoryName, Description, Picture, Price, StatusId, StatusDescription  {
             private Long id;
             private String name;
             private Long categoryId;

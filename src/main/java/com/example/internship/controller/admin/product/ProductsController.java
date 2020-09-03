@@ -28,11 +28,11 @@ public class ProductsController {
 
     @GetMapping(value="")
     public String showProducts(Model model, @RequestParam(value = "name", required = false) String productName) {
-        List<ProductDto.Response.Full> list;
+        List<ProductDto.Response.All> list;
         if (productName == null) {
-            list = productService.getAll();
+            list = productService.findAll();
         } else {
-            list = productService.getByName(productName);
+            list = productService.findByName(productName);
         }
         model.addAttribute("productList", list);
         return "/admin/products";

@@ -38,7 +38,7 @@ public enum CategoryDto {
         ;
 
         @Data
-        public static class Full implements Id, Name, ParentId, Priority {
+        public static class All implements Id, Name, ParentId, Priority {
             private Long id;
             private String name;
             private Long parentId;
@@ -50,7 +50,7 @@ public enum CategoryDto {
         ;
 
         @Data
-        public static class Full implements Id, Name, ParentId, ParentName, Priority {
+        public static class All implements Id, Name, ParentId, ParentName, Priority {
             private Long id;
             private String name;
             private Long parentId;

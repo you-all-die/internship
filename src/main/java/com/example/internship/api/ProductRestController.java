@@ -1,11 +1,10 @@
 package com.example.internship.api;
 
-import com.example.internship.dto.ProductDto;
 import com.example.internship.dto.ProductSearchResult;
+import com.example.internship.dto.product.ProductDto;
 import com.example.internship.service.ProductService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +25,8 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = ProductDto.class)
-    public Optional<ProductDto> productData(@PathVariable Long id) {
+    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = ProductDto.Response.All.class)
+    public Optional<ProductDto.Response.All> productData(@PathVariable Long id) {
         return productService.findById(id);
     }
 

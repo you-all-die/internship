@@ -3,7 +3,6 @@ package com.example.internship.controller.admin.category;
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class CategoriesController {
 
     @GetMapping(value = "")
     public String showCategories(Model model, @RequestParam(value = "name", required = false) String categoryName) {
-        List<CategoryDto.Response.Full> list;
+        List<CategoryDto.Response.All> list;
         if (categoryName == null) {
             list = categoryService.findAll();
         } else {
@@ -59,19 +58,19 @@ public class CategoriesController {
 
     @GetMapping({"/add"})
     public String addNewCategory(Model model) {
-        CategoryDto.Response.Full category = new CategoryDto.Response.Full();
+        CategoryDto.Response.All category = new CategoryDto.Response.All();
         model.addAttribute("category", category);
-        List<CategoryDto.Response.IdAndName> parentCategories = categoryService.getIdAndName();
+        List<CategoryDto.Response.IdAndName> parentCategories = categoryService.findIdAndName();
         model.addAttribute("parentCategories", parentCategories);
         return "/admin/category";
     }
 
     @GetMapping({"/edit"})
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
-            Optional<CategoryDto.Response.Full> category = categoryService.findById(id);
+            Optional<CategoryDto.Response.All> category = categoryService.findById(id);
         if(category.isPresent()) {
             model.addAttribute("category", category.get());
-            List<CategoryDto.Response.IdAndName> parentCategories = categoryService.getIdAndName();
+            List<CategoryDto.Response.IdAndName> parentCategories = categoryService.findIdAndName();
             model.addAttribute("parentCategories", parentCategories);
             return "/admin/category";
         }
@@ -81,21 +80,21 @@ public class CategoriesController {
     }
 
     @PostMapping(value="/save")
-    public String saveCategory(@ModelAttribute("category") CategoryDto.Request.Full category, BindingResult result, Model model) {
+    public String saveCategory(@ModelAttribute("category") CategoryDto.Request.All category, BindingResult result, Model model) {
         categoryService.save(category);
         return "redirect:/admin/category";
     }
 
     @GetMapping({"/{id}/subcategories"})
     public String showSubCategories(Model model, @PathVariable(value = "id", required = false) Long parentId) {
-        List<CategoryDto.Response.Full> list = categoryService.findSubcategories(parentId);
+        List<CategoryDto.Response.All> list = categoryService.findSubcategories(parentId);
         System.out.println(list);
         return "redirect:/admin/category";
     }
 
     @GetMapping(value = "/top")
     public String showTopLevelCategories(Model model) {
-        List<CategoryDto.Response.Full> list = categoryService.findTopLevelCategories();
+        List<CategoryDto.Response.All> list = categoryService.findTopLevelCategories();
         System.out.println(list);
         return "redirect:/admin/category";
     }

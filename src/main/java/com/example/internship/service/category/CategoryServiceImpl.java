@@ -24,27 +24,27 @@ public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto.Response.Full> findAll() {
+    public List<CategoryDto.Response.All> findAll() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CategoryDto.Response.Full> findSubcategories(Long parentId) {
+    public List<CategoryDto.Response.All> findSubcategories(Long parentId) {
         return categoryRepository.findByParentId(parentId).stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CategoryDto.Response.IdAndName> getIdAndName() {
+    public List<CategoryDto.Response.IdAndName> findIdAndName() {
         return categoryRepository.findAll().stream().map(this::convertToIdAndNameDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public Optional<CategoryDto.Response.Full> findById(Long id) {
+    public Optional<CategoryDto.Response.All> findById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         return category.map(this::convertToFullDto);
     }
@@ -59,26 +59,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void save(CategoryDto.Request.Full category) {
+    public void save(CategoryDto.Request.All category) {
         categoryRepository.save(modelMapper.map(category, Category.class));
     }
 
     @Override
-    public List<CategoryDto.Response.Full> findByName(String name) {
+    public List<CategoryDto.Response.All> findByName(String name) {
         return categoryRepository.findByNameContainsIgnoreCase(name).stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CategoryDto.Response.Full> findTopLevelCategories() {
+    public List<CategoryDto.Response.All> findTopLevelCategories() {
         return categoryRepository.findByParentIdIsNull().stream()
                 .map(this::convertToFullDto)
                 .collect(Collectors.toList());
     }
 
-    private CategoryDto.Response.Full convertToFullDto(Category category) {
-        return modelMapper.map(category, CategoryDto.Response.Full.class);
+    private CategoryDto.Response.All convertToFullDto(Category category) {
+        return modelMapper.map(category, CategoryDto.Response.All.class);
     }
 
     private CategoryDto.Response.IdAndName convertToIdAndNameDto(Category category) {
@@ -87,14 +87,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PostConstruct
     private void configureMapper() {
-        modelMapper.createTypeMap(Category.class, CategoryDto.Response.Full.class)
+        modelMapper.createTypeMap(Category.class, CategoryDto.Response.All.class)
                 .addMappings(mapper -> {
-                    mapper.map(src -> src.getParent().getName(), CategoryDto.Response.Full::setParentName);
-                    mapper.map(src -> src.getParent().getId(), CategoryDto.Response.Full::setParentId);
+                    mapper.map(src -> src.getParent().getName(), CategoryDto.Response.All::setParentName);
+                    mapper.map(src -> src.getParent().getId(), CategoryDto.Response.All::setParentId);
                 });
 
-        modelMapper.createTypeMap(CategoryDto.Request.Full.class, Category.class)
-                .addMappings(mapper -> mapper.<Long>map(CategoryDto.Request.Full::getParentId, (target, v) -> target.getParent().setId(v)));
+        modelMapper.createTypeMap(CategoryDto.Request.All.class, Category.class)
+                .addMappings(mapper -> mapper.<Long>map(CategoryDto.Request.All::getParentId, (target, v) -> target.getParent().setId(v)));
     }
 }
 
