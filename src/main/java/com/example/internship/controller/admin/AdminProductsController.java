@@ -60,6 +60,12 @@ public class AdminProductsController {
         return "redirect:/admin/products";
     }
 
+    @PostMapping(value="/product/hide")
+    public String hideProduct(@RequestParam("productId") Long id, Model model) {
+        //productService.hideProduct(id);
+        return "redirect:/admin/products";
+    }
+
     //Форма редактирования существующего продукта
     @GetMapping(value="/product/edit")
     public String editProduct(@RequestParam(value = "productId") Long id, Model model) {
@@ -76,7 +82,7 @@ public class AdminProductsController {
     }
 
     //Форма добавления нового продукта
-    @GetMapping(value="/add")
+    @GetMapping(value="/product/add")
     public String addNewProductForm(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
