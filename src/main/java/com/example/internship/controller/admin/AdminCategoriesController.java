@@ -1,6 +1,11 @@
 package com.example.internship.controller.admin;
 
+import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Category;
+import com.example.internship.mail.EmailService;
+import com.example.internship.mail.TestCustomerDto;
+import com.example.internship.mail.TestOrderDto;
+import com.example.internship.mail.TestOrderLineDto;
 import com.example.internship.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -16,7 +23,8 @@ import java.util.List;
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminCategoriesController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+    private final EmailService emailService;
 
     @GetMapping({"/categories"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
@@ -49,6 +57,15 @@ public class AdminCategoriesController {
 
     @PostMapping(value="/category/add")
     public String addCategory(Model model) {
+        TestCustomerDto customerDto = new TestCustomerDto("Вася", "uran2030@yandex.ru");
+        TestOrderDto orderDto = new TestOrderDto(12312L, "2020-09-03",
+                Arrays.asList(new TestOrderLineDto(1L, "продукт", 2L, 500L),
+                        new TestOrderLineDto(2L, "продукт 2", 1L, 1000L)));
+        try {
+            emailService.sendOrderDetailsMessage(customerDto, orderDto);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         return "redirect:/admin/category/add";
     }
 

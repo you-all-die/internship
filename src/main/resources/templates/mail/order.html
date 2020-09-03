@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:object="${order}" th::text="Интернет-магазин Interstellar Ship: Новый заказ № *{id}">
+        Интернет-магазин Interstellar Ship: Новый заказ
+    </title>
+</head>
+<body>
+<p th:object="${user}" th::text="Добрый день, *{name}!">Добрый день!</p>
+<p th:object="${order}" th::text="Ваш заказ №*{id} от *{date} принят">Ваш заказ принят</p>
+<u>Состав заказа:</u>
+<th:block th:each="orderLine : ${order.orderLines}">
+    <p th::text="*{productId}: *{productName} - *{productQuantity}: *{price}">Продукт</p>
+</th:block>
+<u>Комментарии к заказу:</u>
+<p th:object="${order}" th:text="*{comment}"></p>
+<p th:object="${order}" th:text="<b>Общая стоимост заказа:</b> *{totalPrice}"></p>
+<p th:object="${order}" th:text="Пожалуйста, при обращении к администрации магазина указывайте номер Ващего заказа *{id}"></p>
+<p>Спасибо за покупку!</p>
+</body>
+</html>
