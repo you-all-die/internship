@@ -1,5 +1,6 @@
 package com.example.internship.entity;
 
+
 import lombok.Data;
 
 import javax.persistence.*;
