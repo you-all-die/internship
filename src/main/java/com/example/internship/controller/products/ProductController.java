@@ -1,7 +1,6 @@
 package com.example.internship.controller.products;
 
 import com.example.internship.dto.ProductDto;
-import com.example.internship.service.CartService;
 import com.example.internship.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-    private final CartService cartService;
-
     @GetMapping("products")
     public String getProducts(Model model) {
         List<ProductDto> products = productService.findAll();
@@ -32,7 +29,7 @@ public class ProductController {
      * @Author Роман Каравашкин
      */
     @GetMapping("product/{id}")
-    public String showProduct(@PathVariable("id") long id, Model model){
+    public String showProduct(@PathVariable("id") long id, Model model) {
         model.addAttribute("product",
                 productService.getProductById(id));
 

@@ -1,8 +1,12 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.entity.Product;
+import com.example.internship.dto.ProductSearchResult;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductService {
@@ -13,7 +17,20 @@ public interface ProductService {
 
     void addProduct(ProductDto productDto);
 
+    void saveProduct(Product product);
+
     List<ProductDto> findByName(String name);
 
+    Product findByIdProduct(Long id);
+
+
+
     ProductDto getProductById(Long id);
+
+    // Продукт по id
+    Optional<ProductDto> findById(Long id);
+    // Поиск по условиям
+    ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
+                               Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
+
 }
