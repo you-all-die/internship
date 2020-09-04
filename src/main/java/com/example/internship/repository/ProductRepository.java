@@ -11,4 +11,9 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     List<Product> findByNameContainsIgnoreCase(String name);
+
+    /**
+     * @author Самохвалов Юрий Алексеевич
+     */
+    List<Product> findAllByCategoryId(long categoryId);
 }
