@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Interstellar Ship Internet Shop - Categories</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <h1 class="ui center aligned header">Список категорий</h1>
+    <table class="ui celled table">
+        <tbody>
+        <tr>
+            <td>
+                <form method="POST" action="#" th:action="@{/category/add}">
+                    <button class="ui primary button">
+                        Добавить категорию
+                    </button>
+                </form>
+            </td>
+
+            <td class="right aligned collapsing">
+                <form method="POST" class="ui form" action="#" th:action="@{/templates/categories}">
+                    <div class="fields">
+                    <div class="field">
+                        <div class="ui input">
+                            <input class="ui input" placeholder="Имя..." th:name="name" name="name" id="name" type="text"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <input class="ui button" type="submit" value="Найти"/>
+                    </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ui celled table">
+        <thead>
+        <tr><th>Название</th>
+            <th>Родительская категория</th>
+            <th colspan="2">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="category: ${categoryList}">
+            <td th:text="${category.name}">Name</td>
+            <td th:text="${category?.parent?.name}">Subcategory</td>
+            <td class="right aligned collapsing">
+                <form method="POST" th:action="@{/category/edit(categoryId=${category.id})}">
+                    <button type="submit" name="submit" value="value" class="ui green button">
+                        Редактировать
+                    </button>
+                </form>
+            </td>
+            <td class="right aligned collapsing">
+                <form method="POST" th:action="@{/category/delete(categoryId=${category.id})}">
+                    <button type="submit" name="submit" value="value" class="ui red button">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>

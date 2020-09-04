@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Interstellar Ship Internet Shop - Category</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <form class="ui large form" method="POST" action="#" th:action="@{/category/save}" th:object="${category}">
+        <h1 class="ui center aligned header"
+            th:text="*{id==null} ? 'Создать категорию' : 'Редактирование категории'"></h1>
+        <input type="hidden" th:field="*{id}">
+        <div class="ui stacked segment">
+            <div class="required field">
+                <div class="ui input">
+                    <input type="text" name="name" th:field="*{name}" placeholder="Имя...">
+                </div>
+            </div>
+            <div class="field">
+                <select th:field="*{parent.id}">
+                    <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
+                            th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" value="Submit" class="ui fluid primary button">Сохранить</button>
+        </div>
+    </form>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Панель администратора</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<br>
+<div class="ui main container">
+    <div class="ui two column stackable grid">
+        <div class="column">
+            <form action="#" th:action="@{/products}">
+                <button class="ui button" type="submit">
+                    Управление товарами
+                </button>
+            </form>
+        </div>
+        <div class="column">
+            <form action="#" th:action="@{/categories}">
+                <button class="ui button" type="submit">
+                    Управление категориями
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
