@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,13 @@ public class GsProductServiceImpl implements GsProductService {
 
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+
+    @Override
+    public List<ProductDto.Response.All> findAll() {
+        return productRepository.findAll().stream()
+                .map(this::convertToAll)
+                .collect(Collectors.toUnmodifiableList());
+    }
 
     @Override
     public List<ProductDto.Response.AllWithCategoryId> findAllByCategoryId(long categoryId) {
@@ -45,6 +53,10 @@ public class GsProductServiceImpl implements GsProductService {
     @Override
     public void delete(long id) {
         productRepository.deleteById(id);
+    }
+
+    private ProductDto.Response.All convertToAll(Product product) {
+        return modelMapper.map(product, ProductDto.Response.All.class);
     }
 
     private ProductDto.Response.AllWithCategoryId convertToAllWithCategoryId(Product product) {

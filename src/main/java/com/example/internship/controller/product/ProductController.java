@@ -1,4 +1,4 @@
-package com.example.internship.controller.products;
+package com.example.internship.controller.product;
 
 import com.example.internship.service.GsProductService;
 import com.example.internship.service.ProductService;
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Controller
 @RequestMapping("/product") // Вынес /product в маппинг(СЮА)
 @RequiredArgsConstructor // Заменил All на Required (СЮА)
@@ -16,15 +19,6 @@ public class ProductController {
 
     private final ProductService productService;
     private final GsProductService gsProductService;
-
-/*  Убрал, так как реализую свой функционал (СЮА)
-    @GetMapping("")
-    public String getProducts(Model model) {
-        List<ProductDto> products = productService.findAll();
-        model.addAttribute("products", products);
-        return "products/products";
-    }
-*/
 
     /**
      * @Author Роман Каравашкин
@@ -36,7 +30,10 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public String showProducts() {
+    public String showProducts(
+            Model model
+    ) {
+        model.addAttribute("products", gsProductService.findAll());
         return "product/index";
     }
 }

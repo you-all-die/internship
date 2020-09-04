@@ -10,6 +10,8 @@
         <div class="ui container">
             <h1 class="header" th:text="#{product.index.header}">Products</h1>
             <div class="ui grid container">
+
+                <!-- Фильтры -->
                 <div class="four wide column">
                     <div class="ui form">
                         <div class="field">
@@ -20,138 +22,24 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Карточки товаров -->
                 <div class="twelve wide column">
-                    <div class="ui five cards">
-                        <div class="ui card">
+                    <div class="ui four cards">
+                        <div class="ui raised card" th:each="product : ${products}" th:object="${product}">
                             <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
+                                <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
                             </div>
                             <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
+                                <div class="header" th:text="*{name}">Name</div>
                             </div>
                             <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
-                            </div>
-                        </div>
-                        <div class="ui card">
-                            <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
-                            </div>
-                        </div>
-                        <div class="ui card">
-                            <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
-                            </div>
-                        </div>
-                        <div class="ui card">
-                            <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
-                            </div>
-                        </div>
-                        <div class="ui card">
-                            <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
-                            </div>
-                        </div>
-                        <div class="ui card">
-                            <div class="image">
-                                <div class="ui placeholder">
-                                    <div class="square image"></div>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="ui placeholder">
-                                    <div class="header">
-                                        <div class="very short line"></div>
-                                        <div class="medium line"></div>
-                                    </div>
-                                    <div class="paragraph">
-                                        <div class="short line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="extra content">
-                                <div class="ui disabled primary button">Add</div>
-                                <div class="ui disabled button">Delete</div>
+                                <div th:text="*{price}">100$</div>
+                                <form class="ui form" method="post" th:action="@{/cart/add(productId=*{id})}">
+                                    <button class="ui icon button" type="submit">
+                                        <i class="cart plus icon"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
