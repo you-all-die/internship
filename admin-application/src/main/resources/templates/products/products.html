@@ -13,7 +13,7 @@
         <a th:href="@{/templates/products}" class="item">Товары</a>
         <a th:href="@{/categories}" class="item">Категории</a>
         <a th:href="@{/productstatus}" class="item">Статус товара</a>
-        <a th:href="@{/add}" class="item">Новый товар</a>
+        <a th:href="@{/product/add}" class="item">Новый товар</a>
         <div class="right menu">
             <div class="item">
                 <form th:action="@{/templates/products}" method="post">
@@ -31,7 +31,7 @@
 
 <div class="ui container" th:if="${#arrays.isEmpty(products)}">
     <h4>По вашему запросу ничего не найдено...</h4>
-    <a th:href="@{/admin/products}">Показать все товары</a><br>
+    <a th:href="@{/products}">Показать все товары</a><br>
 </div>
 
 <div class="ui container" th:unless="${#arrays.isEmpty(products)}">
