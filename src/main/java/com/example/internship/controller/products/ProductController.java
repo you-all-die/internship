@@ -2,6 +2,7 @@ package com.example.internship.controller.products;
 
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +14,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
 
-    public ProductController(
-            @Qualifier("productServiceImpl") ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductService productService;
 
     @GetMapping("products")
     public String getProducts(Model model) {

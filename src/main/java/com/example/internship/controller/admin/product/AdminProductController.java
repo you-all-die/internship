@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
-public class ProductController {
+public class AdminProductController {
 
     private final ProductService productService;
 

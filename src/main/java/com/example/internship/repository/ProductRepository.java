@@ -13,6 +13,4 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     List<Product> findByNameContainsIgnoreCase(String name);
 
-    @Query("from Product limit :limit")
-    List<Product> findPopular(long limit);
 }

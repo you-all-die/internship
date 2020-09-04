@@ -51,12 +51,17 @@ public class ProductServiceImpl implements ProductService {
     /**
      * @author Самохвалов Юрий Алексеевич
      *
+     * Возвращает 5 первых попавшихся товаров.
+     *
+     * Наивная реализация, если вы знаете лучшее решение,
+     * сообщите, пожалуйста, мне.
+     *
      * @param limit максимальное количество возвращаемых продуктов
      * @return список продуктов
      */
     @Override
     public List<ProductDto.Response.All> findPopular(long limit) {
-        return productRepository.findPopular(limit).stream()
+        return productRepository.findAll().stream().limit(limit)
                 .map(this::convertToFullDto)
                 .collect(Collectors.toUnmodifiableList());
     }
