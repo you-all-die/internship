@@ -3,7 +3,6 @@ package com.example.internship.controller.admin.product;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
-public class ProductController {
+public class TheProductController {
 
     private final ProductService productService;
 
@@ -36,30 +35,30 @@ public class ProductController {
     }
 
     @PostMapping(value="")
-    public String findProduct(@RequestParam("name") String name, Model model) {
+    public String findProduct(@RequestParam("name") String name) {
         return "redirect:/admin/product?name=" + name;
     }
 
     @PostMapping(value="/product/delete")
-    public String deleteProduct(@RequestParam("productId") Long id, Model model) {
+    public String deleteProduct(@RequestParam("productId") Long id) {
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
         productService.delete(id);
         return "redirect:/admin/product";
     }
 
     @PostMapping(value="/product/edit")
-    public String editProduct(@RequestParam("productId") Long id, Model model) {
+    public String editProduct(@RequestParam("productId") Long id) {
         return "redirect:/admin/product/edit?id=" + id;
     }
 
     @PostMapping(value="/product/hide")
-    public String hideProduct(@RequestParam("productId") Long id, Model model) {
+    public String hideProduct(@RequestParam("productId") Long id) {
         //productService.hideProduct(id);
         return "redirect:/admin/product";
     }
 
     @PostMapping(value="/product/add")
-    public String addProduct(Model model) {
+    public String addProduct() {
         return "redirect:/admin/product/add";
     }
 }
