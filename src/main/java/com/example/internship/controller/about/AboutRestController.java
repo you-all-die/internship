@@ -1,8 +1,9 @@
-package com.example.internship.api;
+package com.example.internship.controller.about;
 
 import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
 import com.example.internship.service.OutletService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,13 @@ import java.util.List;
  * @author Самохвалов Юрий Алексеевич
  */
 @RestController
-@RequestMapping("/api/about")
-public class CityRestController {
+@RequestMapping("/rest/about")
+@RequiredArgsConstructor
+public class AboutRestController {
 
-    @Autowired
-    private OutletService outletService;
+    private final OutletService outletService;
 
-    @PostMapping("")
+    @PostMapping
     public Iterable<Outlet> showOutletsFromCity(@RequestParam(name = "city", required = false) String city) {
         return outletService.getOutlets(city);
     }

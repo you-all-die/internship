@@ -38,7 +38,7 @@ ymaps.ready(function () {
 
     /* Добавить метки для магазинов */
     $.ajax({
-        url: '/api/about/coordinates',
+        url: '/rest/about/coordinates',
         method: 'POST'
     }).then(function (outlets) {
         outlets.map(outlet => {
@@ -59,7 +59,7 @@ ymaps.ready(function () {
 var onCityChange = function (select) {
     let city = select.options[select.selectedIndex].value;
     $.ajax({
-        url: '/api/about?city=' + unescape(city),
+        url: '/rest/about?city=' + unescape(city),
         method: 'POST'
     }).then(function (data) {
         /* Сначала все магазине в списке прячем */
