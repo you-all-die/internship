@@ -14,14 +14,14 @@
 <u>Состав заказа:</u>
 <th:block th:each="orderLine : ${orderLines}">
     <p>
-        [[${orderLine.id}]]:[[${orderLine.productName}]] - [[${orderLine.productQuantity}]]: [[${orderLine.price}]]
+        [[${orderLine.id}]]: [[${orderLine.productName}]] - [[${orderLine.productQuantity}]]: [[${orderLine.price}]]
     </p>
 </th:block>
 <u>Комментарий к заказу:</u>
 <p th:object="${order}" th:text="*{comment}"></p>
 <p th:object="${order}"><b>Общая стоимость заказа:</b> [[*{totalPrice}]]</p>
 <p th:object="${order}">
-    Пожалуйста, при обращении к администрации магазина указывайте номер Ващего заказа [[*{id}]]
+    Пожалуйста, при обращении к администрации магазина указывайте номер Ващего заказа - [[*{id}]]
 </p>
 <p>Спасибо за покупку!</p>
 </body>

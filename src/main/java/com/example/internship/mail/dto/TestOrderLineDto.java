@@ -1,4 +1,4 @@
-package com.example.internship.mail;
+package com.example.internship.mail.dto;
 
 import lombok.Data;
 

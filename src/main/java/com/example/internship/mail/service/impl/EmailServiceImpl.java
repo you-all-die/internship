@@ -1,27 +1,36 @@
-package com.example.internship.mail;
+package com.example.internship.mail.service.impl;
 
-
-import com.example.internship.dto.CustomerDto;
-import com.example.internship.dto.OrderLineDto;
-import lombok.RequiredArgsConstructor;
+import com.example.internship.mail.dto.TestCustomerDto;
+import com.example.internship.mail.dto.TestOrderDto;
+import com.example.internship.mail.service.EmailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service("emailService")
+@Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender emailSender;
+    private final String ORDER_EMAIL_SUBJECT = "Новый заказ № ";
+    private final String REGISTRATION_EMAIL_SUBJECT = "Добро пожаловать!";
 
+    private final JavaMailSender emailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
+
+    @Value("${internship.email.noreply}")
+    private String noreplyEmail;
+
+    @Value("${internship.email.order}")
+    private String orderEmail;
 
     @Autowired
     public EmailServiceImpl(JavaMailSender emailSender, SpringTemplateEngine thymeleafTemplateEngine) {
@@ -29,18 +38,18 @@ public class EmailServiceImpl implements EmailService {
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
     }
 
-    private void sendHtmlMessage(String to, String subject, String htmlBody) {
+    private void sendHtmlMessage(String to, String from, String subject, String htmlBody) {
 
         MimeMessage message = emailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
-            helper.setFrom("mail@yandex.ru");
+            helper.setFrom(from);
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             emailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Error sending e-mail to {}, exception {}", to, e.toString());
         }
     }
 
@@ -53,6 +62,16 @@ public class EmailServiceImpl implements EmailService {
         templateModel.put("orderLines", order.getOrderLines());
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
-        sendHtmlMessage(customer.getEmail(), "subject", htmlBody);
+        sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
+    }
+
+    @Override
+    public void sendRegistrationWelcomeMessage(TestCustomerDto customer) {
+        Context thymeleafContext = new Context();
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("customer", customer);
+        thymeleafContext.setVariables(templateModel);
+        String htmlBody = thymeleafTemplateEngine.process("mail/welcome", thymeleafContext);
+        sendHtmlMessage(customer.getEmail(), noreplyEmail, REGISTRATION_EMAIL_SUBJECT, htmlBody);
     }
 }
