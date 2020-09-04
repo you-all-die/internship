@@ -19,7 +19,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/category")
 @RequiredArgsConstructor
-public class CategoriesController {
+public class AdminCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping(value = "")
