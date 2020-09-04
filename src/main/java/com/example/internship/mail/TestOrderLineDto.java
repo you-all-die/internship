@@ -8,6 +8,4 @@ public class TestOrderLineDto {
     private final String productName;
     private final Long productQuantity;
     private final Long price;
-    private String comment;
-    private Long totalPrice;
 }

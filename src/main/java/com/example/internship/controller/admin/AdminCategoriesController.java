@@ -55,17 +55,15 @@ public class AdminCategoriesController {
         return "redirect:/admin/category/edit?categoryId=" + id;
     }
 
-    @PostMapping(value="/category/add")
+    @PostMapping(value = "/category/add")
     public String addCategory(Model model) {
         TestCustomerDto customerDto = new TestCustomerDto("Вася", "uran2030@yandex.ru");
         TestOrderDto orderDto = new TestOrderDto(12312L, "2020-09-03",
                 Arrays.asList(new TestOrderLineDto(1L, "продукт", 2L, 500L),
-                        new TestOrderLineDto(2L, "продукт 2", 1L, 1000L)));
-        try {
-            emailService.sendOrderDetailsMessage(customerDto, orderDto);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+                        new TestOrderLineDto(2L, "продукт 2", 1L, 1000L)),
+                "привет", 2000L);
+        System.out.println(orderDto.getOrderLines());
+        emailService.sendOrderDetailsMessage(customerDto, orderDto);
         return "redirect:/admin/category/add";
     }
 

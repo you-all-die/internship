@@ -7,6 +7,5 @@ import javax.mail.MessagingException;
 
 public interface EmailService {
     public void sendOrderDetailsMessage(
-            TestCustomerDto customer, TestOrderDto order)
-            throws MessagingException;
+            TestCustomerDto customer, TestOrderDto order);
 }
