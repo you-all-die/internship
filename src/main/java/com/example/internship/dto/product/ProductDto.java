@@ -1,6 +1,7 @@
 package com.example.internship.dto.product;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
@@ -32,6 +33,11 @@ public enum ProductDto {
         void setPrice(BigDecimal price);
     }
 
+    private interface CategoryId {
+        long getCategoryId();
+        void setCategoryId(long categoryId);
+    }
+
     public enum Response {
         ;
 
@@ -42,6 +48,12 @@ public enum ProductDto {
             private String description;
             private String picture;
             private BigDecimal price;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = true)
+        public static class AllWithCategoryId extends All implements CategoryId {
+            private long categoryId;
         }
     }
 }
