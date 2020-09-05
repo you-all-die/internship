@@ -1,55 +1,67 @@
 <!-- Самохвалов Юрий Алексеевич -->
 <th:block th:fragment="cards (products)" xmlns:th="http://www.thymeleaf.org">
 
-    <th:block th:each="product : ${products}">
+    <th:block th:unless="${#lists.isEmpty(products)}">
 
-        <!-- Карточка товара -->
-        <div class="ui raised card"
-             th:object="${product}"
-             th:id="|product*{id}|">
+        <th:block th:each="product : ${products}">
 
-            <!-- Фотография с ценой на ленточке -->
-            <div class="image">
-                <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
-                <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
-            </div>
+            <!-- Карточка товара -->
+            <div class="ui raised card"
+                 th:object="${product}"
+                 th:id="|product*{id}|">
 
-            <!-- Описание -->
-            <div class="content">
-                <div th:text="*{description}">Description</div>
-            </div>
-
-            <!-- Кнопка добавления в корзину -->
-            <div class="extra content">
-                <div class="ui right floated icon inverted button"
-                     th:onclick="|confirm('#modal*{id}', *{id})|">
-                    <i class="cart arrow down green link large icon"></i>
-                </div>
-            </div>
-
-            <!-- Модальное окно подтверждения добавление в корзину -->
-            <div class="ui basic modal" th:id="|modal*{id}|">
-
-                <!-- Заголовок -->
-                <div class="ui icon header">
-                    <i class="cart arrow down large icon"></i>
-                    <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
+                <!-- Фотография с ценой на ленточке -->
+                <div class="image">
+                    <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
+                    <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
                 </div>
 
-                <!-- Содержание диалога (фото) -->
+                <!-- Описание -->
                 <div class="content">
-                    <div class="ui centered medium image">
-                        <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
+                    <div th:text="*{description}">Description</div>
+                </div>
+
+                <!-- Кнопка добавления в корзину -->
+                <div class="extra content">
+                    <div class="ui right floated icon inverted button"
+                         th:onclick="|confirm('#modal*{id}', *{id})|">
+                        <i class="cart arrow down green link large icon"></i>
                     </div>
                 </div>
 
-                <!-- Кнопки -->
-                <div class="actions">
-                    <div class="ui red basic cancel button">Нет</div>
-                    <div class="ui green basic approve button">Да</div>
-                </div>
-            </div>
+                <!-- Модальное окно подтверждения добавление в корзину -->
+                <div class="ui basic modal" th:id="|modal*{id}|">
 
+                    <!-- Заголовок -->
+                    <div class="ui icon header">
+                        <i class="cart arrow down large icon"></i>
+                        <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
+                    </div>
+
+                    <!-- Содержание диалога (фото) -->
+                    <div class="content">
+                        <div class="ui centered medium image">
+                            <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
+                        </div>
+                    </div>
+
+                    <!-- Кнопки -->
+                    <div class="actions">
+                        <div class="ui red basic cancel button">Нет</div>
+                        <div class="ui green basic approve button">Да</div>
+                    </div>
+                </div>
+
+            </div>
+        </th:block>
+    </th:block>
+
+    <th:block th:if="${#lists.isEmpty(products)}">
+        <div class="ui segment placeholder">
+            <div class="ui icon header">
+                <i class="ban icon"></i>
+                <span th:text="#{product.cards.no_found}">No found</span>
+            </div>
         </div>
     </th:block>
 
