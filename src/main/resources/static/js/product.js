@@ -1,3 +1,5 @@
+/* Самохвалов Юрий Алексеевич */
+
 const addToCart = function (productId) {
     $.post({ url: '/product/cart?productId=' + unescape(productId) })
         .done(function () {
