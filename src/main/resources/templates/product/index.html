@@ -19,6 +19,10 @@
                             <label th:text="#{product.index.label.category}"></label>
                             <select class="ui dropdown">
                                 <option value="" th:text="#{product.index.select.all}">All</option>
+                                <option th:each="category : ${categories}"
+                                        th:object="${category}"
+                                        th:text="*{name}">Category Name
+                                </option>
                             </select>
                         </div>
                     </div>

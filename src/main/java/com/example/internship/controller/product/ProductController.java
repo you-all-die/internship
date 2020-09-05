@@ -1,5 +1,6 @@
 package com.example.internship.controller.product;
 
+import com.example.internship.service.GsCategoryService;
 import com.example.internship.service.GsProductService;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ public class ProductController {
 
     private final ProductService productService;
     private final GsProductService gsProductService;
+    private final GsCategoryService categoryService;
 
     /**
-     * @Author Роман Каравашкин
+     * @author Роман Каравашкин
      */
     @GetMapping("/{id}") // убрал ненужный /product (СЮА)
     public String showProduct(@PathVariable("id") long id, Model model) {
@@ -35,6 +37,7 @@ public class ProductController {
             Model model
     ) {
         model.addAttribute("products", gsProductService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "product/index";
     }
 }
