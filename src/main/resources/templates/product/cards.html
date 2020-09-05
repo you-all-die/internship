@@ -1,8 +1,9 @@
+<!-- Самохвалов Юрий Алексеевич -->
 <th:block th:fragment="cards (products)" xmlns:th="http://www.thymeleaf.org">
 
     <th:block th:each="product : ${products}">
 
-        <!-- Карточка товаров -->
+        <!-- Карточка товара -->
         <div class="ui raised card"
              th:object="${product}"
              th:id="|product*{id}|">
@@ -21,7 +22,7 @@
             <!-- Кнопка добавления в корзину -->
             <div class="extra content">
                 <div class="ui right floated icon inverted button"
-                     th:onclick="|$('#modal*{id}').modal({ onApprove: function () { addToCart(*{id}) }}).modal('show')|">
+                     th:onclick="|confirm('#modal*{id}', *{id})|">
                     <i class="cart arrow down green link large icon"></i>
                 </div>
             </div>

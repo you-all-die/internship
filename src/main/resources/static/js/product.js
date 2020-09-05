@@ -1,11 +1,12 @@
 /* Самохвалов Юрий Алексеевич */
 
+/* При загрузке окна браузера имитируем событие селектора */
 window.onload = function () {
-    console.log('window.onload()');
     let selector = $('#categorySelector').get(0);
     onCategoryChange(selector);
 };
 
+/* Добавить товар в корзину */
 const addToCart = function (productId) {
     $.post({ url: '/product/cart?productId=' + unescape(productId) })
         .then(function () {
@@ -16,6 +17,7 @@ const addToCart = function (productId) {
         });
 }
 
+/* При выборе из селектора категорий  */
 const onCategoryChange = function (select) {
     let categoryId = select.options[select.selectedIndex].value;
     let url = '/product/cards';
@@ -24,23 +26,20 @@ const onCategoryChange = function (select) {
     }
     $.ajax({ url: url, method: 'GET' })
         .then(function (html) {
-            console.log('GET ' + url);
-            console.log(html);
             $('#cards').html(html);
         })
         .catch(function (error) {
             console.log('Ошибка обращения к серверу: ' + error.message)
         });
-    //$('#cards').load('/product/cards?categoryId=' + categoryId);
 }
 
-const confirmAddToCart = function (productId) {
-    $('#modal' + productId)
+/* Диалог подтверждения добавления товара */
+const confirm = function (modalId, productId) {
+    console.log('confirm(' + modalId + ', ' + productId + ')');
+    $(modalId)
         .modal({
             blurring: true,
-            onApprove: function () {
-                addToCart(productId);
-            }
+            onApprove: function () { addToCart(productId); }
         })
-        .show('modal');
+        .modal('show');
 }
