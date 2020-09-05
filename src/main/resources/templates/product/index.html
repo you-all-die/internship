@@ -16,6 +16,7 @@
                 <div class="four wide column">
                     <div class="ui form">
                         <div class="field">
+                            <!-- Селектор категорий -->
                             <label th:text="#{product.index.label.category}"></label>
                             <select class="ui dropdown" onchange="onCategoryChange(this)">
                                 <option value="" th:text="#{product.index.select.all}">All</option>
@@ -25,6 +26,7 @@
                                         th:text="*{name}">Category Name
                                 </option>
                             </select>
+
                         </div>
                     </div>
                 </div>
@@ -32,7 +34,11 @@
                 <!-- Карточки товаров -->
                 <div class="twelve wide column">
                     <div class="ui four cards">
-                        <div class="ui raised card" th:each="product : ${products}" th:object="${product}">
+                        <div class="ui raised card"
+                             th:each="product : ${products}"
+                             th:object="${product}"
+                             th:id="|product*{id}|"
+                             th:data-category="*{categoryId}">
                             <div class="image">
                                 <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
                             </div>

@@ -10,8 +10,8 @@ const addToCart = function (productId) {
 }
 
 const onCategoryChange = function (select) {
-    let category = select.options[select.selectedIndex].value;
-    $.post({ url: '' })
+    let categoryId = select.options[select.selectedIndex].value;
+    $.post({ url: '/product/filter?categoryId=' + categoryId })
         .done(function (products) {
             console.log('Сервер вернул: ' + products);
         })

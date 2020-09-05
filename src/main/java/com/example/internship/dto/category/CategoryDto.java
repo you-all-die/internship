@@ -58,5 +58,10 @@ public enum CategoryDto {
         public static class AllWithParent extends All implements Parent {
             private Category parent;
         }
+
+        @Data
+        public static class IdOnly implements Id {
+            private long id;
+        }
     }
 }

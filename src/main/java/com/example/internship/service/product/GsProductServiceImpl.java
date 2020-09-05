@@ -1,7 +1,6 @@
 package com.example.internship.service.product;
 
 import com.example.internship.dto.product.ProductDto;
-import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.GsProductService;
@@ -10,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,9 +24,9 @@ public class GsProductServiceImpl implements GsProductService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<ProductDto.Response.All> findAll() {
+    public List<ProductDto.Response.AllWithCategoryId> findAll() {
         return productRepository.findAll().stream()
-                .map(this::convertToAll)
+                .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -36,6 +34,13 @@ public class GsProductServiceImpl implements GsProductService {
     public List<ProductDto.Response.AllWithCategoryId> findAllByCategoryId(long categoryId) {
         return productRepository.findAll().stream()
                 .map(this::convertToAllWithCategoryId)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<ProductDto.Response.Ids> findAllIdByCategoryId(long categoryId) {
+        return productRepository.findAllByCategoryId(categoryId).stream()
+                .map(this::convertToIds)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -63,6 +68,10 @@ public class GsProductServiceImpl implements GsProductService {
         return modelMapper.map(product, ProductDto.Response.AllWithCategoryId.class);
     }
 
+    private ProductDto.Response.Ids convertToIds(Product product) {
+        return modelMapper.map(product, ProductDto.Response.Ids.class);
+    }
+
     private Product convertToEntity(ProductDto.Request.AllWithCategoryId dto) {
         return modelMapper.map(dto, Product.class);
     }
@@ -74,6 +83,11 @@ public class GsProductServiceImpl implements GsProductService {
                 .addMappings(mapper -> {
                     // подразумевается, что categoryId у продукта не может быть null
                     mapper.map(src -> src.getCategory().getId(), ProductDto.Response.AllWithCategoryId::setCategoryId);
+                });
+        modelMapper
+                .createTypeMap(Product.class, ProductDto.Response.Ids.class)
+                .addMappings(mapper -> {
+                    mapper.map(product -> product.getId(), ProductDto.Response.Ids::setId);
                 });
     }
 }
