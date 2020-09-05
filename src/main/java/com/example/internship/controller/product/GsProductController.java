@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/product") // Вынес /product в маппинг(СЮА)
 @RequiredArgsConstructor // Заменил All на Required (СЮА)
-public class ProductController {
+public class GsProductController {
 
     private final ProductService productService;
     private final GsProductService gsProductService;

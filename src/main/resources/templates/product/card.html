@@ -5,6 +5,7 @@
         <meta name="author" content="Самохвалов Юрий Алексеевич">
         <title>Product Card</title>
     </head>
+
     <body>
 
         <!-- Карточка товаров -->
@@ -14,15 +15,18 @@
              th:object="${product}"
              th:id="|product*{id}|">
 
+            <!-- Фотография с ценой на ленточке -->
             <div class="image">
                 <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
                 <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
             </div>
 
+            <!-- Описание -->
             <div class="content">
                 <div th:text="*{description}">Description</div>
             </div>
 
+            <!-- Кнопка добавления в корзину -->
             <div class="extra content">
                 <div class="ui right floated icon inverted button"
                      th:onclick="|$('#modal*{id}').modal({ onApprove: function () { addToCart(*{id}) }}).modal('show')|">
@@ -30,17 +34,23 @@
                 </div>
             </div>
 
-            <!-- Подтверждение действия -->
+            <!-- Модальное окно подтверждения добавление в корзину -->
             <div class="ui basic modal" th:id="|modal*{id}|">
+
+                <!-- Заголовок -->
                 <div class="ui icon header">
                     <i class="cart arrow down large icon"></i>
                     <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
                 </div>
+
+                <!-- Содержание диалога (фото) -->
                 <div class="content">
                     <div class="ui centered medium image">
                         <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
                     </div>
                 </div>
+
+                <!-- Кнопки -->
                 <div class="actions">
                     <div class="ui red basic cancel button">Нет</div>
                     <div class="ui green basic approve button">Да</div>

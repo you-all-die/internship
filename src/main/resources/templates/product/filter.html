@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Самохвалов Юрий Алексеевич">
+        <title>Product Filters</title>
+    </head>
+    <body>
+
+        <div th:fragment="filter (categories)">
+            <div class="ui form">
+                <div class="field">
+                    <!-- Селектор категорий -->
+                    <label th:text="#{product.index.label.category}"></label>
+                    <select class="ui dropdown" onchange="onCategoryChange(this)">
+                        <option value="" th:text="#{product.index.select.all}">All</option>
+                        <option th:each="category : ${categories}"
+                                th:object="${category}"
+                                th:value="*{id}"
+                                th:text="*{name}">Category Name
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

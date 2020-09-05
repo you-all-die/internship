@@ -15,21 +15,7 @@
 
                 <!-- Фильтры -->
                 <div class="four wide column">
-                    <div class="ui form">
-                        <div class="field">
-                            <!-- Селектор категорий -->
-                            <label th:text="#{product.index.label.category}"></label>
-                            <select class="ui dropdown" onchange="onCategoryChange(this)">
-                                <option value="" th:text="#{product.index.select.all}">All</option>
-                                <option th:each="category : ${categories}"
-                                        th:object="${category}"
-                                        th:value="*{id}"
-                                        th:text="*{name}">Category Name
-                                </option>
-                            </select>
-
-                        </div>
-                    </div>
+                    <div th:replace="/product/filter :: filter (${categories})"></div>
                 </div>
 
                 <!-- Карточки товаров -->
@@ -38,6 +24,7 @@
                         <div th:replace="/product/card :: card (${products})"></div>
                     </div>
                 </div>
+
             </div>
 
         </div>
