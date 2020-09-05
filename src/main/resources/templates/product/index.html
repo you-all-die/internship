@@ -4,10 +4,11 @@
         <meta charset="UTF-8">
         <meta name="author" content="Самохвалов Юрий Алексеевич">
         <title th:text="#{product.index.page_title}">Product List</title>
-        <script th:src="@{/js/product/utils.js}"></script>
+        <script th:src="@{/js/product.js}"></script>
     </head>
     <body>
         <div th:replace="common/main :: header"></div>
+
         <div class="ui container">
             <h1 class="header" th:text="#{product.index.header}">Products</h1>
             <div class="ui grid container">
@@ -39,22 +40,47 @@
                              th:object="${product}"
                              th:id="|product*{id}|"
                              th:data-category="*{categoryId}">
+
                             <div class="image">
                                 <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
                             </div>
+
                             <div class="content">
                                 <div class="header" th:text="*{name}">Name</div>
                             </div>
+
                             <div class="extra content">
                                 <div th:text="*{price}">100$</div>
-                                <button class="ui right floated icon button" th:onclick="|addToCart(*{id})|">
-                                    <i class="cart plus icon"></i>
-                                </button>
+                                <div class="ui right floated icon inverted button"
+                                     th:onclick="|$('#modal*{id}').modal({ onApprove: function () { addToCart(*{id}) }}).modal('show')|">
+                                    <i class="cart arrow down green link large icon"></i>
+                                </div>
                             </div>
+
+                            <!-- Подтверждение действия -->
+                            <div class="ui basic modal" th:id="|modal*{id}|">
+                                <div class="ui icon header">
+                                    <i class="cart arrow down large icon"></i>
+                                    <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
+                                </div>
+                                <div class="content">
+                                    <div class="ui centered medium image">
+                                        <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
+                                    </div>
+                                    <div th:text="*{price}">999.99$</div>
+                                </div>
+                                <div class="actions">
+                                    <div class="ui red basic cancel button">Нет</div>
+                                    <div class="ui green basic approve button">Да</div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+
     </body>
 </html>

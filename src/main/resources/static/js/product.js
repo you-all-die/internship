@@ -19,3 +19,14 @@ const onCategoryChange = function (select) {
             console.log('Ошибка обращения к серверу: ' + error);
         })
 }
+
+const confirmAddToCart = function (productId) {
+    $('#modal' + productId)
+        .modal({
+            blurring: true,
+            onApprove: function () {
+                addToCart(productId);
+            }
+        })
+        .show('modal');
+}
