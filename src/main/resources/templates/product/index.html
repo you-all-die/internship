@@ -17,10 +17,11 @@
                     <div class="ui form">
                         <div class="field">
                             <label th:text="#{product.index.label.category}"></label>
-                            <select class="ui dropdown">
+                            <select class="ui dropdown" onchange="onCategoryChange(this)">
                                 <option value="" th:text="#{product.index.select.all}">All</option>
                                 <option th:each="category : ${categories}"
                                         th:object="${category}"
+                                        th:value="*{id}"
                                         th:text="*{name}">Category Name
                                 </option>
                             </select>
