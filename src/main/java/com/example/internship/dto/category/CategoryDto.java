@@ -23,11 +23,19 @@ public enum CategoryDto {
     }
 
     private interface ParentId {
-        long getParentId();
-        void setParentId(long parentId);
+        Long getParentId();
+        void setParentId(Long parentId);
     }
 
     public enum Request {
+        ;
+
+        @Data
+        public static class All implements Id, Name, ParentId {
+            private long id;
+            private String name;
+            private Long parentId;
+        }
     }
 
     public enum Response {
@@ -42,7 +50,7 @@ public enum CategoryDto {
         @Data
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithParentId extends All implements ParentId {
-            private long parentId;
+            private Long parentId;
         }
 
         @Data
