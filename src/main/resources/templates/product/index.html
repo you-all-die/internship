@@ -35,46 +35,7 @@
                 <!-- Карточки товаров -->
                 <div class="twelve wide column">
                     <div class="ui four cards">
-                        <div class="ui raised card"
-                             th:each="product : ${products}"
-                             th:object="${product}"
-                             th:id="|product*{id}|"
-                             th:data-category="*{categoryId}">
-
-                            <div class="image">
-                                <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
-                                <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
-                            </div>
-
-                            <div class="content">
-                                <div th:text="*{description}">Description</div>
-                            </div>
-
-                            <div class="extra content">
-                                <div class="ui right floated icon inverted button"
-                                     th:onclick="|$('#modal*{id}').modal({ onApprove: function () { addToCart(*{id}) }}).modal('show')|">
-                                    <i class="cart arrow down green link large icon"></i>
-                                </div>
-                            </div>
-
-                            <!-- Подтверждение действия -->
-                            <div class="ui basic modal" th:id="|modal*{id}|">
-                                <div class="ui icon header">
-                                    <i class="cart arrow down large icon"></i>
-                                    <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
-                                </div>
-                                <div class="content">
-                                    <div class="ui centered medium image">
-                                        <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
-                                    </div>
-                                </div>
-                                <div class="actions">
-                                    <div class="ui red basic cancel button">Нет</div>
-                                    <div class="ui green basic approve button">Да</div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <div th:replace="/product/card :: card (${products})"></div>
                     </div>
                 </div>
             </div>
