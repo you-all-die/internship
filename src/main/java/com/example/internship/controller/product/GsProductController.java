@@ -11,13 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -32,7 +27,6 @@ public class GsProductController {
     private final ProductService productService;
     private final GsProductService gsProductService;
     private final GsCategoryService categoryService;
-    private final SpringTemplateEngine templateEngine;
 
     /**
      * @author Роман Каравашкин

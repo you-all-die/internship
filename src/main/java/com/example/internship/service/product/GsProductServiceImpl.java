@@ -32,7 +32,7 @@ public class GsProductServiceImpl implements GsProductService {
 
     @Override
     public List<ProductDto.Response.AllWithCategoryId> findAllByCategoryId(long categoryId) {
-        return productRepository.findAll().stream()
+        return productRepository.findAllByCategoryId(categoryId).stream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
     }
