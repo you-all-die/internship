@@ -1,7 +1,6 @@
 /* Самохвалов Юрий Алексеевич */
 
 var map;
-var geolocation;
 
 /*
 Первоначальная загрузка:
@@ -20,7 +19,7 @@ ymaps.ready(function () {
         zoom: 16,
         controls: ['geolocationControl']
     });
-    geolocation = ymaps.geolocation;
+    let geolocation = ymaps.geolocation;
 
     /* Имитировать событие onChange селектора городов для принудительной фильтрации */
     onCityChange($('#citySelector').get(0));

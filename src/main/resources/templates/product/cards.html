@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="author" content="Самохвалов Юрий Алексеевич">
-        <title>Product Card</title>
-    </head>
+<th:block th:fragment="cards (products)" xmlns:th="http://www.thymeleaf.org">
 
-    <body>
+    <th:block th:each="product : ${products}">
 
         <!-- Карточка товаров -->
         <div class="ui raised card"
-             th:fragment="card (products)"
-             th:each="product : ${products}"
              th:object="${product}"
              th:id="|product*{id}|">
 
@@ -58,6 +50,6 @@
             </div>
 
         </div>
+    </th:block>
 
-    </body>
-</html>
+</th:block>
