@@ -1,5 +1,6 @@
 package com.example.internship.controller.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
@@ -42,8 +43,13 @@ public class GsProductController {
     public String showProducts(
             Model model
     ) {
-        model.addAttribute("products", gsProductService.findAll());
-        model.addAttribute("categories", categoryService.findAll());
+        final List<ProductDto.Response.AllWithCategoryId> products = gsProductService.findAll();
+        final List<CategoryDto.Response.All> categories = categoryService.findAll();
+        model.addAttribute("categories", categories);
+        model.addAttribute("products", products);
+        model.addAttribute("pageNumber", 1);
+        model.addAttribute("pageSize", 20);
+        model.addAttribute("total", products.size());
         return "product/index";
     }
 
