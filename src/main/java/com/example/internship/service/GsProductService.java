@@ -2,6 +2,7 @@ package com.example.internship.service;
 
 import com.example.internship.dto.product.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,11 @@ public interface GsProductService {
     Optional<ProductDto.Response.AllWithCategoryId> findById(long id);
     void save(ProductDto.Request.AllWithCategoryId productDto);
     void delete(long id);
+    ProductDto.Response.SearchResult findByCriteria(
+            Integer pageSize,
+            Integer pageNumber,
+            String nameLike,
+            Long categoryId,
+            BigDecimal minimalPrice,
+            BigDecimal maximumPrice);
 }

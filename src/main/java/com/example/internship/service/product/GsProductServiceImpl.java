@@ -4,11 +4,16 @@ import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.GsProductService;
+import com.example.internship.specification.GsProductSpecification;
+import com.example.internship.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,6 +65,34 @@ public class GsProductServiceImpl implements GsProductService {
         productRepository.deleteById(id);
     }
 
+    @Override
+    public ProductDto.Response.SearchResult findByCriteria(
+            Integer pageSize,
+            Integer pageNumber,
+            String nameLike,
+            Long categoryId,
+            BigDecimal minimalPrice,
+            BigDecimal maximumPrice
+    ) {
+        Specification<Product> specification = Specification.where(
+                GsProductSpecification.productWithNameLike(nameLike == null ? "" : nameLike)
+        );
+        if (categoryId != null) {
+            specification = specification.and(GsProductSpecification.productWithCategory(categoryId));
+        }
+
+        ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
+        result.setPageNumber(pageNumber);
+        result.setPageSize(pageSize);
+        result.setProducts(productRepository.findAll(
+                specification,
+                PageRequest.of(pageNumber, pageSize)).stream()
+                .map(this::convertToAllWithCategoryId)
+                .collect(Collectors.toUnmodifiableList())
+        );
+        return result;
+    }
+
     private ProductDto.Response.All convertToAll(Product product) {
         return modelMapper.map(product, ProductDto.Response.All.class);
     }
@@ -86,8 +119,6 @@ public class GsProductServiceImpl implements GsProductService {
                 });
         modelMapper
                 .createTypeMap(Product.class, ProductDto.Response.Ids.class)
-                .addMappings(mapper -> {
-                    mapper.map(product -> product.getId(), ProductDto.Response.Ids::setId);
-                });
+                .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
     }
 }

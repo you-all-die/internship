@@ -2,9 +2,9 @@ package com.example.internship.dto.product;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -76,6 +76,14 @@ public enum ProductDto {
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithCategoryId extends All implements CategoryId {
             private long categoryId;
+        }
+
+        @Data
+        public static class SearchResult {
+            private List<AllWithCategoryId> products;
+            private Integer pageNumber;
+            private Integer pageSize;
+            private Long total;
         }
     }
 }
