@@ -12,7 +12,7 @@
 	<artifactId>admin-application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Admin application</name>
-	<description>Admin application for intership shop</description>
+	<description>Admin application for internship shop</description>
 
 	<properties>
 		<java.version>11</java.version>
