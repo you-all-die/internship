@@ -50,6 +50,8 @@ public class GsProductController {
         model.addAttribute("pageNumber", 1);
         model.addAttribute("pageSize", 20);
         model.addAttribute("total", products.size());
+        model.addAttribute("minimalPrice", BigDecimal.ZERO);
+        model.addAttribute("maximalPrice", BigDecimal.ZERO);
         return "product/index";
     }
 
