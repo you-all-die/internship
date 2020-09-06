@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -46,6 +47,17 @@ public class GsProductController {
         return "product/index";
     }
 
+    @PostMapping("")
+    public ProductDto.Response.SearchResult showProductList(
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "nameLike", required = false) String nameLike,
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
+            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice
+    ) {
+        return gsProductService.findByCriteria(pageNumber, pageSize, nameLike, categoryId, minimalPrice, maximalPrice);
+    }
 
     @PostMapping("/cart")
     public void addToCart(
