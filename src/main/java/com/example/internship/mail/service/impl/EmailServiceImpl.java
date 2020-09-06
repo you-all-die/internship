@@ -1,6 +1,6 @@
 package com.example.internship.mail.service.impl;
 
-import com.example.internship.mail.dto.TestCustomerDto;
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.dto.TestOrderDto;
 import com.example.internship.mail.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +20,16 @@ import java.util.Map;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    private final String ORDER_EMAIL_SUBJECT = "Новый заказ № ";
-    private final String REGISTRATION_EMAIL_SUBJECT = "Добро пожаловать!";
+    private final static String ORDER_EMAIL_SUBJECT = "Новый заказ № ";
+    private final static String REGISTRATION_EMAIL_SUBJECT = "Добро пожаловать!";
 
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
-    @Value("${internship.email.noreply}")
+    @Value("${internship.email.noreply_email}")
     private String noreplyEmail;
 
-    @Value("${internship.email.order}")
+    @Value("${internship.email.order_email}")
     private String orderEmail;
 
     @Autowired
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendOrderDetailsMessage(TestCustomerDto customer, TestOrderDto order) {
+    public void sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order) {
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendRegistrationWelcomeMessage(TestCustomerDto customer) {
+    public void sendRegistrationWelcomeMessage(CustomerDto customer) {
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);

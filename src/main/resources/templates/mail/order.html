@@ -9,9 +9,8 @@
 <p th:object="${order}" th:text="#{email.order.accepted(*{id}, *{date})}">Ваш заказ принят
 </p>
 <u th:text="#{email.order.contents.header}">Состав заказа:</u>
-<th:block th:each="orderLine : ${orderLines}"
-          th:text="${email.order.contents.order_line(${orderLine.id}, ${orderLine.productName}, ${orderLine.productQuantity}, ${orderLine.price})}">
-    <p>
+<th:block th:each="orderLine : ${orderLines}">
+    <p th:text="#{email.order.contents.order_line(${orderLine.id}, ${orderLine.productName}, ${orderLine.productQuantity}, ${orderLine.price})}">
         Товар
     </p>
 </th:block>
