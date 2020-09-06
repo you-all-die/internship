@@ -21,6 +21,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     /**
      * @author Самохвалов Юрий Алексеевич
      */
-//    @Query("select p.id from Product p where p.category_id = :categoryId")
     List<Long> findIdByCategoryId(long categoryId);
 }
