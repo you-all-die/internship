@@ -17,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminCategoriesController {
     private final CategoryService categoryService;
-    private final EmailService emailService;
 
     @GetMapping({"/categories"})
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
