@@ -16,12 +16,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * @author Modenov D.A
- */
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class CartServiceImpl implements CartService {
     public boolean add(Product product, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty()) return false;
+        if (customer.isEmpty() || Objects.isNull(product)) return false;
 
         Cart cart = customer.get().getCart();
         List<OrderLine> orderLines = cart.getOrderLines();
