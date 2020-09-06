@@ -5,7 +5,7 @@
     <title th:object="${order}" th:text="#{email.order.title(*{id})}">Новый заказ</title>
 </head>
 <body>
-<p th:object="${customer}" th:text="*{name != null} ? #{email.order.welcome.registered(*{name})} : #{email.order.welcome.anonymous}">Добрый день!</p>
+<p th:object="${customer}" th:text="*{firstName != null} ? #{email.order.welcome.registered(*{firstName})} : #{email.order.welcome.anonymous}">Добрый день!</p>
 <p th:object="${order}" th:text="#{email.order.accepted(*{id}, *{date})}">Ваш заказ принят
 </p>
 <u th:text="#{email.order.contents.header}">Состав заказа:</u>

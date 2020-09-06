@@ -7,7 +7,7 @@
     </title>
 </head>
 <body>
-<p th:object="${customer}" th:text="#{email.welcome.greetings(*{name})}">Добрый день!</p>
+<p th:object="${customer}" th:text="#{email.welcome.greetings(*{firstName})}">Добрый день!</p>
 <p th:text="#{email.welcome.happy_to_see}">
     Рады видеть Вас в интернет-магазине Interstellar Ship!
 </p>
