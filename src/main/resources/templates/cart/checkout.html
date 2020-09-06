@@ -7,6 +7,9 @@
 <div th:replace="common/main :: header"></div>
 <div class="ui main container">
     <div class="ui main grid">
+        <div class="four wide column row">
+            <a th:href="@{/cart}">Назад в корзину</a>
+        </div>
         <div class="four wide column centered row">
             <div class="column left aligned">
                 <form class="ui form" th:action="@{/checkout}" method="post" >
