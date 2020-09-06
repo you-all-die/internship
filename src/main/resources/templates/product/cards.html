@@ -58,8 +58,8 @@
 
     <th:block th:if="${#lists.isEmpty(products)}">
         <div class="ui segment placeholder">
-            <div class="ui icon header">
-                <i class="ban icon"></i>
+            <div class="ui red icon header">
+                <i class="question circle red outline icon"></i>
                 <span th:text="#{product.cards.no_found}">No found</span>
             </div>
         </div>
