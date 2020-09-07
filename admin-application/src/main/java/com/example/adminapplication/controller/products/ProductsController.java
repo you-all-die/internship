@@ -5,8 +5,6 @@ import com.example.adminapplication.service.CategoryService;
 import com.example.adminapplication.service.ProductService;
 import com.example.adminapplication.service.ProductStatusService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,6 @@ public class ProductsController {
     private final CategoryService categoryService;
     private final ProductStatusService productStatusService;
     private static final String DEFAULT_FILE_PICTURE_NAME = "default.jpg";
-    private static final Logger log = LoggerFactory.getLogger(ProductsController.class);
 
     //Генерация имени файла
     private String generationFileName(ProductDto product, MultipartFile pictureName) {

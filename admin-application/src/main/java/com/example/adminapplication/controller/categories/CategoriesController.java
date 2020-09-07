@@ -3,8 +3,6 @@ package com.example.adminapplication.controller.categories;
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +18,6 @@ import java.util.List;
 public class CategoriesController {
 
     private final CategoryService categoryService;
-    private static final Logger log = LoggerFactory.getLogger(CategoriesController.class);
 
     @GetMapping(value = "/categories")
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
