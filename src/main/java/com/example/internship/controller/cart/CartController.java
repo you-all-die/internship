@@ -35,7 +35,7 @@ public class CartController {
 
     @PostMapping("/add")
     public String addToCart(@CookieValue(value = "customerId", defaultValue = "") String customerId,
-                            @RequestParam("source") String source, @RequestParam("productId") Product product) {
+                            @RequestParam("productId") Product product)  {
 
         cartService.add(product, Long.valueOf(customerId));
 
