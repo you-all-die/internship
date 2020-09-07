@@ -3,6 +3,11 @@
 /* При загрузке окна браузера имитируем событие селектора */
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
+    $('#priceSlider').slider({
+        min: 0,
+        max: 20,
+        step: 1
+    });
     onCategoryChange();
 };
 

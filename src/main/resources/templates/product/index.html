@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
+    <head th:replace="common/fomain :: common_header (~{::title}, ~{::link}, ~{::script})">
         <meta charset="UTF-8">
         <meta name="author" content="Самохвалов Юрий Алексеевич">
         <title th:text="#{product.index.page_title}">Product List</title>
-        <link rel="stylesheet" type="text/css" th:href="@{//tyleryasaka.github.io/semantic-ui-range/range.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/product/styles.css}">
-        <script th:src="@{//tyleryasaka.github.io/semantic-ui-range/range.js}"></script>
         <script th:src="@{/js/product.js}"></script>
     </head>
     <body>
-        <div th:replace="common/main :: header"></div>
+        <div th:replace="common/fomain :: header"></div>
 
         <div class="ui container">
             <h1 class="ui center aligned blue header" th:text="#{product.index.header}">Products</h1>

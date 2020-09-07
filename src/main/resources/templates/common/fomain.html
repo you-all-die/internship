@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head th:fragment="common_header(title,links,scripts)">
+        <meta charset="UTF-8">
+        <meta name="author" content="Самохвалов Юрий Алексеевич">
+        <title th:replace="${title}">Interstellar Ship</title>
+
+
+        <!-- Common styles and scripts -->
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.css">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/common/main.css}">
+        <th:block th:replace="${links}"/>
+
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
+        <th:block th:replace="${scripts}"/>
+    </head>
+    <body>
+        <header th:fragment="header">
+            <div class="ui huge secondary  menu">
+                <div class="item">
+                    <img class="Medium" src="#" th:src="@{/images/headerLogo.png}" alt="Logo">
+                </div>
+                <a class="item" th:href="@{/}" th:text="#{common.main.menu.home}">
+                    Home
+                </a>
+                <!-- Изменил ссылку с /products на /product (СЮА) -->
+                <a class="item" th:href="@{/product}" th:text="#{common.main.menu.products}">Products</a>
+
+                <a class="item" th:href="@{/about}" th:text="#{common.main.menu.about}">
+                    About us
+                </a>
+
+                <div class="right menu">
+                    <div class="item">
+                        <div class="ui icon input disabled">
+                            <input type="text" th:placeholder="#{common.main.menu.search}">
+                            <i class="search link icon"></i>
+                        </div>
+                    </div>
+
+                    <a class="item" th:href="@{/cart}">
+                        <i class="shopping cart icon"></i>
+                    </a>
+
+                    <div class="ui right dropdown item">
+                        <i class="user icon"></i>
+
+                        <div class="menu">
+
+                            <!-- ссылка на вход в систему -->
+                            <a class="item"
+                               th:href="@{/login}"
+                               sec:authorize="isAnonymous()"
+                               th:text="#{common.main.menu.login}">
+                                <i class="sign-in icon"></i>Log in
+                            </a>
+
+                            <!-- ссылка на выход из системы -->
+                            <a class="item"
+                               th:href="@{/logout}"
+                               sec:authorize="isAuthenticated()"
+                               th:text="#{common.main.menu.logout}">
+                                <a class="item"
+                                   th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">
+                                    <span th:text="${#authentication.principal.getUsername()}"></span>
+                                </a>
+                                <i class="sign-in icon"></i>Log out
+                            </a>
+
+                            <!-- ссылка на регистрацию в систему -->
+                            <a class="item"
+                               th:href="@{/registration}"
+                               sec:authorize="isAnonymous()"
+                               th:text="#{common.main.menu.registration}">
+                                <i class="user plus icon"></i>Registration
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <script>$('.ui.dropdown').dropdown();</script>
+        </header>
+
+        <footer th:fragment="footer">
+            <div class="ui container">
+                <label>2020 © Online electronics store. All rights reserved!</label>
+            </div>
+        </footer>
+    </body>
+</html>
