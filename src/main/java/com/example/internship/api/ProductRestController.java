@@ -2,6 +2,7 @@ package com.example.internship.api;
 
 import com.example.internship.dto.ProductDto;
 import com.example.internship.dto.ProductSearchResult;
+import com.example.internship.entity.Product;
 import com.example.internship.service.ProductService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -57,5 +59,36 @@ public class ProductRestController {
                                                      Integer pageNumber) {
 
         return productService.search(searchText, categoryId, priceFrom, priceTo, pageSize, pageNumber);
+    }
+
+
+    @PostMapping("/find-all")
+    @ApiOperation(value = "Возвращает все продукты", response = List.class)
+    public List<ProductDto> findAll() {
+        return productService.findAll();
+    }
+
+    @PostMapping("/find-by-name")
+    @ApiOperation(value = "Возвращает продукта по названию", response = List.class)
+    public List<ProductDto> findByName(@RequestBody String name) {
+        return productService.findByName(name);
+    }
+
+    @PostMapping("/remove-product")
+    @ApiOperation(value = "Удаляет продукт по id")
+    public void removeProduct(@RequestBody Long id) {
+        productService.removeProduct(id);
+    }
+
+    @PostMapping("/find-by-id")
+    @ApiOperation(value = "Возвращает продукт по значению id", response = Product.class)
+    public Product findById(@RequestBody Long id) {
+        return productService.findByIdProduct(id);
+    }
+
+    @PostMapping("/save-product")
+    @ApiOperation(value = "Сохраняет продукт")
+    public void saveProduct(@RequestBody Product product) {
+        productService.saveProduct(product);
     }
 }
