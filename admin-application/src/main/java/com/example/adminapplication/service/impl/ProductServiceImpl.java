@@ -1,9 +1,9 @@
 package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.ProductDto;
-import com.example.adminapplication.properties.RestTemplateProperties;
 import com.example.adminapplication.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -18,10 +18,12 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final RestTemplate restTemplate;
-    private final RestTemplateProperties restTemplateProperties;
+
+    @Value("${resttemplate.url}")
+    private final String url;
 
     private String url() {
-        return restTemplateProperties.getUrl() + "/product";
+        return url + "/product";
     }
 
     @Override
