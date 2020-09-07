@@ -12,25 +12,18 @@
                 <div class="field">
                     <!-- Селектор категорий -->
                     <label th:text="#{product.filter.label.category}"></label>
-                    <select id="categorySelector" class="ui dropdown" onchange="onCategoryChange(this)">
-                        <option value="" th:text="#{product.filter.option.all}">All</option>
-                        <option th:each="category : ${categories}"
-                                th:object="${category}"
-                                th:value="*{id}"
-                                th:text="*{name}">Category Name
-                        </option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label th:text="#{product.filter.label.minimal_price}">Minimal price</label>
-                    <input type="number" th:field="${minimalPrice}">
-                </div>
-                <div class="field">
-                    <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
-                    <input type="number" th:field="${maximalPrice}">
+                    <div th:replace="/product/categories-tree :: tree (${categories})">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{product.filter.label.minimal_price}">Minimal price</label>
+                        <input type="number" th:field="${minimalPrice}">
+                    </div>
+                    <div class="field">
+                        <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
+                        <input type="number" th:field="${maximalPrice}">
+                    </div>
                 </div>
             </div>
         </div>
-
     </body>
 </html>

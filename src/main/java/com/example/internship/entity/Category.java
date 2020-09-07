@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -23,4 +24,11 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
+
+    /*
+     * Самохвалов Юрий Алексеевич
+     * установил жадную загрузку в расчёте, что разделов бывает не очень много
+     */
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Category> subcategories;
 }

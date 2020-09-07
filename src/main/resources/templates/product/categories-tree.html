@@ -1,0 +1,13 @@
+<!-- Самохвалов Юрий Алексеевич -->
+<th:block th:fragment="tree (categories)" xmlns:th="http://www.thymeleaf.org">
+    <div class="ui link list">
+        <div th:each="category : ${categories}">
+            <a class="item" th:text="${category.name}">Category name</a>
+            <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
+                <div th:replace="/product/categories-tree :: tree (${category.subcategories})">
+                    Subcategories sublist
+                </div>
+            </th:block>
+        </div>
+    </div>
+</th:block>

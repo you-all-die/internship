@@ -20,9 +20,9 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto.Response.All> findAll() {
+    public List<CategoryDto.Response.AllWithParentAndSubcategories> findAll() {
         return categoryRepository.findAll().stream()
-                .map(this::convertToAllDto)
+                .map(this::convertToAllWithParentAndSubcategories)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -43,5 +43,9 @@ public class GsCategoryServiceImpl implements GsCategoryService {
 
     private CategoryDto.Response.All convertToAllDto(Category category) {
         return modelMapper.map(category, CategoryDto.Response.All.class);
+    }
+
+    private CategoryDto.Response.AllWithParentAndSubcategories convertToAllWithParentAndSubcategories(Category category) {
+        return modelMapper.map(category, CategoryDto.Response.AllWithParentAndSubcategories.class);
     }
 }

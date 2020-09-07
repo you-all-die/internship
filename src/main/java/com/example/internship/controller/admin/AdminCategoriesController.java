@@ -56,7 +56,7 @@ public class AdminCategoriesController {
     public String addNewCategory(Model model) {
         Category category = new Category();
         model.addAttribute("category", category);
-        Category defaultParent = new Category((long) -1, "Без категории", null );
+        Category defaultParent = new Category((long) -1, "Без категории", null, null ); // СЮА
         List<Category> parentCategories = categoryService.findAll();
         parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);
@@ -67,7 +67,7 @@ public class AdminCategoriesController {
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
         Category category = categoryService.findById(id);
         model.addAttribute("category", category);
-        Category defaultParent = new Category((long) -1, "Без категории", null );
+        Category defaultParent = new Category((long) -1, "Без категории", null, null ); // СЮА
         List<Category> parentCategories = categoryService.findAll();
         parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);

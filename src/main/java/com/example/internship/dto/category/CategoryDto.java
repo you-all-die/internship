@@ -4,6 +4,8 @@ import com.example.internship.entity.Category;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 public enum CategoryDto {
     ;
 
@@ -25,6 +27,11 @@ public enum CategoryDto {
     private interface ParentId {
         Long getParentId();
         void setParentId(Long parentId);
+    }
+
+    private interface Subcategories {
+        List<Category> getSubcategories();
+        void setSubcategories(List<Category> subcategories);
     }
 
     public enum Request {
@@ -57,6 +64,12 @@ public enum CategoryDto {
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithParent extends All implements Parent {
             private Category parent;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = true)
+        public static class AllWithParentAndSubcategories extends AllWithParent implements Subcategories {
+            private List<Category> subcategories;
         }
 
         @Data
