@@ -3,7 +3,7 @@
 /* При загрузке окна браузера имитируем событие селектора */
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
-    onCategoryChange(selector);
+    onCategoryChange();
 };
 
 /* Добавить товар в корзину */
@@ -20,9 +20,8 @@ const addToCart = function (productId) {
     });
 }
 
-/* При выборе из селектора категорий  */
-const onCategoryChange = function (select) {
-    let categoryId = select.options[select.selectedIndex].value;
+/* При выборе из дерева категорий  */
+const onCategoryChange = function (categoryId) {
     let url = '/product/cards';
     if (categoryId) {
         url = url + '?categoryId=' + categoryId;
