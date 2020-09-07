@@ -83,7 +83,7 @@ public enum ProductDto {
             private List<AllWithCategoryId> products;
             private Integer pageNumber;
             private Integer pageSize;
-            private Long total;
+            private Integer total;
         }
     }
 }

@@ -1,11 +1,13 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
+import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
+import com.example.internship.service.GsCategoryService;
 import com.example.internship.service.GsProductService;
 import com.example.internship.specification.GsProductSpecification;
-import com.example.internship.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class GsProductServiceImpl implements GsProductService {
 
     private final ProductRepository productRepository;
+    private final GsCategoryService categoryService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -77,24 +81,38 @@ public class GsProductServiceImpl implements GsProductService {
         Specification<Product> specification = Specification.where(
                 GsProductSpecification.productWithNameLike(nameLike == null ? "" : nameLike)
         );
-        if (categoryId != null) {
-            specification = specification.and(GsProductSpecification.productWithCategory(categoryId));
-        }
+
+        specification = generateForCategoryAndDescendants(specification, categoryId);
 
         ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
-        result.setPageNumber(pageNumber);
-        result.setPageSize(pageSize);
-        result.setProducts(productRepository.findAll(
+        final List<ProductDto.Response.AllWithCategoryId> products = productRepository.findAll(
                 specification,
                 PageRequest.of(pageNumber, pageSize)).stream()
                 .map(this::convertToAllWithCategoryId)
-                .collect(Collectors.toUnmodifiableList())
-        );
+                .collect(Collectors.toUnmodifiableList());
+
+        result.setProducts(products);
+        result.setPageNumber(pageNumber);
+        result.setPageSize(pageSize);
+        result.setTotal(products.size());
         return result;
     }
 
     private ProductDto.Response.All convertToAll(Product product) {
         return modelMapper.map(product, ProductDto.Response.All.class);
+    }
+
+    private Specification<Product> generateForCategoryAndDescendants(
+            Specification<Product> specification,
+            Long categoryId
+    ) {
+        if (categoryId == null) {
+            return specification;
+        }
+        specification.and(GsProductSpecification.productWithCategory(categoryId));
+        categoryService.findDescendants(categoryId).forEach(idOnly ->
+                specification.and(GsProductSpecification.productWithCategory(idOnly.getId())));
+        return specification;
     }
 
     private ProductDto.Response.AllWithCategoryId convertToAllWithCategoryId(Product product) {

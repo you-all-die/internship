@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +58,17 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public Optional<CategoryDto.Response.All> findById(long id) {
-        return categoryRepository.findById(id).map(this::convertToAllDto);
+    public List<CategoryDto.Response.IdOnly> findDescendants(Long categoryId) {
+        final Optional<Category> categoryOptional = findById(categoryId);
+        if (categoryOptional.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return findDescendants(categoryOptional.get());
+    }
+
+    @Override
+    public Optional<Category> findById(long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
