@@ -1,7 +1,6 @@
-<div class="item"
-     xmlns:th="http://www.thymeleaf.org"
+<div xmlns:th="http://www.thymeleaf.org"
+     class="item"
      th:fragment="item (category)"
      th:onclick="|onCategoryChange(${category.id})|"
-     th:text="${category.name}">
-    Category Name
+     th:text="${category.name}">Category Name
 </div>

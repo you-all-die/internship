@@ -1,16 +1,15 @@
 <!-- Самохвалов Юрий Алексеевич -->
-<div th:fragment="tree (categories)" xmlns:th="http://www.thymeleaf.org">
-    <div class="ui selection list">
-        <div th:each="category : ${categories}">
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="tree (categories)"
+     class="ui selection list"
+     th:each="category : ${categories}">
 
-            <div th:replace="/product/tree-item :: item (${category})">Category name</div>
+    <div th:replace="/product/tree-item :: item (${category})">Category name</div>
 
-            <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
-                <!-- Список субкатегорий -->
-                <div th:replace="/product/categories-tree :: tree (${category.subcategories})">
-                    Subcategories sublist
-                </div>
-            </th:block>
+    <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
+        <!-- Список субкатегорий -->
+        <div th:replace="/product/categories-tree :: tree (${category.subcategories})">
+            Subcategories sublist
         </div>
-    </div>
+    </th:block>
 </div>

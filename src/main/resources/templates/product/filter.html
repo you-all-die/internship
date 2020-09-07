@@ -1,5 +1,5 @@
 <div id="filter"
-     class="ui form segment"
+     class="ui form stacked segment"
      xmlns:th="http://www.thymeleaf.org"
      th:fragment="filter (categories)">
 
@@ -7,7 +7,7 @@
         <!-- Селектор категорий -->
         <label th:text="#{product.filter.label.category}"></label>
         <div class="ui selection list">
-            <div class="item" th:onclick="onCategoryChange()">Все</div>
+            <div class="item" th:onclick="onCategoryChange()" th:text="#{product.filter.categories.all}">All</div>
             <div th:replace="/product/categories-tree :: tree (${categories})"></div>
         </div>
 
@@ -20,20 +20,20 @@
         <!-- Сортировка -->
         <div class="field">
             <label th:text="#{product.filter.label.sort_order}">Sort Order</label>
-            <div class="ui placeholder">
-                <div class="line"></div>
-                <div class="line"></div>
+            <div class="ui toggle checkbox">
+                <input id="sorting" type="checkbox" name="sorting">
+                <label th:text="#{product.filter.label.descending}" for="sorting">Descending</label>
             </div>
         </div>
 
         <!-- Пагинация -->
         <div class="field">
             <label th:text="#{product.filter.label.pagination}">Pagination</label>
-            <div class="ui placeholder">
-                <div class="line"></div>
-                <div class="line"></div>
+            <div class="ui pagination menu">
+                <div class="active item">1</div>
+                <div class="item">2</div>
             </div>
         </div>
-
     </div>
+
 </div>
