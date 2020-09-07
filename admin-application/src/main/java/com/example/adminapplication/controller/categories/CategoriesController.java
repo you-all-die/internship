@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 
@@ -25,18 +24,15 @@ public class CategoriesController {
 
     @GetMapping(value = "/categories")
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
-        try {
-            List<CategoryDto> list;
-            if (categoryName == null) {
-                list = categoryService.findAllSortById();
-            } else {
-                list = categoryService.findByName(categoryName);
-            }
-            model.addAttribute("categoryList", list);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
+
+        List<CategoryDto> list;
+        if (categoryName == null) {
+            list = categoryService.findAllSortById();
+        } else {
+            list = categoryService.findByName(categoryName);
         }
+        model.addAttribute("categoryList", list);
+
         return "categories/categories";
     }
 
@@ -47,13 +43,9 @@ public class CategoriesController {
 
     @PostMapping(value = "/category/delete")
     public String deleteCategory(@RequestParam("categoryId") Long id, Model model) {
-        try {
-            //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
-            categoryService.removeCategory(id);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+        //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
+        categoryService.removeCategory(id);
+
         return "redirect:/categories";
     }
 
@@ -69,44 +61,35 @@ public class CategoriesController {
 
     @GetMapping({"/category/add"})
     public String addNewCategory(Model model) {
-        try {
-            CategoryDto category = new CategoryDto();
-            model.addAttribute("category", category);
-            CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
-            List<CategoryDto> parentCategories = categoryService.findAll();
-            parentCategories.add(0, defaultParent);
-            model.addAttribute("parentCategories", parentCategories);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        CategoryDto category = new CategoryDto();
+        model.addAttribute("category", category);
+        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
+        List<CategoryDto> parentCategories = categoryService.findAll();
+        parentCategories.add(0, defaultParent);
+        model.addAttribute("parentCategories", parentCategories);
+
         return "categories/category";
     }
 
     @GetMapping({"/category/edit"})
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
-        try {
-            CategoryDto category = categoryService.findById(id);
-            model.addAttribute("category", category);
-            CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
-            List<CategoryDto> parentCategories = categoryService.findAll();
-            parentCategories.add(0, defaultParent);
-            model.addAttribute("parentCategories", parentCategories);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        CategoryDto category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
+        List<CategoryDto> parentCategories = categoryService.findAll();
+        parentCategories.add(0, defaultParent);
+        model.addAttribute("parentCategories", parentCategories);
+
         return "categories/category";
     }
 
     @PostMapping(value = "/category/save")
     public String saveCategory(@ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
-        try {
-            categoryService.addCategory(category);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        categoryService.addCategory(category);
+
         return "redirect:/categories";
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -42,16 +41,13 @@ public class ProductsController {
 
     @GetMapping(value = "/products")
     public String findProduct(@RequestParam(value = "search", required = false) String searchName, Model model) {
-        try {
-            if (searchName == null) {
-                model.addAttribute("products", productService.findAll());
-            } else {
-                model.addAttribute("products", productService.findByName(searchName));
-            }
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
+
+        if (searchName == null) {
+            model.addAttribute("products", productService.findAll());
+        } else {
+            model.addAttribute("products", productService.findByName(searchName));
         }
+
         return "/products/products";
     }
 
@@ -63,12 +59,8 @@ public class ProductsController {
     //Удаление товара
     @PostMapping(value = "/product/delete")
     public String deleteProduct(@RequestParam("productId") Long id, Model model) {
-        try {
-            productService.removeProduct(id);
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        productService.removeProduct(id);
         //здесь должны быть проверки на возможность удаления продукта, а пока просто удаляем
         return "redirect:/products";
     }
@@ -82,15 +74,12 @@ public class ProductsController {
     //Форма редактирования существующего продукта
     @GetMapping(value = "/product/edit")
     public String editProduct(@RequestParam(value = "productId") Long id, Model model) {
-        try {
-            ProductDto product = productService.findByIdProduct(id);
-            model.addAttribute("product", product);
-            model.addAttribute("product_status", productStatusService.findAll());
-            model.addAttribute("selectcategory", categoryService.findAllSortById());
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        ProductDto product = productService.findByIdProduct(id);
+        model.addAttribute("product", product);
+        model.addAttribute("product_status", productStatusService.findAll());
+        model.addAttribute("selectcategory", categoryService.findAllSortById());
+
         return "products/productsave";
     }
 
@@ -102,15 +91,12 @@ public class ProductsController {
     //Форма добавления нового продукта
     @GetMapping(value = "/product/add")
     public String addNewProductForm(Model model) {
-        try {
-            ProductDto product = new ProductDto();
-            model.addAttribute("product", product);
-            model.addAttribute("product_status", productStatusService.findAll());
-            model.addAttribute("selectcategory", categoryService.findAllSortById());
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
-        }
+
+        ProductDto product = new ProductDto();
+        model.addAttribute("product", product);
+        model.addAttribute("product_status", productStatusService.findAll());
+        model.addAttribute("selectcategory", categoryService.findAllSortById());
+
         return "products/productsave";
     }
 
@@ -120,51 +106,48 @@ public class ProductsController {
                               @RequestParam("picture_file") MultipartFile pictureNew,
                               Model model) throws IOException {
 
-        try {
-            String filePictureName = DEFAULT_FILE_PICTURE_NAME;
-            String defaultPictureName = DEFAULT_FILE_PICTURE_NAME;
-            Boolean renamePicture = false;
-            String uploadPath = System.getProperty("user.dir") + "/img_product/";
 
-            //Если ID есть->редактирование, иначе добавление нового товара
-            //Генерация имени файла
-            //Удаление старого файла из папки
-            if (product.getId() != null) {
-                if (pictureNew.getSize() > 0) {
-                    filePictureName = generationFileName(product, pictureNew);
-                    if (!product.getPicture().equals(defaultPictureName)) {
-                        File oldPicture = new File(uploadPath + product.getPicture());
-                        if (oldPicture.exists()) {
-                            oldPicture.delete();
-                        }
+        String filePictureName = DEFAULT_FILE_PICTURE_NAME;
+        String defaultPictureName = DEFAULT_FILE_PICTURE_NAME;
+        Boolean renamePicture = false;
+        String uploadPath = System.getProperty("user.dir") + "/img_product/";
+
+        //Если ID есть->редактирование, иначе добавление нового товара
+        //Генерация имени файла
+        //Удаление старого файла из папки
+        if (product.getId() != null) {
+            if (pictureNew.getSize() > 0) {
+                filePictureName = generationFileName(product, pictureNew);
+                if (!product.getPicture().equals(defaultPictureName)) {
+                    File oldPicture = new File(uploadPath + product.getPicture());
+                    if (oldPicture.exists()) {
+                        oldPicture.delete();
                     }
-                } else filePictureName = product.getPicture();
-            } else {
-                renamePicture = true;
-            }
+                }
+            } else filePictureName = product.getPicture();
+        } else {
+            renamePicture = true;
+        }
 
+        product.setPicture(filePictureName);
+        productService.saveProduct(product);
+
+        //Переименование названия фото в БД
+        if (renamePicture & (pictureNew.getSize() > 0)) {
+            filePictureName = generationFileName(product, pictureNew);
             product.setPicture(filePictureName);
             productService.saveProduct(product);
-
-            //Переименование названия фото в БД
-            if (renamePicture & (pictureNew.getSize() > 0)) {
-                filePictureName = generationFileName(product, pictureNew);
-                product.setPicture(filePictureName);
-                productService.saveProduct(product);
-            }
-
-            //Cоздание директории /img_product/, сохранение файла
-            if (pictureNew.getSize() > 0) {
-                File imgDir = new File(uploadPath);
-                if (!imgDir.exists()) {
-                    imgDir.mkdir();
-                }
-                pictureNew.transferTo(new File(uploadPath + filePictureName));
-            }
-        } catch (ResourceAccessException e) {
-            log.error(e.getMessage());
-            return "redirect:/errors/connection";
         }
+
+        //Cоздание директории /img_product/, сохранение файла
+        if (pictureNew.getSize() > 0) {
+            File imgDir = new File(uploadPath);
+            if (!imgDir.exists()) {
+                imgDir.mkdir();
+            }
+            pictureNew.transferTo(new File(uploadPath + filePictureName));
+        }
+
         return "redirect:/products";
     }
 }
