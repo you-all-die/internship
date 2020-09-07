@@ -27,6 +27,7 @@ public class Category {
 
     /*
      * Самохвалов Юрий Алексеевич
+     * список наследных категорий
      */
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> subcategories;

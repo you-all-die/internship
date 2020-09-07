@@ -11,16 +11,10 @@
             <div th:replace="/product/categories-tree :: tree (${categories})"></div>
         </div>
 
-        <!-- Минимальная цена -->
+        <!-- Выбор цены -->
         <div class="field">
-            <label th:text="#{product.filter.label.minimal_price}">Minimal price</label>
-            <input type="number" th:field="${minimalPrice}">
-        </div>
-
-        <!-- Максимальная цена -->
-        <div class="field">
-            <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
-            <input type="number" th:field="${maximalPrice}">
+            <label th:text="#{product.filter.label.price}">Price</label>
+            <div id="priceRange" class="ui range"></div>
         </div>
 
         <!-- Сортировка -->
