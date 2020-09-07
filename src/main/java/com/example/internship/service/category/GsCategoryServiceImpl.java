@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,17 +21,28 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto.Response.AllWithParentAndSubcategories> findAll() {
+    public List<CategoryDto.Response.AllWithParentSubcategories> findAll() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToAllWithParentAndSubcategories)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public List<CategoryDto.Response.AllWithParentAndSubcategories> findTopCategories() {
+    public List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories() {
         return categoryRepository.findAllByParentNull().stream()
                 .map(this::convertToAllWithParentAndSubcategories)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<CategoryDto.Response.IdOnly> findDescendants(Category category) {
+        List<CategoryDto.Response.IdOnly> descendants = new LinkedList<>();
+        Category parent = category.getParent();
+        while (parent != null) {
+            descendants.add(modelMapper.map(parent, CategoryDto.Response.IdOnly.class));
+            parent = parent.getParent();
+        }
+        return descendants;
     }
 
     @Override
@@ -52,7 +64,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         return modelMapper.map(category, CategoryDto.Response.All.class);
     }
 
-    private CategoryDto.Response.AllWithParentAndSubcategories convertToAllWithParentAndSubcategories(Category category) {
-        return modelMapper.map(category, CategoryDto.Response.AllWithParentAndSubcategories.class);
+    private CategoryDto.Response.AllWithParentSubcategories convertToAllWithParentAndSubcategories(Category category) {
+        return modelMapper.map(category, CategoryDto.Response.AllWithParentSubcategories.class);
     }
 }

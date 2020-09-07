@@ -34,6 +34,11 @@ public enum CategoryDto {
         void setSubcategories(List<Category> subcategories);
     }
 
+    private interface Descendants {
+        List<Response.IdOnly> getDescendants();
+        void setDescendants(List<Response.IdOnly> descendants);
+    }
+
     public enum Request {
         ;
 
@@ -68,8 +73,14 @@ public enum CategoryDto {
 
         @Data
         @EqualsAndHashCode(callSuper = true)
-        public static class AllWithParentAndSubcategories extends AllWithParent implements Subcategories {
+        public static class AllWithParentSubcategories extends AllWithParent implements Subcategories {
             private List<Category> subcategories;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = true)
+        public static class AllWithParentSubcategoriesDescendants extends AllWithParentSubcategories implements Descendants {
+            private List<IdOnly> descendants;
         }
 
         @Data

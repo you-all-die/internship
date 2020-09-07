@@ -27,8 +27,7 @@ public class Category {
 
     /*
      * Самохвалов Юрий Алексеевич
-     * установил жадную загрузку в расчёте, что разделов бывает не очень много
      */
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> subcategories;
 }

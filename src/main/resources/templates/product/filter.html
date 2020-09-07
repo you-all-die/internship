@@ -1,22 +1,21 @@
-<th:block th:fragment="filter (categories)" xmlns:th="http://www.thymeleaf.org">
-    <div class="ui form">
+<div class="ui form segment"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="filter (categories)">
+
+    <div class="field">
+        <!-- Селектор категорий -->
+        <label th:text="#{product.filter.label.category}"></label>
+        <div class="ui selection list">
+            <div class="item" style="cursor:pointer" th:onclick="onCategoryChange()">Все</div>
+            <div th:replace="/product/categories-tree :: tree (${categories})"></div>
+        </div>
         <div class="field">
-            <!-- Селектор категорий -->
-            <label th:text="#{product.filter.label.category}"></label>
-            <div class="ui selection list">
-                <div class="item" style="cursor:pointer"
-                     th:text="#{product.filter.label.all_categories}"
-                     th:onclick="onCategoryChange()">All categories</div>
-                <div th:replace="/product/categories-tree :: tree (${categories})"></div>
-            </div>
-            <div class="field">
-                <label th:text="#{product.filter.label.minimal_price}">Minimal price</label>
-                <input type="number" th:field="${minimalPrice}">
-            </div>
-            <div class="field">
-                <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
-                <input type="number" th:field="${maximalPrice}">
-            </div>
+            <label th:text="#{product.filter.label.minimal_price}">Minimal price</label>
+            <input type="number" th:field="${minimalPrice}">
+        </div>
+        <div class="field">
+            <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
+            <input type="number" th:field="${maximalPrice}">
         </div>
     </div>
-</th:block>
+</div>
