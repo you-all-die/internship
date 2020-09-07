@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/main :: common_header(~{::title},_,_)">
-    <title>Interstellar Ship Internet Shop - Products</title>
+    <title th:text="#{products.productsave.title}">Edit product</title>
 </head>
 
 <body>
@@ -9,11 +9,7 @@
 
 <div class="ui container">
     <div class="ui menu">
-        <a th:href="@{/}" class="item">Администрирование</a>
-        <a th:href="@{/products}" class="item">Товары</a>
-        <a th:href="@{/categories}" class="item">Категории</a>
-        <a th:href="@{/productstatus}" class="item">Статус товара</a>
-        <a th:href="@{/product/add}" class="item">Новый товар</a>
+        <a th:href="@{/products}" class="item" th:text="#{products.productsave.products}">Products</a>
         <div class="right menu">
 
                 <div class="item">
@@ -22,7 +18,7 @@
                         <i class="search link icon"></i>
                     </div>
                 </div>
-            <a th:href="@{/products${searchname}}" class="ui item">Найти</a>
+            <a th:href="@{/products${searchname}}" class="ui item" th:text="#{products.productsave.find}">Find</a>
         </div>
     </div><br>
 </div>
@@ -30,11 +26,13 @@
 <div class="ui container">
         <div class="ui attached message">
             <div class="header">
-                <label th:text="${product.id}!=null ? 'Редактирование данных товара' : 'Добавление нового товара'"></label>
+                <label th:text="${product.id}!=null ? #{products.productsave.edit} : #{products.productsave.add_new}">
+                </label>
             </div>
         </div>
     <div>
-        <form th:action="@{/product/save}" class="ui form attached fluid segment" enctype="multipart/form-data" method="post" th:object="${product}">
+        <form th:action="@{/product/save}" class="ui form attached fluid segment" enctype="multipart/form-data"
+              method="post" th:object="${product}">
             <div class="field" th:if="*{id}">
                 <label>Артикул:</label>
                 <input type="text" name="id" th:field="*{id}" readonly>
@@ -46,7 +44,8 @@
             <div class="field">
                 <label>Категория</label>
                 <select class = "form-control"  name="category_id" th:field="*{category.id}">
-                    <option th:each="c : ${selectcategory}" th:selected="${c.id == category?.id}" th:value="${c.id}" th:text="${c.id} + ' -> ' + ${c.name}"/>
+                    <option th:each="c : ${selectcategory}" th:selected="${c.id == category?.id}" th:value="${c.id}"
+                            th:text="${c.id} + ' -> ' + ${c.name}"/>
                 </select>
             </div>
             <div class="field">
@@ -68,12 +67,13 @@
             <div class="field">
                 <label>Статуc товара</label>
                 <select class = "form-control"  name="product_status" th:field="*{status.id}">
-                    <option th:each="s : ${product_status}"  th:selected="${s.id == status?.id}" th:value="${s.id}" th:text="${s.id} + ' -> ' + ${s.description}"/>
+                    <option th:each="s : ${product_status}"  th:selected="${s.id == status?.id}" th:value="${s.id}"
+                            th:text="${s.id} + ' -> ' + ${s.description}"/>
                 </select>
             </div>
             <div class="actions">
-                <button type="submit" class="ui primary button">Сохранить</button>
-                <button type="button" class="ui cancel button">Отмена</button>
+                <button type="submit" class="ui primary button" th:text="#{products.productsave.save}">Save</button>
+                <button type="button" class="ui cancel button" th:text="#{products.productsave.cancel}">Cancel</button>
             </div>
         </form>
     </div>

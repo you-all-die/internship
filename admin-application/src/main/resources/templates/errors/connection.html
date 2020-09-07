@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:replace="common/main :: common_header(~{::title},_,_)">
-    <title>Ошибка соединения</title>
+    <title th:text="#{errors.connection.title}"></title>
 </head>
 
 <body>
 <div th:replace="common/main :: header"></div>
 
 <div class="ui container" >
-    <h4>Нет соединения с API магазина.</h4>
-    <div>В настоящий момент управление товарами и категориями недоступно. Проверьте доступность сайта.</div>
+    <h4 th:text="#{errors.connection.header}"></h4>
+    <div th:text="#{errors.connection.descriprition}"></div>
 </div>
 
 </div><br>

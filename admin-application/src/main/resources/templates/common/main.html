@@ -55,21 +55,21 @@
         <div class="item">
             <img class="Medium" src="#" th:src="@{/images/headerLogo.png}" alt="Logo">
         </div>
-        <a class="item" th:href="@{/}">
-            Главаная
+        <a class="item" th:href="@{/}" th:text="#{common.main.main_page}">
+            Main
         </a>
-        <a class="item" th:href="@{/products}">
-            Управление товарами
+        <a class="item" th:href="@{/products}" th:text="#{common.main.edit_product}">
+            Edit product
         </a>
 
-        <a class="item" th:href="@{/categories}">
-            Управление категориями
+        <a class="item" th:href="@{/categories}" th:text="#{common.main.edit_categories}">
+            Edit categories
         </a>
 
         <div class="right menu">
             <div class="item">
                 <div class="ui icon input disabled">
-                    <input type="text" placeholder="Search...">
+                    <input type="text" placeholder="Search..." th:placeholder="#{common.main.search}">
                     <i class="search link icon"></i>
                 </div>
             </div>
@@ -108,7 +108,7 @@
 
 <footer th:fragment="footer">
     <div class="ui container">
-        <label>2020 © Online electronics store. All rights reserved!</label>
+        <label th:text="#{common.main.label}">2020 © Online electronics store. All rights reserved!</label>
     </div>
 </footer>
 </body>
