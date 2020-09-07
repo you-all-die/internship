@@ -1,20 +1,28 @@
 package com.example.internship.service.impl;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
+import com.example.internship.entity.Product;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
+import com.example.internship.specification.CustomerSpecification;
+import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,6 +54,8 @@ public class CustomerServiceImpl implements CustomerService {
     public final void delete(long id) {
         customerRepository.deleteById(id);
     }
+
+    private final CustomerSearchResult customerSearchResult;
 
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
@@ -120,5 +130,32 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Customer convertToModel(CustomerDto customerDto) {
         return mapper.map(customerDto, Customer.class);
+    }
+
+    //Api: поиск по критериям: ФИО, E-mail. Размер страницы, номер страницы
+    @Override
+    public CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
+                                       Optional<String> lastName,Optional<String> email,
+                                       Integer pageSize, Integer pageNumber) {
+        // Формируем условия для запроса к БД
+        Specification<Customer> specification = Specification.where(
+                // Добавить поиск по Имени
+                new CustomerSpecification("firstName", firstName.orElse("")))
+                // Добавить поиск по Отчеству
+                .and(new CustomerSpecification("middleName", middleName.orElse("")))
+                // Добавить поиск по Фамилии
+                .and(new CustomerSpecification("lastName", lastName.orElse("")))
+                // Добавить поиск по E-mail
+                .and(new CustomerSpecification("email", email.orElse("")));
+
+        // Формируем результат поиска
+        customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
+                .stream().map(this::convertToDto)
+                .collect(Collectors.toList()));
+        customerSearchResult.setPageNumber(pageNumber);
+        customerSearchResult.setPageSize(pageSize);
+        customerSearchResult.setTotalCustomers(customerRepository.findAll(specification).size());
+
+        return customerSearchResult;
     }
 }

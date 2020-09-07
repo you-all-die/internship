@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 
 import java.util.Optional;
@@ -26,4 +27,8 @@ public interface CustomerService {
     void customerIdAddToCookie(Long customerId);
     // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
     boolean isAnonymousCustomer(Long customerId);
+    //Api:поиск по критериям:ФИО, E-mail
+    CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
+                                       Optional<String> lastName, Optional<String> email,
+                                       Integer pageSize, Integer pageNumber);
 }

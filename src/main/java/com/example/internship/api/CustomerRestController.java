@@ -1,5 +1,6 @@
 package com.example.internship.api;
 
+import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
@@ -33,7 +34,6 @@ import java.util.Optional;
 
 public class CustomerRestController {
     private final CustomerService customerService;
-    private final CustomerRepository customerRepository;
 
     //Показать всех пользователей
     @GetMapping("")
@@ -68,24 +68,21 @@ public class CustomerRestController {
 
     //Поиск пользователей
     @GetMapping("search")
-    @ApiOperation(value = "Поиск пользователей")
-    public List<Customer> searchUser(@RequestParam(name = "firstName", required = false )
-                                     @ApiParam(value = "Поиск по имени") String firstName,
+    @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
+    public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false )
+                                     @ApiParam(value = "Поиск по имени") Optional<String> firstName,
                                      @RequestParam(name = "middleName", required = false )
-                                     @ApiParam(value = "Поиск по отчеству") String middleName,
+                                     @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
                                      @RequestParam(name = "lastName", required = false )
-                                     @ApiParam(value = "Поиск по фамилии") String lastName,
+                                     @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
                                      @RequestParam(name = "email", required = false)
-                                     @ApiParam(value = "Поиск по email") String email){
+                                     @ApiParam(value = "Поиск по email") Optional<String> email,
+                                     @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                     @ApiParam(value = "Размер страницы") Integer pageSize,
+                                     @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                     @ApiParam(value = "Номер страницы") Integer pageNumber) {
 
-        return customerRepository.searchUsers(notNullString(firstName),notNullString(middleName),
-                                              notNullString(lastName),notNullString(email));
+        return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
     }
 
-    private String notNullString(String searchString){
-        if (searchString == null){
-            searchString="";
-        }
-        return searchString.toLowerCase();
-    }
 }
