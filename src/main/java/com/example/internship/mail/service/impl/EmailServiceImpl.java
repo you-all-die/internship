@@ -2,6 +2,7 @@ package com.example.internship.mail.service.impl;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.dto.TestOrderDto;
+import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
     }
 
-    private void sendHtmlMessage(String to, String from, String subject, String htmlBody) {
+    private void sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
 
         MimeMessage message = emailSender.createMimeMessage();
         try {
@@ -48,13 +49,16 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             emailSender.send(message);
+            log.info("Email sent!\n" + "Subject: " + subject + "\nTo: " +
+                    to + "\nFrom: " + from + "\nMessage:\n" + htmlBody);
         } catch (Exception e) {
             log.error("Error sending e-mail to {}, exception {}", to, e.toString());
+            throw new MailServiceException("Error sending e-mail " + subject + " to " + to + " from " + from, e);
         }
     }
 
     @Override
-    public void sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order) {
+    public void sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
@@ -66,7 +70,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendRegistrationWelcomeMessage(CustomerDto customer) {
+    public void sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);

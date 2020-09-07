@@ -1,7 +1,6 @@
 package com.example.internship.controller.admin;
 
 import com.example.internship.entity.Category;
-import com.example.internship.mail.service.EmailService;
 import com.example.internship.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
