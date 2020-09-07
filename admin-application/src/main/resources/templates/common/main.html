@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="common_header(title,links,scripts)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Interstellar Ship</title>
+
+    <!-- Common styles and scripts -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/semantic.min.css}">
+    <style>
+        .main.container {
+            margin-top: 5em;
+            flex: 1 1 100%
+        }
+
+        header {
+            flex: 0 0 auto;
+        }
+
+        footer {
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background-color: #f5f5f5;
+            margin-top: 5em;
+            margin-bottom: 0;
+            flex: 0 0 auto;
+        }
+
+        html {
+            height: 100%;
+            display: flex;
+        }
+
+        body {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 100%;
+        }
+
+
+    </style>
+
+    <th:block th:replace="${links}"/>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/semantic.min.js}"></script>
+    <th:block th:replace="${scripts}"/>
+</head>
+<body>
+<header th:fragment="header">
+    <div class="ui huge secondary  menu">
+        <div class="item">
+            <img class="Medium" src="#" th:src="@{/images/headerLogo.png}" alt="Logo">
+        </div>
+        <a class="item" th:href="@{/}" th:text="#{common.main.main_page}">
+            Main
+        </a>
+        <a class="item" th:href="@{/products}" th:text="#{common.main.edit_product}">
+            Edit product
+        </a>
+
+        <a class="item" th:href="@{/categories}" th:text="#{common.main.edit_categories}">
+            Edit categories
+        </a>
+
+        <div class="right menu">
+            <div class="item">
+                <div class="ui icon input disabled">
+                    <input type="text" placeholder="Search..." th:placeholder="#{common.main.search}">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+
+            <div class="ui right dropdown item">
+                <i class="user icon"></i>
+
+                <div class="menu">
+                    <!--                    &lt;!&ndash; ссылка на вход в систему &ndash;&gt;-->
+                    <!--                    <a class="item" th:href="@{/login}" sec:authorize="isAnonymous()">-->
+                    <!--                        <i class="sign-in icon"></i>-->
+                    <!--                        Log in-->
+                    <!--                    </a>-->
+                    <!--                    &lt;!&ndash; ссылка на выход из системы &ndash;&gt;-->
+                    <!--                    <a class="item" th:href="@{/logout}" sec:authorize="isAuthenticated()">-->
+                    <!--                        <a class="item" th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">-->
+                    <!--                            <span th:text="${#authentication.principal.getUsername()}"></span>-->
+                    <!--                        </a>-->
+                    <!--                        <i class="sign-in icon"></i>-->
+                    <!--                        Log out-->
+                    <!--                    </a>-->
+                    <!--                    &lt;!&ndash; ссылка на регистрацию в систему &ndash;&gt;-->
+                    <!--                    <a class="item" th:href="@{/registration}" sec:authorize="isAnonymous()">-->
+                    <!--                        <i class="user plus icon"></i>-->
+                    <!--                        Registration-->
+                    <!--                    </a>-->
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>$('.ui.dropdown').dropdown();</script>
+</header>
+
+<footer th:fragment="footer">
+    <div class="ui container">
+        <label th:text="#{common.main.label}">2020 © Online electronics store. All rights reserved!</label>
+    </div>
+</footer>
+</body>
+</html>
