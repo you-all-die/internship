@@ -20,7 +20,6 @@ import java.util.List;
 public class CategoriesController {
 
     private final CategoryService categoryService;
-    private static final Logger log = LoggerFactory.getLogger(CategoriesController.class);
 
     @GetMapping(value = "/categories")
     public String saveDataForm(Model model, @RequestParam(value = "name", required = false) String categoryName) {
