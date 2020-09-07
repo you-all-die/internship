@@ -5,6 +5,7 @@ import com.example.adminapplication.properties.RestTemplateProperties;
 import com.example.adminapplication.service.ProductStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class ProductStatusServiceImpl implements ProductStatusService {
     }
 
     @Override
-    public List<ProductStatusDto> findAll() {
+    public List<ProductStatusDto> findAll() throws ResourceAccessException {
         return restTemplate.postForObject(url() + "/find-all", null, List.class);
     }
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Ошибка соединения</title>
+</head>
+
+<body>
+<div th:replace="common/main :: header"></div>
+
+<div class="ui container" >
+    <h4>Нет соединения с API магазина.</h4>
+    <div>В настоящий момент управление товарами и категориями недоступно. Проверьте доступность сайта.</div>
+</div>
+
+</div><br>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
