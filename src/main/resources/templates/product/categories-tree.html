@@ -2,7 +2,10 @@
 <th:block th:fragment="tree (categories)" xmlns:th="http://www.thymeleaf.org">
     <div class="ui selection list">
         <div th:each="category : ${categories}">
-            <div class="item" style="cursor:pointer" th:text="${category.name}">Category name</div>
+            <div class="item"
+                 style="cursor:pointer"
+                 th:onclick="|onCategoryChange(${category.id})|"
+                 th:text="${category.name}">Category name</div>
             <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
                 <div th:replace="/product/categories-tree :: tree (${category.subcategories})">
                     Subcategories sublist
