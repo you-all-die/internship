@@ -27,6 +27,13 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
+    public List<CategoryDto.Response.AllWithParentAndSubcategories> findTopCategories() {
+        return categoryRepository.findAllByParentNull().stream()
+                .map(this::convertToAllWithParentAndSubcategories)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
     public Optional<CategoryDto.Response.All> findById(long id) {
         return categoryRepository.findById(id).map(this::convertToAllDto);
     }

@@ -9,5 +9,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> { // заменил CrudRepository (СЮА)
     List<Category> findByNameContainsIgnoreCase(String name);
     List<Category> findAllByOrderByIdAscParentIdAsc();
+    List<Category> findAllByParentNull();
 }
 

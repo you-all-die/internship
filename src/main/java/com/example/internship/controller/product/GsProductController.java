@@ -44,7 +44,7 @@ public class GsProductController {
             Model model
     ) {
         final List<ProductDto.Response.AllWithCategoryId> products = gsProductService.findAll();
-        final List<CategoryDto.Response.AllWithParentAndSubcategories> categories = categoryService.findAll();
+        final List<CategoryDto.Response.AllWithParentAndSubcategories> categories = categoryService.findTopCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         model.addAttribute("pageNumber", 1);

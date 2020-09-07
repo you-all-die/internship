@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface GsCategoryService {
     List<CategoryDto.Response.AllWithParentAndSubcategories> findAll();
+    List<CategoryDto.Response.AllWithParentAndSubcategories> findTopCategories();
     Optional<CategoryDto.Response.All> findById(long id);
     void save(CategoryDto.Request.All categoryDto);
     void delete(long id);
