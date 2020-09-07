@@ -2,7 +2,7 @@ package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.ProductStatusDto;
 import com.example.adminapplication.service.ProductStatusService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -14,13 +14,13 @@ import java.util.List;
  * @author Ivan Gubanov
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductStatusServiceImpl implements ProductStatusService {
 
     private final RestTemplate restTemplate;
 
     @Value("${resttemplate.url}")
-    private final String url;
+    private String url;
 
     private String url() {
         return url + "/product-status";
