@@ -1,4 +1,5 @@
-<div class="ui form segment"
+<div id="filter"
+     class="ui form segment"
      xmlns:th="http://www.thymeleaf.org"
      th:fragment="filter (categories)">
 
@@ -16,6 +17,20 @@
         <div class="field">
             <label th:text="#{product.filter.label.maximal_price}">Maximal price</label>
             <input type="number" th:field="${maximalPrice}">
+        </div>
+        <div class="field">
+            <label th:text="#{product.filter.label.sort_order}">Sort Order</label>
+            <div class="ui placeholder">
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="field">
+            <label th:text="#{product.filter.label.pagination}">Pages</label>
+            <div class="ui placeholder">
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
         </div>
     </div>
 </div>
