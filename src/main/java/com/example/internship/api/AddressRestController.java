@@ -4,6 +4,7 @@ import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
 import com.example.internship.service.AddressService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +17,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user/{id}/address")
-
+@RequiredArgsConstructor
 public class AddressRestController {
 
 
-    private AddressService addressService;
+    private  final AddressService addressService;
 
-    @Autowired
-    public AddressRestController(AddressService addressService) {
-        this.addressService = addressService;
-    }
-
-    @GetMapping("")
+    @GetMapping
     public List<AddressDto.Response.Full> getAllCustomerById(@PathVariable Long id) {
         return addressService.getAllById(id);
     }
 
-    @PostMapping("")
+    @PostMapping
     public void addAddress(@RequestBody AddressDto.Request.Full addressDto) {
         addressService.addAddress(addressDto);
     }
