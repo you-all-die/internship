@@ -3,6 +3,7 @@ package com.example.internship.dto.category;
 import com.example.internship.entity.Category;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -31,12 +32,14 @@ public enum CategoryDto {
 
     private interface Subcategories {
         List<Category> getSubcategories();
-        void setSubcategories(List<Category> subcategories);
+    }
+
+    private interface Ancestors {
+        List<Response.IdOnly> getAncestors();
     }
 
     private interface Descendants {
         List<Response.IdOnly> getDescendants();
-        void setDescendants(List<Response.IdOnly> descendants);
     }
 
     public enum Request {
@@ -79,8 +82,8 @@ public enum CategoryDto {
 
         @Data
         @EqualsAndHashCode(callSuper = true)
-        public static class AllWithParentSubcategoriesDescendants extends AllWithParentSubcategories implements Descendants {
-            private List<IdOnly> descendants;
+        public static class AllWithParentSubcategoriesAncestors extends AllWithParentSubcategories implements Ancestors {
+            @Getter private List<IdOnly> ancestors;
         }
 
         @Data

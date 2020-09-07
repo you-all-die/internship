@@ -35,13 +35,24 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public List<CategoryDto.Response.IdOnly> findDescendants(Category category) {
-        List<CategoryDto.Response.IdOnly> descendants = new LinkedList<>();
+    public List<CategoryDto.Response.IdOnly> findAncestors(Category category) {
+        List<CategoryDto.Response.IdOnly> ancestors = new LinkedList<>();
         Category parent = category.getParent();
         while (parent != null) {
-            descendants.add(modelMapper.map(parent, CategoryDto.Response.IdOnly.class));
+            ancestors.add(modelMapper.map(parent, CategoryDto.Response.IdOnly.class));
             parent = parent.getParent();
         }
+        return ancestors;
+    }
+
+    @Override
+    public List<CategoryDto.Response.IdOnly> findDescendants(Category category) {
+        List<CategoryDto.Response.IdOnly> descendants = new LinkedList<>();
+        category.getSubcategories().forEach(subcategory -> {
+                    descendants.add(modelMapper.map(subcategory, CategoryDto.Response.IdOnly.class));
+                    descendants.addAll(findDescendants(subcategory));
+                }
+        );
         return descendants;
     }
 

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface GsCategoryService {
     List<CategoryDto.Response.AllWithParentSubcategories> findAll();
     List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories();
+    List<CategoryDto.Response.IdOnly> findAncestors(Category category);
     List<CategoryDto.Response.IdOnly> findDescendants(Category category);
     Optional<CategoryDto.Response.All> findById(long id);
     void save(CategoryDto.Request.All categoryDto);
