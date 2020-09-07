@@ -1,0 +1,7 @@
+<div class="item" style="cursor:pointer"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="item (category)"
+     th:onclick="|onCategoryChange(${category.id})|"
+     th:text="${category.name}">
+    Category Name
+</div>
