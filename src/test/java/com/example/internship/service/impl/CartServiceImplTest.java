@@ -68,73 +68,114 @@ class CartServiceImplTest {
     }
 
     /**
-     * Проверка метода add:
-     * <br> - Входные параметры null, один из параметров null или несуществующий пользователь.
+     * Проверка провального метода add:
+     * <br> - Входные параметры null.
+     * <br> - Один из параметров null.
+     * <br> - Несуществующий пользователь.
+     */
+    @Test
+    public void testAddFail() {
+
+        assertFalse(cartService.add(null, null));
+
+        assertFalse(cartService.add(null, CUSTOMER_ID1));
+        
+        assertFalse(cartService.add(new Product(), CUSTOMER_ID2));
+
+    }
+
+    /**
+     * Проверка успешного выполнения метода add:
      * <br> - Добавление продукта.
      * <br> - Добавление идентичного продукта.
      */
     @Test
-    public void add() {
-
-        assertFalse(cartService.add(null, null));
-        assertFalse(cartService.add(null, CUSTOMER_ID1));
-        assertFalse(cartService.add(new Product(), CUSTOMER_ID2));
+    public void testAddSuccess() {
 
         assertTrue(cartService.add(product2, CUSTOMER_ID1));
+
         Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
                 .filter(value -> value.getProduct().equals(product2))
                 .findFirst();
-
         assertEquals(product2, orderLine1.get().getProduct());
 
         assertTrue(cartService.add(product2, CUSTOMER_ID1));
+
         assertEquals(2, orderLine1.get().getProductQuantity());
 
     }
 
     /**
-     * Проверка метода updateQuantity:
-     * <br> - Входные параметры null, несуществующий пользователь, продукта нет в корзине, число <= 0
-     * <br> - Обновление количества продукта в корзине.
+     * Проверка провального метода updateQuantity:
+     * <br> - Входные параметры null.
+     * <br> - Несуществующий пользователь.
+     * <br> - Продукта нет в корзине.
+     * <br> - Количество продукта <= 0.
      */
     @Test
-    public void updateQuantity() {
+    public void testUpdateQuantityFail() {
 
         assertFalse(cartService.updateQuantity(null,null, null));
+
         assertFalse(cartService.updateQuantity(null, 1, CUSTOMER_ID1));
+
         assertFalse(cartService.updateQuantity(new Product(), 1, CUSTOMER_ID2));
+
         assertFalse(cartService.updateQuantity(new Product(), 0, CUSTOMER_ID1));
+
         assertFalse(cartService.updateQuantity(new Product(), -1, CUSTOMER_ID1));
 
         assertFalse(cartService.updateQuantity(new Product(), 10, CUSTOMER_ID1));
 
+    }
+
+    /**
+     * Проверка успешного метода updateQuantity:
+     * <br> - Обновление количества продукта в корзине.
+     */
+    @Test
+    public void testUpdateQuantitySuccess() {
+
         assertTrue(cartService.updateQuantity(product, 10, CUSTOMER_ID1));
+
         Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
                 .filter(value -> value.getProduct().equals(product))
                 .findFirst();
-
         assertEquals(10, orderLine1.get().getProductQuantity());
 
     }
 
     /**
-     * Проверка метода remove:
-     * <br> - Входные параметры null, несуществующий пользователь, продукта нет в корзине.
-     * <br> - Удаление продукта из корзины.
+     * Проверка провального метода remove:
+     * <br> - Входные параметры null.
+     * <br> - Несуществующий пользователь.
+     * <br> - Продукта нет в корзине.
      */
     @Test
     public void remove() {
 
         assertFalse(cartService.remove(null, null));
+
         assertFalse(cartService.remove(null, CUSTOMER_ID1));
+
         assertFalse(cartService.remove(new Product(), CUSTOMER_ID2));
+
         assertFalse(cartService.remove(new Product(), CUSTOMER_ID1));
 
+    }
+
+    /**
+     * Проверка успешного метода remove:
+     * <br> - Удаление продукта из корзины.
+     */
+    @Test
+    public void testRemoveSuccess() {
+
         assertTrue(cartService.remove(product, CUSTOMER_ID1));
+
         Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
                 .filter(value -> value.getProduct().equals(product))
                 .findFirst();
-
         assertFalse(orderLine1.isPresent());
 
     }
