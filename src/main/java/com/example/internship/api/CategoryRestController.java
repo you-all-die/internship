@@ -1,15 +1,17 @@
 package com.example.internship.api;
 
+import com.example.internship.dto.CategorySearchResult;
+import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.service.CategoryService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Ivan Gubanov
@@ -56,4 +58,36 @@ public class CategoryRestController {
     public void addCategory(@RequestBody Category category) {
         categoryService.addCategory(category);
     }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = Category.class)
+    public Category productData(@PathVariable Long id) {
+        return categoryService.findById(id);
+    }
+
+    @GetMapping("/search")
+    @ApiOperation(value = "Возвращает список категории согласно заданным критериям поиска.",
+            notes = "В запросе search могут указываться:\n" +
+                    "- pageSize количество возвращаемых категорий (значение по умолчанию 20)\n" +
+                    "- pageNumber номер страницы (значение по умолчанию 1)\n" +
+                    "- parentId поиск по id parent\n" +
+                    "- searchText - поиск по наименованию",
+            response = ProductSearchResult.class)
+    public CategorySearchResult productSearch(@RequestParam(name = "searchText", required = false)
+                                             @ApiParam(value = "поиск по наименованию")
+                                                     Optional<String> searchText,
+                                              @RequestParam(name = "parentId", required = false)
+                                             @ApiParam(value = "поиск id parent")
+                                                     Optional<Long> parentId,
+                                              @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                             @ApiParam(value = "размер страницы")
+                                                     Integer pageSize,
+                                              @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                             @ApiParam(value = "номер страницы")
+                                                     Integer pageNumber) {
+
+        return categoryService.search(searchText, parentId, pageSize, pageNumber);
+    }
+
+
 }
