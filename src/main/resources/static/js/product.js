@@ -46,9 +46,13 @@ const confirm = function (modalId, productId) {
 /* Выбор категории  */
 const onCategoryChange = function (categoryId) {
     console.log('>>> onCategoryChange(' + categoryId + ')');
-    onFilterChange({
-        categoryId: categoryId
-    });
+    if (categoryId) {
+        onFilterChange({
+            categoryId: categoryId
+        });
+    } else {
+        onFilterChange({});
+    }
 }
 
 /* Обработка изменений в диапазоне цен */
@@ -72,13 +76,44 @@ const onSortOrderChange = function (descending) {
 const onPageChange = function (pageNumber) {
     console.log('>>> onPageChange(' + pageNumber + ')');
     onFilterChange({
-        page: pageNumber
+        pageNumber: pageNumber
     });
 }
 
 /* Обработка изменений фильтра в целом */
 const onFilterChange = function (filter) {
-    let params = $.param(filter);
-    console.log('>>> onFilterChange(' + filter.toString() + ')');
-    console.log('>>> params = ' + params);
+    let cookieFilter = filterFromCookies();
+    let joinedFilter = Object.assign(cookieFilter, filter);
+    let params = $.param(joinedFilter);
+    let url = '/product/filter?' + params;
+    console.table({ cookieFilter, filter, joinedFilter, params, url});
+}
+
+const filterFromCookies = function () {
+    let filter = {};
+    let categoryId = parseInt(getCookie('categoryIdCookie'));
+    if (categoryId) {
+        filter.categoryId = categoryId;
+    }
+    let minimalPrice = parseInt(getCookie('minimalPriceCookie'));
+    if (minimalPrice) {
+        filter.minimalPrice = minimalPrice;
+    }
+    let maximalPrice = parseInt(getCookie('maximalPriceCookie'));
+    if (maximalPrice) {
+        filter.maximalPrice = maximalPrice;
+    }
+    let pageNumber = parseInt(getCookie('pageNumberCookie'));
+    if (pageNumber) {
+        filter.pageNumber = pageNumber;
+    }
+    let descending = getCookie('descendingCookie');
+    if (descending) {
+        filter.descending = descending == 'true';
+    }
+
+    console.log('>>> filterFromCookies() returns:');
+    console.table({ filter });
+
+    return filter;
 }
