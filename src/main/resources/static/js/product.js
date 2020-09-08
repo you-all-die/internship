@@ -45,32 +45,40 @@ const confirm = function (modalId, productId) {
 
 /* Выбор категории  */
 const onCategoryChange = function (categoryId) {
-    let url = '/product/cards';
-    if (categoryId) {
-        url = url + '?categoryId=' + categoryId;
-    }
-    console.log('GET ' + url)
-    $.ajax({
-        url: url,
-        method: 'GET'
-    }).then(function (html) {
-        $('#cards').html(html);
-    }).catch(function (error) {
-        console.log('Ошибка обращения к серверу: ' + error.message)
+    console.log('>>> onCategoryChange(' + categoryId + ')');
+    onFilterChange({
+        categoryId: categoryId
     });
 }
 
 /* Обработка изменений в диапазоне цен */
 const onPriceSliderChange =  function (min, max) {
     console.log('>>> onPriceSliderChange(' + min + ', ' + max + ')');
+    onFilterChange({
+        minimalPrice: min,
+        maximalPrice: max
+    });
 }
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
     console.log('>>> onSortOrderChange(' + descending + ')');
+    onFilterChange({
+        descending: descending
+    });
 }
 
 /* Обработка изменения номера страниц */
 const onPageChange = function (pageNumber) {
     console.log('>>> onPageChange(' + pageNumber + ')');
+    onFilterChange({
+        page: pageNumber
+    });
+}
+
+/* Обработка изменений фильтра в целом */
+const onFilterChange = function (filter) {
+    let params = $.param(filter);
+    console.log('>>> onFilterChange(' + filter.toString() + ')');
+    console.log('>>> params = ' + params);
 }
