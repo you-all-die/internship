@@ -1,10 +1,12 @@
 package com.example.internship.controller.checkout;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.OrderDto;
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
+import com.example.internship.service.CheckoutService;
 import com.example.internship.service.impl.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -26,15 +28,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CheckoutController {
 
-    @Autowired
-    private CustomerServiceImpl customerService;
+    private final CustomerServiceImpl customerService;
+    private final CheckoutService checkoutService;
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
     public String getCheckout(Model model) {
-        //        Получение куки customerID
+        //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
-//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        //Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart/checkout";
 
         //Ищем пользователя по Id
@@ -45,12 +47,4 @@ public class CheckoutController {
         return "cart/checkout";
     }
 
-    // Оформление заказа (куда передаем заказ?)
-//    @PostMapping("/checkout")
-//    public String postCheckout(Model model,
-//                               @RequestParam("cusomerId") Long Id) {
-//        Optional<Customer> optionalCustomer = customerService.getById(Id);
-//        model.addAttribute("isSuccess", true);
-//        return "/cart/checkout";
-//    }
 }
