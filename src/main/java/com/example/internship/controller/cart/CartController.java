@@ -1,8 +1,10 @@
 package com.example.internship.controller.cart;
 
 import com.example.internship.dto.OrderLineDto;
+import com.example.internship.entity.Customer;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
+import com.example.internship.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Modenov D.A
@@ -22,11 +25,17 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+    private final CustomerService customerService;
 
     @GetMapping
-    public String showCart(@CookieValue(value = "customerId", defaultValue = "") String customerId, Model model) {
-        List<OrderLineDto> orderLines = cartService.findAll(Long.valueOf(customerId));
-        BigDecimal totalPrice = cartService.getTotalPrice(Long.valueOf(customerId));
+    public String showCart(Model model) {
+//        Получение куки customerID
+        Optional<Long> customerId = customerService.customerIdFromCookie();
+//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        if (customerId.isEmpty()) return "redirect:/cart";
+
+        List<OrderLineDto> orderLines = cartService.findAll(Long.valueOf(customerId.get()));
+        BigDecimal totalPrice = cartService.getTotalPrice(Long.valueOf(customerId.get()));
 
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("orderLines", orderLines);
@@ -34,29 +43,36 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addToCart(@CookieValue(value = "customerId", defaultValue = "") String customerId,
-                            @RequestParam("productId") Product product)  {
+    public String addToCart(@RequestParam("productId") Product product)  {
+//        Получение куки customerID
+        Optional<Long> customerId = customerService.customerIdFromCookie();
+//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.add(product, Long.valueOf(customerId));
-
+        cartService.add(product, Long.valueOf(customerId.get()));
         return "redirect:/products";
     }
 
     @PostMapping("/remove")
-    public String removeItem(@CookieValue(value = "customerId", defaultValue = "") String customerId,
-                             @RequestParam("productId") Product product) {
+    public String removeItem(@RequestParam("productId") Product product) {
+//        Получение куки customerID
+        Optional<Long> customerId = customerService.customerIdFromCookie();
+//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.remove(product, Long.valueOf(customerId));
-
+        cartService.remove(product, Long.valueOf(customerId.get()));
         return "redirect:/cart";
     }
 
     @PostMapping("/update")
-    public String updateItem(@CookieValue(value = "customerId", defaultValue = "") String customerId,
-                             @RequestParam("productId") Product product,
+    public String updateItem(@RequestParam("productId") Product product,
                              @RequestParam("productQuantity") Integer productQuantity) {
+        //        Получение куки customerID
+        Optional<Long> customerId = customerService.customerIdFromCookie();
+//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.updateQuantity(product, productQuantity, Long.valueOf(customerId));
+        cartService.updateQuantity(product, productQuantity, Long.valueOf(customerId.get()));
         return "redirect:/cart";
     }
 }

@@ -31,10 +31,14 @@ public class CheckoutController {
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
-    public String getCheckout(Model model,
-                              @CookieValue(value = "customerId", defaultValue = "") String customerId) {
+    public String getCheckout(Model model) {
+        //        Получение куки customerID
+        Optional<Long> customerId = customerService.customerIdFromCookie();
+//        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
+        if (customerId.isEmpty()) return "redirect:/cart/checkout";
+
         //Ищем пользователя по Id
-        Optional<Customer> optionalCustomer = customerService.getById(Long.valueOf(customerId));
+        Optional<Customer> optionalCustomer = customerService.getById(Long.valueOf(customerId.get()));
         //Если пользователь есть, возвращаем его, если нет, создаем нового
         CustomerDto customer = optionalCustomer.isPresent() ? customerService.getCustomerDto(optionalCustomer.get()) : customerService.createAnonymousCustomer();
         model.addAttribute("customer", customer);
