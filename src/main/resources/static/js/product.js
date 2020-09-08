@@ -6,9 +6,14 @@ window.onload = function () {
     $('#priceSlider').slider({
         min: 0,
         max: 20,
-        step: 1
+        step: 1,
+        onChange: function (delta, min) {
+            onPriceSliderChange(min, min + delta);
+        }
     });
-    onCategoryChange();
+    $('#sorting').change(function () {
+        onSortOrderChange(this.checked);
+    });
 };
 
 /* Добавить товар в корзину */
@@ -23,6 +28,16 @@ const addToCart = function (productId) {
     }).catch(function () {
         console.log('Ошибка добавления в корзину товара id=' + productId);
     });
+}
+
+
+/* Диалог подтверждения добавления товара */
+const confirm = function (modalId, productId) {
+    console.log('confirm(' + modalId + ', ' + productId + ')');
+    $(modalId).modal({
+        blurring: true,
+        onApprove: function () { addToCart(productId); }
+    }).modal('show');
 }
 
 /* При выборе из дерева категорий  */
@@ -42,11 +57,17 @@ const onCategoryChange = function (categoryId) {
     });
 }
 
-/* Диалог подтверждения добавления товара */
-const confirm = function (modalId, productId) {
-    console.log('confirm(' + modalId + ', ' + productId + ')');
-    $(modalId).modal({
-        blurring: true,
-        onApprove: function () { addToCart(productId); }
-    }).modal('show');
+/* Обработка изменений в диапазоне цен */
+const onPriceSliderChange =  function (min, max) {
+    console.log('>>> onPriceSliderChange(' + min + ', ' + max + ')');
+}
+
+/* Обработка изменений порядка сортировки */
+const onSortOrderChange = function (descending) {
+    console.log('>>> onSortOrderChange(' + descending + ')');
+}
+
+/* Обработка изменения номера страниц */
+const onPageChange = function (pageNumber) {
+    console.log('>>> onPageChange(' + pageNumber + ')');
 }

@@ -22,7 +22,8 @@
             <label th:text="#{product.filter.label.sort_order}">Sort Order</label>
             <div class="ui toggle checkbox">
                 <input id="sorting" type="checkbox" name="sorting">
-                <label th:text="#{product.filter.label.descending}" for="sorting">Descending</label>
+                <label for="sorting"
+                       th:text="#{product.filter.label.descending}">Descending</label>
             </div>
         </div>
 
@@ -30,8 +31,8 @@
         <div class="field">
             <label th:text="#{product.filter.label.pagination}">Pagination</label>
             <div class="ui pagination menu">
-                <div class="active item">1</div>
-                <div class="item">2</div>
+                <div class="active item" onclick="onPageChange(1)">1</div>
+                <div class="item" onclick="onPageChange(2)">2</div>
             </div>
         </div>
     </div>
