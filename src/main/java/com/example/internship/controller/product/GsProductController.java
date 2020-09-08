@@ -91,10 +91,10 @@ public class GsProductController {
             Model model
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
-                nameLike, categoryId, minimalPrice, maximalPrice, 20, 1
+                nameLike, categoryId, minimalPrice, maximalPrice, 1, 20
         );
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";

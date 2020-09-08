@@ -1,5 +1,6 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
@@ -9,11 +10,13 @@ import com.example.internship.specification.GsProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,16 +78,20 @@ public class GsProductServiceImpl implements GsProductService {
             Integer pageNumber,
             Integer pageSize
     ) {
+        final Sort sortOrder = Sort.by(Sort.Direction.ASC, "price");
+
         Specification<Product> specification = Specification.where(
-                GsProductSpecification.productWithNameLike(nameLike == null ? "" : nameLike)
+                GsProductSpecification.productWithNameLike(nameLike)
         );
 
 //        specification = generateForCategoryAndDescendants(specification, categoryId);
 
         ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
-        final List<ProductDto.Response.AllWithCategoryId> products = productRepository.findAll(
-                specification,
-                PageRequest.of(pageNumber, pageSize)).stream()
+        final List<ProductDto.Response.AllWithCategoryId> products = productRepository
+                .findAll(
+                        specification,
+                        PageRequest.of(pageNumber, pageSize, sortOrder))
+                .stream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
@@ -103,7 +110,7 @@ public class GsProductServiceImpl implements GsProductService {
      * Вернуть набор спецификаций для продукта и его наследников
      *
      * @param specification начальная спецификация
-     * @param categoryId идентификатор категории
+     * @param categoryId    идентификатор категории
      * @return спецификация
      */
     private Specification<Product> generateForCategoryAndDescendants(
@@ -113,9 +120,10 @@ public class GsProductServiceImpl implements GsProductService {
         if (categoryId == null) {
             return specification;
         }
-        specification.and(GsProductSpecification.productWithCategory(categoryId));
-        categoryService.findDescendants(categoryId).forEach(idOnly ->
-                specification.or(GsProductSpecification.productWithCategory(idOnly.getId())));
+        final List<Long> ids = new ArrayList<>();
+        ids.add(categoryId);
+        ids.addAll(categoryService.findDescendants(categoryId));
+        specification.and(GsProductSpecification.productOfCategories(ids));
         return specification;
     }
 

@@ -20,6 +20,8 @@ window.onload = function () {
     $('#sorting').change(function () {
         onSortOrderChange(this.checked);
     });
+
+    onFilterChange({});
 };
 
 /* Добавить товар в корзину */

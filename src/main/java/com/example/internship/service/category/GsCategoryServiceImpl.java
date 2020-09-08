@@ -36,21 +36,21 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public List<CategoryDto.Response.IdOnly> findAncestors(Category category) {
-        List<CategoryDto.Response.IdOnly> ancestors = new LinkedList<>();
+    public List<Long> findAncestors(Category category) {
+        List<Long> ancestors = new LinkedList<>();
         Category parent = category.getParent();
         while (parent != null) {
-            ancestors.add(modelMapper.map(parent, CategoryDto.Response.IdOnly.class));
+            ancestors.add(parent.getId());
             parent = parent.getParent();
         }
         return ancestors;
     }
 
     @Override
-    public List<CategoryDto.Response.IdOnly> findDescendants(Category category) {
-        List<CategoryDto.Response.IdOnly> descendants = new LinkedList<>();
+    public List<Long> findDescendants(Category category) {
+        List<Long> descendants = new LinkedList<>();
         category.getSubcategories().forEach(subcategory -> {
-                    descendants.add(modelMapper.map(subcategory, CategoryDto.Response.IdOnly.class));
+                    descendants.add(subcategory.getId());
                     descendants.addAll(findDescendants(subcategory));
                 }
         );
@@ -58,7 +58,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public List<CategoryDto.Response.IdOnly> findDescendants(Long categoryId) {
+    public List<Long> findDescendants(Long categoryId) {
         final Optional<Category> categoryOptional = findById(categoryId);
         if (categoryOptional.isEmpty()) {
             return Collections.emptyList();
