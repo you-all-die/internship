@@ -70,7 +70,7 @@ public class CustomerRestController {
     public Object searchUser(@RequestParam(name = "firstName", required = false)
                                  @ApiParam(value = "Поиск по имени") Optional<String> firstName,
                              @RequestParam(name = "middleName", required = false)
-                                 @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
+                             @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
                              @RequestParam(name = "lastName", required = false)
                                  @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
                              @RequestParam(name = "email", required = false)
@@ -80,13 +80,7 @@ public class CustomerRestController {
                              @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
                                  @ApiParam(value = "Номер страницы") Integer pageNumber) {
 
-
-        if (!firstName.isPresent() & !middleName.isPresent() & !lastName.isPresent() & !email.isPresent()) {
-            return new ResponseEntity("Критерии поиска не заданы!", HttpStatus.OK);
-        } else {
-
-            return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
-        }
+        return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
 
     }
 }
