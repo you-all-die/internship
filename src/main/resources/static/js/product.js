@@ -1,6 +1,9 @@
 /* Самохвалов Юрий Алексеевич */
 
-/* При загрузке окна браузера имитируем событие селектора */
+/*
+    Начальное состояние окна при загрузке
+    - Подключение обработчик событий к элементам фильтра
+*/
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
     $('#priceSlider').slider({
@@ -40,7 +43,7 @@ const confirm = function (modalId, productId) {
     }).modal('show');
 }
 
-/* При выборе из дерева категорий  */
+/* Выбор категории  */
 const onCategoryChange = function (categoryId) {
     let url = '/product/cards';
     if (categoryId) {

@@ -3,16 +3,20 @@ package com.example.internship.controller.product;
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
+import com.example.internship.helper.WebHelper;
 import com.example.internship.service.CartService;
 import com.example.internship.service.GsCategoryService;
 import com.example.internship.service.GsProductService;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -72,7 +76,7 @@ public class GsProductController {
             @RequestParam("productId") Product product,
             @CookieValue(value = "customerId", defaultValue = "") String customerId
     ) {
-        cartService.add(product, Long.valueOf(customerId));
+            cartService.add(product, Long.valueOf(customerId));
     }
 
     @PostMapping("/filter")
@@ -84,9 +88,13 @@ public class GsProductController {
 
     @GetMapping("/cards")
     public String showCards(
+            HttpServletRequest request,
             @RequestParam(value = "categoryId", required = false) Long categoryId,
             Model model
     ) {
+        if (!WebHelper.isAjaxRequest(request)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
+        }
         model.addAttribute(
                 "products",
                 categoryId == null ? gsProductService.findAll() : gsProductService.findAllByCategoryId(categoryId));
