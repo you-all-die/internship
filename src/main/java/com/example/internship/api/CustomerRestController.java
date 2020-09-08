@@ -2,7 +2,6 @@ package com.example.internship.api;
 
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
-import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 /*
@@ -38,21 +36,21 @@ public class CustomerRestController {
     //Показать всех пользователей
     @GetMapping("")
     @ApiOperation(value = "Показать список пользователей", response = Iterable.class)
-    public Iterable<Customer> list(){
+    public Iterable<Customer> list() {
         return customerService.getAll();
     }
 
     //Показать данные конкретного пользователя
     @GetMapping("{id}")
     @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
-    public Optional<Customer> getUser(@PathVariable Long id){
+    public Optional<Customer> getUser(@PathVariable Long id) {
         return customerService.getById(id);
     }
 
     //Редактирование данных
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
-    public ResponseEntity postUser(@PathVariable Long id, @RequestBody Customer customer){
+    public ResponseEntity postUser(@PathVariable Long id, @RequestBody Customer customer) {
         Customer customerOld = customerService.getById(id).orElse(null);
         customerOld.setFirstName(customer.getFirstName());
         customerOld.setMiddleName(customer.getMiddleName());
@@ -69,20 +67,26 @@ public class CustomerRestController {
     //Поиск пользователей
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
-    public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false )
-                                     @ApiParam(value = "Поиск по имени") Optional<String> firstName,
-                                     @RequestParam(name = "middleName", required = false )
-                                     @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
-                                     @RequestParam(name = "lastName", required = false )
-                                     @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
-                                     @RequestParam(name = "email", required = false)
-                                     @ApiParam(value = "Поиск по email") Optional<String> email,
-                                     @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                     @ApiParam(value = "Размер страницы") Integer pageSize,
-                                     @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                     @ApiParam(value = "Номер страницы") Integer pageNumber) {
+    public Object searchUser(@RequestParam(name = "firstName", required = false)
+                                 @ApiParam(value = "Поиск по имени") Optional<String> firstName,
+                             @RequestParam(name = "middleName", required = false)
+                                 @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
+                             @RequestParam(name = "lastName", required = false)
+                                 @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
+                             @RequestParam(name = "email", required = false)
+                                 @ApiParam(value = "Поиск по email") Optional<String> email,
+                             @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                 @ApiParam(value = "Размер страницы") Integer pageSize,
+                             @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                 @ApiParam(value = "Номер страницы") Integer pageNumber) {
 
-        return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
+
+        if (!firstName.isPresent() & !middleName.isPresent() & !lastName.isPresent() & !email.isPresent()) {
+            return new ResponseEntity("Критерии поиска не заданы!", HttpStatus.OK);
+        } else {
+
+            return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
+        }
+
     }
-
 }

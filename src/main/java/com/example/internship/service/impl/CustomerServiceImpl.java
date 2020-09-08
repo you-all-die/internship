@@ -137,25 +137,52 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
                                        Optional<String> lastName,Optional<String> email,
                                        Integer pageSize, Integer pageNumber) {
-        // Формируем условия для запроса к БД
-        Specification<Customer> specification = Specification.where(
-                // Добавить поиск по Имени
-                new CustomerSpecification("firstName", firstName.orElse("")))
-                // Добавить поиск по Отчеству
-                .and(new CustomerSpecification("middleName", middleName.orElse("")))
-                // Добавить поиск по Фамилии
-                .and(new CustomerSpecification("lastName", lastName.orElse("")))
-                // Добавить поиск по E-mail
-                .and(new CustomerSpecification("email", email.orElse("")));
+        int count = 0;
 
-        // Формируем результат поиска
-        customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
-                .stream().map(this::convertToDto)
-                .collect(Collectors.toList()));
-        customerSearchResult.setPageNumber(pageNumber);
-        customerSearchResult.setPageSize(pageSize);
-        customerSearchResult.setTotalCustomers(customerRepository.findAll(specification).size());
+        // Формируем условия для запроса
+        Specification<Customer> specification = null;
 
-        return customerSearchResult;
-    }
+        if(firstName.isPresent()){
+            specification = Specification.where( new CustomerSpecification("firstName", firstName.get()));
+            count++;
+        }
+        if(middleName.isPresent()){
+            if(count>0){
+                specification = specification.and(new CustomerSpecification("middleName", middleName.get()));
+            }
+            else {
+                specification = Specification.where(new CustomerSpecification("middleName", middleName.get()));
+                count++;
+            }
+        }
+        if(lastName.isPresent()){
+            if(count>0){
+                specification = specification.and(new CustomerSpecification("lastName", lastName.get()));
+            }
+            else {
+                specification = Specification.where(new CustomerSpecification("lastName", lastName.get()));
+                count++;
+            }
+        }
+        if(email.isPresent()){
+            if(count>0){
+                specification = specification.and(new CustomerSpecification("email", email.get()));
+            }
+            else {
+                specification = Specification.where(new CustomerSpecification("email", email.get()));
+                count++;
+            }
+        }
+
+            // Реезультат поиска
+            customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
+                    .stream().map(this::convertToDto)
+                    .collect(Collectors.toList()));
+            customerSearchResult.setPageNumber(pageNumber);
+            customerSearchResult.setPageSize(pageSize);
+            customerSearchResult.setTotalCustomers(customerRepository.findAll(specification).size());
+
+            return customerSearchResult;
+        }
+
 }
