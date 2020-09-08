@@ -79,11 +79,23 @@ public class GsProductController {
             cartService.add(product, Long.valueOf(customerId));
     }
 
-    @PostMapping("/filter")
-    public List<ProductDto.Response.Ids> filter(
-            @RequestParam("categoryId") Long categoryId
+    @GetMapping("/filter")
+    public String filter(
+            HttpServletRequest request,
+            @RequestParam(value = "nameLike", required = false) String nameLike,
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
+            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
+            @RequestParam(value = "descending",required = false) Boolean descending,
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber
     ) {
-        return gsProductService.findAllIdByCategoryId(categoryId);
+        if (!WebHelper.isAjaxRequest(request)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        gsProductService.findByCriteria(
+                1, 20, nameLike, categoryId, minimalPrice, maximalPrice
+        );
+        return "/product/cards :: cards";
     }
 
     @GetMapping("/cards")

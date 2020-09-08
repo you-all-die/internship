@@ -79,8 +79,18 @@ const onFilterChange = function (filter) {
     let cookieFilter = filterFromCookies();
     let joinedFilter = Object.assign(cookieFilter, filter);
     let params = $.param(joinedFilter);
-    let url = '/product/filter?' + params;
-    console.table({ cookieFilter, filter, joinedFilter, params, url});
+    let url = '/product/filter' + (params ? '?' + params : '');
+    console.log('>>> onFilterChange URL: ' + url)
+    $.ajax({
+        url: url,
+        method: 'GET'
+    }).done(function (html) {
+        console.log('>>> Server returns:')
+        console.log(html);
+        $('#cards').html(html);
+    }).fail(function (error) {
+        console.log({ error });
+    });
 }
 
 /* Формирует заготовку фильтра из кук */
@@ -100,7 +110,7 @@ const filterFromCookies = function () {
     }
     let pageNumber = parseInt(getCookie('pageNumberCookie'));
     if (pageNumber) {
-        filter.pageNumber = pageNumber;
+        filter.pageNumber = pageNumber - 1; /* Страницы отсчитываются с нуля */
     }
     let descending = getCookie('descendingCookie');
     if (descending) {
