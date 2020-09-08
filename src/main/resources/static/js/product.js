@@ -6,6 +6,9 @@
 */
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
+    $('#globalSearch').change(function () {
+        onSearchChange(this.value);
+    });
     $('#priceSlider').slider({
         min: 0,
         max: 20,
@@ -43,21 +46,18 @@ const confirm = function (modalId, productId) {
     }).modal('show');
 }
 
+/* Обработка изменений в строке поиска */
+const onSearchChange = function (searchString) {
+    onFilterChange(searchString ? { nameLike: searchString } : {});
+}
+
 /* Выбор категории  */
 const onCategoryChange = function (categoryId) {
-    console.log('>>> onCategoryChange(' + categoryId + ')');
-    if (categoryId) {
-        onFilterChange({
-            categoryId: categoryId
-        });
-    } else {
-        onFilterChange({});
-    }
+    onFilterChange(categoryId ? { categoryId: categoryId } : {});
 }
 
 /* Обработка изменений в диапазоне цен */
 const onPriceSliderChange =  function (min, max) {
-    console.log('>>> onPriceSliderChange(' + min + ', ' + max + ')');
     onFilterChange({
         minimalPrice: min,
         maximalPrice: max
@@ -66,18 +66,12 @@ const onPriceSliderChange =  function (min, max) {
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
-    console.log('>>> onSortOrderChange(' + descending + ')');
-    onFilterChange({
-        descending: descending
-    });
+    onFilterChange({ descending: descending });
 }
 
 /* Обработка изменения номера страниц */
 const onPageChange = function (pageNumber) {
-    console.log('>>> onPageChange(' + pageNumber + ')');
-    onFilterChange({
-        pageNumber: pageNumber
-    });
+    onFilterChange({ pageNumber: pageNumber });
 }
 
 /* Обработка изменений фильтра в целом */
@@ -89,6 +83,7 @@ const onFilterChange = function (filter) {
     console.table({ cookieFilter, filter, joinedFilter, params, url});
 }
 
+/* Формирует заготовку фильтра из кук */
 const filterFromCookies = function () {
     let filter = {};
     let categoryId = parseInt(getCookie('categoryIdCookie'));
