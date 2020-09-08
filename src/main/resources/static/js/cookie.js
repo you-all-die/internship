@@ -16,3 +16,10 @@ const getCookie = function (name) {
 const setCookie = function (name, value) {
     document.cookie = name + '=' + value;
 }
+
+/* Удалить куку */
+const deleteCookie = function (name) {
+    let expirationDate = new Date();
+    expirationDate.setTime(expirationDate.getTime() - 1);
+    document.cookie = name += '=; expires=' + expirationDate.toGMTString();
+}
