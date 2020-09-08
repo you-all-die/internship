@@ -17,10 +17,10 @@ public interface GsProductService {
     void save(ProductDto.Request.AllWithCategoryId productDto);
     void delete(long id);
     ProductDto.Response.SearchResult findByCriteria(
-            Integer pageSize,
-            Integer pageNumber,
             String nameLike,
             Long categoryId,
             BigDecimal minimalPrice,
-            BigDecimal maximumPrice);
+            BigDecimal maximumPrice,
+            Integer pageNumber,
+            Integer pageSize);
 }

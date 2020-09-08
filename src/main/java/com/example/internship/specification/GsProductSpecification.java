@@ -1,28 +1,28 @@
 package com.example.internship.specification;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.Expression;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-@RequiredArgsConstructor
-public class GsProductSpecification {
-
-    private final String key;
-    private final Object value;
+public enum GsProductSpecification {
+    ;
 
     public static Specification<Product> productWithNameLike(final String searchString) {
-        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("name"), "%" + searchString + "%");
+        return (Specification<Product>) (product, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.like(product.get("name"), "%" + searchString + "%");
     }
 
     public static Specification<Product> productWithCategory(final Long categoryId) {
-        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.<Long>get("categoryId"), categoryId);
+        return (Specification<Product>) (product, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(product.<Long>get("categoryId"), categoryId);
     }
 
 /*

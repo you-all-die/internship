@@ -24,7 +24,7 @@ import java.util.List;
  * @author Самохвалов Юрий Алексеевич
  */
 @Controller
-@RequestMapping("/product") // Вынес /product в маппинг(СЮА)
+@RequestMapping("/product") // Вынес /product в маппинг (СЮА)
 @RequiredArgsConstructor // Заменил All на Required (СЮА)
 @Slf4j
 public class GsProductController {
@@ -43,7 +43,7 @@ public class GsProductController {
         return "products/product";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String showProducts(
             Model model
     ) {
@@ -59,7 +59,7 @@ public class GsProductController {
         return "product/index";
     }
 
-    @PostMapping("")
+    @PostMapping
     public ProductDto.Response.SearchResult showProductList(
             @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
@@ -68,7 +68,7 @@ public class GsProductController {
             @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
             @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice
     ) {
-        return gsProductService.findByCriteria(pageNumber, pageSize, nameLike, categoryId, minimalPrice, maximalPrice);
+        return gsProductService.findByCriteria(nameLike, categoryId, minimalPrice, maximalPrice, pageSize, pageNumber);
     }
 
     @PostMapping("/cart")
@@ -87,14 +87,16 @@ public class GsProductController {
             @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
             @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
             @RequestParam(value = "descending",required = false) Boolean descending,
-            @RequestParam(value = "pageNumber", required = false) Integer pageNumber
+            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            Model model
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        gsProductService.findByCriteria(
-                1, 20, nameLike, categoryId, minimalPrice, maximalPrice
+        final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
+                nameLike, categoryId, minimalPrice, maximalPrice, 20, 1
         );
+        model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";
     }
 

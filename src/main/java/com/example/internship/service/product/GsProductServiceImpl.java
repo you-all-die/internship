@@ -1,8 +1,6 @@
 package com.example.internship.service.product;
 
-import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
-import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.GsCategoryService;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,18 +68,18 @@ public class GsProductServiceImpl implements GsProductService {
 
     @Override
     public ProductDto.Response.SearchResult findByCriteria(
-            Integer pageSize,
-            Integer pageNumber,
             String nameLike,
             Long categoryId,
             BigDecimal minimalPrice,
-            BigDecimal maximumPrice
+            BigDecimal maximumPrice,
+            Integer pageNumber,
+            Integer pageSize
     ) {
         Specification<Product> specification = Specification.where(
                 GsProductSpecification.productWithNameLike(nameLike == null ? "" : nameLike)
         );
 
-        specification = generateForCategoryAndDescendants(specification, categoryId);
+//        specification = generateForCategoryAndDescendants(specification, categoryId);
 
         ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
         final List<ProductDto.Response.AllWithCategoryId> products = productRepository.findAll(
@@ -102,6 +99,13 @@ public class GsProductServiceImpl implements GsProductService {
         return modelMapper.map(product, ProductDto.Response.All.class);
     }
 
+    /**
+     * Вернуть набор спецификаций для продукта и его наследников
+     *
+     * @param specification начальная спецификация
+     * @param categoryId идентификатор категории
+     * @return спецификация
+     */
     private Specification<Product> generateForCategoryAndDescendants(
             Specification<Product> specification,
             Long categoryId
@@ -111,7 +115,7 @@ public class GsProductServiceImpl implements GsProductService {
         }
         specification.and(GsProductSpecification.productWithCategory(categoryId));
         categoryService.findDescendants(categoryId).forEach(idOnly ->
-                specification.and(GsProductSpecification.productWithCategory(idOnly.getId())));
+                specification.or(GsProductSpecification.productWithCategory(idOnly.getId())));
         return specification;
     }
 
