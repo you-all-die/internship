@@ -85,17 +85,3 @@ const centerMap = function (longitude, latitude) {
     setCookie('longitudeCookie', longitude);
     setCookie('latitudeCookie', latitude);
 }
-
-/* Получить значение куки */
-const getCookie = function (name) {
-    var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    if (results) {
-        return unescape(results[2]);
-    }
-    return null;
-}
-
-/* Сохранить куку */
-const setCookie = function (name, value) {
-    document.cookie = name + '=' + value;
-}
