@@ -49,7 +49,7 @@ public class CartController {
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.add(product, Long.valueOf(customerId.get()));
+        cartService.add(product,customerId.get());
         return "redirect:/products";
     }
 
@@ -60,7 +60,7 @@ public class CartController {
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.remove(product, Long.valueOf(customerId.get()));
+        cartService.remove(product, customerId.get());
         return "redirect:/cart";
     }
 
@@ -72,7 +72,7 @@ public class CartController {
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.updateQuantity(product, productQuantity, Long.valueOf(customerId.get()));
+        cartService.updateQuantity(product, productQuantity, customerId.get());
         return "redirect:/cart";
     }
 }
