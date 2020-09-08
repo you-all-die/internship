@@ -31,9 +31,9 @@ public class CategoryService {
     }
 
     public void addCategory(Category category) {
-        if (category.getParent() != null && category.getParent().getId() == (long) -1) {
-            category.setParent(null);
-        }
+//        if (null == category.getParent().getId()) {
+//            category.setParent(null);
+//        }
         categoryRepository.save(category);
     }
 

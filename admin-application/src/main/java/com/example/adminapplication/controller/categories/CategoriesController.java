@@ -61,9 +61,7 @@ public class CategoriesController {
 
         CategoryDto category = new CategoryDto();
         model.addAttribute("category", category);
-        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
         List<CategoryDto> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);
 
         return "categories/category";
@@ -74,9 +72,7 @@ public class CategoriesController {
 
         CategoryDto category = categoryService.findById(id);
         model.addAttribute("category", category);
-        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
         List<CategoryDto> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);
 
         return "categories/category";

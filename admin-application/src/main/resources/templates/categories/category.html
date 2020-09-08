@@ -20,9 +20,13 @@
             </div>
             <div class="field">
                 <select th:field="*{parent.id}">
-                    <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
-                            th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
-                    </option>
+                    <option th:value=null th:selected="${parent?.id}==null">Без категории</option>
+                    <th:block>
+                        <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
+                                th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
+                            Категория
+                        </option>
+                    </th:block>
                 </select>
             </div>
             <button type="submit" value="Submit" class="ui fluid primary button" th:text="#{categories.category.save}">
