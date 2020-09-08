@@ -49,7 +49,7 @@ public class CartController {
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.add(product,customerId.get());
+        cartService.add(product, customerId.get());
         return "redirect:/products";
     }
 
