@@ -12,12 +12,12 @@
         </div>
         <div class="four wide column centered row">
             <div class="column left aligned">
-                <form class="ui form" th:action="@{/checkout}" method="post" >
+                <form class="ui form" th:action="@{/cart/checkout/add}" method="post" >
                     <div class="field">
                         <label> *First name : <input type="text" name="firstName" placeholder="first name" autofocus="autofocus" th:value="${customer.firstName}" th:required="required"/> </label>
                     </div>
                     <div class="field">
-                        <label> Midle Name : <input type="text" name="midleName" placeholder="midle name" th:value="${customer.middleName}"/> </label>
+                        <label> Midle Name : <input type="text" name="middleName" placeholder="middle name" th:value="${customer.middleName}"/> </label>
                     </div>
                     <div class="field">
                         <label> *Last Name : <input type="text" name="lastName" placeholder="last name" th:value="${customer.lastName}" th:required="required"/> </label>
@@ -37,7 +37,7 @@
                         </label>
                         <!--Если у пользователя нет адреса-->
                         <label th:if="${customer.addresses.size()} == 0"> *Address:
-                            <input type="text" name="adress" placeholder="adress" th:required="required"/>
+                            <input type="text" name="address" placeholder="address" th:required="required"/>
                         </label>
                     </div>
                     <button class="ui primary button" type="submit">
