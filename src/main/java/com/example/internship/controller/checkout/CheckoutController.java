@@ -3,6 +3,7 @@ package com.example.internship.controller.checkout;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.dto.OrderLineDto;
+import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class CheckoutController {
 
     private final CustomerServiceImpl customerService;
-    private final CheckoutService checkoutService;
+//    private final CheckoutService checkoutService;
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
@@ -38,13 +39,21 @@ public class CheckoutController {
         Optional<Long> customerId = customerService.customerIdFromCookie();
         //Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart/checkout";
+//        System.out.println("CUSTOMER ID NOT EMPTY");
 
         //Ищем пользователя по Id
         Optional<Customer> optionalCustomer = customerService.getById(customerId.get());
-        //Если пользователь есть, возвращаем его, если нет, создаем нового
-        CustomerDto customer = optionalCustomer.isPresent() ? customerService.getCustomerDto(optionalCustomer.get()) : customerService.createAnonymousCustomer();
-        model.addAttribute("customer", customer);
+        Cart cart = optionalCustomer.get().getCart();
+//        System.out.println("CART: " + cart);
+//        Корзина создается при переходе по /cart
+        if (cart == null) return "redirect:/cart";
+
+
+        CustomerDto customer = customerService.getCustomerDto(optionalCustomer.get());
+                model.addAttribute("customer", customer);
         return "cart/checkout";
+
     }
 
 }
+
