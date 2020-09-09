@@ -81,9 +81,11 @@ public class ProductServiceImpl implements ProductService {
         // Формируем условия для запроса к БД
         Specification<Product> specification = Specification.where(
                 // Поиск по имени
-                new ProductSpecification("name", name.orElse("")))
-                // Поиск по цене ОТ
-                .and(new ProductSpecification("priceFrom", priceFrom.orElse(new BigDecimal(0))));
+                new ProductSpecification("name", name.orElse("")));
+        // Поиск по цене ОТ
+        if (priceFrom.isPresent()) {
+            specification = specification.and(new ProductSpecification("priceFrom", priceFrom.get()));
+        }
         // Поиск по цене ДО
         if (priceTo.isPresent()) {
             specification = specification.and(new ProductSpecification("priceTo", priceTo.get()));

@@ -10,6 +10,7 @@ public interface CustomerService {
     Iterable<Customer> getAll();
 
     Optional<Customer> getById(long id);
+    Optional<CustomerDto> getDtoById(Long id);
 
     void save(Customer customer);
 

@@ -69,3 +69,5 @@ buildNumber.properties
 /.mvn/
 mvnw
 mvnw.cmd
+/admin-application/.gitignore
+/admin-application/.mvn/

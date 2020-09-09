@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title th:text="#{products.title}">Edit products</title>
+</head>
+
+<body>
+<div th:replace="common/main :: header"></div>
+
+<div class="ui container">
+    <div class="ui menu">
+        <a th:href="@{/product/add}" class="item" th:text="#{products.add_new}">Add new</a>
+        <div class="right menu">
+            <div class="item">
+                <form th:action="@{/templates/products}" method="post">
+                    <div class="ui action input">
+                        <input type="text" placeholder="Search..." name="search">
+                        <button class="ui icon button" type="submit">
+                            <i class="search icon"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><br>
+</div>
+
+<div class="ui container" th:if="${#arrays.isEmpty(products)}">
+    <h4 th:text="#{products.not_found}">Not found...</h4>
+    <a th:href="@{/products}" th:text="#{products.show_all}">Show all products</a><br>
+</div>
+
+<div class="ui container" th:unless="${#arrays.isEmpty(products)}">
+    <table class="ui celled table" >
+        <thead>
+        <tr>
+            <th th:text="#{products.article}">Article</th>
+            <th th:text="#{products.name}">Name</th>
+            <th th:text="#{products.category}">Category</th>
+            <th th:text="#{products.description}">Description</th>
+            <th th:text="#{products.price}">Price</th>
+            <th th:text="#{products.picture}">Image</th>
+            <th th:text="#{products.status}">Status</th>
+            <th th:text="#{products.edit}">Edit</th>
+            <th th:text="#{products.delete}">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pr: ${products}">
+            <td th:text="${pr.id}"/>
+            <td th:text="${pr.name}"/>
+            <td th:text="${pr.category.id} + '-> ' + ${pr.category.name}"/>
+            <td th:text="${pr.description}"/>
+            <td th:text="${pr.price}"/>
+            <td>
+                <img th:src="'/img/' + ${pr.picture}" class="ui mini rounded image">
+                <div class="content">
+                    <div class="sub header" th:text="${pr.picture}"/>
+                </div>
+            </td>
+            <td th:text="${pr.status.id} + '-> ' + ${pr.status.description}"/>
+            <td>
+                <form th:action="@{'/product/edit'}" method="post">
+                    <button class="ui primary basic button" type="submit" name="productId" th:value="${pr.id}"
+                            th:text="#{products.edit}">
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/product/delete'}" method="post">
+                    <button class="ui negative basic button" type="submit" name="productId" th:value="${pr.id}"
+                            th:text="#{products.delete}">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div><br>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>

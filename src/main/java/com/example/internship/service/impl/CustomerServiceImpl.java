@@ -39,6 +39,18 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id);
     }
 
+    @Override
+    public Optional<CustomerDto> getDtoById(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isPresent()) {
+            CustomerDto customerDto = convertToDto(customer.get());
+            return Optional.of(customerDto);
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+
     public final void save(Customer customer) {
         customerRepository.save(customer);
     }
