@@ -1,7 +1,6 @@
 package com.example.internship.dto.product;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -78,14 +77,66 @@ public enum ProductDto {
             private long categoryId;
         }
 
-        @Data
+        @Value
+        @AllArgsConstructor(access = AccessLevel.PRIVATE)
         public static class SearchResult {
-            private List<AllWithCategoryId> products;
-            private Integer pageNumber;
-            private Integer pageSize;
-            private Integer total;
-            private BigDecimal minimalPrice;
-            private BigDecimal maximalPrice;
+            List<AllWithCategoryId> products;
+            Integer total;
+            Integer pageNumber;
+            Integer pageSize;
+            BigDecimal minimalPrice;
+            BigDecimal maximalPrice;
+
+            public static class Builder {
+                private List<AllWithCategoryId> products;
+                private Integer pageNumber;
+                private Integer pageSize;
+                private BigDecimal minimalPrice;
+                private BigDecimal maximalPrice;
+
+                public Builder() {
+                }
+
+                public Builder products(List<AllWithCategoryId> products) {
+                    this.products = products;
+                    return this;
+                }
+
+                public Builder minimalPrice(BigDecimal minimalPrice) {
+                    this.minimalPrice = minimalPrice;
+                    return this;
+                }
+
+                public Builder maximalPrice(BigDecimal maximalPrice) {
+                    this.maximalPrice = maximalPrice;
+                    return this;
+                }
+
+                public Builder pageNumber(Integer pageNumber) {
+                    this.pageNumber = pageNumber;
+                    return this;
+                }
+
+                public Builder pageSize(Integer pageSize) {
+                    this.pageSize = pageSize;
+                    return this;
+                }
+
+                public SearchResult build() {
+                    assert null != products;
+                    assert null != pageNumber;
+                    assert null != pageSize;
+
+                    return new SearchResult(
+                            products,
+                            products.size(),
+                            pageNumber,
+                            pageSize,
+                            null != minimalPrice ? minimalPrice : BigDecimal.ZERO,
+                            null != maximalPrice ? maximalPrice : BigDecimal.ZERO
+                    );
+                }
+            }
         }
     }
 }

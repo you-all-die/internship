@@ -104,14 +104,13 @@ public class GsProductServiceImpl implements GsProductService {
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
-        SearchResult result = new SearchResult();
-        result.setProducts(filteredProducts);
-        result.setPageNumber(pageNumber);
-        result.setPageSize(pageSize);
-        result.setTotal(filteredProducts.size());
-        result.setMinimalPrice(productRepository.findMinimalPrice().orElse(BigDecimal.ZERO));
-        result.setMaximalPrice(productRepository.findMaximalPrice().orElse(BigDecimal.ZERO));
-        return result;
+        return new SearchResult.Builder()
+                .products(filteredProducts)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .minimalPrice(productRepository.findMinimalPrice().orElse(BigDecimal.ZERO))
+                .maximalPrice(productRepository.findMaximalPrice().orElse(BigDecimal.ZERO))
+                .build();
     }
 
     private AllWithCategoryId convertToAllWithCategoryId(Product product) {
