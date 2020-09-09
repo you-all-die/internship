@@ -97,6 +97,8 @@ public class GsProductServiceImpl implements GsProductService {
         result.setPageNumber(pageNumber);
         result.setPageSize(pageSize);
         result.setTotal(filteredProducts.size());
+        result.setMinimalPrice(productRepository.findMinimalPrice().orElse(BigDecimal.ZERO));
+        result.setMaximalPrice(productRepository.findMaximalPrice().orElse(BigDecimal.ZERO));
         return result;
     }
 

@@ -84,12 +84,8 @@ public enum ProductDto {
             private Integer pageNumber;
             private Integer pageSize;
             private Integer total;
-        }
-
-        @Data
-        public static class MinMaxPrice {
-            private BigDecimal minimal;
-            private BigDecimal maximal;
+            private BigDecimal minimalPrice;
+            private BigDecimal maximalPrice;
         }
     }
 }
