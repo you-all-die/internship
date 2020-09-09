@@ -100,6 +100,10 @@ public class GsProductController {
             @CookieValue("productCategoryId") Long categoryId,
             Model model
     ) {
+        if (!WebHelper.isAjaxRequest(request)) {
+            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
+        }
         model.addAttribute(categoryId);
         return "/product/breadcrumbs :: widget";
     }
