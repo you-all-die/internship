@@ -26,8 +26,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
 
-    private final ProductSearchResult searchResult;
-
     @Override
     public List<ProductDto> findAll() {
         return productRepo.findAll(Sort.by("id")).stream().map(this::convertToDto).collect(Collectors.toList());
@@ -78,6 +76,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductSearchResult search(Optional<String> name, Optional<Long> categoryId,
                                       Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo,
                                       Integer pageSize, Integer pageNumber) {
+
+        ProductSearchResult searchResult = new ProductSearchResult();
+
         // Формируем условия для запроса к БД
         Specification<Product> specification = Specification.where(
                 // Поиск по имени
@@ -100,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList()));
         searchResult.setPageNumber(pageNumber);
         searchResult.setPageSize(pageSize);
-        searchResult.setTotalProducts(productRepo.findAll(specification).size());
+        searchResult.setTotalProducts(productRepo.count(specification));
 
         return searchResult;
     }
