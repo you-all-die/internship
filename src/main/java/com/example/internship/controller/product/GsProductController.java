@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +105,7 @@ public class GsProductController {
     public String viewFilter(
             HttpServletRequest request,
             @CookieValue(value = SEARCH_STRING_COOKIE, required = false) String searchString,
-            @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Category category,
+            @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             @CookieValue(value = LOWER_PRICE_COOKIE, required = false) BigDecimal lowerPriceLimit,
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
             @CookieValue(value = MINIMAL_PRICE_COOKIE, required = false) BigDecimal minimalPrice,
@@ -118,9 +119,11 @@ public class GsProductController {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
+        List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
         model
                 .addAttribute("searchString", searchString)
-                .addAttribute("category", category)
+                .addAttribute("categoryId", categoryId)
+                .addAttribute("categories", categories)
                 .addAttribute("lowerPriceLimit", lowerPriceLimit)
                 .addAttribute("upperPriceLimit", upperPriceLimit)
                 .addAttribute("minimalPrice", minimalPrice)

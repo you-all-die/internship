@@ -1,13 +1,17 @@
 <div class="ui form stacked segment"
      xmlns:th="http://www.thymeleaf.org"
-     th:fragment="widget (categories)">
+     th:fragment="widget (searchString, categoryId, categories)">
 
     <div class="field">
         <!-- Селектор категорий -->
         <label th:text="#{product.filter.label.category}"></label>
         <div class="ui selection list">
-            <div class="item" th:onclick="onCategoryChange()" th:text="#{product.filter.categories.all}">All</div>
-            <div th:replace="/product/categories-tree :: widget (${categories})"></div>
+            <div class="item"
+                 th:classappend="!${categoryId}? 'active'"
+                 th:onclick="onCategoryChange()"
+                 th:text="#{product.filter.categories.all}">All
+            </div>
+            <div th:replace="/product/categories-tree :: widget (${categories}, ${categoryId})"></div>
         </div>
 
         <!-- Выбор цены -->
