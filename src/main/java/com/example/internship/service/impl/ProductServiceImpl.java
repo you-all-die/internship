@@ -7,12 +7,10 @@ import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
