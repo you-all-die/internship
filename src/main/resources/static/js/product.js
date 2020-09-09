@@ -58,12 +58,12 @@ const onCategoryChange = function (categoryId) {
 const onPriceSliderChange =  function (min, max) {
     let minRepresentation = parseFloat(min);
     let maxRepresentation = parseFloat(max);
-    if (Number.isFloat(minRepresentation) && Number.isFloat(maxRepresentation)) {
-        setCookie('productMinimalPrice', minRepresentation);
-        setCookie('productMaximalPrice', maxRepresentation);
+    if (Number.isFinite(minRepresentation) && Number.isFinite(maxRepresentation)) {
+        setCookie('productLowerLimitPrice', minRepresentation);
+        setCookie('productUpperLimitPrice', maxRepresentation);
     } else {
-        deleteCookie('productMinimalPrice');
-        deleteCookie('productMaximalPrice');
+        deleteCookie('productLowerLimitPrice');
+        deleteCookie('productUpperLimitPrice');
     }
     reloadCards();
 }
