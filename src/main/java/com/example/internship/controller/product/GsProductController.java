@@ -82,6 +82,8 @@ public class GsProductController {
             HttpServletRequest request,
             @CookieValue(value = "productSearchString") String searchString,
             @CookieValue(value = "productCategoryId") Long categoryId,
+            @CookieValue(value = "productLowerPriceLimit") BigDecimal lowerPriceLimit,
+            @CookieValue(value = "productUpperPriceLimit") BigDecimal upperPriceLimit,
             @CookieValue(value = "productMinimalPrice") BigDecimal minimalPrice,
             @CookieValue(value = "productMaximalPrice") BigDecimal maximalPrice,
             @CookieValue(value = "productPageNumber") Integer pageNumber,
@@ -94,7 +96,7 @@ public class GsProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         final SearchResult searchResult = gsProductService.findByCriteria(
-                searchString, categoryId, minimalPrice, maximalPrice, pageNumber, pageSize, descendingOrder
+                searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";

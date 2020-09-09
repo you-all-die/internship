@@ -84,15 +84,15 @@ public enum ProductDto {
             Integer total;
             Integer pageNumber;
             Integer pageSize;
-            BigDecimal minimalPrice;
-            BigDecimal maximalPrice;
+            BigDecimal lowerPriceLimit;
+            BigDecimal upperPriceLimit;
 
             public static class Builder {
                 private List<AllWithCategoryId> products;
                 private Integer pageNumber;
                 private Integer pageSize;
-                private BigDecimal minimalPrice;
-                private BigDecimal maximalPrice;
+                private BigDecimal lowerPriceLimit;
+                private BigDecimal upperPriceLimit;
 
                 public Builder() {
                 }
@@ -102,13 +102,13 @@ public enum ProductDto {
                     return this;
                 }
 
-                public Builder minimalPrice(BigDecimal minimalPrice) {
-                    this.minimalPrice = minimalPrice;
+                public Builder lowerPriceLimit(BigDecimal lowerPriceLimit) {
+                    this.lowerPriceLimit = lowerPriceLimit;
                     return this;
                 }
 
-                public Builder maximalPrice(BigDecimal maximalPrice) {
-                    this.maximalPrice = maximalPrice;
+                public Builder upperPriceLimit(BigDecimal upperPriceLimit) {
+                    this.upperPriceLimit = upperPriceLimit;
                     return this;
                 }
 
@@ -132,8 +132,8 @@ public enum ProductDto {
                             products.size(),
                             pageNumber,
                             pageSize,
-                            null != minimalPrice ? minimalPrice : BigDecimal.ZERO,
-                            null != maximalPrice ? maximalPrice : BigDecimal.ZERO
+                            null != lowerPriceLimit ? lowerPriceLimit : BigDecimal.ZERO,
+                            null != upperPriceLimit ? upperPriceLimit : BigDecimal.ZERO
                     );
                 }
             }

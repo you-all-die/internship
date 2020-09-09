@@ -62,6 +62,16 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
+    public Optional<BigDecimal> findMinimalPrice() {
+        return productRepository.findMinimalPrice();
+    }
+
+    @Override
+    public Optional<BigDecimal> findMaximalPrice() {
+        return productRepository.findMaximalPrice();
+    }
+
+    @Override
     public void save(ProductDto.Request.AllWithCategoryId productDto) {
         productRepository.save(convertToEntity(productDto));
     }
@@ -75,8 +85,8 @@ public class GsProductServiceImpl implements GsProductService {
     public SearchResult findByCriteria(
             String nameLike,
             Long categoryId,
-            BigDecimal minimalPrice,
-            BigDecimal maximalPrice,
+            BigDecimal lowerPriceLimit,
+            BigDecimal upperPriceLimit,
             Integer pageNumber,
             Integer pageSize,
             Boolean descendingOrder
@@ -85,7 +95,7 @@ public class GsProductServiceImpl implements GsProductService {
         final Specification<Product> specification = new GsProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
-                .minimalMaximalPrices(minimalPrice, maximalPrice)
+                .lowerUpperLimits(lowerPriceLimit, upperPriceLimit)
                 .build();
 
         final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -102,8 +112,8 @@ public class GsProductServiceImpl implements GsProductService {
                 .products(filteredProducts)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
-                .minimalPrice(productRepository.findMinimalPrice().orElse(BigDecimal.ZERO))
-                .maximalPrice(productRepository.findMaximalPrice().orElse(BigDecimal.ZERO))
+                .lowerPriceLimit(lowerPriceLimit)
+                .upperPriceLimit(upperPriceLimit)
                 .build();
     }
 
