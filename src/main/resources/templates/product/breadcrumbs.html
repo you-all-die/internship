@@ -1,0 +1,9 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="widget (categories)">
+    <div class="ui breadcrumb">
+        <a class="section" th:text="#{product.filter.categories.all}">All</a>
+        <th:block th:each="category : ${categories}">
+            <div class="divider"></div>
+            <div class="section" th:text="${category.name}}"></div>
+        </th:block>
+    </div>
+</div>

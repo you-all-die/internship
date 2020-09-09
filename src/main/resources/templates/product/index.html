@@ -15,14 +15,19 @@
             <h1 class="ui center aligned blue header" th:text="#{product.index.header}">Products</h1>
             <div class="ui grid container">
 
-                <!-- Фильтры -->
-                <div class="four wide column">
-                    <div th:replace="/product/filter :: filter (${categories})"></div>
+                <div class="row">
+                    <div id="breadcrumbs"></div>
                 </div>
 
-                <!-- Карточки товаров -->
-                <div class="twelve wide column">
-                    <div id="cards" class="ui four cards">
+                <div class="row">
+                    <!-- Фильтры -->
+                    <div class="four wide column">
+                        <div id="filter"></div>
+                    </div>
+
+                    <!-- Карточки товаров -->
+                    <div class="twelve wide column">
+                        <div id="cards" class="ui four cards"></div>
                     </div>
                 </div>
 

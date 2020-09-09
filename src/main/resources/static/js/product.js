@@ -21,7 +21,7 @@ window.onload = function () {
         onSortOrderChange(this.checked);
     });
 
-    onFilterChange({});
+   reloadAll();
 };
 
 /* Добавить товар в корзину */
@@ -61,7 +61,7 @@ const onCategoryChange = function (categoryId) {
     } else {
         deleteCookie('productCategoryId');
     }
-    reloadCards();
+    reloadAll();
 }
 
 /* Обработка изменений в диапазоне цен */
@@ -94,7 +94,7 @@ const onSortOrderChange = function (descending) {
 }
 
 /* Обработка изменения номера страниц */
-const onPageChange = function (pageNumber) {
+const onPageNumberChange = function (pageNumber) {
     let representation = parseInt(pageNumber);
     if (Number.isInteger(representation)) {
         setCookie('productPageNumber', representation);
@@ -102,14 +102,53 @@ const onPageChange = function (pageNumber) {
         deleteCookie('productPageNumber');
     }
     reloadCards();
+    reloadFilter();
+}
+
+/* Обработка изменения размера страницы */
+const onPageSizeChange = function (pageSize) {
+    let representation = parseInt(pageSize);
+    if (Number.isInteger(representation)) {
+        setCookie('productPageSize');
+    } else {
+        deleteCookie('productPageSize');
+    }
+    reloadCards();
+    reloadFilter();
 }
 
 const reloadCards = function () {
-    $.get({ url: '/product/filter'})
+    $.get({ url: '/product/cards'})
         .done(function (html) {
             $('#cards').html(html);
         })
         .fail(function (error) {
             console.log({ error });
         });
+}
+
+const reloadFilter = function () {
+    $.get({ url: '/product/filter' })
+        .done(function (html) {
+            $('#filter').html(html);
+        })
+        .fail(function (error) {
+            console.log({ error });
+        });
+}
+
+const reloadCrumbs = function () {
+    $.get({ url: '/product/breadcrumbs' })
+        .done(function (html) {
+            $('#breadcrumbs').html(html);
+        })
+        .fail(function (error) {
+            console.log({ error });
+        })
+}
+
+const reloadAll = function () {
+    reloadCards();
+    reloadCrumbs();
+    reloadFilter();
 }

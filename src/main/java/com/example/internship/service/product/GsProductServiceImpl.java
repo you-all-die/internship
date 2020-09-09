@@ -5,7 +5,7 @@ import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.GsCategoryService;
+import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.service.GsProductService;
 import com.example.internship.specification.GsProductSpecification;
 import lombok.RequiredArgsConstructor;

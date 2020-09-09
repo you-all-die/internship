@@ -3,7 +3,6 @@ package com.example.internship.service.category;
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
-import com.example.internship.service.GsCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -36,14 +35,18 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public List<Long> findAncestors(Category category) {
-        List<Long> ancestors = new LinkedList<>();
+    public List<CategoryDto.Response.All> findAncestors(Category category) {
+        if (null == category) {
+            return Collections.emptyList();
+        }
+        List<Category> ancestors = new LinkedList<>();
+        ancestors.add(category);
         Category parent = category.getParent();
         while (parent != null) {
-            ancestors.add(parent.getId());
+            ancestors.add(0, parent);
             parent = parent.getParent();
         }
-        return ancestors;
+        return ancestors.stream().map(this::convertToAllDto).collect(Collectors.toUnmodifiableList());
     }
 
     /**
