@@ -71,13 +71,13 @@ public class CustomerRestController {
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
     public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false)
-                                               @ApiParam(value = "Поиск по имени") Optional<String> firstName,
+                                               @ApiParam(value = "Поиск по имени") String firstName,
                                            @RequestParam(name = "middleName", required = false)
-                                           @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
+                                           @ApiParam(value = "Поиск по отчеству") String middleName,
                                            @RequestParam(name = "lastName", required = false)
-                                               @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
+                                               @ApiParam(value = "Поиск по фамилии") String lastName,
                                            @RequestParam(name = "email", required = false)
-                                               @ApiParam(value = "Поиск по email") Optional<String> email,
+                                               @ApiParam(value = "Поиск по email") String email,
                                            @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                @ApiParam(value = "Размер страницы") Integer pageSize,
                                            @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
