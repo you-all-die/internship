@@ -10,7 +10,6 @@ import com.example.internship.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Modenov D.A
  */
-@SpringBootTest
+
 class CartServiceImplTest {
 
     private final CustomerRepository customerRepository = mock(CustomerRepository.class);
@@ -80,7 +79,7 @@ class CartServiceImplTest {
         assertFalse(cartService.add(null, null));
 
         assertFalse(cartService.add(null, CUSTOMER_ID1));
-        
+
         assertFalse(cartService.add(new Product(), CUSTOMER_ID2));
 
     }
