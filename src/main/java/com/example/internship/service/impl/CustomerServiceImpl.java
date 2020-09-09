@@ -3,11 +3,9 @@ package com.example.internship.service.impl;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
-import com.example.internship.entity.Product;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
-import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,8 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
     public final void delete(long id) {
         customerRepository.deleteById(id);
     }
-
-    private final CustomerSearchResult customerSearchResult;
 
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
@@ -138,27 +133,29 @@ public class CustomerServiceImpl implements CustomerService {
                                        Optional<String> lastName,Optional<String> email,
                                        Integer pageSize, Integer pageNumber) {
 
-        // Формируем условия для запроса
-        Specification<Customer> specification = null;
+        CustomerSearchResult customerSearchResult = new CustomerSearchResult();
+        Specification<Customer> specification;
 
-        specification = draftSpecification(specification,"firstName", firstName);
+        // Формируем условия для запроса
+        specification = draftSpecification(null,"firstName", firstName);
         specification = draftSpecification(specification,"middleName", middleName);
         specification = draftSpecification(specification,"lastName", lastName);
         specification = draftSpecification(specification,"email", email);
 
-        // Реезультат поиска
+        // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
                 .stream().map(this::convertToDto)
                 .collect(Collectors.toList()));
         customerSearchResult.setPageNumber(pageNumber);
         customerSearchResult.setPageSize(pageSize);
-        customerSearchResult.setTotalCustomers(customerRepository.findAll(specification).size());
+        customerSearchResult.setTotalCustomers(customerRepository.count(specification));
 
         return customerSearchResult;
     }
 
     //Метод проверки поля и добавления условия в запрос
-    private Specification draftSpecification(Specification specification, String columnName, Optional<String> optionalName){
+    private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
+                                                       Optional<String> optionalName ){
         if(optionalName.isPresent()){
             if(specification == null){
                 specification = Specification.where(new CustomerSpecification(columnName, optionalName.get()));

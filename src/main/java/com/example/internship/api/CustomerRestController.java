@@ -28,7 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/user/")
-@Api( value = "customers", description = "Медоты: получение/редактирование/поиск данных пользователя")
+@Api( value = "customers")
 
 public class CustomerRestController {
     private final CustomerService customerService;
@@ -50,35 +50,38 @@ public class CustomerRestController {
     //Редактирование данных
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
-    public ResponseEntity postUser(@PathVariable Long id, @RequestBody Customer customer) {
+    public ResponseEntity<?> postUser(@PathVariable Long id, @RequestBody Customer customer) {
         Customer customerOld = customerService.getById(id).orElse(null);
-        customerOld.setFirstName(customer.getFirstName());
-        customerOld.setMiddleName(customer.getMiddleName());
-        customerOld.setLastName(customer.getLastName());
-        customerOld.setAddresses(customer.getAddresses());
-        customerOld.setCart(customer.getCart());
-        customerOld.setEmail(customer.getEmail());
-        customerOld.setPassword(customer.getPassword());
-        customerOld.setPhone(customer.getPhone());
-        customerService.save(customer);
-        return new ResponseEntity("Данные пользователя обновлены!", HttpStatus.OK);
+        if (customerOld!=null) {
+            customerOld.setFirstName(customer.getFirstName());
+            customerOld.setMiddleName(customer.getMiddleName());
+            customerOld.setLastName(customer.getLastName());
+            customerOld.setAddresses(customer.getAddresses());
+            customerOld.setCart(customer.getCart());
+            customerOld.setEmail(customer.getEmail());
+            customerOld.setPassword(customer.getPassword());
+            customerOld.setPhone(customer.getPhone());
+            customerService.save(customer);
+            return new ResponseEntity<>("Данные пользователя обновлены!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Пользователь не найден", HttpStatus.OK);
     }
 
     //Поиск пользователей
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
-    public Object searchUser(@RequestParam(name = "firstName", required = false)
-                                 @ApiParam(value = "Поиск по имени") Optional<String> firstName,
-                             @RequestParam(name = "middleName", required = false)
-                             @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
-                             @RequestParam(name = "lastName", required = false)
-                                 @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
-                             @RequestParam(name = "email", required = false)
-                                 @ApiParam(value = "Поиск по email") Optional<String> email,
-                             @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                 @ApiParam(value = "Размер страницы") Integer pageSize,
-                             @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                 @ApiParam(value = "Номер страницы") Integer pageNumber) {
+    public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false)
+                                               @ApiParam(value = "Поиск по имени") Optional<String> firstName,
+                                           @RequestParam(name = "middleName", required = false)
+                                           @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
+                                           @RequestParam(name = "lastName", required = false)
+                                               @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
+                                           @RequestParam(name = "email", required = false)
+                                               @ApiParam(value = "Поиск по email") Optional<String> email,
+                                           @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                               @ApiParam(value = "Размер страницы") Integer pageSize,
+                                           @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                               @ApiParam(value = "Номер страницы") Integer pageNumber) {
 
         return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
 
