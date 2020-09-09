@@ -71,6 +71,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
+        if (null == customer) {
+            throw new MailServiceException("Invalid customer", new NullPointerException());
+        }
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
