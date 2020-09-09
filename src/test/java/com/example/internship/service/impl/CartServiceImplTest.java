@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -152,7 +153,7 @@ class CartServiceImplTest {
      * <br> - Продукта нет в корзине.
      */
     @Test
-    public void remove() {
+    public void testRemoveFail() {
 
         assertFalse(cartService.remove(null, null));
 
@@ -177,6 +178,55 @@ class CartServiceImplTest {
                 .filter(value -> value.getProduct().equals(product))
                 .findFirst();
         assertFalse(orderLine1.isPresent());
+
+    }
+
+    /**
+     * Проверка провального метода getTotalPrice:
+     * <br> - Входные параметры null.
+     * <br> - Несуществующий пользователь.
+     * <br> - Нет товаров в корзине.
+     */
+    @Test
+    public void testGetTotalPriceFail() {
+
+        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(null));
+
+        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(CUSTOMER_ID2));
+
+        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(CUSTOMER_ID1));
+    }
+
+    /**
+     * Проверка успешного метода getTotalPrice:
+     * <br> - Подсчет цены одного товара в корзине.
+     * <br> - Подсчет цены двух товаров в корзине.
+     */
+    @Test
+    public void testGetTotalPriceSuccess() {
+
+        OrderLine orderLine3 = new OrderLine();
+        OrderLine orderLine4 = new OrderLine();
+
+        Product product3 = new Product();
+        product3.setPrice(BigDecimal.valueOf(100));
+
+        Product product4 = new Product();
+        product4.setPrice(BigDecimal.valueOf(999.99));
+
+
+        orderLine3.setProduct(product3);
+        orderLine3.setProductQuantity(1);
+        cart.getOrderLines().add(orderLine3);
+
+        assertEquals(BigDecimal.valueOf(100), cartService.getTotalPrice(CUSTOMER_ID1));
+
+
+        orderLine4.setProduct(product4);
+        orderLine4.setProductQuantity(2);
+        cart.getOrderLines().add(orderLine4);
+
+        assertEquals(BigDecimal.valueOf(2099.98), cartService.getTotalPrice(CUSTOMER_ID1));
 
     }
 }
