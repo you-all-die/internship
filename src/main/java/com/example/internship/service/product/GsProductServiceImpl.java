@@ -1,6 +1,5 @@
 package com.example.internship.service.product;
 
-import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
@@ -15,8 +14,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +37,7 @@ public class GsProductServiceImpl implements GsProductService {
     private final ProductRepository productRepository;
     private final GsCategoryService categoryService;
     private final ModelMapper modelMapper;
+    private final EntityManager entityManager;
 
     @Override
     public List<ProductDto.Response.AllWithCategoryId> findAll() {
@@ -79,25 +86,29 @@ public class GsProductServiceImpl implements GsProductService {
             Integer pageSize,
             Boolean descendingOrder
     ) {
-        final Sort sortOrder = Sort.by(
-                null == descendingOrder || !descendingOrder ? Sort.Direction.ASC : Sort.Direction.DESC,
-                "price"
-        );
+        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Product> query = builder.createQuery(Product.class);
+        final Root<Product> root = query.from(Product.class);
 
-        Specification<Product> specification = Specification.where(
-                GsProductSpecification.productWithNameLike(nameLike)
-        );
+        final List<Predicate> predicates = new LinkedList<>();
+        if (null != nameLike && !nameLike.isBlank()) {
+            predicates.add(builder.like(builder.lower(root.get("name")), getLikePattern(nameLike)));
+        }
+        if (null != categoryId) {
+            final List<Long> categoryIds = new LinkedList<>();
+            categoryIds.add(categoryId);
+            categoryIds.addAll(categoryService.findDescendants(categoryId));
+            predicates.add(builder.in(root.get("category").get("id")).value(categoryIds));
+        }
 
-        specification = generateForCategoryAndDescendants(specification, categoryId);
-
-        ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
-        final List<ProductDto.Response.AllWithCategoryId> products = productRepository
-                .findAll(
-                        specification,
-                        PageRequest.of(pageNumber, pageSize, sortOrder))
-                .stream()
+        query.select(root).where(predicates.toArray(new Predicate[]{}));
+        final TypedQuery<Product> typedQuery = entityManager.createQuery(query);
+        final List<ProductDto.Response.AllWithCategoryId> products = typedQuery
+                .getResultStream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
+
+        ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
 
         result.setProducts(products);
         result.setPageNumber(pageNumber);
@@ -106,28 +117,32 @@ public class GsProductServiceImpl implements GsProductService {
         return result;
     }
 
-    private ProductDto.Response.All convertToAll(Product product) {
-        return modelMapper.map(product, ProductDto.Response.All.class);
-    }
-
     /**
-     * Вернуть набор спецификаций для продукта и его наследников
+     * Добавить в спецификацию условия выбора продукта и его наследников
      *
      * @param specification начальная спецификация
      * @param categoryId    идентификатор категории
-     * @return спецификация
+     * @return полученная спецификация
      */
-    private Specification<Product> generateForCategoryAndDescendants(
+    private Specification<Product> addProductsOfCategoryAndDescendants(
             Specification<Product> specification,
             Long categoryId
     ) {
         if (categoryId != null) {
-            final List<Long> ids = new ArrayList<>();
+            final List<Long> ids = new LinkedList<>();
             ids.add(categoryId);
             ids.addAll(categoryService.findDescendants(categoryId));
-            specification.and(GsProductSpecification.productOfCategories(ids));
+            specification.and(GsProductSpecification.ofCategories(ids));
         }
         return specification;
+    }
+
+    private static String getLikePattern(String searchString) {
+        if (null == searchString || searchString.isEmpty()) {
+            return "%";
+        } else {
+            return "%" + searchString.toLowerCase() + "%";
+        }
     }
 
     private ProductDto.Response.AllWithCategoryId convertToAllWithCategoryId(Product product) {

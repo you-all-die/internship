@@ -3,7 +3,7 @@ package com.example.internship.specification;
 import com.example.internship.entity.Product;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -11,14 +11,14 @@ import java.util.List;
 public enum GsProductSpecification {
     ;
 
-    public static Specification<Product> productWithNameLike(final String searchString) {
+    public static Specification<Product> withNameLike(final String searchString) {
         return (Specification<Product>) (product, query, builder) ->
                 builder.like(builder.lower(product.get("name")), getLikePattern(searchString));
     }
 
-    public static Specification<Product> productOfCategories(final List<Long> ids) {
-        return (Specification<Product>) (product, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.in(product.get("categoryId").in(ids));
+    public static Specification<Product> ofCategories(final Collection<Long> categoryIds) {
+        return (Specification<Product>) (product, query, builder) ->
+                builder.in(product.<Long>get("categoryId").in(categoryIds));
     }
 
     /*

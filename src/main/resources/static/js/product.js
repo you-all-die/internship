@@ -87,8 +87,6 @@ const onFilterChange = function (filter) {
         url: url,
         method: 'GET'
     }).done(function (html) {
-        console.log('>>> Server returns:')
-        console.log(html);
         $('#cards').html(html);
     }).fail(function (error) {
         console.log({ error });
