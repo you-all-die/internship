@@ -7,7 +7,7 @@
         <label th:text="#{product.filter.label.category}"></label>
         <div class="ui selection list">
             <div class="item"
-                 th:classappend="!${categoryId}? 'active'"
+                 th:classappend="!${categoryId} ? 'active'"
                  th:onclick="onCategoryChange()"
                  th:text="#{product.filter.categories.all}">All
             </div>

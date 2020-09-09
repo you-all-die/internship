@@ -4,9 +4,7 @@
      class="ui selection list"
      th:each="category : ${categories}">
 
-    <div th:classappend="${category.id} == activeId ? 'active'"
-         th:replace="/product/tree-item :: item (${category})">Category name
-    </div>
+    <div th:replace="/product/tree-item :: widget (${category}, ${activeId})">Category name</div>
 
     <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
         <!-- Список субкатегорий -->
