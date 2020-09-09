@@ -72,19 +72,19 @@ public class CategoryRestController {
                     "- pageNumber номер страницы (значение по умолчанию 1)\n" +
                     "- parentId поиск по id parent\n" +
                     "- searchText - поиск по наименованию",
-            response = ProductSearchResult.class)
-    public CategorySearchResult productSearch(@RequestParam(name = "searchText", required = false)
-                                             @ApiParam(value = "поиск по наименованию")
-                                                     Optional<String> searchText,
-                                              @RequestParam(name = "parentId", required = false)
-                                             @ApiParam(value = "поиск id parent")
-                                                     Optional<Long> parentId,
-                                              @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                             @ApiParam(value = "размер страницы")
-                                                     Integer pageSize,
-                                              @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                             @ApiParam(value = "номер страницы")
-                                                     Integer pageNumber) {
+            response = CategorySearchResult.class)
+    public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
+                                               @ApiParam(value = "поиск по наименованию")
+                                                       Optional<String> searchText,
+                                               @RequestParam(name = "parentId", required = false)
+                                               @ApiParam(value = "поиск id parent")
+                                                       Optional<Long> parentId,
+                                               @RequestParam(name = "pageSize", required = false, defaultValue = "20")
+                                               @ApiParam(value = "размер страницы")
+                                                       Integer pageSize,
+                                               @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
+                                               @ApiParam(value = "номер страницы")
+                                                       Integer pageNumber) {
 
         return categoryService.search(searchText, parentId, pageSize, pageNumber);
     }
