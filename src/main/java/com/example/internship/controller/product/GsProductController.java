@@ -78,7 +78,7 @@ public class GsProductController {
             HttpServletRequest request,
             HttpServletResponse response,
             Model model,
-            @CookieValue(value = SEARCH_STRING_COOKIE, required = false) String searchString,
+            @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             @CookieValue(value = LOWER_PRICE_COOKIE, required = false) BigDecimal lowerPriceLimit,
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
@@ -90,10 +90,6 @@ public class GsProductController {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
-        if (null == searchString) {
-            searchString = "";
-            response.addCookie(new Cookie(SEARCH_STRING_COOKIE, searchString));
-        }
         final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
@@ -104,7 +100,7 @@ public class GsProductController {
     @GetMapping("/filter")
     public String viewFilter(
             HttpServletRequest request,
-            @CookieValue(value = SEARCH_STRING_COOKIE, required = false) String searchString,
+            @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             @CookieValue(value = LOWER_PRICE_COOKIE, required = false) BigDecimal lowerPriceLimit,
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,

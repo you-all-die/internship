@@ -6,9 +6,11 @@
 */
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
-    $('#globalSearch').change(function () {
-        onSearchChange(this.value);
-    });
+    $('#globalSearch')
+        .val(getCookie('productSearchString') || '')
+        .change(function () {
+            onSearchChange(this.value);
+        });
     $('#priceSlider').slider({
         min: 0,
         max: 20,
