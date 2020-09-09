@@ -49,6 +49,8 @@ public class GsProductController {
             Model model,
             @CookieValue(value = "productSearchString") String searchString,
             @CookieValue(value = "productCategoryId") Long categoryId,
+            @CookieValue(value = "productLowerPriceLimit") BigDecimal lowerPriceLimit,
+            @CookieValue(value = "productUpperPriceLimit") BigDecimal upperPriceLimit,
             @CookieValue(value = "productMinimalPrice") BigDecimal minimalPriceCookie,
             @CookieValue(value = "productMaximalPrice") BigDecimal maximalPrice,
             @CookieValue(value = "productPageNumber", defaultValue = "0") Integer pageNumberCookie,
