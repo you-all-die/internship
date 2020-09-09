@@ -5,25 +5,32 @@
     - Подключение обработчиков событий к элементам фильтра
 */
 window.onload = function () {
-    let selector = $('#categorySelector').get(0);
     $('#globalSearch')
         .val(getCookie('productSearchString') || '')
         .change(function () {
             onSearchChange(this.value);
         });
-    $('#priceSlider').slider({
-        min: 0,
-        max: 20,
-        step: 1,
-        onChange: function (delta, min) {
-            onPriceSliderChange(min, min + delta);
-        }
-    });
-    $('#sorting').change(function () {
-        onSortOrderChange(this.checked);
-    });
 
-   reloadAll();
+    reloadCrumbs();
+    reloadFilter();
+
+    $('#priceSlider')
+        .slider({
+            min: 0,
+            max: 20,
+            step: 1,
+            onChange: function (delta, min) {
+                onPriceSliderChange(min, min + delta);
+            }
+        });
+
+    $('#descendingOrder')
+        // .val(!!getCookie('productDescendingOrder'))
+        .change(function () {
+            onSortOrderChange(this.checked);
+        });
+
+   reloadCards();
 };
 
 /* Добавить товар в корзину */
@@ -82,15 +89,11 @@ const onPriceSliderChange =  function (min, max) {
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
-    switch (descending) {
-        case 'true':
-            setCookie('productDescendingOrder', descending);
-            break;
-        case 'false':
-            setCookie('productDescendingOrder', descending);
-            break;
-        default:
-            deleteCookie('productDescendingOrder');
+    console.log({ descending });
+    if (!!descending) {
+        setCookie('productDescendingOrder', 'true');
+    } else {
+        deleteCookie('productDescendingOrder');
     }
     reloadCards();
 }

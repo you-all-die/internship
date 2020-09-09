@@ -84,7 +84,7 @@ public class GsProductController {
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
             @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
-            @CookieValue(value = DESCENDING_COOKIE, required = false) Boolean descendingOrder
+            @CookieValue(value = DESCENDING_COOKIE, required = false, defaultValue = "false") Boolean descendingOrder
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
