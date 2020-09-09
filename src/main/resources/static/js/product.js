@@ -2,7 +2,7 @@
 
 /*
     Начальное состояние окна при загрузке
-    - Подключение обработчик событий к элементам фильтра
+    - Подключение обработчиков событий к элементам фильтра
 */
 window.onload = function () {
     let selector = $('#categorySelector').get(0);
@@ -81,10 +81,10 @@ const onPriceSliderChange =  function (min, max) {
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
     switch (descending) {
-        'true':
+        case 'true':
             setCookie('productDescendingOrder', descending);
             break;
-        'false':
+        case 'false':
             setCookie('productDescendingOrder', descending);
             break;
         default:

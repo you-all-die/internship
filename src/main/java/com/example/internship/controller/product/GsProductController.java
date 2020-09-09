@@ -47,10 +47,13 @@ public class GsProductController {
     @GetMapping
     public String showAllProducts(
             Model model,
+            @CookieValue(value = "productSearchString") String searchString,
+            @CookieValue(value = "productCategoryId") Long categoryId,
+            @CookieValue(value = "productMinimalPrice") BigDecimal minimalPriceCookie,
+            @CookieValue(value = "productMaximalPrice") BigDecimal maximalPrice,
             @CookieValue(value = "productPageNumber", defaultValue = "0") Integer pageNumberCookie,
             @CookieValue(value = "productPageSize", defaultValue = "20") Integer pageSizeCookie,
-            @CookieValue(value = "productMinimalPrice", defaultValue = "0") BigDecimal minimalPriceCookie,
-            @CookieValue(value = "productMaximalPrice", defaultValue = "0") BigDecimal maximalPrice
+            @CookieValue(value = "productDescendingOrder") Boolean descendingOrder
     ) {
         final List<ProductDto.Response.AllWithCategoryId> products = gsProductService.findAll();
         final List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
