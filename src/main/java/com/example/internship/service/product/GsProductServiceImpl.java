@@ -4,7 +4,6 @@ import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
-import com.example.internship.helper.SpecificationHelper;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.GsCategoryService;
 import com.example.internship.service.GsProductService;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,24 +81,19 @@ public class GsProductServiceImpl implements GsProductService {
             Integer pageSize,
             Boolean descendingOrder
     ) {
-        List<Specification<Product>> specifications = new LinkedList<>();
-        if (null != nameLike && !nameLike.isBlank()) {
-            specifications.add(GsProductSpecification.withNameLike(nameLike));
-        }
-        if (null != categoryId) {
-            final List<Long> ids = categoryService.findDescendants(categoryId);
-            specifications.add(GsProductSpecification.ofCategories(ids));
-        }
-        if (null != minimalPrice && null != maximalPrice) {
-            specifications.add(GsProductSpecification.minimalAndMaximalPrices(minimalPrice, maximalPrice));
-        }
+        List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
+        final Specification<Product> specification = new GsProductSpecification.Builder()
+                .nameLike(nameLike)
+                .ofCategories(categoryIds)
+                .minimalMaximalPrices(minimalPrice, maximalPrice)
+                .build();
+
         final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
 
-        final Specification<Product> combinedSpecifications = SpecificationHelper.combineAll(specifications);
         final List<AllWithCategoryId> filteredProducts = productRepository
-                .findAll(combinedSpecifications, pageable)
+                .findAll(specification, pageable)
                 .stream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
