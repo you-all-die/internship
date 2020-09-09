@@ -81,7 +81,7 @@ public class GsProductServiceImpl implements GsProductService {
             String nameLike,
             Long categoryId,
             BigDecimal minimalPrice,
-            BigDecimal maximumPrice,
+            BigDecimal maximalPrice,
             Integer pageNumber,
             Integer pageSize,
             Boolean descendingOrder
@@ -100,6 +100,15 @@ public class GsProductServiceImpl implements GsProductService {
             categoryIds.addAll(categoryService.findDescendants(categoryId));
             predicates.add(builder.in(root.get("category").get("id")).value(categoryIds));
         }
+        /* TODO сначала надо согласовать с UI, так как там границы цен условны, надо преобразовывать */
+/*
+        if (null != minimalPrice) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("price").as(BigDecimal.class), minimalPrice));
+        }
+        if (null != maximalPrice) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("price").as(BigDecimal.class), maximalPrice));
+        }
+*/
 
         query.select(root).where(predicates.toArray(new Predicate[]{}));
         final TypedQuery<Product> typedQuery = entityManager.createQuery(query);
