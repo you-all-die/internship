@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title th:text="#{products.productsave.title}">Edit product</title>
+</head>
+
+<body>
+<div th:replace="common/main :: header"></div>
+
+<div class="ui container">
+    <div class="ui menu">
+        <a th:href="@{/products}" class="item" th:text="#{products.productsave.products}">Products</a>
+        <div class="right menu">
+
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search..." name="searchname">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            <a th:href="@{/products${searchname}}" class="ui item" th:text="#{products.productsave.find}">Find</a>
+        </div>
+    </div><br>
+</div>
+
+<div class="ui container">
+        <div class="ui attached message">
+            <div class="header">
+                <label th:text="${product.id}!=null ? #{products.productsave.edit} : #{products.productsave.add_new}">
+                </label>
+            </div>
+        </div>
+    <div>
+        <form th:action="@{/product/save}" class="ui form attached fluid segment" enctype="multipart/form-data"
+              method="post" th:object="${product}">
+            <div class="field" th:if="*{id}">
+                <label>Артикул:</label>
+                <input type="text" name="id" th:field="*{id}" readonly>
+            </div>
+            <div class="field">
+                <label>Наименование</label>
+                <input type="text" name="name" th:field="*{name}" required>
+            </div>
+            <div class="field">
+                <label>Категория</label>
+                <select class = "form-control"  name="category_id" th:field="*{category.id}">
+                    <option th:each="c : ${selectcategory}" th:selected="${c.id == category?.id}" th:value="${c.id}"
+                            th:text="${c.id} + ' -> ' + ${c.name}"/>
+                </select>
+            </div>
+            <div class="field">
+                <label>Характеристики</label>
+                <input type="text" name="description"  th:field ="*{description}" required>
+            </div>
+            <div class="field">
+                <label>Цена(Руб.) Формат: 00.00 </label>
+                <input type="text" name="price" th:field="*{price}" required pattern="\d+(.\d{2})?">
+            </div>
+            <div class="field">
+                <label>Изображение</label>
+                <input type="file" name="picture_file" accept="image/jpeg">
+            </div>
+            <div class="field" th:if="*{id}">
+                <label>Старое изображение</label>
+                <input type="text" name="picture_old" th:field="*{picture}" readonly>
+            </div>
+            <div class="field">
+                <label>Статуc товара</label>
+                <select class = "form-control"  name="product_status" th:field="*{status.id}">
+                    <option th:each="s : ${product_status}"  th:selected="${s.id == status?.id}" th:value="${s.id}"
+                            th:text="${s.id} + ' -> ' + ${s.description}"/>
+                </select>
+            </div>
+            <div class="actions">
+                <button type="submit" class="ui primary button" th:text="#{products.productsave.save}">Save</button>
+                <button type="button" class="ui cancel button" th:text="#{products.productsave.cancel}">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+
+<footer th:replace="common/main::footer"></footer>
+</body>
+
+
+
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title th:text="#{errors.connection.title}"></title>
+</head>
+
+<body>
+<div th:replace="common/main :: header"></div>
+
+<div class="ui container" >
+    <h4 th:text="#{errors.connection.header}"></h4>
+    <div th:text="#{errors.connection.descriprition}"></div>
+</div>
+
+</div><br>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.example.internship.entity;
 
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;

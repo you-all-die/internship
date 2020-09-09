@@ -9,6 +9,7 @@ import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +30,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findAll() {
-        return productRepo.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+        return productRepo.findAll(Sort.by("id")).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public void removeProduct(Long id) {
-        productRepo.deleteById(id);
+        if (productRepo.existsById(id)) productRepo.deleteById(id);
     }
 
     @Override
     public void addProduct(ProductDto productDto) {
         productRepo.save(convertToModel(productDto));
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+        productRepo.save(product);
     }
 
     @Override
@@ -50,9 +56,12 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    public Product findByIdProduct(Long id) {
+        return productRepo.findById(id).orElseThrow();
+    }
+
     @Override
     public ProductDto getProductById(Long id) {
-
         return convertToDto(productRepo.findById(id).get());
     }
 
@@ -72,9 +81,11 @@ public class ProductServiceImpl implements ProductService {
         // Формируем условия для запроса к БД
         Specification<Product> specification = Specification.where(
                 // Поиск по имени
-                new ProductSpecification("name", name.orElse("")))
-                // Поиск по цене ОТ
-                .and(new ProductSpecification("priceFrom", priceFrom.orElse(new BigDecimal(0))));
+                new ProductSpecification("name", name.orElse("")));
+        // Поиск по цене ОТ
+        if (priceFrom.isPresent()) {
+            specification = specification.and(new ProductSpecification("priceFrom", priceFrom.get()));
+        }
         // Поиск по цене ДО
         if (priceTo.isPresent()) {
             specification = specification.and(new ProductSpecification("priceTo", priceTo.get()));
@@ -101,4 +112,5 @@ public class ProductServiceImpl implements ProductService {
     private Product convertToModel(ProductDto productDto) {
         return mapper.map(productDto, Product.class);
     }
+
 }
