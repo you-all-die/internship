@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 /**
  * @author Modenov D.A
  */
-
 class CartServiceImplTest {
 
     private final CustomerRepository customerRepository = mock(CustomerRepository.class);
@@ -42,14 +41,11 @@ class CartServiceImplTest {
     Cart cart;
 
     Product product;
-    Product product2;
 
     @BeforeEach
     public void before() {
         product = new Product();
         product.setId(1L);
-        product2 = new Product();
-        product2.setId(2L);
 
         cart = new Cart();
         cart.setId(1L);
@@ -69,64 +65,149 @@ class CartServiceImplTest {
 
     /**
      * Проверка провального метода add:
-     * <br> - Входные параметры null.
-     * <br> - Один из параметров null.
+     * <br> - Все аргументы null.
+     */
+    @Test
+    public void testAddEmptyAllArgs() {
+        assertFalse(cartService.add(null, null));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода add:
+     * <br> - Продукт равен null.
+     */
+    @Test
+    public void testAddEmptyProduct() {
+        assertFalse(cartService.add(null, CUSTOMER_ID1));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода add:
      * <br> - Несуществующий пользователь.
      */
     @Test
-    public void testAddFail() {
-
-        assertFalse(cartService.add(null, null));
-
-        assertFalse(cartService.add(null, CUSTOMER_ID1));
-
+    public void testAddEmptyCustomer() {
         assertFalse(cartService.add(new Product(), CUSTOMER_ID2));
 
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
      * Проверка успешного выполнения метода add:
-     * <br> - Добавление продукта.
-     * <br> - Добавление идентичного продукта.
+     * <br> - Добавление нового продукта в корзину.
      */
     @Test
-    public void testAddSuccess() {
+    public void testAddFirstProduct() {
+        Product testNewProduct = new Product();
 
-        assertTrue(cartService.add(product2, CUSTOMER_ID1));
+        assertTrue(cartService.add(testNewProduct, CUSTOMER_ID1));
 
         Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
-                .filter(value -> value.getProduct().equals(product2))
+                .filter(value -> value.getProduct().equals(testNewProduct))
                 .findFirst();
-        assertEquals(product2, orderLine1.get().getProduct());
+        assertEquals(testNewProduct, orderLine1.get().getProduct());
 
-        assertTrue(cartService.add(product2, CUSTOMER_ID1));
+        verify(cartRepository, times(1)).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка успешного выполнения метода add:
+     * <br> - Добавление существующего продукта в корзину.
+     */
+    @Test
+    public void testAddExistingProduct() {
+        Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
+                .filter(value -> value.getProduct().equals(product))
+                .findFirst();
+        assertEquals(product, orderLine1.get().getProduct());
+
+        assertTrue(cartService.add(product, CUSTOMER_ID1));
 
         assertEquals(2, orderLine1.get().getProductQuantity());
 
+        verify(cartRepository, times(1)).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+
+    /**
+     * Проверка провального метода updateQuantity:
+     * <br> - Входные аргументы null.
+     */
+    @Test
+    public void testUpdateQuantityEmptyAllArgs() {
+        assertFalse(cartService.updateQuantity(null,null, null));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
      * Проверка провального метода updateQuantity:
-     * <br> - Входные параметры null.
-     * <br> - Несуществующий пользователь.
-     * <br> - Продукта нет в корзине.
-     * <br> - Количество продукта <= 0.
+     * <br> - Продукт равен null.
      */
     @Test
-    public void testUpdateQuantityFail() {
-
-        assertFalse(cartService.updateQuantity(null,null, null));
-
+    public void testUpdateQuantityEmptyProduct() {
         assertFalse(cartService.updateQuantity(null, 1, CUSTOMER_ID1));
 
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода updateQuantity:
+     * <br> - Не существующий пользователь.
+     */
+    @Test
+    public void testUpdateQuantityEmptyCustomer() {
         assertFalse(cartService.updateQuantity(new Product(), 1, CUSTOMER_ID2));
 
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода updateQuantity:
+     * <br> - Количество продукта равно 0.
+     */
+    @Test
+    public void testUpdateQuantityZeroQuantity() {
         assertFalse(cartService.updateQuantity(new Product(), 0, CUSTOMER_ID1));
 
-        assertFalse(cartService.updateQuantity(new Product(), -1, CUSTOMER_ID1));
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
 
+    /**
+     * Проверка провального метода updateQuantity:
+     * <br> - Количество продукта отрицательно.
+     */
+    @Test
+    public void testUpdateQuantityNegativeQuantity() {
+        assertFalse(cartService.updateQuantity(new Product(), -10, CUSTOMER_ID1));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода updateQuantity:
+     * <br> - Продукта нет в корзине.
+     */
+    @Test
+    public void testUpdateQuantityNoProductInCart() {
         assertFalse(cartService.updateQuantity(new Product(), 10, CUSTOMER_ID1));
 
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
@@ -135,6 +216,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testUpdateQuantitySuccess() {
+        product.setPrice(BigDecimal.valueOf(100));
 
         assertTrue(cartService.updateQuantity(product, 10, CUSTOMER_ID1));
 
@@ -143,25 +225,56 @@ class CartServiceImplTest {
                 .findFirst();
         assertEquals(10, orderLine1.get().getProductQuantity());
 
+        verify(cartRepository, times(1)).save(any());
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
      * Проверка провального метода remove:
-     * <br> - Входные параметры null.
-     * <br> - Несуществующий пользователь.
+     * <br> - Входные аргументы null.
+     */
+    @Test
+    public void testRemoveEmptyAllArgs() {
+        assertFalse(cartService.remove(null, null));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода remove:
+     * <br> - Продукт равен null.
+     */
+    @Test
+    public void testRemoveEmptyProduct() {
+        assertFalse(cartService.remove(null, CUSTOMER_ID1));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода remove:
+     * <br> - Не существующий пользователь.
+     */
+    @Test
+    public void testRemoveEmptyCustomer() {
+        assertFalse(cartService.remove(new Product(), CUSTOMER_ID2));
+
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода remove:
      * <br> - Продукта нет в корзине.
      */
     @Test
-    public void testRemoveFail() {
-
-        assertFalse(cartService.remove(null, null));
-
-        assertFalse(cartService.remove(null, CUSTOMER_ID1));
-
-        assertFalse(cartService.remove(new Product(), CUSTOMER_ID2));
-
+    public void testRemoveNoProductInCart() {
         assertFalse(cartService.remove(new Product(), CUSTOMER_ID1));
 
+        verify(cartRepository, never()).save(any());
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
@@ -170,7 +283,6 @@ class CartServiceImplTest {
      */
     @Test
     public void testRemoveSuccess() {
-
         assertTrue(cartService.remove(product, CUSTOMER_ID1));
 
         Optional<OrderLine> orderLine1 = cart.getOrderLines().stream()
@@ -178,54 +290,60 @@ class CartServiceImplTest {
                 .findFirst();
         assertFalse(orderLine1.isPresent());
 
+        verify(cartRepository, times(1)).save(any());
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+
+    /**
+     * Проверка провального метода getTotalPrice:
+     * <br> - Входные аргументы null.
+     */
+    @Test
+    public void testGetTotalPriceEmptyArgs() {
+        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(null));
+
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
      * Проверка провального метода getTotalPrice:
-     * <br> - Входные параметры null.
      * <br> - Несуществующий пользователь.
+     */
+    @Test
+    public void testGetTotalPriceEmptyCustomer() {
+        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(CUSTOMER_ID2));
+
+        verify(customerRepository, times(1)).findById(any());
+    }
+
+    /**
+     * Проверка провального метода getTotalPrice:
      * <br> - Нет товаров в корзине.
      */
     @Test
-    public void testGetTotalPriceFail() {
-
-        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(null));
-
-        assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(CUSTOMER_ID2));
-
+    public void testGetTotalPriceNoProductInCart() {
         assertEquals(BigDecimal.ZERO, cartService.getTotalPrice(CUSTOMER_ID1));
+
+        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
      * Проверка успешного метода getTotalPrice:
-     * <br> - Подсчет цены одного товара в корзине.
-     * <br> - Подсчет цены двух товаров в корзине.
+     * <br> - Подсчет цены товаров в корзине.
      */
     @Test
     public void testGetTotalPriceSuccess() {
+        Product newProduct = new Product();
+        newProduct.setPrice(BigDecimal.valueOf(999.99));
 
-        OrderLine orderLine3 = new OrderLine();
-        OrderLine orderLine4 = new OrderLine();
+        OrderLine orderLine2 = new OrderLine();
 
-        Product product3 = new Product();
-        product3.setPrice(BigDecimal.valueOf(100));
+        orderLine2.setProduct(newProduct);
+        orderLine2.setProductQuantity(2);
+        cart.getOrderLines().add(orderLine2);
 
-        Product product4 = new Product();
-        product4.setPrice(BigDecimal.valueOf(999.99));
-
-
-        orderLine3.setProduct(product3);
-        orderLine3.setProductQuantity(1);
-        cart.getOrderLines().add(orderLine3);
-
-        assertEquals(BigDecimal.valueOf(100), cartService.getTotalPrice(CUSTOMER_ID1));
-
-
-        orderLine4.setProduct(product4);
-        orderLine4.setProductQuantity(2);
-        cart.getOrderLines().add(orderLine4);
-
-        assertEquals(BigDecimal.valueOf(2099.98), cartService.getTotalPrice(CUSTOMER_ID1));
-
+        assertEquals(BigDecimal.valueOf(1999.98), cartService.getTotalPrice(CUSTOMER_ID1));
+        verify(customerRepository, times(1)).findById(any());
     }
 }
