@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CategorySearchResult searchResult;
 
     public List<Category> findAll() {
         return (List<Category>) categoryRepository.findAll();
@@ -54,6 +53,8 @@ public class CategoryService {
 
     public CategorySearchResult search(Optional<String> name, Optional<Long> parentId, Integer pageSize, Integer pageNumber) {
 
+        CategorySearchResult categorySearchResult = new CategorySearchResult();
+
         Specification<Category> specification = Specification.where(
 
                 new CategorySpecification("name", name.orElse("")));
@@ -62,10 +63,11 @@ public class CategoryService {
             specification = specification.and(new CategorySpecification("parentId", parentId.get()));
         }
 
-        searchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
-        searchResult.setPageNumber(pageNumber);
-        searchResult.setPageSize(pageSize);
+        categorySearchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
+        categorySearchResult.setPageNumber(pageNumber);
+        categorySearchResult.setPageSize(pageSize);
+        categorySearchResult.setTotalCategory(categoryRepository.findAll(specification).size());
 
-        return searchResult;
+        return categorySearchResult;
     }
 }
