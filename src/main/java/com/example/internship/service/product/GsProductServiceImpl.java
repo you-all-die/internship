@@ -123,26 +123,6 @@ public class GsProductServiceImpl implements GsProductService {
         return result;
     }
 
-    /**
-     * Добавить в спецификацию условия выбора продукта и его наследников
-     *
-     * @param specification начальная спецификация
-     * @param categoryId    идентификатор категории
-     * @return полученная спецификация
-     */
-    private Specification<Product> addProductsOfCategoryAndDescendants(
-            Specification<Product> specification,
-            Long categoryId
-    ) {
-        if (categoryId != null) {
-            final List<Long> ids = new LinkedList<>();
-            ids.add(categoryId);
-            ids.addAll(categoryService.findDescendants(categoryId));
-            specification.and(GsProductSpecification.ofCategories(ids));
-        }
-        return specification;
-    }
-
     private static String getLikePattern(String searchString) {
         if (null == searchString || searchString.isEmpty()) {
             return "%";
