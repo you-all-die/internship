@@ -24,8 +24,10 @@
         <div class="field">
             <label th:text="#{product.filter.label.sort_order}">Sort Order</label>
             <div class="ui toggle checkbox">
-                <input id="descendingOrder" type="checkbox" name="sorting" onchange="onSortOrderChange(this.checked)">
-                <label for="sorting" th:text="#{product.filter.label.descending}">Descending</label>
+                <input id="descendingOrder"
+                       type="checkbox"
+                       name="sorting">
+                <label for="descendingOrder" th:text="#{product.filter.label.descending}">Descending</label>
             </div>
         </div>
 

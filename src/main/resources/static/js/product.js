@@ -11,26 +11,7 @@ window.onload = function () {
             onSearchChange(this.value);
         });
 
-    reloadCrumbs();
-    reloadFilter();
-
-    $('#priceSlider')
-        .slider({
-            min: 0,
-            max: 20,
-            step: 1,
-            onChange: function (delta, min) {
-                onPriceSliderChange(min, min + delta);
-            }
-        });
-
-    $('#descendingOrder')
-        // .val(!!getCookie('productDescendingOrder'))
-        .change(function () {
-            onSortOrderChange(this.checked);
-        });
-
-   reloadCards();
+   reloadAll();
 };
 
 /* Добавить товар в корзину */
@@ -89,7 +70,6 @@ const onPriceSliderChange =  function (min, max) {
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
-    console.log({ descending });
     if (!!descending) {
         setCookie('productDescendingOrder', 'true');
     } else {
@@ -136,6 +116,20 @@ const reloadFilter = function () {
     $.get({ url: '/product/filter' })
         .done(function (html) {
             $('#filter').html(html);
+            $('#descendingOrder')
+                .attr('checked', !!getCookie('productDescendingOrder'))
+                .change(function () {
+                    onSortOrderChange(this.checked);
+                });
+            $('#priceSlider')
+                .slider({
+                    min: 0,
+                    max: 20,
+                    step: 1,
+                    onChange: function (delta, min) {
+                        onPriceSliderChange(min, min + delta);
+                    }
+                });
         })
         .fail(function (error) {
             console.log({ error });

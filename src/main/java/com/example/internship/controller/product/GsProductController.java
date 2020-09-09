@@ -76,7 +76,6 @@ public class GsProductController {
     @GetMapping("/cards")
     public String viewCards(
             HttpServletRequest request,
-            HttpServletResponse response,
             Model model,
             @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
