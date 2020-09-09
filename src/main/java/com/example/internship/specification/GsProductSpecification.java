@@ -13,8 +13,7 @@ public enum GsProductSpecification {
 
     public static Specification<Product> productWithNameLike(final String searchString) {
         return (Specification<Product>) (product, query, builder) ->
-//                builder.like(builder.lower(product.get("name")), getLikePattern(searchString));
-        builder.isNotNull(product.get("name"));
+                builder.like(builder.lower(product.get("name")), getLikePattern(searchString));
     }
 
     public static Specification<Product> productOfCategories(final List<Long> ids) {
