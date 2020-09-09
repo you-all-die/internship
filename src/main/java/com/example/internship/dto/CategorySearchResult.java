@@ -14,9 +14,9 @@ public class CategorySearchResult {
     private List<Category> category;
     private Integer pageNumber;
     private Integer pageSize;
-    private Integer totalCategory;
+    private Long totalCategory;
 
-    public CategorySearchResult(List<Category> category, Integer pageNumber, Integer pageSize, Integer totalCategory) {
+    public CategorySearchResult(List<Category> category, Integer pageNumber, Integer pageSize, Long totalCategory) {
         this.category = category;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -26,11 +26,11 @@ public class CategorySearchResult {
     public CategorySearchResult() {
     }
 
-    public Integer getTotalCategory() {
+    public Long getTotalCategory() {
         return totalCategory;
     }
 
-    public void setTotalCategory(Integer total) {
+    public void setTotalCategory(Long total) {
         this.totalCategory = total;
     }
 

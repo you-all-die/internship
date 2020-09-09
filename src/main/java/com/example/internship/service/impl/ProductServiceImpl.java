@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList()));
         searchResult.setPageNumber(pageNumber);
         searchResult.setPageSize(pageSize);
-        searchResult.setTotalProducts(productRepo.findAll(specification).size());
+        searchResult.setTotalProducts(productRepo.count(specification));
 
         return searchResult;
     }

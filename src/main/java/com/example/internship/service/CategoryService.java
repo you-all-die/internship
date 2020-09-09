@@ -66,7 +66,7 @@ public class CategoryService {
         categorySearchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
         categorySearchResult.setPageNumber(pageNumber);
         categorySearchResult.setPageSize(pageSize);
-        categorySearchResult.setTotalCategory(categoryRepository.findAll(specification).size());
+        categorySearchResult.setTotalCategory(categoryRepository.count(specification));
 
         return categorySearchResult;
     }
