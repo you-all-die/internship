@@ -2,6 +2,7 @@ package com.example.internship.service.product;
 
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
+import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.SpecificationHelper;
 import com.example.internship.repository.ProductRepository;
@@ -10,6 +11,9 @@ import com.example.internship.service.GsProductService;
 import com.example.internship.specification.GsProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +73,7 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
-    public ProductDto.Response.SearchResult findByCriteria(
+    public SearchResult findByCriteria(
             String nameLike,
             Long categoryId,
             BigDecimal minimalPrice,
@@ -86,13 +90,21 @@ public class GsProductServiceImpl implements GsProductService {
             final List<Long> ids = categoryService.findDescendants(categoryId);
             specifications.add(GsProductSpecification.ofCategories(ids));
         }
+        if (null != minimalPrice && null != maximalPrice) {
+            specifications.add(GsProductSpecification.minimalAndMaximalPrices(minimalPrice, maximalPrice));
+        }
+        final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        final Sort sortOrder = Sort.by(direction, "price");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
 
         final Specification<Product> combinedSpecifications = SpecificationHelper.combineAll(specifications);
-        final List<AllWithCategoryId> filteredProducts = productRepository.findAll(combinedSpecifications).stream()
+        final List<AllWithCategoryId> filteredProducts = productRepository
+                .findAll(combinedSpecifications, pageable)
+                .stream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
-        ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
+        SearchResult result = new SearchResult();
         result.setProducts(filteredProducts);
         result.setPageNumber(pageNumber);
         result.setPageSize(pageSize);
