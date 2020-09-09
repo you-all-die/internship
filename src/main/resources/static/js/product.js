@@ -38,7 +38,6 @@ const addToCart = function (productId) {
     });
 }
 
-
 /* Диалог подтверждения добавления товара */
 const confirm = function (modalId, productId) {
     console.log('confirm(' + modalId + ', ' + productId + ')');
@@ -50,83 +49,67 @@ const confirm = function (modalId, productId) {
 
 /* Обработка изменений в строке поиска */
 const onSearchChange = function (searchString) {
-    onFilterChange(searchString ? { nameLike: searchString } : {});
+    setCookie('productSearchString', searchString || '');
+    reloadCards();
 }
 
 /* Выбор категории  */
 const onCategoryChange = function (categoryId) {
-    onFilterChange(categoryId ? { categoryId: categoryId } : {});
+    let representation = parseInt(categoryId);
+    if (Number.isInteger(representation)) {
+        setCookie('productCategoryId', representation);
+    } else {
+        deleteCookie('productCategoryId');
+    }
+    reloadCards();
 }
 
 /* Обработка изменений в диапазоне цен */
 const onPriceSliderChange =  function (min, max) {
-    onFilterChange({
-        minimalPrice: min,
-        maximalPrice: max
-    });
+    let minRepresentation = parseFloat(min);
+    let maxRepresentation = parseFloat(max);
+    if (Number.isFloat(minRepresentation) && Number.isFloat(maxRepresentation)) {
+        setCookie('productMinimalPrice', minRepresentation);
+        setCookie('productMaximalPrice', maxRepresentation);
+    } else {
+        deleteCookie('productMinimalPrice');
+        deleteCookie('productMaximalPrice');
+    }
+    reloadCards();
 }
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
-    onFilterChange({ descending: descending });
+    switch (descending) {
+        'true':
+            setCookie('productDescendingOrder', descending);
+            break;
+        'false':
+            setCookie('productDescendingOrder', descending);
+            break;
+        default:
+            deleteCookie('productDescendingOrder');
+    }
+    reloadCards();
 }
 
 /* Обработка изменения номера страниц */
 const onPageChange = function (pageNumber) {
-    onFilterChange({ pageNumber: pageNumber });
+    let representation = parseInt(pageNumber);
+    if (Number.isInteger(representation)) {
+        setCookie('productPageNumber', representation);
+    } else {
+        deleteCookie('productPageNumber');
+    }
+    reloadCards();
 }
 
-/* Обработка изменений фильтра в целом */
-const onFilterChange = function (filter) {
-    let cookieFilter = filterFromCookies();
-    let joinedFilter = Object.assign(cookieFilter, filter);
-    let params = $.param(joinedFilter);
-    let url = '/product/filter' + (params ? '?' + params : '');
-    console.log('>>> onFilterChange URL: ' + url)
-    $.ajax({
-        url: url,
-        method: 'GET'
-    }).done(function (html) {
-        $('#cards').html(html);
-    }).fail(function (error) {
-        console.log({ error });
-    });
-}
-
-/* Формирует заготовку фильтра из кук */
-const filterFromCookies = function () {
-    let filter = {};
-    let searchString = getCookie('productSearchString');
-    if (searchString) {
-        filter.searchString = searchString;
-    }
-    let categoryId = parseInt(getCookie('productCategoryId'));
-    if (categoryId) {
-        filter.categoryId = categoryId;
-    }
-    let minimalPrice = parseFloat(getCookie('productMinimalPrice'));
-    if (minimalPrice) {
-        filter.minimalPrice = minimalPrice;
-    }
-    let maximalPrice = parseFloat(getCookie('productMaximalPrice'));
-    if (maximalPrice) {
-        filter.maximalPrice = maximalPrice;
-    }
-    let pageNumber = parseInt(getCookie('productPageNumber'));
-    if (pageNumber) {
-        filter.pageNumber = pageNumber - 1; /* Страницы отсчитываются с нуля */
-    }
-    let pageSize = parseInt(getCookie('productPageSize'));
-    if (pageSize) {
-        filter.pageSize = pageSize;
-    }
-    let descending = getCookie('productDescendingOrder');
-    if (descending) {
-        filter.descending = descending == 'true';
-    }
-
-    console.log('>>> filterFromCookies() returns:');
-    console.table({ filter });
-
-    return filter;
+const reloadCards = function () {
+    $.get({ url: '/product/filter'})
+        .done(function (html) {
+            $('#cards').html(html);
+        })
+        .fail(function (error) {
+            console.log({ error });
+        });
 }

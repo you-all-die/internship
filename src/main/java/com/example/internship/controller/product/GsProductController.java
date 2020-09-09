@@ -2,6 +2,7 @@ package com.example.internship.controller.product;
 
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
+import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.WebHelper;
 import com.example.internship.service.CartService;
@@ -87,7 +88,7 @@ public class GsProductController {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
-        final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
+        final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, minimalPrice, maximalPrice, pageNumber, pageSize, descendingOrder
         );
         model.addAttribute("products", searchResult.getProducts());
