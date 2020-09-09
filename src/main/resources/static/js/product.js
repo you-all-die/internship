@@ -96,23 +96,31 @@ const onFilterChange = function (filter) {
 /* Формирует заготовку фильтра из кук */
 const filterFromCookies = function () {
     let filter = {};
-    let categoryId = parseInt(getCookie('categoryIdCookie'));
+    let searchString = getCookie('productSearchString');
+    if (searchString) {
+        filter.searchString = searchString;
+    }
+    let categoryId = parseInt(getCookie('productCategoryId'));
     if (categoryId) {
         filter.categoryId = categoryId;
     }
-    let minimalPrice = parseInt(getCookie('minimalPriceCookie'));
+    let minimalPrice = parseFloat(getCookie('productMinimalPrice'));
     if (minimalPrice) {
         filter.minimalPrice = minimalPrice;
     }
-    let maximalPrice = parseInt(getCookie('maximalPriceCookie'));
+    let maximalPrice = parseFloat(getCookie('productMaximalPrice'));
     if (maximalPrice) {
         filter.maximalPrice = maximalPrice;
     }
-    let pageNumber = parseInt(getCookie('pageNumberCookie'));
+    let pageNumber = parseInt(getCookie('productPageNumber'));
     if (pageNumber) {
         filter.pageNumber = pageNumber - 1; /* Страницы отсчитываются с нуля */
     }
-    let descending = getCookie('descendingCookie');
+    let pageSize = parseInt(getCookie('productPageSize'));
+    if (pageSize) {
+        filter.pageSize = pageSize;
+    }
+    let descending = getCookie('productDescendingOrder');
     if (descending) {
         filter.descending = descending == 'true';
     }

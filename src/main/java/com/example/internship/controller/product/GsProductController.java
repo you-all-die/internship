@@ -44,32 +44,23 @@ public class GsProductController {
     }
 
     @GetMapping
-    public String showProducts(
-            Model model
+    public String showAllProducts(
+            Model model,
+            @CookieValue(value = "productPageNumber", defaultValue = "0") Integer pageNumberCookie,
+            @CookieValue(value = "productPageSize", defaultValue = "20") Integer pageSizeCookie,
+            @CookieValue(value = "productMinimalPrice", defaultValue = "0") BigDecimal minimalPriceCookie,
+            @CookieValue(value = "productMaximalPrice", defaultValue = "0") BigDecimal maximalPrice
     ) {
         final List<ProductDto.Response.AllWithCategoryId> products = gsProductService.findAll();
         final List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
-        model.addAttribute("pageNumber", 1);
-        model.addAttribute("pageSize", 20);
+        model.addAttribute("pageNumber", pageNumberCookie);
+        model.addAttribute("pageSize", pageSizeCookie);
         model.addAttribute("total", products.size());
-        model.addAttribute("minimalPrice", BigDecimal.ZERO);
-        model.addAttribute("maximalPrice", BigDecimal.ZERO);
+        model.addAttribute("minimalPrice", minimalPriceCookie);
+        model.addAttribute("maximalPrice", maximalPrice);
         return "product/index";
-    }
-
-    @PostMapping
-    public ProductDto.Response.SearchResult showProductList(
-            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @RequestParam(value = "nameLike", required = false) String nameLike,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
-            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
-            @RequestParam(value = "descending", required = false, defaultValue = "false")  Boolean descending
-    ) {
-        return gsProductService.findByCriteria(nameLike, categoryId, minimalPrice, maximalPrice, pageSize, pageNumber, descending);
     }
 
     @PostMapping("/cart")
@@ -83,13 +74,13 @@ public class GsProductController {
     @GetMapping("/filter")
     public String filter(
             HttpServletRequest request,
-            @RequestParam(value = "nameLike", required = false) String nameLike,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
-            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
-            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize,
-            @RequestParam(value = "descending",required = false) Boolean descending,
+            @CookieValue(value = "productSearchString") String searchString,
+            @CookieValue(value = "productCategoryId") Long categoryId,
+            @CookieValue(value = "productMinimalPrice") BigDecimal minimalPrice,
+            @CookieValue(value = "productMaximalPrice") BigDecimal maximalPrice,
+            @CookieValue(value = "productPageNumber") Integer pageNumber,
+            @CookieValue(value = "productPageSize") Integer pageSize,
+            @CookieValue(value = "productDescendingOrder") Boolean descendingOrder,
             Model model
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
@@ -97,9 +88,19 @@ public class GsProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
-                nameLike, categoryId, minimalPrice, maximalPrice, 0, 20, descending
+                searchString, categoryId, minimalPrice, maximalPrice, pageNumber, pageSize, descendingOrder
         );
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";
+    }
+
+    @GetMapping("/breadcrumbs")
+    public String breadCrumbs(
+            HttpServletRequest request,
+            @CookieValue("productCategoryId") Long categoryId,
+            Model model
+    ) {
+        model.addAttribute(categoryId);
+        return "/product/breadcrumbs :: widget";
     }
 }
