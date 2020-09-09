@@ -97,7 +97,7 @@ public class GsProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
-                nameLike, categoryId, minimalPrice, maximalPrice, 1, 20, descending
+                nameLike, categoryId, minimalPrice, maximalPrice, 0, 20, descending
         );
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";
