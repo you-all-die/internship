@@ -46,9 +46,16 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         return ancestors;
     }
 
+    /**
+     * Возвращает список идентификаторов категории и всех её наследников
+     *
+     * @param category категория
+     * @return список идентификаторов категорий
+     */
     @Override
     public List<Long> findDescendants(Category category) {
         List<Long> descendants = new LinkedList<>();
+        descendants.add(category.getId());
         category.getSubcategories().forEach(subcategory -> {
                     descendants.add(subcategory.getId());
                     descendants.addAll(findDescendants(subcategory));
@@ -57,6 +64,13 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         return descendants;
     }
 
+    /**
+     * Возвращает список идентификаторов категории и всех её наследников.
+     * Если категории с указанным идентификатором не существует, возвращает пустой список.
+     *
+     * @param categoryId идентификатор категории
+     * @return список идентификаторов категорий
+     */
     @Override
     public List<Long> findDescendants(Long categoryId) {
         final Optional<Category> categoryOptional = findById(categoryId);
