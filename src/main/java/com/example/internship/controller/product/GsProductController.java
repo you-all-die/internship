@@ -102,19 +102,4 @@ public class GsProductController {
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";
     }
-
-    @GetMapping("/cards")
-    public String showCards(
-            HttpServletRequest request,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            Model model
-    ) {
-        if (!WebHelper.isAjaxRequest(request)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
-        }
-        model.addAttribute(
-                "products",
-                categoryId == null ? gsProductService.findAll() : gsProductService.findAllByCategoryId(categoryId));
-        return "product/cards :: cards";
-    }
 }
