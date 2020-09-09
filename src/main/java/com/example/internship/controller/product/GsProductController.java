@@ -66,9 +66,10 @@ public class GsProductController {
             @RequestParam(value = "nameLike", required = false) String nameLike,
             @RequestParam(value = "categoryId", required = false) Long categoryId,
             @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
-            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice
+            @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
+            @RequestParam(value = "descending", required = false, defaultValue = "false")  Boolean descending
     ) {
-        return gsProductService.findByCriteria(nameLike, categoryId, minimalPrice, maximalPrice, pageSize, pageNumber);
+        return gsProductService.findByCriteria(nameLike, categoryId, minimalPrice, maximalPrice, pageSize, pageNumber, descending);
     }
 
     @PostMapping("/cart")
@@ -86,15 +87,16 @@ public class GsProductController {
             @RequestParam(value = "categoryId", required = false) Long categoryId,
             @RequestParam(value = "minimalPrice", required = false) BigDecimal minimalPrice,
             @RequestParam(value = "maximalPrice", required = false) BigDecimal maximalPrice,
-            @RequestParam(value = "descending",required = false) Boolean descending,
             @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "descending",required = false) Boolean descending,
             Model model
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         final ProductDto.Response.SearchResult searchResult = gsProductService.findByCriteria(
-                nameLike, categoryId, minimalPrice, maximalPrice, 1, 20
+                nameLike, categoryId, minimalPrice, maximalPrice, 1, 20, descending
         );
         model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: cards";

@@ -1,5 +1,6 @@
 package com.example.internship.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Category {
      * Самохвалов Юрий Алексеевич
      * список наследных категорий
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> subcategories;
 }

@@ -76,15 +76,19 @@ public class GsProductServiceImpl implements GsProductService {
             BigDecimal minimalPrice,
             BigDecimal maximumPrice,
             Integer pageNumber,
-            Integer pageSize
+            Integer pageSize,
+            Boolean descendingOrder
     ) {
-        final Sort sortOrder = Sort.by(Sort.Direction.ASC, "price");
+        final Sort sortOrder = Sort.by(
+                null == descendingOrder || !descendingOrder ? Sort.Direction.ASC : Sort.Direction.DESC,
+                "price"
+        );
 
         Specification<Product> specification = Specification.where(
                 GsProductSpecification.productWithNameLike(nameLike)
         );
 
-//        specification = generateForCategoryAndDescendants(specification, categoryId);
+        specification = generateForCategoryAndDescendants(specification, categoryId);
 
         ProductDto.Response.SearchResult result = new ProductDto.Response.SearchResult();
         final List<ProductDto.Response.AllWithCategoryId> products = productRepository
@@ -117,13 +121,12 @@ public class GsProductServiceImpl implements GsProductService {
             Specification<Product> specification,
             Long categoryId
     ) {
-        if (categoryId == null) {
-            return specification;
+        if (categoryId != null) {
+            final List<Long> ids = new ArrayList<>();
+            ids.add(categoryId);
+            ids.addAll(categoryService.findDescendants(categoryId));
+            specification.and(GsProductSpecification.productOfCategories(ids));
         }
-        final List<Long> ids = new ArrayList<>();
-        ids.add(categoryId);
-        ids.addAll(categoryService.findDescendants(categoryId));
-        specification.and(GsProductSpecification.productOfCategories(ids));
         return specification;
     }
 

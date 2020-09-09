@@ -22,5 +22,6 @@ public interface GsProductService {
             BigDecimal minimalPrice,
             BigDecimal maximumPrice,
             Integer pageNumber,
-            Integer pageSize);
+            Integer pageSize,
+            Boolean descendingOrder);
 }
