@@ -103,7 +103,7 @@ const onPageSizeChange = function (pageSize) {
 }
 
 /*
-    Перезагрузка виждета с карточками товаров
+    Перезагрузка виджета с карточками товаров
 */
 const reloadCards = function () {
     $.get({ url: '/product/cards'})
@@ -137,6 +137,10 @@ const reloadFilter = function () {
                         onPriceSliderChange(min, min + delta);
                     }
                 });
+            $('#pageSelector')
+                .change(function () {
+                    onPageNumberChange(this.selectedIndex);
+                })
         })
         .fail(function (error) {
             console.log({ error });

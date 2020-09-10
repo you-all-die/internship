@@ -14,80 +14,81 @@
 
     <body>
         <div th:replace="common/main :: header"></div>
-    <div class="ui main container">
-        <div class="ui container about-content">
+        <div class="ui main container">
+            <div class="ui container about-content">
 
-            <div class="ui grid">
+                <div class="ui grid">
 
-                <!-- Колонка с селектором городов и списком магазинов -->
-                <div class="six wide column">
+                    <!-- Колонка с селектором городов и списком магазинов -->
+                    <div class="six wide column">
 
-                    <!-- Выбор городов -->
-                    <div class="ui form">
-                        <div class="ui header" th:text="#{about.index.cities}">Cities</div>
-                        <div class="field">
-                            <select id="citySelector" class="ui dropdown" onchange="onCityChange(this)">
-                                <option value="" th:selected="${citiFilter}==''">Все</option>
-                                <th:block th:each="city : ${cities}">
-                                    <option th:value="${city}"
-                                            th:selected="${cityFilter}==${city}"
-                                            th:text="${city}">City
-                                    </option>
-                                </th:block>
-                            </select>
+                        <!-- Выбор городов -->
+                        <div class="ui form">
+                            <div class="ui header" th:text="#{about.index.cities}">Cities</div>
+                            <div class="field">
+                                <select id="citySelector" class="ui dropdown" onchange="onCityChange(this)">
+                                    <option value="" th:selected="${citiFilter}==''">Все</option>
+                                    <th:block th:each="city : ${cities}">
+                                        <option th:value="${city}"
+                                                th:selected="${cityFilter}==${city}"
+                                                th:text="${city}">City
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Список магазинов -->
-                    <div class="ui header outlet-list-header" th:text="#{about.index.outlets}">Outlets</div>
-                    <div id="outletList" class="ui list outlet-list" hidden>
-                        <div class="item" th:each="outlet : ${outlets}">
-                            <!-- Формируется уникальный идентификатор -->
-                            <div th:with="outletItemId = ${'outlet' + outlet.id}">
-                                <!-- Идентификатор для доступа из javascript -->
-                                <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer"
-                                     th:onclick="|centerMap(${outlet.longitude},${outlet.latitude})|">
+                        <!-- Список магазинов -->
+                        <div class="ui header outlet-list-header" th:text="#{about.index.outlets}">Outlets</div>
+                        <div id="outletList" class="ui list outlet-list" hidden>
+                            <div class="item" th:each="outlet : ${outlets}">
+                                <!-- Формируется уникальный идентификатор -->
+                                <div th:with="outletItemId = ${'outlet' + outlet.id}">
+                                    <!-- Идентификатор для доступа из javascript -->
+                                    <div th:id="${outletItemId}" class="content outlet-item" style="cursor:pointer"
+                                         th:onclick="|centerMap(${outlet.longitude},${outlet.latitude})|">
 
-                                    <h3 class="header" th:text="${outlet.name}">Outlet</h3>
+                                        <h3 class="header" th:text="${outlet.name}">Outlet</h3>
 
-                                    <div class="description">
-                                        <table class="ui definition table">
-                                            <tbody>
-                                                <tr th:if="${outlet.address}">
-                                                    <td th:text="#{about.index.address}" class="ui four wide column">
-                                                        Address
-                                                    </td>
-                                                    <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
-                                                </tr>
-                                                <tr th:if="${outlet.phone}">
-                                                    <td th:text="#{about.index.phone}">Phone</td>
-                                                    <td th:text="${outlet.phone}">322-33-22</td>
-                                                </tr>
-                                                <tr th:if="outlet.openingHours">
-                                                    <td th:text="#{about.index.opening_hours}">Opening hours</td>
-                                                    <td th:text="${outlet.openingHours}">00:00 - 24:00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="description">
+                                            <table class="ui definition table">
+                                                <tbody>
+                                                    <tr th:if="${outlet.address}">
+                                                        <td th:text="#{about.index.address}"
+                                                            class="ui four wide column">
+                                                            Address
+                                                        </td>
+                                                        <td th:text="${outlet.address}">Ney York, 5th Avenue</td>
+                                                    </tr>
+                                                    <tr th:if="${outlet.phone}">
+                                                        <td th:text="#{about.index.phone}">Phone</td>
+                                                        <td th:text="${outlet.phone}">322-33-22</td>
+                                                    </tr>
+                                                    <tr th:if="outlet.openingHours">
+                                                        <td th:text="#{about.index.opening_hours}">Opening hours</td>
+                                                        <td th:text="${outlet.openingHours}">00:00 - 24:00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Карта местности -->
-                <div class="ten wide column">
-                    <div id="map" class="ui placeholder segment map-container">
-                        <div class="ui active dimmer">
-                            <div class="ui loader">
+                    <!-- Карта местности -->
+                    <div class="ten wide column">
+                        <div id="map" class="ui placeholder segment map-container">
+                            <div class="ui active dimmer">
+                                <div class="ui loader">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
         <footer th:replace="common/main::footer"></footer>
     </body>
 </html>

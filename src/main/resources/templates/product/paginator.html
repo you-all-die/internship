@@ -1,4 +1,5 @@
 <select xmlns:th="http://www.thymeleaf.org"
+        id="pageSelector"
         class="ui dropdown"
         th:fragment="widget (pages)">
     <option th:each="page : ${pages}" th:selected="${page}" th:text="${pageStat.count}"></option>
