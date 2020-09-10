@@ -23,7 +23,7 @@ public interface ProductService {
 
     Product findByIdProduct(Long id);
 
-
+    void removeAll();
 
     ProductDto getProductById(Long id);
 
