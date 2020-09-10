@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartForm {
+public class OrderLineForm {
 
     Long productId;
     Integer productQuantity;

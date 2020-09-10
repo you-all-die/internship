@@ -38,7 +38,7 @@ public class CartServiceImpl implements CartService {
     private final ModelMapper mapper;
 
     @Override
-    public boolean addFromApi(Long productId, Long customerId) {
+    public boolean add(Long productId, Long customerId) {
         Optional<Product> product = productRepository.findById(productId);
 
         return product.filter(value -> add(value, customerId)).isPresent();
@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean updateQuantityFromApi(Long productId, Integer productQuantity, Long customerId) {
+    public boolean updateQuantity(Long productId, Integer productQuantity, Long customerId) {
         Optional<Product> product = productRepository.findById(productId);
 
         return product.filter(value -> updateQuantity(value, productQuantity, customerId)).isPresent();
@@ -92,7 +92,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean removeFromApi(Long productId, Long customerId) {
+    public boolean remove(Long productId, Long customerId) {
         Optional<Product> product = productRepository.findById(productId);
 
         return product.filter(value -> remove(value, customerId)).isPresent();

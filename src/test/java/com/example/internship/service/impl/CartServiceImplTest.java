@@ -72,7 +72,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testAddEmptyAllArgs() {
-        assertFalse(cartService.add(null, null));
+        assertFalse(cartService.add(any(Product.class), null));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());
@@ -84,10 +84,8 @@ class CartServiceImplTest {
      */
     @Test
     public void testAddEmptyProduct() {
-        assertFalse(cartService.add(null, CUSTOMER_ID1));
-
+        assertFalse(cartService.add(any(Product.class), CUSTOMER_ID1));
         verify(cartRepository, never()).save(any());
-        verify(customerRepository, times(1)).findById(any());
     }
 
     /**
@@ -147,7 +145,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testUpdateQuantityEmptyAllArgs() {
-        assertFalse(cartService.updateQuantity(null, null, null));
+        assertFalse(cartService.updateQuantity(any(Product.class), null, null));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());
@@ -159,7 +157,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testUpdateQuantityEmptyProduct() {
-        assertFalse(cartService.updateQuantity(null, 1, CUSTOMER_ID1));
+        assertFalse(cartService.updateQuantity(any(Product.class), 1, CUSTOMER_ID1));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());
@@ -238,7 +236,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testRemoveEmptyAllArgs() {
-        assertFalse(cartService.remove(null, null));
+        assertFalse(cartService.remove(any(Product.class), null));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());
@@ -250,7 +248,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testRemoveEmptyProduct() {
-        assertFalse(cartService.remove(null, CUSTOMER_ID1));
+        assertFalse(cartService.remove(any(Product.class), CUSTOMER_ID1));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());

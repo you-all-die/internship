@@ -18,7 +18,7 @@ public interface CartService {
      * @param customerId id пользователя.
      * @return true если товар добавлен и false если нет.
      */
-    boolean addFromApi(Long productId, Long customerId);
+    boolean add(Long productId, Long customerId);
 
     /**
      * Добавляет товар в корзину.
@@ -27,7 +27,7 @@ public interface CartService {
      * @return true если товар добавлен и false если нет.
      * 
      * @deprecated 
-     * <br> Используйте метод {@link #addFromApi(Long productId, Long customerId)}
+     * <br> Используйте метод {@link #add(Long productId, Long customerId)}
      */
     @Deprecated
     boolean add(Product product, Long customerId);
@@ -39,7 +39,7 @@ public interface CartService {
      * @param customerId id пользователя.
      * @return true если количество товара обновлено и false если нет.
      */
-    boolean updateQuantityFromApi(Long productId, Integer productQuantity, Long customerId);
+    boolean updateQuantity(Long productId, Integer productQuantity, Long customerId);
 
     /**
      * Обновляет количество товара в корзине.
@@ -50,7 +50,7 @@ public interface CartService {
      *
      * @deprecated
      * <br> Используйте метод
-     * {@link #updateQuantityFromApi(Long productId, Integer productQuantity, Long customerId)}
+     * {@link #updateQuantity(Long productId, Integer productQuantity, Long customerId)}
      */
     @Deprecated
     boolean updateQuantity(Product product, Integer productQuantity, Long customerId);
@@ -61,7 +61,7 @@ public interface CartService {
      * @param customerId id пользователя.
      * @return true если товар удален из корзины и false если нет.
      */
-    boolean removeFromApi(Long productId, Long customerId);
+    boolean remove(Long productId, Long customerId);
 
     /**
      * Удаляет товар из корзины.
@@ -71,7 +71,7 @@ public interface CartService {
      *
      * @deprecated
      * <br> Используйте метод
-     * {@link #removeFromApi(Long productId, Long customerId)}
+     * {@link #remove(Long productId, Long customerId)}
      */
     @Deprecated
     boolean remove(Product product, Long customerId);
