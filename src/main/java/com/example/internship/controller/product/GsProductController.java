@@ -1,6 +1,7 @@
 package com.example.internship.controller.product;
 
 import com.example.internship.dto.category.CategoryDto;
+import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.WebHelper;
@@ -16,7 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -40,6 +43,7 @@ public class GsProductController {
     private static final String PAGE_NUMBER_COOKIE = "productPageNumber";
     private static final String PAGE_SIZE_COOKIE = "productPageSize";
     private static final String DESCENDING_COOKIE = "productDescendingOrder";
+    private static final String TOTAL_COOKIE = "productTotal";
 
     private final CartService cartService;
     private final ProductService productService;
@@ -72,6 +76,7 @@ public class GsProductController {
     @GetMapping("/cards")
     public String viewCards(
             HttpServletRequest request,
+            HttpServletResponse response,
             Model model,
             @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
@@ -88,7 +93,9 @@ public class GsProductController {
         final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
-        model.addAttribute("products", searchResult.getProducts());
+        final List<ProductDto.Response.AllWithCategoryId> products = searchResult.getProducts();
+        model.addAttribute("products", products);
+        response.addCookie(new Cookie(TOTAL_COOKIE, Long.toString(products.size())));
         return "/product/cards :: widget";
     }
 
@@ -111,7 +118,6 @@ public class GsProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
-        Long total = gsProductService.count();
 
         model
                 .addAttribute("searchString", searchString)
@@ -150,7 +156,8 @@ public class GsProductController {
             HttpServletRequest request,
             Model model,
             @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
-            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize
+            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
+            @CookieValue(value = TOTAL_COOKIE, required = true) Long total
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
@@ -158,7 +165,6 @@ public class GsProductController {
         }
 
         /* Костыль, нужный для отображения пагинатора :( */
-        long total = gsProductService.count();
         int pageCount = (int) (total / pageSize) + 1;
         boolean[] pages = new boolean[pageCount];
         Arrays.fill(pages, false);
