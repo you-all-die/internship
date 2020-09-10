@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
     }
 
-    private void sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
+    private boolean sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
 
         MimeMessage message = emailSender.createMimeMessage();
         try {
@@ -51,6 +51,7 @@ public class EmailServiceImpl implements EmailService {
             emailSender.send(message);
             log.info("Email sent!\n" + "Subject: " + subject + "\nTo: " +
                     to + "\nFrom: " + from + "\nMessage:\n" + htmlBody);
+            return true;
         } catch (Exception e) {
             log.error("Error sending e-mail to {}, exception {}", to, e.toString());
             throw new MailServiceException("Error sending e-mail " + subject + " to " + to + " from " + from, e);
@@ -58,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
+    public boolean sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
@@ -66,11 +67,11 @@ public class EmailServiceImpl implements EmailService {
         templateModel.put("orderLines", order.getOrderLines());
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
-        sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
+        return sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
     }
 
     @Override
-    public void sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
+    public boolean sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
         if (null == customer) {
             throw new MailServiceException("Invalid customer", new NullPointerException());
         }
@@ -79,6 +80,6 @@ public class EmailServiceImpl implements EmailService {
         templateModel.put("customer", customer);
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail/welcome", thymeleafContext);
-        sendHtmlMessage(customer.getEmail(), noreplyEmail, REGISTRATION_EMAIL_SUBJECT, htmlBody);
+        return sendHtmlMessage(customer.getEmail(), noreplyEmail, REGISTRATION_EMAIL_SUBJECT, htmlBody);
     }
 }
