@@ -4,12 +4,14 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
-import org.thymeleaf.context.Context;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.context.IContext;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -18,30 +20,34 @@ import javax.mail.internet.MimeMessage;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class EmailServiceImplTest {
-    private final JavaMailSender javaMailSender = mock(JavaMailSender.class);
-    private final SpringTemplateEngine templateEngine = mock(SpringTemplateEngine.class);
 
+    @MockBean
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine thymeleafTemplateEngine;
+
+    @Autowired
     private EmailService emailService;
 
-    CustomerDto customer;
-
-    @BeforeEach
+    @Before
     public void before() {
-        emailService = new EmailServiceImpl(javaMailSender, templateEngine);
-        doNothing().when(javaMailSender).send(any(MimeMessage.class));
-        when(templateEngine.process(anyString(), any(IContext.class))).thenReturn("");
+        when(javaMailSender.createMimeMessage()).thenReturn(mock(MimeMessage.class));
     }
 
     @Test
     public void testSendRegistrationWelcomeMessageNullArg() {
         Throwable exception = assertThrows(MailServiceException.class, () -> emailService.sendRegistrationWelcomeMessage(null));
         assertEquals("Invalid customer", exception.getMessage());
+        verify(javaMailSender, never()).send(any(MimeMessage.class));
     }
 
     @Test
     public void testSendRegistrationWelcomeMessageAllArgs() {
-        customer = new CustomerDto();
+        CustomerDto customer = new CustomerDto();
         customer.setEmail("a@a.com");
         customer.setFirstName("name");
         try {
@@ -49,5 +55,6 @@ public class EmailServiceImplTest {
         } catch (MailServiceException e) {
             Assert.fail(e.getMessage());
         }
+        verify(javaMailSender, times(1)).send(any(MimeMessage.class));
     }
 }
