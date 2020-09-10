@@ -30,7 +30,7 @@ public interface ProductService {
     // Продукт по id
     Optional<ProductDto> findById(Long id);
     // Поиск по условиям
-    ProductSearchResult search(Optional<String> name, Optional<Long> categoryId, Optional<BigDecimal> priceFrom,
-                               Optional<BigDecimal> priceTo, Integer pageSize, Integer pageNumber);
+    ProductSearchResult search(String name, Long categoryId, BigDecimal priceFrom, BigDecimal priceTo, Integer pageSize,
+                               Integer pageNumber);
 
 }
