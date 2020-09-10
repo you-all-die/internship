@@ -1,4 +1,4 @@
-package com.example.internship.service;
+package com.example.internship.service.product;
 
 import com.example.internship.dto.product.ProductDto;
 
@@ -18,6 +18,7 @@ public interface GsProductService {
     Optional<BigDecimal> findMaximalPrice();
     void save(ProductDto.Request.AllWithCategoryId productDto);
     void delete(long id);
+    long count();
     ProductDto.Response.SearchResult findByCriteria(
             String nameLike,
             Long categoryId,

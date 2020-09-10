@@ -102,6 +102,9 @@ const onPageSizeChange = function (pageSize) {
     reloadFilter();
 }
 
+/*
+    Перезагрузка виждета с карточками товаров
+*/
 const reloadCards = function () {
     $.get({ url: '/product/cards'})
         .done(function (html) {
@@ -112,6 +115,10 @@ const reloadCards = function () {
         });
 }
 
+/*
+    Перезагрузка виджета фильтра.
+    Обновление элементов фильтра через куки.
+*/
 const reloadFilter = function () {
     $.get({ url: '/product/filter' })
         .done(function (html) {
@@ -136,6 +143,9 @@ const reloadFilter = function () {
         });
 }
 
+/*
+    Перезагрузка виджета хлебных крошек
+*/
 const reloadCrumbs = function () {
     $.get({ url: '/product/breadcrumbs' })
         .done(function (html) {
@@ -146,6 +156,10 @@ const reloadCrumbs = function () {
         })
 }
 
+/*
+    Полная перезагрузка матрицы.
+    Порядок вызова важен!
+*/
 const reloadAll = function () {
     reloadCards();
     reloadCrumbs();

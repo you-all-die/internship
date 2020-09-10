@@ -6,7 +6,6 @@ import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
-import com.example.internship.service.GsProductService;
 import com.example.internship.specification.GsProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -82,6 +81,11 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
+    public long count() {
+        return productRepository.count();
+    }
+
+    @Override
     public SearchResult findByCriteria(
             String nameLike,
             Long categoryId,
@@ -108,10 +112,13 @@ public class GsProductServiceImpl implements GsProductService {
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
+        final long total = productRepository.count();
+
         return new SearchResult.Builder()
                 .products(filteredProducts)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
+                .total(total)
                 .lowerPriceLimit(lowerPriceLimit)
                 .upperPriceLimit(upperPriceLimit)
                 .build();

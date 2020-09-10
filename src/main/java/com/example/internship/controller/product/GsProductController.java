@@ -2,12 +2,11 @@ package com.example.internship.controller.product;
 
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
-import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.WebHelper;
 import com.example.internship.service.CartService;
 import com.example.internship.service.category.GsCategoryService;
-import com.example.internship.service.GsProductService;
+import com.example.internship.service.product.GsProductService;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +16,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -105,8 +101,8 @@ public class GsProductController {
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
             @CookieValue(value = MINIMAL_PRICE_COOKIE, required = false) BigDecimal minimalPrice,
             @CookieValue(value = MAXIMAL_PRICE_COOKIE, required = false) BigDecimal maximalPrice,
-            @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") BigDecimal pageNumber,
-            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") BigDecimal pageSize,
+            @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
+            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = DESCENDING_COOKIE, required = false) Boolean descendingOrder,
             Model model
     ) {
@@ -115,6 +111,15 @@ public class GsProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
+        Long total = gsProductService.count();
+
+        /* Костыль, нужный для отображения пагинатора :( */
+        int pageCount = (int) (total / pageSize) + 1;
+        boolean[] pages = new boolean[pageCount];
+        Arrays.fill(pages, false);
+        pages[pageNumber] = true;
+        /* Конец костыля */
+
         model
                 .addAttribute("searchString", searchString)
                 .addAttribute("categoryId", categoryId)
@@ -125,6 +130,8 @@ public class GsProductController {
                 .addAttribute("maximalPrice", maximalPrice)
                 .addAttribute("pageNumber", pageNumber)
                 .addAttribute("pageSize", pageSize)
+                .addAttribute("total", total)
+                .addAttribute("pages", pages)
                 .addAttribute("descendingOrder", descendingOrder);
         return "/product/filter :: widget";
     }

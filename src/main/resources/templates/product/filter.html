@@ -1,6 +1,6 @@
 <div class="ui form stacked segment"
      xmlns:th="http://www.thymeleaf.org"
-     th:fragment="widget (searchString, categoryId, categories)">
+     th:fragment="widget (searchString, categoryId, categories, pages)">
 
     <div class="field">
         <!-- Селектор категорий -->
@@ -34,9 +34,8 @@
         <!-- Пагинация -->
         <div class="field">
             <label th:text="#{product.filter.label.pagination}">Pagination</label>
-            <div class="ui pagination menu">
-                <div class="active item" onclick="onPageChange(1)">1</div>
-                <div class="item" onclick="onPageChange(2)">2</div>
+            <div id="paginator"
+                 th:replace="/product/paginator :: widget (${pages})">
             </div>
         </div>
     </div>

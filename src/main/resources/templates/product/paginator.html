@@ -1,9 +1,5 @@
-<th:block th:fragment="widget (pageNumber, pageSize, total)" xmlns:th="http://www.thymeleaf.org">
-    <div class="ui pagination menu" th:with="lastPage = ${total} / ${pageSize}">
-        <div class="active item">1</div>
-        <div class="item">2</div>
-        <div class="disabled item">...</div>
-        <div class="item">9</div>
-        <div class="item">10</div>
-    </div>
-</th:block>
+<select xmlns:th="http://www.thymeleaf.org"
+        class="ui dropdown"
+        th:fragment="widget (pages)">
+    <option th:each="page : ${pages}" th:selected="${page}" th:text="${pageStat.count}"></option>
+</select>

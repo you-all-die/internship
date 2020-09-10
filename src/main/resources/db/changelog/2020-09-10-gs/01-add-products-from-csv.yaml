@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-more-phones
+      author: Самохвалов Юрий Алексеевич
+      comment: Народ хочет разнообразия телефонов и планшетов
+      preconditions:
+        - onFail: MARK_RUN
+      loadData:
+        - file: db/changelog/2020-09-10-gs/products.csv
+        - tableName: product
