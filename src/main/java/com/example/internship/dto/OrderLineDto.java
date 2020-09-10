@@ -1,5 +1,6 @@
 package com.example.internship.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 /**
@@ -12,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 public class OrderLineDto {
 
+    @JsonIgnore
     private Long id;
     private ProductDto product;
     private Integer productQuantity;

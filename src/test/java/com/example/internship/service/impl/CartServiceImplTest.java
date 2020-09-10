@@ -6,6 +6,7 @@ import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
+import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.*;
 class CartServiceImplTest {
 
     private final CustomerRepository customerRepository = mock(CustomerRepository.class);
+
+    private final ProductRepository productRepository = mock(ProductRepository.class);
 
     private final CartRepository cartRepository = mock(CartRepository.class);
 
@@ -60,7 +63,7 @@ class CartServiceImplTest {
         when(customerRepository.findById(eq(CUSTOMER_ID1))).thenReturn(Optional.of(customer));
         when(customerRepository.findById(eq(CUSTOMER_ID2))).thenReturn(Optional.empty());
         when(customerRepository.save(any())).thenReturn(customer);
-        cartService = new CartServiceImpl(customerRepository,cartRepository, mapper);
+        cartService = new CartServiceImpl(customerRepository, productRepository, cartRepository, mapper);
     }
 
     /**
@@ -144,7 +147,7 @@ class CartServiceImplTest {
      */
     @Test
     public void testUpdateQuantityEmptyAllArgs() {
-        assertFalse(cartService.updateQuantity(null,null, null));
+        assertFalse(cartService.updateQuantity(null, null, null));
 
         verify(cartRepository, never()).save(any());
         verify(customerRepository, times(1)).findById(any());
