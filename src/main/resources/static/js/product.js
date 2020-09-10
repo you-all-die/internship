@@ -51,6 +51,8 @@ const onCategoryChange = function (categoryId) {
     } else {
         deleteCookie('productCategoryId');
     }
+    /* Не забыть поставить первую страницу! */
+    deleteCookie('productPageNumber');
     reloadAll();
 }
 
@@ -137,10 +139,21 @@ const reloadFilter = function () {
                         onPriceSliderChange(min, min + delta);
                     }
                 });
+            reloadPaginator();
+        })
+        .fail(function (error) {
+            console.log({ error });
+        });
+}
+
+const reloadPaginator = function () {
+    $.get({ url: '/product/paginator' })
+        .done(function (html) {
             $('#pageSelector')
+                .html(html)
                 .change(function () {
                     onPageNumberChange(this.selectedIndex);
-                })
+                });
         })
         .fail(function (error) {
             console.log({ error });

@@ -113,13 +113,6 @@ public class GsProductController {
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
         Long total = gsProductService.count();
 
-        /* Костыль, нужный для отображения пагинатора :( */
-        int pageCount = (int) (total / pageSize) + 1;
-        boolean[] pages = new boolean[pageCount];
-        Arrays.fill(pages, false);
-        pages[pageNumber] = true;
-        /* Конец костыля */
-
         model
                 .addAttribute("searchString", searchString)
                 .addAttribute("categoryId", categoryId)
@@ -128,10 +121,6 @@ public class GsProductController {
                 .addAttribute("upperPriceLimit", upperPriceLimit)
                 .addAttribute("minimalPrice", minimalPrice)
                 .addAttribute("maximalPrice", maximalPrice)
-                .addAttribute("pageNumber", pageNumber)
-                .addAttribute("pageSize", pageSize)
-                .addAttribute("total", total)
-                .addAttribute("pages", pages)
                 .addAttribute("descendingOrder", descendingOrder);
         return "/product/filter :: widget";
     }
@@ -154,5 +143,30 @@ public class GsProductController {
         }
         model.addAttribute("categories", categories);
         return "/product/breadcrumbs :: widget";
+    }
+
+    @GetMapping("/paginator")
+    public String paginator(
+            HttpServletRequest request,
+            Model model,
+            @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
+            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize
+    ) {
+        if (!WebHelper.isAjaxRequest(request)) {
+            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
+        }
+
+        /* Костыль, нужный для отображения пагинатора :( */
+        long total = gsProductService.count();
+        int pageCount = (int) (total / pageSize) + 1;
+        boolean[] pages = new boolean[pageCount];
+        Arrays.fill(pages, false);
+        pages[pageNumber] = true;
+        /* Конец костыля */
+
+        model
+                .addAttribute("pages", pages);
+        return "/product/paginator :: widget";
     }
 }
