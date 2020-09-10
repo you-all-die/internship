@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -17,6 +18,9 @@ import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Murashov A.A
+ */
 @Service("emailService")
 @Slf4j
 public class EmailServiceImpl implements EmailService {
@@ -25,18 +29,20 @@ public class EmailServiceImpl implements EmailService {
     private final static String REGISTRATION_EMAIL_SUBJECT = "Добро пожаловать!";
 
     private final JavaMailSender emailSender;
-    private final SpringTemplateEngine thymeleafTemplateEngine;
+    private final ITemplateEngine thymeleafTemplateEngine;
 
-    @Value("${internship.email.noreply_email}")
-    private String noreplyEmail;
+    private final String noreplyEmail;
 
-    @Value("${internship.email.order_email}")
-    private String orderEmail;
+    private final String orderEmail;
 
     @Autowired
-    public EmailServiceImpl(JavaMailSender emailSender, SpringTemplateEngine thymeleafTemplateEngine) {
+    public EmailServiceImpl(JavaMailSender emailSender, ITemplateEngine thymeleafTemplateEngine,
+                            @Value("${internship.email.noreply_email}") String noreplyEmail,
+                            @Value("${internship.email.order_email}") String orderEmail) {
         this.emailSender = emailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
+        this.noreplyEmail = noreplyEmail;
+        this.orderEmail = orderEmail;
     }
 
     private boolean sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
@@ -60,6 +66,18 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public boolean sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
+        if (null == customer) {
+            throw new MailServiceException("Invalid customer", new NullPointerException());
+        }
+
+        if (null == customer.getEmail()) {
+            throw new MailServiceException("Invalid e-mail", new NullPointerException());
+        }
+
+        if (null == order || null == order.getOrderLines()) {
+            throw new MailServiceException("Invalid order data", new NullPointerException());
+        }
+
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
@@ -75,6 +93,11 @@ public class EmailServiceImpl implements EmailService {
         if (null == customer) {
             throw new MailServiceException("Invalid customer", new NullPointerException());
         }
+
+        if (null == customer.getEmail()) {
+            throw new MailServiceException("Invalid e-mail", new NullPointerException());
+        }
+
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("customer", customer);
