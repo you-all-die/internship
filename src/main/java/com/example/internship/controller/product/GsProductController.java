@@ -90,26 +90,24 @@ public class GsProductController {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
+
         final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
-        final List<ProductDto.Response.AllWithCategoryId> products = searchResult.getProducts();
-        model.addAttribute("products", products);
-        response.addCookie(new Cookie(TOTAL_COOKIE, Long.toString(products.size())));
+        response.addCookie(new Cookie(TOTAL_COOKIE, Long.toString(searchResult.getTotal())));
+        model.addAttribute("products", searchResult.getProducts());
         return "/product/cards :: widget";
     }
 
     @GetMapping("/filter")
-    public String viewFilter(
+    public String filter(
             HttpServletRequest request,
-            @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
+            @CookieValue(value = SEARCH_STRING_COOKIE, required = false) String searchString,
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             @CookieValue(value = LOWER_PRICE_COOKIE, required = false) BigDecimal lowerPriceLimit,
             @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
             @CookieValue(value = MINIMAL_PRICE_COOKIE, required = false) BigDecimal minimalPrice,
             @CookieValue(value = MAXIMAL_PRICE_COOKIE, required = false) BigDecimal maximalPrice,
-            @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
-            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = DESCENDING_COOKIE, required = false) Boolean descendingOrder,
             Model model
     ) {
@@ -117,6 +115,7 @@ public class GsProductController {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
+
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
 
         model
@@ -157,7 +156,7 @@ public class GsProductController {
             Model model,
             @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
-            @CookieValue(value = TOTAL_COOKIE, required = true) Long total
+            @CookieValue(value = TOTAL_COOKIE) Long total
     ) {
         if (!WebHelper.isAjaxRequest(request)) {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");

@@ -83,7 +83,7 @@ public enum ProductDto {
             List<AllWithCategoryId> products;
             Integer pageNumber;
             Integer pageSize;
-            Integer total;
+            Long total;
             BigDecimal lowerPriceLimit;
             BigDecimal upperPriceLimit;
 
@@ -136,9 +136,9 @@ public enum ProductDto {
 
                     return new SearchResult(
                             products,
-                            products.size(),
                             pageNumber,
                             pageSize,
+                            total,
                             null != lowerPriceLimit ? lowerPriceLimit : BigDecimal.ZERO,
                             null != upperPriceLimit ? upperPriceLimit : BigDecimal.ZERO
                     );

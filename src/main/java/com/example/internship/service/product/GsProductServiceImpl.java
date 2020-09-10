@@ -96,6 +96,7 @@ public class GsProductServiceImpl implements GsProductService {
             Boolean descendingOrder
     ) {
         List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
+
         final Specification<Product> specification = new GsProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
@@ -106,19 +107,19 @@ public class GsProductServiceImpl implements GsProductService {
         final Sort sortOrder = Sort.by(direction, "price");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
 
+        final long totalProducts = productRepository.count(specification);
+
         final List<AllWithCategoryId> filteredProducts = productRepository
                 .findAll(specification, pageable)
                 .stream()
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
-        final long total = productRepository.count();
-
         return new SearchResult.Builder()
                 .products(filteredProducts)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
-                .total(total)
+                .total(totalProducts)
                 .lowerPriceLimit(lowerPriceLimit)
                 .upperPriceLimit(upperPriceLimit)
                 .build();

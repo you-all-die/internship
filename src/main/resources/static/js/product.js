@@ -57,6 +57,7 @@ const onCategoryChange = function (categoryId) {
 }
 
 /* Обработка изменений в диапазоне цен */
+/*
 const onPriceSliderChange =  function (min, max) {
     let minRepresentation = parseFloat(min);
     let maxRepresentation = parseFloat(max);
@@ -69,6 +70,7 @@ const onPriceSliderChange =  function (min, max) {
     }
     reloadCards();
 }
+*/
 
 /* Обработка изменений порядка сортировки */
 const onSortOrderChange = function (descending) {
