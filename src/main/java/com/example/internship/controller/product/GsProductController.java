@@ -86,10 +86,7 @@ public class GsProductController {
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = DESCENDING_COOKIE, required = false, defaultValue = "false") Boolean descendingOrder
     ) {
-        if (!WebHelper.isAjaxRequest(request)) {
-            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
-        }
+        WebHelper.ajaxOrNotFound(request);
 
         final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
@@ -111,10 +108,7 @@ public class GsProductController {
             @CookieValue(value = DESCENDING_COOKIE, required = false) Boolean descendingOrder,
             Model model
     ) {
-        if (!WebHelper.isAjaxRequest(request)) {
-            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
-        }
+        WebHelper.ajaxOrNotFound(request);
 
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
 
@@ -136,10 +130,8 @@ public class GsProductController {
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             Model model
     ) {
-        if (!WebHelper.isAjaxRequest(request)) {
-            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
-        }
+        WebHelper.ajaxOrNotFound(request);
+
         List<CategoryDto.Response.All> categories = new LinkedList<>();
         if (null != categoryId) {
             categories.addAll(categoryService.findAncestors(
@@ -158,10 +150,7 @@ public class GsProductController {
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = TOTAL_COOKIE) Long total
     ) {
-        if (!WebHelper.isAjaxRequest(request)) {
-            log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
-        }
+        WebHelper.ajaxOrNotFound(request);
 
         /* Костыль, нужный для отображения пагинатора :( */
         int pageCount = (int) (total / pageSize) + 1;
