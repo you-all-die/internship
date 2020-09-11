@@ -1,20 +1,14 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
-import com.example.internship.entity.Product;
 import com.example.internship.repository.CategoryRepository;
 import com.example.internship.specification.CategorySpecification;
-import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,5 +63,9 @@ public class CategoryService {
         categorySearchResult.setTotalCategory(categoryRepository.count(specification));
 
         return categorySearchResult;
+    }
+
+    public void removeAll() {
+        categoryRepository.deleteAll();
     }
 }

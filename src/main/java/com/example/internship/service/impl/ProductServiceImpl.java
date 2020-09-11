@@ -59,6 +59,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void removeAll() {
+        productRepo.deleteAll();
+    }
+
+    @Override
     public ProductDto getProductById(Long id) {
         return convertToDto(productRepo.findById(id).get());
     }
@@ -73,27 +78,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductSearchResult search(Optional<String> name, Optional<Long> categoryId,
-                                      Optional<BigDecimal> priceFrom, Optional<BigDecimal> priceTo,
+    public ProductSearchResult search(String name, Long categoryId, BigDecimal priceFrom, BigDecimal priceTo,
                                       Integer pageSize, Integer pageNumber) {
 
         ProductSearchResult searchResult = new ProductSearchResult();
 
         // Формируем условия для запроса к БД
+        if (name == null) {
+            name = "";
+        }
         Specification<Product> specification = Specification.where(
                 // Поиск по имени
-                new ProductSpecification("name", name.orElse("")));
+                new ProductSpecification("name", name));
         // Поиск по цене ОТ
-        if (priceFrom.isPresent()) {
-            specification = specification.and(new ProductSpecification("priceFrom", priceFrom.get()));
+        if (priceFrom != null) {
+            specification = specification.and(new ProductSpecification("priceFrom", priceFrom));
         }
         // Поиск по цене ДО
-        if (priceTo.isPresent()) {
-            specification = specification.and(new ProductSpecification("priceTo", priceTo.get()));
+        if (priceTo != null) {
+            specification = specification.and(new ProductSpecification("priceTo", priceTo));
         }
         // Поиск по id катероии
-        if (categoryId.isPresent()) {
-            specification = specification.and(new ProductSpecification("categoryId", categoryId.get()));
+        if (categoryId != null) {
+            specification = specification.and(new ProductSpecification("categoryId", categoryId));
+        }
+        if (pageNumber == null) {
+            pageNumber = 0;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
         }
         // Формируем результат поиска
         searchResult.setProducts(productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream()
