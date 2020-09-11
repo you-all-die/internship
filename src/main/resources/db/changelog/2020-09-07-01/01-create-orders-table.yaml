@@ -52,6 +52,11 @@ databaseChangeLog:
                   type: VARCHAR
                   constraints:
                     nullable: false
+              - column:
+                  name: order_line
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
 #      - createTable:
 #        tableName: orders_product
 #        columns:
