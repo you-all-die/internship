@@ -12,7 +12,7 @@
         <a th:href="@{/product/add}" class="item" th:text="#{products.add_new}">Add new</a>
         <div class="right menu">
             <div class="item">
-                <form th:action="@{/templates/products}" method="post">
+                <form th:action="@{/products}" method="post">
                     <div class="ui action input">
                         <input type="text" placeholder="Search..." name="search">
                         <button class="ui icon button" type="submit">
