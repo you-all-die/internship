@@ -138,9 +138,7 @@ public class ProductRestControllerTest {
     @Test
     public void testTwoProductSearchName() {
         expected.setTotalProducts(1L);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productTwo);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productTwo));
         assertEquals(expected, productRestController.productSearch("Iphone 2", null, null,
                 null, null, null));
     }
@@ -152,9 +150,7 @@ public class ProductRestControllerTest {
     @Test
     public void testProductSearchCategoryId() {
         expected.setTotalProducts(1L);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productOne);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productOne));
         assertEquals(expected, productRestController.productSearch(null, 1L, null,
                 null, null, null));
     }
@@ -176,9 +172,7 @@ public class ProductRestControllerTest {
     @Test
     public void testTwoProductSearchPriceFrom() {
         expected.setTotalProducts(1L);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productTwo);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productTwo));
         assertEquals(expected, productRestController.productSearch(null, null,
                 new BigDecimal(101), null, null, null));
     }
@@ -200,9 +194,7 @@ public class ProductRestControllerTest {
     @Test
     public void testTwoProductSearchPriceTo() {
         expected.setTotalProducts(1L);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productOne);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productOne));
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 new BigDecimal(199), null, null));
     }
@@ -225,9 +217,7 @@ public class ProductRestControllerTest {
     @Test
     public void testTwoProductSearchPageSize() {
         expected.setPageSize(1);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productOne);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productOne));
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 null, 1, null));
     }
@@ -251,9 +241,7 @@ public class ProductRestControllerTest {
     public void testTwoProductSearchPageNumber() {
         expected.setPageSize(1);
         expected.setPageNumber(1);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productTwo);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productTwo));
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 null, 1, 1));
     }
@@ -273,7 +261,7 @@ public class ProductRestControllerTest {
      */
     @Test
     public void testTwoFindByName() {
-        assertEquals(new LinkedList<>(), productRestController.findByName("Samsung"));
+        assertEquals(List.of(), productRestController.findByName("Samsung"));
     }
 
     /**
