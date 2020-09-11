@@ -1,7 +1,6 @@
 package com.example.internship.controller.product;
 
 import com.example.internship.dto.category.CategoryDto;
-import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.WebHelper;
@@ -11,11 +10,9 @@ import com.example.internship.service.product.GsProductService;
 import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +83,7 @@ public class GsProductController {
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = DESCENDING_COOKIE, required = false, defaultValue = "false") Boolean descendingOrder
     ) {
-        WebHelper.ajaxOrNotFound(request);
+        WebHelper.guardAjaxOrNotFound(request);
 
         final SearchResult searchResult = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
@@ -108,7 +105,7 @@ public class GsProductController {
             @CookieValue(value = DESCENDING_COOKIE, required = false) Boolean descendingOrder,
             Model model
     ) {
-        WebHelper.ajaxOrNotFound(request);
+        WebHelper.guardAjaxOrNotFound(request);
 
         List<CategoryDto.Response.AllWithParentSubcategories> categories = categoryService.findTopCategories();
 
@@ -130,7 +127,7 @@ public class GsProductController {
             @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
             Model model
     ) {
-        WebHelper.ajaxOrNotFound(request);
+        WebHelper.guardAjaxOrNotFound(request);
 
         List<CategoryDto.Response.All> categories = new LinkedList<>();
         if (null != categoryId) {
@@ -150,7 +147,7 @@ public class GsProductController {
             @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
             @CookieValue(value = TOTAL_COOKIE) Long total
     ) {
-        WebHelper.ajaxOrNotFound(request);
+        WebHelper.guardAjaxOrNotFound(request);
 
         /* Костыль, нужный для отображения пагинатора :( */
         int pageCount = (int) (total / pageSize) + 1;

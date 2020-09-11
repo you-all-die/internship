@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 public enum WebHelper {
     ;
 
-    private static boolean isAjaxRequest(final HttpServletRequest request) {
-        String header = request.getHeader("X-Requested-With");
-        return (null != header) && header.equals("XMLHttpRequest");
-    }
-
-    public static void ajaxOrNotFound(final HttpServletRequest request) {
+    public static void guardAjaxOrNotFound(final HttpServletRequest request) {
         if (!isAjaxRequest(request)) {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }
+    }
+
+    private static boolean isAjaxRequest(final HttpServletRequest request) {
+        String header = request.getHeader("X-Requested-With");
+        return (null != header) && header.equals("XMLHttpRequest");
     }
 }
