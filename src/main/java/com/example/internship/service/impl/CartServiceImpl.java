@@ -7,6 +7,7 @@ import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
+import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +31,18 @@ public class CartServiceImpl implements CartService {
 
     private final CustomerRepository customerRepository;
 
+    private final ProductRepository productRepository;
+
     private final CartRepository cartRepository;
 
     private final ModelMapper mapper;
+
+    @Override
+    public boolean add(Long productId, Long customerId) {
+        Optional<Product> product = productRepository.findById(productId);
+
+        return product.filter(value -> add(value, customerId)).isPresent();
+    }
 
     @Override
     public boolean add(Product product, Long customerId) {
@@ -56,6 +66,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public boolean updateQuantity(Long productId, Integer productQuantity, Long customerId) {
+        Optional<Product> product = productRepository.findById(productId);
+
+        return product.filter(value -> updateQuantity(value, productQuantity, customerId)).isPresent();
+    }
+
+    @Override
     public boolean updateQuantity(Product product, Integer productQuantity, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
@@ -75,6 +92,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public boolean remove(Long productId, Long customerId) {
+        Optional<Product> product = productRepository.findById(productId);
+
+        return product.filter(value -> remove(value, customerId)).isPresent();
+    }
+
+    @Override
     public boolean remove(Product product, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);;
 
@@ -90,6 +114,19 @@ public class CartServiceImpl implements CartService {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean removeAll(Long customerId) {
+        Optional<Customer> customer = checkCustomerCart(customerId);
+
+        if (customer.isEmpty()) return false;
+
+        Cart cart = customer.get().getCart();
+        cart.setOrderLines(null);
+        cartRepository.save(cart);
+
+        return true;
     }
 
     @Override
@@ -116,7 +153,11 @@ public class CartServiceImpl implements CartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-
+    /**
+     * Проверят существует ли пользователь и есть ли у него корзина.
+     * @param customerId id пользователя.
+     * @return возвращает пользователя, если существует.
+     */
     private Optional<Customer> checkCustomerCart(Long customerId) {
         Optional<Customer> customer = customerRepository.findById(customerId);
 
@@ -137,10 +178,21 @@ public class CartServiceImpl implements CartService {
         return customer;
     }
 
+    /**
+     * Конвертирует линии заказов в DTO.
+     * @param orderLine линия заказа.
+     * @return линия заказа конвертированная в DTO.
+     */
     private OrderLineDto convertToDto(OrderLine orderLine) {
         return mapper.map(orderLine, OrderLineDto.class);
     }
 
+    /**
+     *  Проверяет есть ли продукт в корзине.
+     * @param orderLines заказы в корзине
+     * @param product продукт который мы хотим проверить.
+     * @return линия заказа с товаром из корзины, если существует.
+     */
     private Optional<OrderLine> getOrderLineByProduct(List<OrderLine> orderLines, Product product) {
        return orderLines.stream().filter(orderLine -> orderLine.getProduct().equals(product)).findFirst();
     }
