@@ -11,6 +11,8 @@ import java.util.List;
  */
 @Value
 public class SearchResult {
+    /* Текущая категория (null для всех) */
+    Long categoryId;
     /* Список продуктов на страницу */
     List<ProductDto.Response.AllWithCategoryId> products;
     /* Категории высшего уровня */
@@ -36,6 +38,7 @@ public class SearchResult {
         assert null != builder.pageSize;
         assert null != builder.total;
 
+        categoryId = builder.categoryId;
         products = builder.products;
         topCategories = builder.topCategories;
         breadcrumbs = builder.breadcrumbs;
@@ -47,6 +50,7 @@ public class SearchResult {
     }
 
     public static class Builder {
+        private Long categoryId;
         private List<ProductDto.Response.AllWithCategoryId> products;
         private List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
         private List<CategoryDto.Response.All> breadcrumbs;
@@ -57,6 +61,11 @@ public class SearchResult {
         private BigDecimal upperPriceLimit;
 
         public Builder() {
+        }
+
+        public Builder categoryId(Long categoryId) {
+            this.categoryId = categoryId;
+            return this;
         }
 
         public Builder products(List<ProductDto.Response.AllWithCategoryId> products) {

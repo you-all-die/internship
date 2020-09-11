@@ -124,6 +124,7 @@ public class GsProductServiceImpl implements GsProductService {
                 .collect(Collectors.toUnmodifiableList());
 
         return new SearchResult.Builder()
+                .categoryId(categoryId)
                 .products(filteredProducts)
                 .topCategories(topCategories)
                 .breadcrumbs(ancestors)

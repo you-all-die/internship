@@ -16,15 +16,17 @@
             <div class="ui grid container">
 
                 <div class="row">
-                    <div id="breadcrumbs" th:replace="/product/breadcrumbs :: widget (${data.breadcrumbs})"></div>
+                    <!-- Хлебные крошки -->
+                    <div id="breadcrumbs"
+                         th:replace="/product/breadcrumbs :: widget (${data.breadcrumbs})">
+                    </div>
                 </div>
 
                 <div class="row">
                     <!-- Фильтры -->
                     <div class="four wide column">
                         <div id="filter"
-                             th:object="${data}"
-                             th:replace="/product/filter :: widget (*{searchString}, *{categoryId}, *{categories}, *{pages})">
+                             th:replace="/product/filter :: widget (${data})">
                         </div>
                     </div>
 
@@ -36,9 +38,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
     </body>
