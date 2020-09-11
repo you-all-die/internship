@@ -16,7 +16,7 @@
             <div class="ui grid container">
 
                 <div class="row">
-                    <div id="breadcrumbs"></div>
+                    <div id="breadcrumbs" th:replace="/product/breadcrumbs :: widget (${data.breadcrumbs})"></div>
                 </div>
 
                 <div class="row">

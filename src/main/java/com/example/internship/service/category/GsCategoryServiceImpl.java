@@ -35,11 +35,11 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public List<CategoryDto.Response.All> findAncestors(Category category) {
+    public List<CategoryDto.Response.All> findAncestors(final Category category) {
         if (null == category) {
             return Collections.emptyList();
         }
-        List<Category> ancestors = new LinkedList<>();
+        final List<Category> ancestors = new LinkedList<>();
         ancestors.add(category);
         Category parent = category.getParent();
         while (parent != null) {
@@ -49,6 +49,18 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         return ancestors.stream().map(this::convertToAllDto).collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
+    public List<CategoryDto.Response.All> findAncestors(final Long categoryId) {
+        if (null == categoryId) {
+            return Collections.emptyList();
+        }
+        final Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (categoryOptional.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return findAncestors(categoryOptional.get());
+    }
+
     /**
      * Возвращает список идентификаторов категории и всех её наследников
      *
@@ -56,7 +68,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
      * @return список идентификаторов категорий
      */
     @Override
-    public List<Long> findDescendants(Category category) {
+    public List<Long> findDescendants(final Category category) {
         List<Long> descendants = new LinkedList<>();
         descendants.add(category.getId());
         category.getSubcategories().forEach(subcategory -> {
@@ -75,7 +87,10 @@ public class GsCategoryServiceImpl implements GsCategoryService {
      * @return список идентификаторов категорий
      */
     @Override
-    public List<Long> findDescendants(Long categoryId) {
+    public List<Long> findDescendants(final Long categoryId) {
+        if (null == categoryId) {
+            return Collections.emptyList();
+        }
         final Optional<Category> categoryOptional = findById(categoryId);
         if (categoryOptional.isEmpty()) {
             return Collections.emptyList();

@@ -10,6 +10,7 @@ public interface GsCategoryService {
     List<CategoryDto.Response.AllWithParentSubcategories> findAll();
     List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories();
     List<CategoryDto.Response.All> findAncestors(Category category);
+    List<CategoryDto.Response.All> findAncestors(Long categoryId);
     List<Long> findDescendants(Category category);
     List<Long> findDescendants(Long categoryId);
     Optional<Category> findById(long id);

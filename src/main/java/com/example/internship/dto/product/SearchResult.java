@@ -15,6 +15,8 @@ public class SearchResult {
     List<ProductDto.Response.AllWithCategoryId> products;
     /* Категории высшего уровня */
     List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
+    /* Родительские категории для хлебных крошек */
+    List<CategoryDto.Response.All> breadcrumbs;
     /* Номер текущей страницы */
     Integer pageNumber;
     /* Размер страницы */
@@ -29,12 +31,14 @@ public class SearchResult {
     private SearchResult(Builder builder) {
         assert null != builder.products;
         assert null != builder.topCategories;
+        assert null != builder.breadcrumbs;
         assert null != builder.pageNumber;
         assert null != builder.pageSize;
         assert null != builder.total;
 
         products = builder.products;
         topCategories = builder.topCategories;
+        breadcrumbs = builder.breadcrumbs;
         pageNumber = builder.pageNumber;
         pageSize = builder.pageSize;
         total = builder.total;
@@ -45,6 +49,7 @@ public class SearchResult {
     public static class Builder {
         private List<ProductDto.Response.AllWithCategoryId> products;
         private List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
+        private List<CategoryDto.Response.All> breadcrumbs;
         private Integer pageNumber;
         private Integer pageSize;
         private Long total;
@@ -61,6 +66,11 @@ public class SearchResult {
 
         public Builder topCategories(List<CategoryDto.Response.AllWithParentSubcategories> topCategories) {
             this.topCategories = topCategories;
+            return this;
+        }
+
+        public Builder breadcrumbs(List<CategoryDto.Response.All> breadcrumbs) {
+            this.breadcrumbs = breadcrumbs;
             return this;
         }
 
