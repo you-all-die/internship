@@ -1,6 +1,7 @@
 package com.example.internship.service.product;
 
 import com.example.internship.dto.product.ProductDto;
+import com.example.internship.dto.product.SearchResult;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface GsProductService {
     void save(ProductDto.Request.AllWithCategoryId productDto);
     void delete(long id);
     long count();
-    ProductDto.Response.SearchResult findByCriteria(
+    SearchResult findByCriteria(
             String nameLike,
             Long categoryId,
             BigDecimal minimalPrice,

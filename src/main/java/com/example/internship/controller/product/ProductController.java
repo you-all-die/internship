@@ -1,9 +1,7 @@
 package com.example.internship.controller.product;
 
-import com.example.internship.dto.category.CategoryDto;
-import com.example.internship.dto.product.ProductDto.Response.SearchResult;
+import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Product;
-import com.example.internship.helper.WebHelper;
 import com.example.internship.service.CartService;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.category.GsCategoryService;
@@ -14,11 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -28,17 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
-
-    private static final String SEARCH_STRING_COOKIE = "productSearchString";
-    private static final String CATEGORY_ID_COOKIE = "productCategoryId";
-    private static final String LOWER_PRICE_COOKIE = "productLowerPriceLimit";
-    private static final String UPPER_PRICE_COOKIE = "productUpperPriceLimit";
-    private static final String MINIMAL_PRICE_COOKIE = "productMinimalPrice";
-    private static final String MAXIMAL_PRICE_COOKIE = "productMaximalPrice";
-    private static final String PAGE_NUMBER_COOKIE = "productPageNumber";
-    private static final String PAGE_SIZE_COOKIE = "productPageSize";
-    private static final String DESCENDING_COOKIE = "productDescendingOrder";
-    private static final String TOTAL_COOKIE = "productTotal";
 
     private final CartService cartService;
     private final ProductService productService;

@@ -22,12 +22,18 @@
                 <div class="row">
                     <!-- Фильтры -->
                     <div class="four wide column">
-                        <div id="filter"></div>
+                        <div id="filter"
+                             th:object="${data}"
+                             th:replace="/product/filter :: widget (*{searchString}, *{categoryId}, *{categories}, *{pages})">
+                        </div>
                     </div>
 
                     <!-- Карточки товаров -->
                     <div class="twelve wide column">
-                        <div id="cards" class="ui four cards"></div>
+                        <div id="cards"
+                             class="ui four cards"
+                             th:include="/product/cards :: widget (${data.products})">
+                        </div>
                     </div>
                 </div>
 
