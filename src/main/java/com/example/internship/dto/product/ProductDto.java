@@ -78,7 +78,6 @@ public enum ProductDto {
         }
 
         @Value
-        @AllArgsConstructor(access = AccessLevel.PRIVATE)
         public static class SearchResult {
             List<AllWithCategoryId> products;
             Integer pageNumber;
@@ -86,6 +85,20 @@ public enum ProductDto {
             Long total;
             BigDecimal lowerPriceLimit;
             BigDecimal upperPriceLimit;
+
+            private SearchResult(Builder builder) {
+                assert null != builder.products;
+                assert null != builder.pageNumber;
+                assert null != builder.pageSize;
+                assert null != builder.total;
+
+                products = builder.products;
+                pageNumber = builder.pageNumber;
+                pageSize = builder.pageSize;
+                total = builder.total;
+                lowerPriceLimit = null != builder.lowerPriceLimit ? builder.lowerPriceLimit : BigDecimal.ZERO;
+                upperPriceLimit = null != builder.upperPriceLimit ? builder.upperPriceLimit : BigDecimal.ZERO;
+            }
 
             public static class Builder {
                 private List<AllWithCategoryId> products;
@@ -129,19 +142,7 @@ public enum ProductDto {
                 }
 
                 public SearchResult build() {
-                    assert null != products;
-                    assert null != pageNumber;
-                    assert null != pageSize;
-                    assert null != total;
-
-                    return new SearchResult(
-                            products,
-                            pageNumber,
-                            pageSize,
-                            total,
-                            null != lowerPriceLimit ? lowerPriceLimit : BigDecimal.ZERO,
-                            null != upperPriceLimit ? upperPriceLimit : BigDecimal.ZERO
-                    );
+                    return new SearchResult(this);
                 }
             }
         }
