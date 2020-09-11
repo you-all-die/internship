@@ -105,7 +105,9 @@ public class GsProductServiceImpl implements GsProductService {
 
         final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
+        Pageable pageable = PageRequest.of(
+                null == pageNumber ? 0 : pageNumber,
+                null == pageSize ? 20 : pageSize, sortOrder);
 
         final long totalProducts = productRepository.count(specification);
 

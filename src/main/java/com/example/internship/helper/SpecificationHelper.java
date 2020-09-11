@@ -12,7 +12,7 @@ public enum SpecificationHelper {
      *
      * @param specifications список спецификаций
      * @param <T> тип сущности
-     * @return спецификация
+     * @return спецификация или null
      */
     public static <T> Specification<T> combineAll(final List<Specification<T>> specifications) {
         if (null == specifications || specifications.isEmpty()) {

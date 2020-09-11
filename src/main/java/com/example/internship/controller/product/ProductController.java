@@ -5,18 +5,16 @@ import com.example.internship.dto.product.ProductDto.Response.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.WebHelper;
 import com.example.internship.service.CartService;
+import com.example.internship.service.ProductService;
 import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.service.product.GsProductService;
-import com.example.internship.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -58,7 +56,19 @@ public class ProductController {
 
     @GetMapping
     public String viewProductPage(
+            Model model,
+            @RequestParam(required = false) String searchString,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) BigDecimal lowerPriceLimit,
+            @RequestParam(required = false) BigDecimal upperPriceLimit,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Boolean descendingOrder
     ) {
+        final SearchResult data = gsProductService.findByCriteria(
+                searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
+        );
+        model.addAttribute("data", data);
         return "product/index";
     }
 
@@ -73,23 +83,21 @@ public class ProductController {
     @GetMapping("/cards")
     public String viewCards(
             HttpServletRequest request,
-            HttpServletResponse response,
             Model model,
-            @CookieValue(value = SEARCH_STRING_COOKIE, required = false, defaultValue = "") String searchString,
-            @CookieValue(value = CATEGORY_ID_COOKIE, required = false) Long categoryId,
-            @CookieValue(value = LOWER_PRICE_COOKIE, required = false) BigDecimal lowerPriceLimit,
-            @CookieValue(value = UPPER_PRICE_COOKIE, required = false) BigDecimal upperPriceLimit,
-            @CookieValue(value = PAGE_NUMBER_COOKIE, required = false, defaultValue = "0") Integer pageNumber,
-            @CookieValue(value = PAGE_SIZE_COOKIE, required = false, defaultValue = "20") Integer pageSize,
-            @CookieValue(value = DESCENDING_COOKIE, required = false, defaultValue = "false") Boolean descendingOrder
+            @RequestParam(required = false) String searchString,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) BigDecimal lowerPriceLimit,
+            @RequestParam(required = false) BigDecimal upperPriceLimit,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Boolean descendingOrder
     ) {
         WebHelper.guardAjaxOrNotFound(request);
 
-        final SearchResult searchResult = gsProductService.findByCriteria(
+        final SearchResult data = gsProductService.findByCriteria(
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
-        response.addCookie(new Cookie(TOTAL_COOKIE, Long.toString(searchResult.getTotal())));
-        model.addAttribute("products", searchResult.getProducts());
+        model.addAttribute("products", data.getProducts());
         return "/product/cards :: widget";
     }
 

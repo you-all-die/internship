@@ -1,5 +1,6 @@
 package com.example.internship.dto.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -80,6 +81,7 @@ public enum ProductDto {
         @Value
         public static class SearchResult {
             List<AllWithCategoryId> products;
+            List<CategoryDto.Response.All> topCategories;
             Integer pageNumber;
             Integer pageSize;
             Long total;
@@ -88,11 +90,13 @@ public enum ProductDto {
 
             private SearchResult(Builder builder) {
                 assert null != builder.products;
+                assert null != builder.topCategories;
                 assert null != builder.pageNumber;
                 assert null != builder.pageSize;
                 assert null != builder.total;
 
                 products = builder.products;
+                topCategories = builder.topCategories;
                 pageNumber = builder.pageNumber;
                 pageSize = builder.pageSize;
                 total = builder.total;
@@ -102,6 +106,7 @@ public enum ProductDto {
 
             public static class Builder {
                 private List<AllWithCategoryId> products;
+                private List<CategoryDto.Response.All> topCategories;
                 private Integer pageNumber;
                 private Integer pageSize;
                 private Long total;
@@ -113,6 +118,11 @@ public enum ProductDto {
 
                 public Builder products(List<AllWithCategoryId> products) {
                     this.products = products;
+                    return this;
+                }
+
+                public Builder topCategories(List<CategoryDto.Response.All> topCategories) {
+                    this.topCategories = topCategories;
                     return this;
                 }
 
