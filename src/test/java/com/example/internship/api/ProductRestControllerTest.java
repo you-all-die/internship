@@ -41,16 +41,21 @@ public class ProductRestControllerTest {
     public static void beforeAll(@Autowired ProductService productService,
                                  @Autowired CategoryService categoryService,
                                  @Autowired ProductStatusService productStatusService) {
-        Category category = new Category();
-        category.setName("Best phones");
-        category.setParent(null);
-        categoryService.addCategory(category);
+        Category categoryOne = new Category();
+        categoryOne.setName("Best phones");
+        categoryOne.setParent(null);
+        categoryService.addCategory(categoryOne);
+
+        Category categoryTwo = new Category();
+        categoryTwo.setName("Super best phones");
+        categoryTwo.setParent(null);
+        categoryService.addCategory(categoryTwo);
 
         ProductStatus productStatus = new ProductStatus();
         productStatus.setDescription("For sale");
         productStatusService.add(productStatus);
 
-        productOne.setCategory(category);
+        productOne.setCategory(categoryOne);
         productOne.setName("Iphone 1");
         productOne.setDescription("Iphone 1 is best phone");
         productOne.setPicture("iphone1.jpg");
@@ -58,7 +63,7 @@ public class ProductRestControllerTest {
         productOne.setStatus(productStatus);
         productService.addProduct(productOne);
 
-        productTwo.setCategory(category);
+        productTwo.setCategory(categoryTwo);
         productTwo.setName("Iphone 2");
         productTwo.setDescription("Iphone 2 is best Iphone 1");
         productTwo.setPicture("iphone2.jpg");
@@ -66,7 +71,7 @@ public class ProductRestControllerTest {
         productTwo.setStatus(productStatus);
         productService.addProduct(productTwo);
 
-        product.setCategory(category);
+        product.setCategory(categoryOne);
         product.setName("Iphone 3");
         product.setDescription("Iphone 3 is best Iphone 2");
         product.setPicture("iphone3.jpg");
@@ -121,8 +126,22 @@ public class ProductRestControllerTest {
      * - Возвращает все продукты содержащие в имени строку
      */
     @Test
-    public void testProductSearchName() {
+    public void testOneProductSearchName() {
         assertEquals(expected, productRestController.productSearch("Iphone", null, null,
+                null, null, null));
+    }
+
+    /**
+     * Проверка метода productSearch поиск по имени:
+     * - Возвращает все продукты содержащие в имени строку
+     */
+    @Test
+    public void testTwoProductSearchName() {
+        expected.setTotalProducts(1L);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productTwo);
+        expected.setProducts(products);
+        assertEquals(expected, productRestController.productSearch("Iphone 2", null, null,
                 null, null, null));
     }
 
@@ -132,6 +151,10 @@ public class ProductRestControllerTest {
      */
     @Test
     public void testProductSearchCategoryId() {
+        expected.setTotalProducts(1L);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productOne);
+        expected.setProducts(products);
         assertEquals(expected, productRestController.productSearch(null, 1L, null,
                 null, null, null));
     }
@@ -141,9 +164,23 @@ public class ProductRestControllerTest {
      * - Возвращает все с ценой >= указанной
      */
     @Test
-    public void testProductSearchPriceFrom() {
+    public void testOneProductSearchPriceFrom() {
         assertEquals(expected, productRestController.productSearch(null, null,
                 new BigDecimal(100), null, null, null));
+    }
+
+    /**
+     * Проверка метода productSearch поиск по начальной цене:
+     * - Возвращает все с ценой >= указанной
+     */
+    @Test
+    public void testTwoProductSearchPriceFrom() {
+        expected.setTotalProducts(1L);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productTwo);
+        expected.setProducts(products);
+        assertEquals(expected, productRestController.productSearch(null, null,
+                new BigDecimal(101), null, null, null));
     }
 
     /**
@@ -151,9 +188,23 @@ public class ProductRestControllerTest {
      * - Возвращает все с ценой <= указанной
      */
     @Test
-    public void testProductSearchPriceTo() {
+    public void testOneProductSearchPriceTo() {
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 new BigDecimal(200), null, null));
+    }
+
+    /**
+     * Проверка метода productSearch поиск по конечной цене:
+     * - Возвращает все с ценой <= указанной
+     */
+    @Test
+    public void testTwoProductSearchPriceTo() {
+        expected.setTotalProducts(1L);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productOne);
+        expected.setProducts(products);
+        assertEquals(expected, productRestController.productSearch(null, null, null,
+                new BigDecimal(199), null, null));
     }
 
     /**
@@ -161,7 +212,7 @@ public class ProductRestControllerTest {
      * - задаем количество элементов на странице
      */
     @Test
-    public void testProductSearchPageSize() {
+    public void testOneProductSearchPageSize() {
         expected.setPageSize(2);
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 null, 2, null));
@@ -169,12 +220,42 @@ public class ProductRestControllerTest {
 
     /**
      * Проверка метода productSearch пагинация:
+     * - задаем количество элементов на странице
+     */
+    @Test
+    public void testTwoProductSearchPageSize() {
+        expected.setPageSize(1);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productOne);
+        expected.setProducts(products);
+        assertEquals(expected, productRestController.productSearch(null, null, null,
+                null, 1, null));
+    }
+
+    /**
+     * Проверка метода productSearch пагинация:
      * - задаем номер страницы
      */
     @Test
-    public void testProductSearchPageNumber() {
+    public void testOneProductSearchPageNumber() {
         assertEquals(expected, productRestController.productSearch(null, null, null,
                 null, null, 0));
+    }
+
+    /**
+     * Проверка метода productSearch пагинация и количество элементов на странице:
+     * - задаем количество элементов на странице
+     * - задаем номер страницы
+     */
+    @Test
+    public void testTwoProductSearchPageNumber() {
+        expected.setPageSize(1);
+        expected.setPageNumber(1);
+        List<ProductDto> products = new LinkedList<>();
+        products.add(productTwo);
+        expected.setProducts(products);
+        assertEquals(expected, productRestController.productSearch(null, null, null,
+                null, 1, 1));
     }
 
     /**
@@ -182,8 +263,17 @@ public class ProductRestControllerTest {
      * - Возвращает все продукты содержащие в имени строку
      */
     @Test
-    public void testFindByName() {
+    public void testOneFindByName() {
         assertEquals(expected.getProducts(), productRestController.findByName("Iphone"));
+    }
+
+    /**
+     * Проверка метода findByName:
+     * - Возвращает все продукты содержащие в имени строку
+     */
+    @Test
+    public void testTwoFindByName() {
+        assertEquals(new LinkedList<>(), productRestController.findByName("Samsung"));
     }
 
     /**
