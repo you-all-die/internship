@@ -81,7 +81,7 @@ public enum ProductDto {
         @Value
         public static class SearchResult {
             List<AllWithCategoryId> products;
-            List<CategoryDto.Response.All> topCategories;
+            List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
             Integer pageNumber;
             Integer pageSize;
             Long total;
@@ -106,7 +106,7 @@ public enum ProductDto {
 
             public static class Builder {
                 private List<AllWithCategoryId> products;
-                private List<CategoryDto.Response.All> topCategories;
+                private List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
                 private Integer pageNumber;
                 private Integer pageSize;
                 private Long total;
@@ -121,7 +121,7 @@ public enum ProductDto {
                     return this;
                 }
 
-                public Builder topCategories(List<CategoryDto.Response.All> topCategories) {
+                public Builder topCategories(List<CategoryDto.Response.AllWithParentSubcategories> topCategories) {
                     this.topCategories = topCategories;
                     return this;
                 }

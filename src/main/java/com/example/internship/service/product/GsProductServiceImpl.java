@@ -1,5 +1,6 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.ProductDto.Response.SearchResult;
@@ -109,6 +110,8 @@ public class GsProductServiceImpl implements GsProductService {
                 null == pageNumber ? 0 : pageNumber,
                 null == pageSize ? 20 : pageSize, sortOrder);
 
+        final List<CategoryDto.Response.AllWithParentSubcategories> topCategories = categoryService.findTopCategories();
+
         final long totalProducts = productRepository.count(specification);
 
         final List<AllWithCategoryId> filteredProducts = productRepository
@@ -119,6 +122,7 @@ public class GsProductServiceImpl implements GsProductService {
 
         return new SearchResult.Builder()
                 .products(filteredProducts)
+                .topCategories(topCategories)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
                 .total(totalProducts)
