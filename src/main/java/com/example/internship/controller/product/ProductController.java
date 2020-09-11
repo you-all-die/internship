@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 @Slf4j
-public class GsProductController {
+public class ProductController {
 
     private static final String SEARCH_STRING_COOKIE = "productSearchString";
     private static final String CATEGORY_ID_COOKIE = "productCategoryId";
