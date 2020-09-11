@@ -31,6 +31,6 @@ public class Category {
      * список наследных категорий
      */
     @JsonIgnore
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> subcategories;
 }
