@@ -2,6 +2,7 @@ package com.example.internship.entity;
 
 import javax.persistence.*;
 
+//TODO: можно удалить, т.к. функционал уже не актуален
 @Entity
 @Table(name = "address_shop")
 public class AddressShop {

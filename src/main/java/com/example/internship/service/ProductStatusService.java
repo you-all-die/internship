@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+//TODO: сервис + реализация
 @Service
 @AllArgsConstructor
 public class ProductStatusService {
     public final ProductStatusRepository productStatusRepository;
 
     public List<ProductStatus> findAll() {
+        //TODO: ненужное приведение типов
         return (List<ProductStatus>) productStatusRepository.findAll(Sort.by("id"));
     }
 

@@ -32,6 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final ModelMapper mapper;
 
+    //TODO: Работу с куками можно вынести в отдельный сервис который можно подключить здесь
     private final HttpServletRequest request;
 
     private final HttpServletResponse response;
@@ -72,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
     // Регистрация покупателя
     public CustomerDto registrationCustomer(CustomerDto customerDto) {
         // Получаем id покупателя из куки
+        //TODO: такое договорились не писать, нужно избавиться от Optional везде где нет дефолтного значения в orElse
         Long customerId = customerIdFromCookie().orElse(null);
         // Если в куках не найдено или указано неверное значения id покупателя
         if (customerId == null || !isAnonymousCustomer(customerId)) {

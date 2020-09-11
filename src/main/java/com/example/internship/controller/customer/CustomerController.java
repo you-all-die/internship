@@ -21,6 +21,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    //TODO: метод не нужен, по крайней мере здесь, возможно есть смысл заюзать в админке, но уже через рест апи
     @GetMapping("")
     public String viewCustomerList(Model model) {
         Iterable<Customer> customers = customerService.getAll();
@@ -39,6 +40,7 @@ public class CustomerController {
         }
     }
 
+    //TODO: не используется
     @GetMapping("/add")
     public String addCustomer(Model model) {
         Customer customer = new Customer();
@@ -57,12 +59,14 @@ public class CustomerController {
         }
     }
 
+    //TODO: все таки стоит добавить что-то типа /save или /update
     @PostMapping("")
     public String saveCustomer(@ModelAttribute Customer customer) {
         customerService.save(customer);
         return "redirect:/customer";
     }
 
+    //TODO: не используется
     @GetMapping("/{id}/delete")
     public String deleteCustomer(@PathVariable Long id) {
         customerService.delete(id);

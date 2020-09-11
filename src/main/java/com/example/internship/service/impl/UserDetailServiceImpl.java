@@ -26,7 +26,7 @@ public class UserDetailServiceImpl implements UserDetailsService{
 //                .username(customer.getEmail())
 //                .password(customer.getPassword())
 //                .build();
-
+        //TODO: коммент удалить, переменную customerPrincipal убрать, и сразу возвращать return new CustomerPrincipal
         CustomerPrincipal customerPrincipal = new CustomerPrincipal(customer);
         return customerPrincipal;
     }

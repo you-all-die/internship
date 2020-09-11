@@ -91,10 +91,11 @@ public class CartServiceImpl implements CartService {
         return false;
     }
 
+    //TODO: возможно тут стоит сразу удалять по OrderLine по его айдишнику?
     @Override
     public boolean remove(Long productId, Long customerId) {
         Optional<Product> product = productRepository.findById(productId);
-
+        //TODO: тут стоит сразу проверить isPresent и либо вызвать метод удаления либо вернуть false
         return product.filter(value -> remove(value, customerId)).isPresent();
     }
 
@@ -129,6 +130,7 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    //TODO: переименовать
     @Override
     public List<OrderLineDto> findAll(Long customerId) {
         Optional<Customer> customer =  checkCustomerCart(customerId);

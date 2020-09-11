@@ -19,6 +19,18 @@ public class CategorySpecification implements Specification<Category> {
     private String key;
     private Object value;
 
+    /**
+     * TODO: есть предложение, в этом и других подобных классах,
+     * что бы не писать new CategorySpecification("name", name.orElse(""))) добавить соответствующие статические методы:
+     * CategorySpecification.name(name.orElse(""))
+     * CategorySpecification.parent(parentId)
+     *
+     * public static CategorySpecification name(String name) {
+     *     return new CategorySpecification("name", name);
+     * }
+     *
+     * это позволит избежать ошибок при написании ключей типа "name", "parentId" и т.д.
+     * */
     @Override
     public Predicate toPredicate(Root<Category> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
         switch (key) {

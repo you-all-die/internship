@@ -9,10 +9,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "category")
-@Data
+@Data //TODO: определиться с аннотациями, все ли они здесь нужны?
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString //TODO: не нужен
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
