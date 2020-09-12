@@ -4,6 +4,7 @@
 
     <div class="field">
         <!-- Селектор категорий -->
+        <input type="hidden" th:field="${data.categoryId}">
         <label th:text="#{product.filter.label.category}"></label>
         <div class="ui selection list">
             <div class="item"
@@ -28,7 +29,8 @@
             <div class="ui toggle checkbox">
                 <input id="descendingOrder"
                        type="checkbox"
-                       name="sorting">
+                       onclick="onDescendingSortChange(this.checked)"
+                       th:checked="${data.descendingOrder}">
                 <label for="descendingOrder" th:text="#{product.filter.label.descending}">Descending</label>
             </div>
         </div>

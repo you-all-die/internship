@@ -29,6 +29,8 @@ public class SearchResult {
     BigDecimal lowerPriceLimit;
     /* Верхняя граница цены товара */
     BigDecimal upperPriceLimit;
+    /* Порядок сортировки цен */
+    Boolean descendingOrder;
 
     private SearchResult(Builder builder) {
         assert null != builder.products;
@@ -47,6 +49,7 @@ public class SearchResult {
         total = builder.total;
         lowerPriceLimit = null != builder.lowerPriceLimit ? builder.lowerPriceLimit : BigDecimal.ZERO;
         upperPriceLimit = null != builder.upperPriceLimit ? builder.upperPriceLimit : BigDecimal.ZERO;
+        descendingOrder = null != builder.descendingOrder ? builder.descendingOrder : false;
     }
 
     public static class Builder {
@@ -59,6 +62,7 @@ public class SearchResult {
         private Long total;
         private BigDecimal lowerPriceLimit;
         private BigDecimal upperPriceLimit;
+        private Boolean descendingOrder;
 
         public Builder() {
         }
@@ -105,6 +109,11 @@ public class SearchResult {
 
         public Builder total(Long total) {
             this.total = total;
+            return this;
+        }
+
+        public Builder descendingOrder(Boolean descendingOrder) {
+            this.descendingOrder = descendingOrder;
             return this;
         }
 

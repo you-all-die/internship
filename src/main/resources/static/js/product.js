@@ -36,18 +36,25 @@ const confirm = function (modalId, productId) {
 }
 
 const onCategoryChange = function (categoryId) {
-    if (categoryId) {
-        reload({ categoryId: categoryId });
-    } else {
-        reload({});
-    }
+    reload({ categoryId: categoryId });
 }
 
-const reload =  function (filter) {
-    let url = '/product';
-    if (filter) {
-        url = url + '?' + $.param(filter);
-    }
+const onDescendingSortChange = function (descendingOrder) {
+    reload ({
+        descendingOrder : descendingOrder,
+    });
+}
+
+const reload =  function (condition) {
+    let filter = Object.assign(generateFilter(), condition);
+    let url = '/product?' + $.param(filter);
     console.log(url);
     location.href = url;
+}
+
+const generateFilter = function () {
+    return {
+        categoryId: $('#categoryId').val(),
+        descendingOrder: $('#descendingOrder').prop('checked'),
+    };
 }

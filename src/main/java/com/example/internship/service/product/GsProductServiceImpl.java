@@ -132,6 +132,7 @@ public class GsProductServiceImpl implements GsProductService {
                 .total(totalProducts)
                 .lowerPriceLimit(lowerPriceLimit)
                 .upperPriceLimit(upperPriceLimit)
+                .descendingOrder(descendingOrder)
                 .build();
     }
 
