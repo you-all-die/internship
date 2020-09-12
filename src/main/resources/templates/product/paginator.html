@@ -1,6 +1,9 @@
 <select xmlns:th="http://www.thymeleaf.org"
         id="pageSelector"
         class="ui dropdown"
+        onclick="onPageChange(this)"
         th:fragment="widget (pages)">
-    <option th:each="page : ${pages}" th:selected="${page}" th:text="${pageStat.count}"></option>
+    <option th:each="page : ${pages}"
+            th:selected="${page}"
+            th:text="${pageStat.count}"></option>
 </select>

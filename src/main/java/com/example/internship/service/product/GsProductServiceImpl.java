@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -106,15 +107,24 @@ public class GsProductServiceImpl implements GsProductService {
 
         final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
-        Pageable pageable = PageRequest.of(
-                null == pageNumber ? 0 : pageNumber,
-                null == pageSize ? 20 : pageSize, sortOrder);
+
+        if (null == pageNumber) {
+            pageNumber = 0;
+        }
+        if (null == pageSize) {
+            pageSize = 20;
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
 
         final List<CategoryDto.Response.AllWithParentSubcategories> topCategories = categoryService.findTopCategories();
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 
         final long totalProducts = productRepository.count(specification);
+
+        final boolean[] pages = new boolean[(int) (totalProducts / pageSize + 1)];
+        Arrays.fill(pages, false);
+        pages[pageNumber] = true;
 
         final List<AllWithCategoryId> filteredProducts = productRepository
                 .findAll(specification, pageable)
@@ -127,6 +137,7 @@ public class GsProductServiceImpl implements GsProductService {
                 .products(filteredProducts)
                 .topCategories(topCategories)
                 .breadcrumbs(ancestors)
+                .pages(pages)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
                 .total(totalProducts)

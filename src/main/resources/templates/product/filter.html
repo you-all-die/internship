@@ -39,7 +39,7 @@
         <div class="field">
             <label th:text="#{product.filter.label.pagination}">Pagination</label>
             <div id="paginator"
-                 th:replace="/product/paginator :: widget (${pages})">
+                 th:replace="/product/paginator :: widget (${data.pages})">
             </div>
         </div>
     </div>

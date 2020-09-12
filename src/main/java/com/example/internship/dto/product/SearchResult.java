@@ -19,6 +19,8 @@ public class SearchResult {
     List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
     /* Родительские категории для хлебных крошек */
     List<CategoryDto.Response.All> breadcrumbs;
+    /* Страницы */
+    boolean[] pages;
     /* Номер текущей страницы */
     Integer pageNumber;
     /* Размер страницы */
@@ -36,6 +38,7 @@ public class SearchResult {
         assert null != builder.products;
         assert null != builder.topCategories;
         assert null != builder.breadcrumbs;
+        assert null != builder.pages && builder.pages.length > 0;
         assert null != builder.pageNumber;
         assert null != builder.pageSize;
         assert null != builder.total;
@@ -44,6 +47,7 @@ public class SearchResult {
         products = builder.products;
         topCategories = builder.topCategories;
         breadcrumbs = builder.breadcrumbs;
+        pages = builder.pages;
         pageNumber = builder.pageNumber;
         pageSize = builder.pageSize;
         total = builder.total;
@@ -57,6 +61,7 @@ public class SearchResult {
         private List<ProductDto.Response.AllWithCategoryId> products;
         private List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
         private List<CategoryDto.Response.All> breadcrumbs;
+        private boolean[] pages;
         private Integer pageNumber;
         private Integer pageSize;
         private Long total;
@@ -67,52 +72,57 @@ public class SearchResult {
         public Builder() {
         }
 
-        public Builder categoryId(Long categoryId) {
+        public Builder categoryId(final Long categoryId) {
             this.categoryId = categoryId;
             return this;
         }
 
-        public Builder products(List<ProductDto.Response.AllWithCategoryId> products) {
+        public Builder products(final List<ProductDto.Response.AllWithCategoryId> products) {
             this.products = products;
             return this;
         }
 
-        public Builder topCategories(List<CategoryDto.Response.AllWithParentSubcategories> topCategories) {
+        public Builder topCategories(final List<CategoryDto.Response.AllWithParentSubcategories> topCategories) {
             this.topCategories = topCategories;
             return this;
         }
 
-        public Builder breadcrumbs(List<CategoryDto.Response.All> breadcrumbs) {
+        public Builder breadcrumbs(final List<CategoryDto.Response.All> breadcrumbs) {
             this.breadcrumbs = breadcrumbs;
             return this;
         }
 
-        public Builder lowerPriceLimit(BigDecimal lowerPriceLimit) {
+        public Builder pages(final boolean[] pages) {
+            this.pages = pages;
+            return this;
+        }
+
+        public Builder lowerPriceLimit(final BigDecimal lowerPriceLimit) {
             this.lowerPriceLimit = lowerPriceLimit;
             return this;
         }
 
-        public Builder upperPriceLimit(BigDecimal upperPriceLimit) {
+        public Builder upperPriceLimit(final BigDecimal upperPriceLimit) {
             this.upperPriceLimit = upperPriceLimit;
             return this;
         }
 
-        public Builder pageNumber(Integer pageNumber) {
+        public Builder pageNumber(final Integer pageNumber) {
             this.pageNumber = pageNumber;
             return this;
         }
 
-        public Builder pageSize(Integer pageSize) {
+        public Builder pageSize(final Integer pageSize) {
             this.pageSize = pageSize;
             return this;
         }
 
-        public Builder total(Long total) {
+        public Builder total(final Long total) {
             this.total = total;
             return this;
         }
 
-        public Builder descendingOrder(Boolean descendingOrder) {
+        public Builder descendingOrder(final Boolean descendingOrder) {
             this.descendingOrder = descendingOrder;
             return this;
         }

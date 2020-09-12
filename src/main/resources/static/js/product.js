@@ -45,6 +45,11 @@ const onDescendingSortChange = function (descendingOrder) {
     });
 }
 
+const onPageChange = function (select) {
+    let page = select.selectedIndex;
+    reload({ pageNumber: page });
+}
+
 const reload =  function (condition) {
     let filter = Object.assign(generateFilter(), condition);
     let url = '/product?' + $.param(filter);
