@@ -2,11 +2,11 @@
 
     <input type="hidden" th:field="${data.minimalPrice}">
     <input type="hidden" th:field="${data.maximalPrice}">
-    <div class="inline field">
+    <div class="inline fields">
         <label th:text="#{product.filter.label.lower_limit}">Lower Limit</label>
         <input type="number" th:field="${data.lowerPriceLimit}" onchange="onPriceLimitChange()">
     </div>
-    <div class="inline field">
+    <div class="inline fields">
         <label th:text="#{product.filter.label.upper_limit}">Upper Limit</label>
         <input type="number" th:field="${data.upperPriceLimit}" onchange="onPriceLimitChange()">
     </div>

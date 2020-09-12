@@ -110,6 +110,8 @@ public class GsProductServiceImpl implements GsProductService {
                 .priceLimits(lowerPriceLimit, upperPriceLimit)
                 .build();
 
+        final long totalProducts = productRepository.count(specification);
+
         descendingOrder = (null != descendingOrder) ? descendingOrder : false;
         final Sort.Direction direction = descendingOrder ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
@@ -125,8 +127,6 @@ public class GsProductServiceImpl implements GsProductService {
         final List<CategoryDto.Response.AllWithParentSubcategories> topCategories = categoryService.findTopCategories();
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
-
-        final long totalProducts = productRepository.count(specification);
 
         final boolean[] pages = new boolean[(int) (totalProducts / pageSize + 1)];
         Arrays.fill(pages, false);

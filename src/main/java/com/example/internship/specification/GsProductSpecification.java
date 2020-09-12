@@ -27,11 +27,11 @@ public class GsProductSpecification {
                 builder.in(product.get("category").get("id")).value(categoryIds);
     }
 
-    private static Specification<Product> minimalAndMaximalPrices(BigDecimal minimalPrice, BigDecimal maximalPrice) {
+    private static Specification<Product> priceLimits(BigDecimal lowerLimit, BigDecimal upperLimit) {
         return (Specification<Product>) (product, query, builder) ->
                 builder.and(
-                        builder.greaterThanOrEqualTo(product.get("price").as(BigDecimal.class), minimalPrice),
-                        builder.lessThanOrEqualTo(product.get("price").as(BigDecimal.class), maximalPrice)
+                        builder.greaterThanOrEqualTo(product.get("price").as(BigDecimal.class), lowerLimit),
+                        builder.lessThanOrEqualTo(product.get("price").as(BigDecimal.class), upperLimit)
                 );
     }
 
@@ -53,9 +53,9 @@ public class GsProductSpecification {
             return this;
         }
 
-        public Builder priceLimits(BigDecimal minimalPrice, BigDecimal maximalPrice) {
-            if (null != minimalPrice && null != maximalPrice) {
-                specifications.add(GsProductSpecification.minimalAndMaximalPrices(minimalPrice, maximalPrice));
+        public Builder priceLimits(BigDecimal lowerPriceLimit, BigDecimal upperPriceLimit) {
+            if (null != lowerPriceLimit && null != upperPriceLimit) {
+                specifications.add(GsProductSpecification.priceLimits(lowerPriceLimit, upperPriceLimit));
             }
             return this;
         }

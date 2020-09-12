@@ -1,8 +1,7 @@
 /* Самохвалов Юрий Алексеевич */
 
 /*
-    Начальное состояние окна при загрузке
-    - Подключение обработчиков событий к элементам фильтра
+    После загрузки страницы
 */
 window.onload = function () {
     $('#globalSearch')
@@ -35,6 +34,7 @@ const confirm = function (modalId, productId) {
     }).modal('show');
 }
 
+/* При выборе категории */
 const onCategoryChange = function (categoryId) {
     reload({
         categoryId: categoryId,
@@ -42,17 +42,19 @@ const onCategoryChange = function (categoryId) {
     });
 }
 
+/* При изменении порядка сортировка */
 const onDescendingSortChange = function (descendingOrder) {
     reload ({
         descendingOrder : descendingOrder,
     });
 }
 
+/* При изменении номера страницы */
 const onPageChange = function (select) {
-    let page = select.selectedIndex;
-    reload({ pageNumber: page });
+    reload({ pageNumber: select.selectedIndex });
 }
 
+/* При изменении размера страницы */
 const onPageSizeChange = function (select) {
     let pageSize = select.options[select.selectedIndex].value
     reload({
@@ -61,7 +63,8 @@ const onPageSizeChange = function (select) {
      })
 }
 
-const onPriceLimitChange = function (lower, upper) {
+/* При изменении границ цен */
+const onPriceLimitChange = function () {
     let lowerPriceLimit = $('input[name="lowerPriceLimit"]').val();
     let upperPriceLimit = $('input[name="upperPriceLimit"]').val();
 
@@ -72,13 +75,14 @@ const onPriceLimitChange = function (lower, upper) {
     });
 }
 
+/* Перезагрузка страницы с новыми условиями */
 const reload =  function (condition) {
     let filter = Object.assign(generateFilter(), condition);
     let url = '/product?' + $.param(filter);
-    console.table({ url });
     location.href = url;
 }
 
+/* Собрать общие параметры запроса из полей */
 const generateFilter = function () {
     return {
         categoryId: $('#categoryId').val(),
@@ -90,6 +94,7 @@ const generateFilter = function () {
     };
 }
 
+/* Показать тост с сообщением */
 const showToast = function (message) {
     $('body')
         .toast({
