@@ -42,6 +42,12 @@
                  th:replace="/product/paginator :: widget (${data.pages})">
             </div>
         </div>
+
+        <!-- Выбор размера страницы -->
+        <div class="field">
+            <label th:text="#{product.filter.label.page_size}">Page Size</label>
+            <div th:replace="/product/page-size :: widget (${data.pageSize})"></div>
+        </div>
     </div>
 
 </div>
