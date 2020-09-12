@@ -1,4 +1,7 @@
-<select xmlns:th="http://www.thymeleaf.org" th:fragment="widget (pageSize)">
+<select xmlns:th="http://www.thymeleaf.org"
+        id="sizeSelector"
+        th:fragment="widget (pageSize)"
+        onchange="onPageSizeChange(this)">
     <option th:selected="${pageSize} == 12">12</option>
     <option th:selected="${pageSize} == 20">20</option>
     <option th:selected="${pageSize} == 36">36</option>

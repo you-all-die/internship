@@ -36,7 +36,10 @@ const confirm = function (modalId, productId) {
 }
 
 const onCategoryChange = function (categoryId) {
-    reload({ categoryId: categoryId });
+    reload({
+        categoryId: categoryId,
+        pageNumber: 0
+    });
 }
 
 const onDescendingSortChange = function (descendingOrder) {
@@ -50,6 +53,14 @@ const onPageChange = function (select) {
     reload({ pageNumber: page });
 }
 
+const onPageSizeChange = function (select) {
+    let pageSize = select.options[select.selectedIndex].value
+    reload({
+        pageSize: pageSize,
+        pageNumber: 0,
+     })
+}
+
 const reload =  function (condition) {
     let filter = Object.assign(generateFilter(), condition);
     let url = '/product?' + $.param(filter);
@@ -61,5 +72,7 @@ const generateFilter = function () {
     return {
         categoryId: $('#categoryId').val(),
         descendingOrder: $('#descendingOrder').prop('checked'),
+        pageNumber: $('#pageSelector').prop('selectedIndex'),
+        pageSize: $('#sizeSelector').val()
     };
 }
