@@ -1,8 +1,13 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="widget (data)">
+
     <input type="hidden" th:field="${data.minimalPrice}">
     <input type="hidden" th:field="${data.maximalPrice}">
-    <input type="hidden" th:field="${data.lowerPriceLimit}">
-    <input type="hidden" th:field="${data.upperPriceLimit}">
-
-    <div id="priceLimiter" class="ui range slider"></div>
+    <div class="inline field">
+        <label th:text="#{product.filter.label.lower_limit}">Lower Limit</label>
+        <input type="number" th:field="${data.lowerPriceLimit}" onchange="onPriceLimitChange()">
+    </div>
+    <div class="inline field">
+        <label th:text="#{product.filter.label.upper_limit}">Upper Limit</label>
+        <input type="number" th:field="${data.upperPriceLimit}" onchange="onPriceLimitChange()">
+    </div>
 </div>

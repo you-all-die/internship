@@ -10,28 +10,6 @@ window.onload = function () {
         .change(function () {
             onSearchChange(this.value);
         });
-    /* Настройка ограничителя цен */
-    let minimalPrice = $('input[name="minimalPrice"]').val();
-    let maximalPrice = $('input[name="maximalPrice"]').val();
-    let lowerPriceLimit = $('input[name="lowerPriceLimit"]').val();
-    let upperPriceLimit = $('input[name="upperPriceLimit"]').val();
-    let delta = (maximalPrice - minimalPrice) / 20;
-    let start = Math.round(lowerPriceLimit / delta);
-    let end = Math.round(upperPriceLimit / delta);
-    console.log('Настройки ограничителя цен');
-    console.table({ start, end });
-    $('#priceLimiter')
-        .slider({
-            min: 0,
-            max: 20,
-            start: start,
-            end: end,
-            step: 1,
-            onChange: function (delta, lower) {
-                let upper = lower + delta;
-                onPriceLimitChange(lower, upper);
-            }
-        });
 };
 
 /* Добавить товар в корзину */
@@ -84,12 +62,8 @@ const onPageSizeChange = function (select) {
 }
 
 const onPriceLimitChange = function (lower, upper) {
-    let minimalPrice = $('input[name="minimalPrice"]').val()
-    let maximalPrice = $('input[name="maximalPrice"]').val()
-    let step = (maximalPrice - minimalPrice) / 20;
-    let lowerPriceLimit = lower * step;
-    let upperPriceLimit = upper * step;
-    console.table({ minimalPrice, maximalPrice, step, lowerPriceLimit, upperPriceLimit });
+    let lowerPriceLimit = $('input[name="lowerPriceLimit"]').val();
+    let upperPriceLimit = $('input[name="upperPriceLimit"]').val();
 
     reload({
         lowerPriceLimit: lowerPriceLimit,
@@ -101,7 +75,7 @@ const onPriceLimitChange = function (lower, upper) {
 const reload =  function (condition) {
     let filter = Object.assign(generateFilter(), condition);
     let url = '/product?' + $.param(filter);
-    console.log(url);
+    console.table({ url });
     location.href = url;
 }
 
