@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 @Slf4j
 public class ProductController {
 
-    private final CartService cartService;
     private final ProductService productService;
     private final GsProductService gsProductService;
     private final GsCategoryService categoryService;
@@ -53,13 +52,5 @@ public class ProductController {
         );
         model.addAttribute("data", data);
         return "product/index";
-    }
-
-    @PostMapping("/cart")
-    public void addToCart(
-            @RequestParam("productId") Product product,
-            @CookieValue(value = "customerId", defaultValue = "") String customerId
-    ) {
-            cartService.add(product, Long.valueOf(customerId));
     }
 }

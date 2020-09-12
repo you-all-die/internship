@@ -20,9 +20,9 @@ const addToCart = function (productId) {
         url: url,
         method: 'POST'
     }).then(function () {
-        console.log('Успешно добавлен в корзину товар id=' + productId);
+        showToast('Товар успешно добавлен в корзину');
     }).catch(function () {
-        console.log('Ошибка добавления в корзину товара id=' + productId);
+        showToast('Ошибка добавления в корзину товара');
     });
 }
 
@@ -75,4 +75,12 @@ const generateFilter = function () {
         pageNumber: $('#pageSelector').prop('selectedIndex'),
         pageSize: $('#sizeSelector').val()
     };
+}
+
+const showToast = function (message) {
+    $('body')
+        .toast({
+            message,
+            showProgress: 'bottom'
+        });
 }
