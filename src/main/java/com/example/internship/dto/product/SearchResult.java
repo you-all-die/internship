@@ -27,6 +27,10 @@ public class SearchResult {
     Integer pageSize;
     /* Общее количество товаров в запросе */
     Long total;
+    /* Минимальная цена товара */
+    BigDecimal minimalPrice;
+    /* Максимальная цена товара */
+    BigDecimal maximalPrice;
     /* Нижняя граница цены товара */
     BigDecimal lowerPriceLimit;
     /* Верхняя граница цены товара */
@@ -51,9 +55,11 @@ public class SearchResult {
         pageNumber = builder.pageNumber;
         pageSize = builder.pageSize;
         total = builder.total;
-        lowerPriceLimit = null != builder.lowerPriceLimit ? builder.lowerPriceLimit : BigDecimal.ZERO;
-        upperPriceLimit = null != builder.upperPriceLimit ? builder.upperPriceLimit : BigDecimal.ZERO;
-        descendingOrder = null != builder.descendingOrder ? builder.descendingOrder : false;
+        minimalPrice = builder.minimalPrice;
+        maximalPrice = builder.maximalPrice;
+        lowerPriceLimit = builder.lowerPriceLimit;
+        upperPriceLimit = builder.upperPriceLimit;
+        descendingOrder = builder.descendingOrder;
     }
 
     public static class Builder {
@@ -65,6 +71,8 @@ public class SearchResult {
         private Integer pageNumber;
         private Integer pageSize;
         private Long total;
+        private BigDecimal minimalPrice;
+        private BigDecimal maximalPrice;
         private BigDecimal lowerPriceLimit;
         private BigDecimal upperPriceLimit;
         private Boolean descendingOrder;
@@ -97,12 +105,14 @@ public class SearchResult {
             return this;
         }
 
-        public Builder lowerPriceLimit(final BigDecimal lowerPriceLimit) {
-            this.lowerPriceLimit = lowerPriceLimit;
+        public Builder priceBounds(final BigDecimal minimalPrice, final BigDecimal maximalPrice) {
+            this.minimalPrice = minimalPrice;
+            this.maximalPrice = maximalPrice;
             return this;
         }
 
-        public Builder upperPriceLimit(final BigDecimal upperPriceLimit) {
+        public Builder priceLimits(final BigDecimal lowerPriceLimit, final BigDecimal upperPriceLimit) {
+            this.lowerPriceLimit = lowerPriceLimit;
             this.upperPriceLimit = upperPriceLimit;
             return this;
         }

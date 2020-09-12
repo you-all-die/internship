@@ -99,13 +99,19 @@ public class GsProductServiceImpl implements GsProductService {
     ) {
         List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
 
+        final BigDecimal minimalPrice = productRepository.findMinimalPrice().orElse(BigDecimal.ZERO);
+        final BigDecimal maximalPrice = productRepository.findMaximalPrice().orElse(BigDecimal.ZERO);
+        lowerPriceLimit = (null == lowerPriceLimit) ? minimalPrice : lowerPriceLimit;
+        upperPriceLimit = (null == upperPriceLimit || upperPriceLimit.equals(BigDecimal.ZERO)) ? maximalPrice : upperPriceLimit;
+
         final Specification<Product> specification = new GsProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
-                .lowerUpperLimits(lowerPriceLimit, upperPriceLimit)
+                .priceLimits(lowerPriceLimit, upperPriceLimit)
                 .build();
 
-        final Sort.Direction direction = (null != descendingOrder && descendingOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        descendingOrder = (null != descendingOrder) ? descendingOrder : false;
+        final Sort.Direction direction = descendingOrder ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
 
         if (null == pageNumber) {
@@ -141,8 +147,8 @@ public class GsProductServiceImpl implements GsProductService {
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
                 .total(totalProducts)
-                .lowerPriceLimit(lowerPriceLimit)
-                .upperPriceLimit(upperPriceLimit)
+                .priceBounds(minimalPrice, maximalPrice)
+                .priceLimits(lowerPriceLimit, upperPriceLimit)
                 .descendingOrder(descendingOrder)
                 .build();
     }

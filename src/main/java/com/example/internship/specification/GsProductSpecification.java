@@ -53,7 +53,7 @@ public class GsProductSpecification {
             return this;
         }
 
-        public Builder lowerUpperLimits(BigDecimal minimalPrice, BigDecimal maximalPrice) {
+        public Builder priceLimits(BigDecimal minimalPrice, BigDecimal maximalPrice) {
             if (null != minimalPrice && null != maximalPrice) {
                 specifications.add(GsProductSpecification.minimalAndMaximalPrices(minimalPrice, maximalPrice));
             }

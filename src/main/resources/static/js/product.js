@@ -10,6 +10,28 @@ window.onload = function () {
         .change(function () {
             onSearchChange(this.value);
         });
+    /* Настройка ограничителя цен */
+    let minimalPrice = $('input[name="minimalPrice"]').val();
+    let maximalPrice = $('input[name="maximalPrice"]').val();
+    let lowerPriceLimit = $('input[name="lowerPriceLimit"]').val();
+    let upperPriceLimit = $('input[name="upperPriceLimit"]').val();
+    let delta = (maximalPrice - minimalPrice) / 20;
+    let start = Math.round(lowerPriceLimit / delta);
+    let end = Math.round(upperPriceLimit / delta);
+    console.log('Настройки ограничителя цен');
+    console.table({ start, end });
+    $('#priceLimiter')
+        .slider({
+            min: 0,
+            max: 20,
+            start: start,
+            end: end,
+            step: 1,
+            onChange: function (delta, lower) {
+                let upper = lower + delta;
+                onPriceLimitChange(lower, upper);
+            }
+        });
 };
 
 /* Добавить товар в корзину */
@@ -61,6 +83,21 @@ const onPageSizeChange = function (select) {
      })
 }
 
+const onPriceLimitChange = function (lower, upper) {
+    let minimalPrice = $('input[name="minimalPrice"]').val()
+    let maximalPrice = $('input[name="maximalPrice"]').val()
+    let step = (maximalPrice - minimalPrice) / 20;
+    let lowerPriceLimit = lower * step;
+    let upperPriceLimit = upper * step;
+    console.table({ minimalPrice, maximalPrice, step, lowerPriceLimit, upperPriceLimit });
+
+    reload({
+        lowerPriceLimit: lowerPriceLimit,
+        upperPriceLimit: upperPriceLimit,
+        pageNumber: 0,
+    });
+}
+
 const reload =  function (condition) {
     let filter = Object.assign(generateFilter(), condition);
     let url = '/product?' + $.param(filter);
@@ -73,7 +110,9 @@ const generateFilter = function () {
         categoryId: $('#categoryId').val(),
         descendingOrder: $('#descendingOrder').prop('checked'),
         pageNumber: $('#pageSelector').prop('selectedIndex'),
-        pageSize: $('#sizeSelector').val()
+        pageSize: $('#sizeSelector').val(),
+        lowerPriceLimit: $('input[name="lowerPriceLimit"]').val(),
+        upperPriceLimit: $('input[name="upperPriceLimit"]').val(),
     };
 }
 
