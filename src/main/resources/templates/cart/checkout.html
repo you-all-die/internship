@@ -26,19 +26,40 @@
                         <label> Phone: <input type="text" name="phone" placeholder="phone" th:value="${customer.phone}"/> </label>
                     </div>
                     <div class="field">
-                        <label> Email: <input type="text" name="email" placeholder="email" th:value="${customer.email}"/> </label>
+                        <label> *Email: <input type="text" name="email" placeholder="email" th:value="${customer.email}" th:required="required"/> </label>
+                    </div>
+<!--                    <div class="field">-->
+<!--                        &lt;!&ndash;Если у пользователя один или много адресов&ndash;&gt;-->
+<!--                        <label th:if="${customer.addresses.size()} != 0"> *Address:-->
+<!--                            <select name="address" th:each="address : ${addresses}" >-->
+<!--                                <option value="${address}"></option>-->
+<!--                            </select>-->
+<!--                        </label>-->
+<!--                        &lt;!&ndash;Если у пользователя нет адреса&ndash;&gt;-->
+<!--                        <label th:if="${customer.addresses.size()} == 0"> *Address:-->
+<!--                            <input type="text" name="address" placeholder="address" th:required="required"/>-->
+<!--                        </label>-->
+<!--                    </div>-->
+                    <div class="field">
+                        <label> *Region: <input type="text" name="region" placeholder="region" th:required="required"/> </label>
                     </div>
                     <div class="field">
-                        <!--Если у пользователя один или много адресов-->
-                        <label th:if="${customer.addresses.size()} != 0"> *Address:
-                            <select name="address" th:each="address : ${addresses}" >
-                                <option value="${address}"></option>
-                            </select>
-                        </label>
-                        <!--Если у пользователя нет адреса-->
-                        <label th:if="${customer.addresses.size()} == 0"> *Address:
-                            <input type="text" name="address" placeholder="address" th:required="required"/>
-                        </label>
+                        <label> *City: <input type="text" name="city" placeholder="city" th:required="required"/> </label>
+                    </div>
+                    <div class="field">
+                        <label> District: <input type="text" name="district" placeholder="district" /> </label>
+                    </div>
+                    <div class="field">
+                        <label> *Street: <input type="text" name="street" placeholder="street" /> </label>
+                    </div>
+                    <div class="field">
+                        <label> *House: <input type="text" name="house" placeholder="house" /> </label>
+                    </div>
+                    <div class="field">
+                        <label> *Apartment: <input type="text" name="apartment" placeholder="apartment" /> </label>
+                    </div>
+                    <div class="field">
+                        <label> Comment: <input type="text" name="comment" placeholder="comment" /> </label>
                     </div>
                     <button class="ui primary button" type="submit">
                         Checkout

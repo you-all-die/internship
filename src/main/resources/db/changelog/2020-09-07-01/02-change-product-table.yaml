@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-09-07
+      author: Sergey Lapshin
+      comment: Add "not null" to product_price
+      changes:
+        - addNotNullConstraint:
+            columnName: price
+            tableName: product

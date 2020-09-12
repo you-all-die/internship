@@ -1,4 +1,4 @@
-package com.example.internship.controller.checkout;
+ackage com.example.internship.controller.checkout;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.OrderDto;
@@ -62,34 +62,54 @@ public class CheckoutController {
         if (customerId.isEmpty()) return "redirect:/cart/checkout";
 
         Optional<Customer> customer = customerService.getById(customerId.get());
-//        Cart cart = cartService.getByCustomerId(customerId.get());
 
-        System.out.println("CUSTOMER: " + customer.get());
+        for (OrderLine orderLine : customer.get().getCart().getOrderLines()) {
+            Product product = orderLine.getProduct();
 
-//        Создание заказа
-        Order order = new Order();
+            System.out.println("CUSTOMER: " + customer.get());
+            System.out.println("ORDER LINES: " + customer.get().getCart().getOrderLines());
 
-//        Обязательные поля (контролируются формой)
-        order.customerFirstName = allParams.get("firstName");
-        order.customerLastName = allParams.get("lastName");
-//        order.address = allParams.get("address");
+            //        Создание заказа
+            Order order = new Order();
 
-//        Необязательные поля
-        order.customerMiddleName = allParams.containsKey("middleName") ? allParams.get("middleName") : "";
-        order.customerEmail = allParams.containsKey("email") ? allParams.get("email") : "";
-        order.customerPhone = allParams.containsKey("phone") ? allParams.get("phone") : "";
+            //        Обязательные поля (контролируются формой)
+            order.customerFirstName = allParams.get("firstName");
+            order.customerLastName = allParams.get("lastName");
+            order.addressRegion = allParams.get("region");
+            order.addressCity = allParams.get("city");
+            order.addressStreet = allParams.get("street");
+            order.addressHouse = allParams.get("house");
+            order.addressApartment = allParams.get("apartment");
 
-//        Берем значения из других таблиц
-        order.customerId = customer.get().getId();
-        order.statusId = 12L;
-//        order.orderLines = customer.get().getCart().getOrderLines();
+            //        Необязательные поля
+            order.customerMiddleName = allParams.containsKey("middleName") ? allParams.get("middleName") : "";
+            order.customerEmail = allParams.containsKey("email") ? allParams.get("email") : "";
+            order.customerPhone = allParams.containsKey("phone") ? allParams.get("phone") : "";
+            order.addressDistrict = allParams.containsKey("district") ? allParams.get("district") : "";
+            order.addressComment = allParams.containsKey("comment") ? allParams.get("comment") : "";
 
-//        Order order = new Order(customer.get());
-        System.out.println("ORDER: " + order);
+            //        Берем значения из других таблиц
+            order.customerId = customer.get().getId();
 
-//
-        checkoutService.addOrder(order);
-        System.out.println("Отправили тест ордер");
+//          Создать таблицу со статусами (сделать)
+            order.statusId = 12L;
+
+            order.orderLineId = orderLine.getId();
+
+            order.productCategoryId = product.getCategory().getId();
+            order.productId = product.getId();
+            order.productName = product.getName();
+            order.productDescription = product.getDescription();
+            order.productPicture = product.getPicture();
+            order.productPrice = product.getPrice();
+            order.productQuantity = orderLine.getProductQuantity();
+
+//                Сдесь записываем адрес в базу данных и берем его ID (сделать)
+            order.addressId = 12312L;
+
+            checkoutService.addOrder(order);
+            System.out.println("Отправили тест ордер");
+        }
         return "/home/index";
     }
 }

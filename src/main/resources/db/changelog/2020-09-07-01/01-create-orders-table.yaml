@@ -20,9 +20,18 @@ databaseChangeLog:
               - column:
                   name: customer_id
                   type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
                   name: product_id
                   type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_category_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
                   name: status_id
                   type: BIGINT
@@ -31,6 +40,13 @@ databaseChangeLog:
               - column:
                   name: order_line_id
                   type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
               - column:
                   name: customer_first_name
                   type: VARCHAR
@@ -53,10 +69,58 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: order_line
+                  name: product_name
                   type: VARCHAR
                   constraints:
                     nullable: false
+              - column:
+                  name: product_description
+                  type: VARCHAR
+              - column:
+                  name: product_picture
+                  type: VARCHAR
+              - column:
+                  name: product_price
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_quantity
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_region
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_city
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_district
+                  type: VARCHAR
+              - column:
+                  name: address_street
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_house
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_apartment
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_comment
+                  type: VARCHAR
+                  
 #      - createTable:
 #        tableName: orders_product
 #        columns:
