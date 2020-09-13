@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 /*
  * @author Romodin Aleksey
  */
@@ -33,18 +31,14 @@ import java.util.Optional;
 public class CustomerRestController {
     private final CustomerService customerService;
 
-    //Показать всех пользователей
-    @GetMapping("")
-    @ApiOperation(value = "Показать список пользователей", response = Iterable.class)
-    public Iterable<Customer> list() {
-        return customerService.getAll();
-    }
-
     //Показать данные конкретного пользователя
     @GetMapping("{id}")
     @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
-    public Optional<Customer> getUser(@PathVariable Long id) {
-        return customerService.getById(id);
+    public Object getUser(@PathVariable Long id) {
+        if(customerService.getById(id).isPresent()) {
+            return customerService.getById(id);
+        }
+        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
 
     //Редактирование данных
@@ -61,10 +55,10 @@ public class CustomerRestController {
             customerOld.setEmail(customer.getEmail());
             customerOld.setPassword(customer.getPassword());
             customerOld.setPhone(customer.getPhone());
-            customerService.save(customer);
+            customerService.save(customerOld);
             return new ResponseEntity<>("Данные пользователя обновлены!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Пользователь не найден", HttpStatus.OK);
+        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
 
     //Поиск пользователей
