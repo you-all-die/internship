@@ -64,6 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
+    public final void deleteAll() {
+        customerRepository.deleteAll();
+    }
+
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));
