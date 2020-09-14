@@ -34,6 +34,14 @@ const confirm = function (modalId, productId) {
     }).modal('show');
 }
 
+/* При вводе в строке поиска */
+const onSearchChange = function(searchString) {
+    reload({
+        searchString,
+        pageNumber: 0,
+    });
+}
+
 /* При выборе категории */
 const onCategoryChange = function (categoryId) {
     reload({
