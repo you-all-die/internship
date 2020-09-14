@@ -38,6 +38,5 @@ public class SearchResult {
     /* Верхняя граница цены товара */
     BigDecimal upperPriceLimit;
     /* Порядок сортировки цен */
-    @Builder.Default
-    boolean descendingOrder = false;
+    Boolean descendingOrder;
 }
