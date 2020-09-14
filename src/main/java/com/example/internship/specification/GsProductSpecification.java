@@ -43,7 +43,10 @@ public class GsProductSpecification implements Specification<Product> {
         final List<Predicate> predicates = new LinkedList<>();
 
         if (null != searchString && !searchString.isEmpty()) {
-            predicates.add(builder.like(builder.lower(product.get("name")), PredicateHelper.getLikePattern(searchString)));
+            predicates.add(builder.or(
+                    builder.like(builder.lower(product.get("name")), PredicateHelper.getLikePattern(searchString)),
+                    builder.like(builder.lower(product.get("description")), PredicateHelper.getLikePattern(searchString))
+            ));
         }
 
         if (null != categoryIds && !categoryIds.isEmpty()) {
