@@ -11,8 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,7 +40,7 @@ public class GsProductSpecification implements Specification<Product> {
             @NotNull CriteriaQuery<?> query,
             @NotNull CriteriaBuilder builder
     ) {
-        final List<Predicate> predicates = new LinkedList<>();
+        final List<Predicate> predicates = new ArrayList<>();
 
         if (null != searchString && !searchString.isEmpty()) {
             predicates.add(builder.or(

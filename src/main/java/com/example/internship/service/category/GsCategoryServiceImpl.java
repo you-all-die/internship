@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +42,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         if (null == category) {
             return Collections.emptyList();
         }
-        final List<Category> ancestors = new LinkedList<>();
+        final List<Category> ancestors = new ArrayList<>();
         ancestors.add(category);
         Category parent = category.getParent();
         while (parent != null) {
@@ -72,7 +72,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
      */
     @Override
     public List<Long> findDescendants(final Category category) {
-        List<Long> descendants = new LinkedList<>();
+        List<Long> descendants = new ArrayList<>();
         descendants.add(category.getId());
         category.getSubcategories().forEach(subcategory -> {
                     descendants.add(subcategory.getId());
