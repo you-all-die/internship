@@ -1,8 +1,11 @@
 package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.mail.exception.MailServiceException;
+import com.example.internship.mail.service.EmailService;
 import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,9 +20,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/registration")
 @AllArgsConstructor
+@Slf4j
 public class CustomerRegistrationController {
 
     private final CustomerService customerService;
+
+    private final EmailService emailService;
 
     @GetMapping
     public String registration(CustomerDto customerDto) {
@@ -41,7 +47,12 @@ public class CustomerRegistrationController {
             return "customer/registration";
         }
 
-        // регистрация покупателя и редирект на страницу его профиля
+        // регистрация покупателя и редирект на страницу его профиля и отправка письма на почту
+        try {
+            emailService.sendRegistrationWelcomeMessage(customerDto);
+        } catch (MailServiceException exception) {
+            log.error("Error sending email! {}", exception.toString());
+        }
         return "redirect:/customer/" + customerService.registrationCustomer(customerDto).getId();
     }
 
