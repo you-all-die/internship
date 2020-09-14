@@ -6,6 +6,9 @@ import com.example.internship.entity.Category;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 public interface GsCategoryService {
     List<CategoryDto.Response.AllWithParentSubcategories> findAll();
     List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories();

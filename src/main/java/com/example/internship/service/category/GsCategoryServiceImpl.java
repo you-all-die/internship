@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Service
 @RequiredArgsConstructor
 public class GsCategoryServiceImpl implements GsCategoryService {

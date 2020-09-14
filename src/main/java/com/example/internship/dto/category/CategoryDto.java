@@ -7,6 +7,9 @@ import lombok.Getter;
 
 import java.util.List;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 public enum CategoryDto {
     ;
 

@@ -1,10 +1,9 @@
 package com.example.internship.dto.product;
 
-import com.example.internship.dto.category.CategoryDto;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author Самохвалов Юрий Алексеевич
