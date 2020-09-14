@@ -1,6 +1,8 @@
 package com.example.internship.specification;
 
+import com.example.internship.entity.Category_;
 import com.example.internship.entity.Product;
+import com.example.internship.entity.Product_;
 import com.example.internship.helper.PredicateHelper;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +38,7 @@ public class GsProductSpecification implements Specification<Product> {
 
     @Override
     public Predicate toPredicate(
-            @NotNull Root<Product> product,
+            @NotNull Root<Product> root,
             @NotNull CriteriaQuery<?> query,
             @NotNull CriteriaBuilder builder
     ) {
@@ -44,21 +46,21 @@ public class GsProductSpecification implements Specification<Product> {
 
         if (null != searchString && !searchString.isEmpty()) {
             predicates.add(builder.or(
-                    builder.like(builder.lower(product.get("name")), PredicateHelper.getLikePattern(searchString)),
-                    builder.like(builder.lower(product.get("description")), PredicateHelper.getLikePattern(searchString))
+                    builder.like(builder.lower(root.get(Product_.name)), PredicateHelper.getLikePattern(searchString)),
+                    builder.like(builder.lower(root.get(Product_.description)), PredicateHelper.getLikePattern(searchString))
             ));
         }
 
         if (null != categoryIds && !categoryIds.isEmpty()) {
-            predicates.add(builder.in(product.get("category").get("id")).value(categoryIds));
+            predicates.add(builder.in(root.get(Product_.category).get(Category_.ID)).value(categoryIds));
         }
 
         if (null != lowerLimit && null != upperLimit) {
-            predicates.add(builder.between(product.get("price").as(BigDecimal.class), lowerLimit, upperLimit));
+            predicates.add(builder.between(root.get(Product_.price).as(BigDecimal.class), lowerLimit, upperLimit));
         } else if (null != lowerLimit) {
-            predicates.add(builder.greaterThanOrEqualTo(product.get("price"), lowerLimit));
+            predicates.add(builder.greaterThanOrEqualTo(root.get(Product_.price), lowerLimit));
         } else {
-            predicates.add(builder.lessThanOrEqualTo(product.get("price").as(BigDecimal.class), upperLimit));
+            predicates.add(builder.lessThanOrEqualTo(root.get(Product_.price).as(BigDecimal.class), upperLimit));
         }
 
         return builder.and(predicates.toArray(new Predicate[]{}));
