@@ -1,6 +1,7 @@
 package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.ProductDto;
+import com.example.adminapplication.dto.ProductSearchResult;
 import com.example.adminapplication.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -49,5 +51,59 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findByIdProduct(Long id) throws ResourceAccessException {
         return restTemplate.postForObject(url() + "/find-by-id", id, ProductDto.class);
+    }
+
+    @Override
+    public ProductSearchResult productSearch(String searchText, Long categoryId, BigDecimal priceFrom,
+                                             BigDecimal priceTo, Integer pageSize, Integer pageNumber)
+            throws ResourceAccessException {
+
+        StringBuilder url = new StringBuilder(url()).append("/search?");
+        if (searchText != null) {
+            url.append("searchText=").append(searchText).append("&");
+        }
+        if (categoryId != null) {
+            url.append("categoryId=").append(categoryId).append("&");
+        }
+        if (priceFrom != null) {
+            url.append("priceFrom=").append(priceFrom).append("&");
+        }
+        if (priceTo != null) {
+            url.append("priceTo=").append(priceTo).append("&");
+        }
+        if (pageSize != null && pageSize > 0) {
+            url.append("pageSize=").append(pageSize).append("&");
+        }
+        if (pageNumber != null && pageNumber > 0) {
+            url.append("pageNumber=").append(pageNumber - 1).append("&");
+        }
+        ProductSearchResult result = restTemplate.getForObject(url.toString(), ProductSearchResult.class);
+        // Create pagination
+        if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
+
+            result.setTotalPages(result.getTotalProducts() / result.getPageSize());
+
+            if (result.getPageNumber() != 0) {
+
+                result.setPrevPage(result.getPageNumber());
+
+                if (result.getPrevPage() > 1) {
+                    result.setFirstPage(1);
+                }
+            }
+
+            result.setPageNumber(result.getPageNumber() + 1);
+
+            if (result.getPageNumber() < result.getTotalPages()) {
+
+                result.setNextPage(result.getPageNumber() + 1);
+
+                if (result.getNextPage() < result.getTotalPages()) {
+                    result.setLastPage(result.getTotalPages().intValue());
+                }
+            }
+        }
+
+        return result;
     }
 }

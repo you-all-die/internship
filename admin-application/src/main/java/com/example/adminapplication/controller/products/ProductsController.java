@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @Controller
 @AllArgsConstructor
@@ -37,20 +38,20 @@ public class ProductsController {
     }
 
     @GetMapping(value = "/products")
-    public String findProduct(@RequestParam(value = "search", required = false) String searchName, Model model) {
+    public String findProduct(@RequestParam(value = "search", required = false) String searchName,
+                              @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                              @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                              @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom,
+                              @RequestParam(value = "priceTo", required = false) BigDecimal priceTo,
+                              Model model) {
 
-        if (searchName == null) {
-            model.addAttribute("products", productService.findAll());
-        } else {
-            model.addAttribute("products", productService.findByName(searchName));
-        }
+        model.addAttribute("searchName", searchName);
+        model.addAttribute("priceFrom", priceFrom);
+        model.addAttribute("priceTo", priceTo);
+        model.addAttribute("searchResult", productService.productSearch(searchName, null, priceFrom,
+                priceTo, pageSize, pageNumber));
 
         return "/products/products";
-    }
-
-    @PostMapping(value = "/products")
-    public String searchProduct(@RequestParam("search") String searchName, Model model) {
-        return "redirect:/products?search=" + searchName;
     }
 
     //Удаление товара
