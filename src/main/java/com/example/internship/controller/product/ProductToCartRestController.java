@@ -14,9 +14,9 @@ public class ProductToCartRestController {
 
     @PostMapping("/cart")
     public void addProductToCart(
-            @RequestParam("productId") Product product,
+            @RequestParam("productId") Long productId,
             @CookieValue(value = "customerId", defaultValue = "") String customerId
     ) {
-        cartService.add(product, Long.valueOf(customerId));
+        cartService.add(productId, Long.valueOf(customerId));
     }
 }

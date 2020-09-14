@@ -95,7 +95,7 @@ public class GsProductServiceImpl implements GsProductService {
             BigDecimal upperPriceLimit,
             Integer pageNumber,
             Integer pageSize,
-            Boolean descendingOrder
+            boolean descendingOrder
     ) {
         List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
 
@@ -112,7 +112,6 @@ public class GsProductServiceImpl implements GsProductService {
 
         final long totalProducts = productRepository.count(specification);
 
-        descendingOrder = (null != descendingOrder) ? descendingOrder : false;
         final Sort.Direction direction = descendingOrder ? Sort.Direction.DESC : Sort.Direction.ASC;
         final Sort sortOrder = Sort.by(direction, "price");
 
@@ -138,7 +137,7 @@ public class GsProductServiceImpl implements GsProductService {
                 .map(this::convertToAllWithCategoryId)
                 .collect(Collectors.toUnmodifiableList());
 
-        return new SearchResult.Builder()
+        return SearchResult.builder()
                 .categoryId(categoryId)
                 .products(filteredProducts)
                 .topCategories(topCategories)
@@ -147,8 +146,10 @@ public class GsProductServiceImpl implements GsProductService {
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
                 .total(totalProducts)
-                .priceBounds(minimalPrice, maximalPrice)
-                .priceLimits(lowerPriceLimit, upperPriceLimit)
+                .minimalPrice(minimalPrice)
+                .maximalPrice(maximalPrice)
+                .lowerPriceLimit(lowerPriceLimit)
+                .upperPriceLimit(upperPriceLimit)
                 .descendingOrder(descendingOrder)
                 .build();
     }

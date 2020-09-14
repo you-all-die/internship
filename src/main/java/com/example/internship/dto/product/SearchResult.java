@@ -1,6 +1,7 @@
 package com.example.internship.dto.product;
 
 import com.example.internship.dto.category.CategoryDto;
+import lombok.Builder;
 import lombok.Value;
 
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ import java.util.List;
  * Данные для заполнения страницы каталога в шаблоне /product/index.html
  */
 @Value
+@Builder
 public class SearchResult {
     /* Текущая категория (null для всех) */
     Long categoryId;
@@ -38,6 +40,7 @@ public class SearchResult {
     /* Порядок сортировки цен */
     Boolean descendingOrder;
 
+/*
     private SearchResult(Builder builder) {
         assert null != builder.products;
         assert null != builder.topCategories;
@@ -61,7 +64,9 @@ public class SearchResult {
         upperPriceLimit = builder.upperPriceLimit;
         descendingOrder = builder.descendingOrder;
     }
+*/
 
+/*
     public static class Builder {
         private Long categoryId;
         private List<ProductDto.Response.AllWithCategoryId> products;
@@ -141,4 +146,5 @@ public class SearchResult {
             return new SearchResult(this);
         }
     }
+*/
 }
