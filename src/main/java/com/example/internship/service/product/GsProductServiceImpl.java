@@ -107,7 +107,7 @@ public class GsProductServiceImpl implements GsProductService {
         final Specification<Product> specification = new GsProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
-                .priceLimits(lowerPriceLimit, upperPriceLimit)
+                .priceBetween(lowerPriceLimit, upperPriceLimit)
                 .build();
 
         final long totalProducts = productRepository.count(specification);

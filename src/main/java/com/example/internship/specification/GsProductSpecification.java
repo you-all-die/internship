@@ -2,7 +2,6 @@ package com.example.internship.specification;
 
 import com.example.internship.entity.Product;
 import com.example.internship.helper.SpecificationHelper;
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,8 +13,8 @@ import java.util.List;
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GsProductSpecification {
+public enum GsProductSpecification {
+    ;
 
     private static Specification<Product> withNameLike(final String searchString) {
         return (Specification<Product>) (product, query, builder) ->
@@ -27,12 +26,9 @@ public class GsProductSpecification {
                 builder.in(product.get("category").get("id")).value(categoryIds);
     }
 
-    private static Specification<Product> priceLimits(BigDecimal lowerLimit, BigDecimal upperLimit) {
+    private static Specification<Product> priceBetween(BigDecimal lowerLimit, BigDecimal upperLimit) {
         return (Specification<Product>) (product, query, builder) ->
-                builder.and(
-                        builder.greaterThanOrEqualTo(product.get("price").as(BigDecimal.class), lowerLimit),
-                        builder.lessThanOrEqualTo(product.get("price").as(BigDecimal.class), upperLimit)
-                );
+                builder.between(product.get("price").as(BigDecimal.class), lowerLimit, upperLimit);
     }
 
     @NoArgsConstructor
@@ -53,9 +49,9 @@ public class GsProductSpecification {
             return this;
         }
 
-        public Builder priceLimits(BigDecimal lowerPriceLimit, BigDecimal upperPriceLimit) {
+        public Builder priceBetween(BigDecimal lowerPriceLimit, BigDecimal upperPriceLimit) {
             if (null != lowerPriceLimit && null != upperPriceLimit) {
-                specifications.add(GsProductSpecification.priceLimits(lowerPriceLimit, upperPriceLimit));
+                specifications.add(GsProductSpecification.priceBetween(lowerPriceLimit, upperPriceLimit));
             }
             return this;
         }
