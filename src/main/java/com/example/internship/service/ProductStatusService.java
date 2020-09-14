@@ -17,4 +17,12 @@ public class ProductStatusService {
         return (List<ProductStatus>) productStatusRepository.findAll(Sort.by("id"));
     }
 
+    public void add(ProductStatus productStatus) {
+        productStatusRepository.save(productStatus);
+    }
+
+    public void removeAll() {
+        productStatusRepository.deleteAll();
+    }
+
 }
