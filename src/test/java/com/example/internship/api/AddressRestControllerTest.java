@@ -5,7 +5,6 @@ import com.example.internship.service.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -13,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
+import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * @author Роман Каравашкин
  */
@@ -40,19 +38,19 @@ public class AddressRestControllerTest {
      */
 
     AddressService addressService = mock(AddressService.class);
-    AddressDto.Request.Full addressRequestOne = mock(AddressDto.Request.Full.class);
+    AddressDto addressDtoOne = mock(AddressDto.class);
 
-
+    
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public  void setUp(@Autowired AddressService addressService){
+    public  void setUp(){
 
         AddressRestController addressRestController = new AddressRestController(addressService);
 
-        mockMvc =MockMvcBuilders.standaloneSetup(addressRestController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(addressRestController).build();
     }
 
     /**
@@ -62,10 +60,12 @@ public class AddressRestControllerTest {
 
     @Test
     public void testGetAddressByUserId() throws Exception{
-    addressRequestOne = createNewAddressRequest(1L,1L,"Ulyanovsk");
-    Long id     =   addressRequestOne.getCustomerId();
 
-    when(addressService.getAllById(anyLong())).thenReturn(List<AddressDto.Request.Full>);
+    addressDtoOne = createNewAddressRequest(1L,1L,"Ulyanovsk");
+
+    Long id     =   addressDtoOne.getCustomerId();
+
+    when(addressService.getAllById(anyLong())).thenReturn(Arrays.asList(addressDtoOne));
 
     mockMvc.perform(get("/api/user/{id}/address",id)
             .accept(MediaType.APPLICATION_JSON))
@@ -73,7 +73,7 @@ public class AddressRestControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id",is(1)))
             .andExpect(jsonPath("$.customerId",is(1)))
-            .andExpect(jsonPath("$.region",is("Ulanovsk")))
+            .andExpect(jsonPath("$.region",is("Ulyanovsk")))
             .andExpect(jsonPath("$.city",is("City1")))
             .andExpect(jsonPath("$.district",is("district1")))
             .andExpect(jsonPath("$.street",is("street1")))
@@ -86,18 +86,18 @@ public class AddressRestControllerTest {
     }
 
 
-    private AddressDto.Request.Full createNewAddressRequest(Long id, Long customerId,String region){
-        addressRequestOne = new AddressDto.Request.Full();
-        addressRequestOne.setId(id);
-        addressRequestOne.setCustomerId(customerId);
-        addressRequestOne.setRegion(region);
-        addressRequestOne.setCity("City1");
-        addressRequestOne.setDistrict("district1");
-        addressRequestOne.setStreet("street1");
-        addressRequestOne.setHouse("1");
-        addressRequestOne.setApartment("11");
-        addressRequestOne.setComment("test1");
-        return addressRequestOne;
+    private AddressDto createNewAddressRequest(Long id, Long customerId,String region){
+        addressDtoOne = new AddressDto();
+        addressDtoOne.setId(id);
+        addressDtoOne.setCustomerId(customerId);
+        addressDtoOne.setRegion(region);
+        addressDtoOne.setCity("City1");
+        addressDtoOne.setDistrict("district1");
+        addressDtoOne.setStreet("street1");
+        addressDtoOne.setHouse("1");
+        addressDtoOne.setApartment("11");
+        addressDtoOne.setComment("test1");
+        return addressDtoOne;
 
     }
 
