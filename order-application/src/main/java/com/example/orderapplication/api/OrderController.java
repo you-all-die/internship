@@ -24,9 +24,9 @@ public class OrderController {
     @ApiOperation(value = "Возвращает заказ по id заказа и источнику заказа.")
     @Schema(implementation = OrderDto.class)
     public ResponseEntity<OrderDto> getOrder(@RequestParam(name = "id")
-                                                 @ApiParam(name = "id заказа") Long orderId,
+                                                 @ApiParam(value = "id заказа") Long orderId,
                                              @RequestParam(name = "source")
-                                                 @ApiParam(name = "Источник заказа") String source) {
+                                                 @ApiParam(value = "Источник заказа") String source) {
 
         log.info("Сработал orderId при get запросе - " + orderId);
         log.info("Сработал source при get запросе - " + source);
