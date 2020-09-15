@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Cart</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <div class="ui main grid">
+        <div class="four wide column row">
+            <a th:href="@{/cart}">Назад в корзину</a>
+        </div>
+        <div class="four wide column centered row">
+            <div class="column left aligned">
+                <form class="ui form" th:action="@{/checkout}" method="post" >
+                    <div class="field">
+                        <label> *First name : <input type="text" name="firstName" placeholder="first name" autofocus="autofocus" th:value="${customer.firstName}" th:required="required"/> </label>
+                    </div>
+                    <div class="field">
+                        <label> Midle Name : <input type="text" name="midleName" placeholder="midle name" th:value="${customer.middleName}"/> </label>
+                    </div>
+                    <div class="field">
+                        <label> *Last Name : <input type="text" name="lastName" placeholder="last name" th:value="${customer.lastName}" th:required="required"/> </label>
+                    </div>
+                    <div class="field">
+                        <label> Phone: <input type="text" name="phone" placeholder="phone" th:value="${customer.phone}"/> </label>
+                    </div>
+                    <div class="field">
+                        <label> Email: <input type="text" name="email" placeholder="email" th:value="${customer.email}"/> </label>
+                    </div>
+                    <div class="field">
+                        <!--Если у пользователя один или много адресов-->
+                        <label th:if="${customer.addresses.size()} != 0"> *Address:
+                            <select name="address" th:each="address : ${addresses}" >
+                                <option value="${address}"></option>
+                            </select>
+                        </label>
+                        <!--Если у пользователя нет адреса-->
+                        <label th:if="${customer.addresses.size()} == 0"> *Address:
+                            <input type="text" name="adress" placeholder="adress" th:required="required"/>
+                        </label>
+                    </div>
+                    <button class="ui primary button" type="submit">
+                        Checkout
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="four wide column row">
+            * - Поля обязательные для заполнения
+        </div>
+    </div>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
