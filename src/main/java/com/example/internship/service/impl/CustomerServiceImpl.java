@@ -135,6 +135,8 @@ public class CustomerServiceImpl implements CustomerService {
         return customer != null && customer.getEmail() == null;
     }
 
+    public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
+
     private CustomerDto convertToDto(Customer customer) {
         return mapper.map(customer, CustomerDto.class);
     }
@@ -182,3 +184,4 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 }
+

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+/**
+ * @author Murashov A.A
+ */
 @RestController
 @RequestMapping("/api/mail")
 @RequiredArgsConstructor

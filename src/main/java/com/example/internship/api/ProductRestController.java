@@ -41,16 +41,16 @@ public class ProductRestController {
             response = ProductSearchResult.class)
     public ProductSearchResult productSearch(@RequestParam(name = "searchText", required = false)
                                              @ApiParam(value = "поиск по наименованию")
-                                                     Optional<String> searchText,
+                                                     String searchText,
                                              @RequestParam(name = "categoryId", required = false)
                                              @ApiParam(value = "поиск id категории продукта")
-                                                     Optional<Long> categoryId,
+                                                     Long categoryId,
                                              @RequestParam(name = "priceFrom", required = false)
                                              @ApiParam(value = "поиск по минимальной цене")
-                                                     Optional<BigDecimal> priceFrom,
+                                                     BigDecimal priceFrom,
                                              @RequestParam(name = "priceTo", required = false)
                                              @ApiParam(value = "поиск по максимальной цене")
-                                                     Optional<BigDecimal> priceTo,
+                                                     BigDecimal priceTo,
                                              @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                              @ApiParam(value = "размер страницы")
                                                      Integer pageSize,
