@@ -42,7 +42,7 @@ public class OrderDto {
     @NotNull
     private OrderStatus orderStatus;
 
-    @Schema(implementation = OrderLineDto.class)
+    @Schema(description = "Заказы")
     List<OrderLineDto> orderLines;
 
 }
