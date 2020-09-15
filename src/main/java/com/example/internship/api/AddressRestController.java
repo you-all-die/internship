@@ -24,17 +24,17 @@ public class AddressRestController {
     private  final AddressService addressService;
 
     @GetMapping
-    public List<AddressDto.Response.Full> getAllCustomerById(@PathVariable Long id) {
+    public List<AddressDto> getAllCustomerById(@PathVariable Long id) {
         return addressService.getAllById(id);
     }
 
     @PostMapping
-    public void addAddress(@RequestBody AddressDto.Request.Full addressDto) {
+    public void addAddress(@RequestBody AddressDto addressDto) {
         addressService.addAddress(addressDto);
     }
 
     @DeleteMapping("/{addressId}")
-    public List<AddressDto.Response.Full> deleteAddressById(@PathVariable Long id, @PathVariable Long addressId) {
+    public List<AddressDto> deleteAddressById(@PathVariable Long id, @PathVariable Long addressId) {
         return addressService.deleteAddress(id, addressId);
     }
 }
