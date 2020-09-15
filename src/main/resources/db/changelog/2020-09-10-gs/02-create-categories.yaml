@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: delete-and-create-categories-again
+      id: add-category-number-three
       author: Самохвалов Юрий Алексеевич
       comment: Привести категории к общему знаменателю
       preconditions:
@@ -8,6 +8,13 @@ databaseChangeLog:
         - sqlCheck:
             expectedResult: 0
             sql: select count(*) from category where id = 3
-      loadData:
-        - file: db/changelog/2020-09-10-gs/category.csv
-        - tableName: category
+      changes:
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: name
+                  value: "Apple"
+              - column:
+                  name: parent_id
+                  value: "1"
