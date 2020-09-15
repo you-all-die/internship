@@ -43,12 +43,15 @@ public class ProductsController {
                               @RequestParam(value = "pageSize", required = false) Integer pageSize,
                               @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom,
                               @RequestParam(value = "priceTo", required = false) BigDecimal priceTo,
+                              @RequestParam(value = "categoryId", required = false) Long categoryId,
                               Model model) {
 
+        model.addAttribute("categories", categoryService.findAllSortById());
         model.addAttribute("searchName", searchName);
         model.addAttribute("priceFrom", priceFrom);
         model.addAttribute("priceTo", priceTo);
-        model.addAttribute("searchResult", productService.productSearch(searchName, null, priceFrom,
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("searchResult", productService.productSearch(searchName, categoryId, priceFrom,
                 priceTo, pageSize, pageNumber));
 
         return "/products/products";

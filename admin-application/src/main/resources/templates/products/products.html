@@ -14,6 +14,12 @@
             <div class="item">
                 <form th:action="@{/products}" method="get">
                     <div class="ui action input">
+                        <select class="ui dropdown" name="categoryId">
+                            <option value="" th:text="#{products.all_category}"></option>
+                            <tr th:each="category: ${categories}">
+                                <option th:value="${category.id}" th:text="${category.name}"></option>
+                            </tr>
+                        </select>
                         <input type="text" name="priceFrom" th:placeholder="#{products.price_from}">
                         <input type="text" name="priceTo" th:placeholder="#{products.price_to}">
                         <input type="text" name="search" th:placeholder="#{products.search}">
@@ -44,6 +50,7 @@
                     <input type="hidden" name="search" th:if="${searchName}" th:value="${searchName}"/>
                     <input type="hidden" name="priceFrom" th:if="${priceFrom}" th:value="${priceFrom}"/>
                     <input type="hidden" name="priceTo" th:if="${priceTo}" th:value="${priceTo}"/>
+                    <input type="hidden" name="categoryId" th:if="${categoryId}" th:value="${categoryId}"/>
                 </div>
                 <div class="three wide field">
                     <input class="ui submit button" type="submit" th:value="#{products.apply}">
