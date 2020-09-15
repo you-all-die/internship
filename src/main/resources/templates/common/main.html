@@ -45,36 +45,33 @@
                     <div class="ui right dropdown item">
                         <i class="user icon"></i>
 
-                        <div class="menu">
+                <div class="menu">
+                    <div sec:authorize="isAnonymous()">
+                        <!-- ссылка на вход в систему -->
+                        <a class="item" th:href="@{/login}">
+                            <i class="sign-in icon"></i>
+                            Log in
+                        </a>
+                        <!-- ссылка на регистрацию в систему -->
+                        <a class="item" th:href="@{/registration}">
+                            <i class="user plus icon"></i>
+                            Registration
+                        </a>
+                    </div>
 
-                            <!-- ссылка на вход в систему -->
-                            <a class="item"
-                               th:href="@{/login}"
-                               sec:authorize="isAnonymous()"
-                               th:text="#{common.main.menu.login}">
-                                <i class="sign-in icon"></i>Log in
-                            </a>
+                    <div sec:authorize="isAuthenticated()">
+                        <!-- ссылка на  профиль пользователя -->
+                        <a class="item" th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">
+                            <span th:text="${#authentication.principal.getUsername()}"></span>
+                        </a>
+                        <!-- ссылка на выход из системы -->
+                        <a class="item" th:href="@{/logout}">
+                            <i class="sign-in icon"></i>
+                            Log out
+                        </a>
+                    </div>
 
-                            <!-- ссылка на выход из системы -->
-                            <a class="item"
-                               th:href="@{/logout}"
-                               sec:authorize="isAuthenticated()"
-                               th:text="#{common.main.menu.logout}">
-                                <a class="item"
-                                   th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">
-                                    <span th:text="${#authentication.principal.getUsername()}"></span>
-                                </a>
-                                <i class="sign-in icon"></i>Log out
-                            </a>
-
-                            <!-- ссылка на регистрацию в систему -->
-                            <a class="item"
-                               th:href="@{/registration}"
-                               sec:authorize="isAnonymous()"
-                               th:text="#{common.main.menu.registration}">
-                                <i class="user plus icon"></i>Registration
-                            </a>
-                        </div>
+                </div>
 
                     </div>
 
