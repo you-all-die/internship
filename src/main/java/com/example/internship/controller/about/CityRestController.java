@@ -1,4 +1,4 @@
-package com.example.internship.api;
+package com.example.internship.controller.about;
 
 import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.entity.Outlet;
