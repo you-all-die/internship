@@ -13,7 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
+import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * @author Роман Каравашкин
  */
@@ -39,7 +38,7 @@ public class AddressRestControllerTest {
      */
 
     AddressService addressService = mock(AddressService.class);
-    AddressDto.Request.Full addressRequestOne = mock(AddressDto.Request.Full.class);
+    AddressDto addressDtoOne = mock(AddressDto.class);
 
 
     private MockMvc mockMvc;
