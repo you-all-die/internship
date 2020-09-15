@@ -3,8 +3,8 @@ package com.example.internship.api;
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.service.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +36,6 @@ public class AddressRestControllerTest {
      * Интегрированое тестирование AddressRestControllerTest
      * Тест: поиск с незадаными параметрами
      * Тест: поиск с задаными параметрами
-     *
      */
 
     AddressService addressService = mock(AddressService.class);
@@ -48,11 +47,11 @@ public class AddressRestControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public  void setUp(@Autowired AddressService addressService){
+    public void setUp(@Autowired AddressService addressService) {
 
         AddressRestController addressRestController = new AddressRestController(addressService);
 
-        mockMvc =MockMvcBuilders.standaloneSetup(addressRestController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(addressRestController).build();
     }
 
     /**
@@ -61,33 +60,34 @@ public class AddressRestControllerTest {
      */
 
     @Test
-    public void testGetAddressByUserId() throws Exception{
-    addressRequestOne = createNewAddressRequest(1L,1L,"Ulyanovsk");
-    Long id     =   addressRequestOne.getCustomerId();
+    public void testGetAddressByUserId() throws Exception {
+        AddressDto.Response.Full addressRequestOne = createNewAddressRequest(1L, 1L, "Ulyanovsk");
+        final List<AddressDto.Response.Full> addressList = List.of(addressRequestOne);
+        Long id = addressRequestOne.getCustomerId();
 
-    when(addressService.getAllById(anyLong())).thenReturn(List<AddressDto.Request.Full>);
+        when(addressService.getAllById(anyLong())).thenReturn(addressList);
 
-    mockMvc.perform(get("/api/user/{id}/address",id)
-            .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id",is(1)))
-            .andExpect(jsonPath("$.customerId",is(1)))
-            .andExpect(jsonPath("$.region",is("Ulanovsk")))
-            .andExpect(jsonPath("$.city",is("City1")))
-            .andExpect(jsonPath("$.district",is("district1")))
-            .andExpect(jsonPath("$.street",is("street1")))
-            .andExpect(jsonPath("$.house",is("1")))
-            .andExpect(jsonPath("$.apartment",is("11")))
-            .andExpect(jsonPath("$.comment",is("test1")));
+        mockMvc.perform(get("/api/user/{id}/address", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.customerId", is(1)))
+                .andExpect(jsonPath("$.region", is("Ulyanovsk")))
+                .andExpect(jsonPath("$.city", is("City1")))
+                .andExpect(jsonPath("$.district", is("district1")))
+                .andExpect(jsonPath("$.street", is("street1")))
+                .andExpect(jsonPath("$.house", is("1")))
+                .andExpect(jsonPath("$.apartment", is("11")))
+                .andExpect(jsonPath("$.comment", is("test1")));
 
-    verify(addressService,times(2)).getAllById(1L);
-    verifyNoMoreInteractions(addressService);
+        verify(addressService, times(2)).getAllById(1L);
+        verifyNoMoreInteractions(addressService);
     }
 
 
-    private AddressDto.Request.Full createNewAddressRequest(Long id, Long customerId,String region){
-        addressRequestOne = new AddressDto.Request.Full();
+    private AddressDto.Response.Full createNewAddressRequest(Long id, Long customerId, String region) {
+        AddressDto.Response.Full addressRequestOne = new AddressDto.Response.Full();
         addressRequestOne.setId(id);
         addressRequestOne.setCustomerId(customerId);
         addressRequestOne.setRegion(region);
