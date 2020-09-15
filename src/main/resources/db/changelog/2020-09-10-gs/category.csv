@@ -1,0 +1,4 @@
+id,name,parent_id
+1,Смартфоны,NULL
+2,Планшеты,NULL
+3,Apple,1

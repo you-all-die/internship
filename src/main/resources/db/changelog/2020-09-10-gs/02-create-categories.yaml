@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-and-create-categories-again
+      author: Самохвалов Юрий Алексеевич
+      comment: Привести категории к общему знаменателю
+      preconditions:
+        - onFail: MARK_RUN
+      loadData:
+        - file: db/changelog/2020-09-10-gs/category.csv
+        - tableName: category

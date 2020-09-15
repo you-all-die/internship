@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
+      file: db/changelog/2020-09-10-gs/02-create-categories.yaml
+  - include:
       file: db/changelog/2020-09-10-gs/01-add-products-from-csv.yaml
