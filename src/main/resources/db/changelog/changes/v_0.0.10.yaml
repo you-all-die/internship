@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-09-15-001
+      author: Murashov Alexey
+      comment: inserting last_activity into customers
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: ALTER TABLE customers ADD COLUMN last_activity TIMESTAMP (0) WITH TIME ZONE;
+        - sql:
+            sql: ALTER TABLE customers ALTER COLUMN last_activity SET DEFAULT NOW();

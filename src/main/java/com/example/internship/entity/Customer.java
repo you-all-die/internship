@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -32,6 +33,9 @@ public class Customer {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    @Column(name="last_activity")
+    private Timestamp lastActivity;
 
     public final String getFullName() {
         StringBuilder sb = new StringBuilder();

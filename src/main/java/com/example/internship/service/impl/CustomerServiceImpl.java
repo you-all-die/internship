@@ -167,6 +167,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerSearchResult;
     }
 
+    @Override
+    public void updateLastActivity(Long customerId) {
+        customerRepository.setLastActivityForCustomers(customerId);
+    }
+
     //Метод проверки поля и добавления условия в запрос
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
                                                        Optional<String> optionalName ){

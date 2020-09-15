@@ -32,4 +32,7 @@ public interface CustomerService {
     CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
                                        Optional<String> lastName, Optional<String> email,
                                        Integer pageSize, Integer pageNumber);
+
+    //обновление времени последней активности
+    void updateLastActivity(Long customerId);
 }
