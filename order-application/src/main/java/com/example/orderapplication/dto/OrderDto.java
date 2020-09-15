@@ -1,5 +1,7 @@
 package com.example.orderapplication.dto;
 
+import com.example.orderapplication.constants.OrderStatus;
+import com.example.orderapplication.constants.OrderType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -34,10 +36,11 @@ public class OrderDto {
 
     @Schema(description = "Тип доставки")
     @NotNull
-    private String deliveryType;
+    private OrderType orderType;
 
     @Schema(description = "Статус заказа")
-    private String orderStatus;
+    @NotNull
+    private OrderStatus orderStatus;
 
     @Schema(implementation = OrderLineDto.class)
     List<OrderLineDto> orderLines;
