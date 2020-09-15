@@ -1,7 +1,7 @@
 <select xmlns:th="http://www.thymeleaf.org"
         id="pageSelector"
         class="ui dropdown"
-        onclick="onPageChange(this)"
+        onchange="onPageChange(this)"
         th:fragment="widget (pages)">
     <option th:each="page : ${pages}"
             th:selected="${page}"
