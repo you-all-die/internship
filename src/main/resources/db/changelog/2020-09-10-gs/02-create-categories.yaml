@@ -7,7 +7,7 @@ databaseChangeLog:
         - onFail: MARK_RUN
         - sqlCheck:
             expectedResult: 0
-            sql: select count(*) from category where id = 1 or id = 2 or id = 3
+            sql: select count(*) from category where id = 3
       loadData:
         - file: db/changelog/2020-09-10-gs/category.csv
         - tableName: category
