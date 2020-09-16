@@ -17,12 +17,16 @@
                         <select class="ui dropdown" name="categoryId">
                             <option value="" th:text="#{products.all_category}"></option>
                             <tr th:each="category: ${categories}">
-                                <option th:value="${category.id}" th:text="${category.name}"></option>
+                                <option th:value="${category.id}" th:text="${category.name}"
+                                        th:selected="${category.id == categoryId}"></option>
                             </tr>
                         </select>
-                        <input type="text" name="priceFrom" th:placeholder="#{products.price_from}">
-                        <input type="text" name="priceTo" th:placeholder="#{products.price_to}">
-                        <input type="text" name="search" th:placeholder="#{products.search}">
+                        <input type="text" name="priceFrom" th:placeholder="#{products.price_from}"
+                               th:value="${priceFrom} ? ${priceFrom}">
+                        <input type="text" name="priceTo" th:placeholder="#{products.price_to}"
+                               th:value="${priceTo} ? ${priceTo}">
+                        <input type="text" name="search" th:placeholder="#{products.search}"
+                               th:value="${searchName} ? ${searchName}">
                         <input type="hidden" name="pageSize" th:value="${searchResult.pageSize}"/>
                         <button class="ui icon button" type="submit">
                             <i class="search icon"></i>
@@ -46,7 +50,7 @@
             <div class="inline fields">
                 <div class="three wide field">
                     <label th:text="#{products.page_size}"></label>
-                    <input type="text" th:placeholder="${searchResult.pageSize}" name="pageSize">
+                    <input type="text" name="pageSize" th:value="${searchResult.pageSize}">
                     <input type="hidden" name="search" th:if="${searchName}" th:value="${searchName}"/>
                     <input type="hidden" name="priceFrom" th:if="${priceFrom}" th:value="${priceFrom}"/>
                     <input type="hidden" name="priceTo" th:if="${priceTo}" th:value="${priceTo}"/>
