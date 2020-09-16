@@ -24,6 +24,7 @@ class GsProductServiceTest {
 
     private static final long PRODUCT_NUMBER = 100L;
     private static final long CATEGORY_ID = 1L;
+    private static final long SUBCATEGORY_ID = CATEGORY_ID + 1;
     private static final String CATEGORY_NAME = "Category";
 
     @Autowired GsProductService productService;
@@ -38,6 +39,13 @@ class GsProductServiceTest {
         category.setId(CATEGORY_ID);
         category.setName(CATEGORY_NAME);
         categoryService.save(category);
+
+        // Субкатегория для проверки крошек
+        Category subcategory = new Category();
+        subcategory.setId(SUBCATEGORY_ID);
+        subcategory.setParent(category);
+        subcategory.setName("Sub" + CATEGORY_NAME);
+        categoryService.save(subcategory);
 
         // Генерация списка продуктов
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
@@ -213,6 +221,54 @@ class GsProductServiceTest {
                 null);
         assertAll(
                 () -> assertEquals(result.getProducts().size(), 0, "Не должно быть ни одного продукта")
+        );
+    }
+
+    @Test
+    @DisplayName("Изменение размера страницы")
+    void testChangePageSize() {
+        final SearchResult result = productService.findByCriteria(
+                null,
+                null,
+                null,
+                null,
+                null, // Заведомо несуществующий номер страницы
+                1,
+                null);
+        assertAll(
+                () -> assertEquals(result.getProducts().size(), 1, "На странице должен быть только один продукт")
+        );
+    }
+
+    @Test
+    @DisplayName("Проверка хлебных крошек")
+    void testBreadcrumbs() {
+        final SearchResult result = productService.findByCriteria(
+                null,
+                SUBCATEGORY_ID,
+                null,
+                null,
+                null, // Заведомо несуществующий номер страницы
+                1,
+                null);
+        assertAll(
+                () -> assertEquals(result.getBreadcrumbs().size(), 2, "Должна быть две хлебные крошки")
+        );
+    }
+
+    @Test
+    @DisplayName("Сложный запрос")
+    void testComplexCriteria() {
+        final SearchResult result = productService.findByCriteria(
+                "Phone 99",
+                CATEGORY_ID,
+                BigDecimal.ZERO,
+                BigDecimal.valueOf(PRODUCT_NUMBER),
+                0,
+                (int) PRODUCT_NUMBER,
+                true);
+        assertAll(
+                () -> assertFalse(result.getProducts().isEmpty(), "Должен быть найден хотя бы один продукт")
         );
     }
 
