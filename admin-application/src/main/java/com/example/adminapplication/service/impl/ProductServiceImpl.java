@@ -4,6 +4,7 @@ import com.example.adminapplication.dto.ProductDto;
 import com.example.adminapplication.dto.ProductSearchResult;
 import com.example.adminapplication.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -59,16 +60,16 @@ public class ProductServiceImpl implements ProductService {
             throws ResourceAccessException {
 
         StringBuilder url = new StringBuilder(url()).append("/search?");
-        if (searchText != null) {
+        if (StringUtils.isNotBlank(searchText)) {
             url.append("searchText=").append(searchText).append("&");
         }
-        if (categoryId != null) {
+        if (categoryId != null && categoryId > 0) {
             url.append("categoryId=").append(categoryId).append("&");
         }
-        if (priceFrom != null) {
+        if (priceFrom != null && priceFrom.compareTo(BigDecimal.ZERO) > 0) {
             url.append("priceFrom=").append(priceFrom).append("&");
         }
-        if (priceTo != null) {
+        if (priceTo != null && priceTo.compareTo(BigDecimal.ZERO) > 0) {
             url.append("priceTo=").append(priceTo).append("&");
         }
         if (pageSize != null && pageSize > 0) {
@@ -81,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
         // Create pagination
         if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
 
-            result.setTotalPages(result.getTotalProducts() / result.getPageSize());
+            result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
 
             if (result.getPageNumber() != 0) {
 
