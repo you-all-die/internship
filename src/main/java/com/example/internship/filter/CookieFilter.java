@@ -1,6 +1,5 @@
 package com.example.internship.filter;
 
-import com.example.internship.entity.Customer;
 import com.example.internship.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.Order;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Optional;
 
 @Component
@@ -30,12 +27,7 @@ public class CookieFilter implements Filter {
             // Создаем анонимного покупателя и добавляем его id в куки
             customerService.customerIdAddToCookie(customerService.createAnonymousCustomer().getId());
         } else {
-            Optional<Customer> customer = customerService.getById(customerId.get());
-            if (customer.isPresent()) {
-                if (customer.get().getLastActivity().compareTo(Instant.now().minusSeconds(3600)) < 0) {
-                    customerService.updateLastActivity(customerId.get());
-                }
-            }
+            customerService.updateLastActivity(customerId.get());
         }
         // Завершаем работу фильтра
         filterChain.doFilter(servletRequest, servletResponse);

@@ -32,8 +32,6 @@ public class Customer {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    private Instant lastActivity;
-
     public final String getFullName() {
         StringBuilder sb = new StringBuilder();
         if (null != lastName) {
