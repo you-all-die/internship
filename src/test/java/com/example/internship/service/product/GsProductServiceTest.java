@@ -147,4 +147,20 @@ class GsProductServiceTest {
                 () -> assertEquals(result.getProducts().size(), 0, "Количество найденных продуктов должно быть равно 0")
         );
     }
+
+    @Test
+    @DisplayName("Поиск по несуществующей категории")
+    void test() {
+        final SearchResult result = productService.findByCriteria(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        assertAll(
+                () -> assertEquals(result.getProducts().size(), 0, "Количество найденных продуктов должно быть равно 0")
+        );
+    }
 }

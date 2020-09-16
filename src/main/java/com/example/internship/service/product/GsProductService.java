@@ -24,8 +24,8 @@ public interface GsProductService {
     SearchResult findByCriteria(
             String nameLike,
             Long categoryId,
-            BigDecimal minimalPrice,
-            BigDecimal maximumPrice,
+            BigDecimal lowerPriceLimit,
+            BigDecimal upperPriceLimit,
             Integer pageNumber,
             Integer pageSize,
             Boolean descendingOrder);
