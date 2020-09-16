@@ -11,25 +11,31 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
+@AutoConfigureMockMvc
 class ProductControllerTest {
 
     @Autowired
-    private ProductController productController;
-    @Autowired
-    private GsCategoryService categoryService;
+    private MockMvc mockMvc;
 
-    private static List<Product> productList = new ArrayList<>();
+    private static final List<Product> productList = new ArrayList<>();
 
     @BeforeAll
     static void beforeAll(
@@ -68,7 +74,12 @@ class ProductControllerTest {
     }
 
     @Test
-    void testControllerLoaded() {
-        assertNotNull(productController, "Контроллер не загружен!");
+    void testWithAllNulls() throws Exception {
+        // Ожидается, что будет загружены первые двадцать продуктов,
+        // отсортированных по возрастанию цены
+        mockMvc.perform(get("/product")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Phone 1")))
+                .andExpect(content().string(containsString("Phone 20")));
     }
 }
