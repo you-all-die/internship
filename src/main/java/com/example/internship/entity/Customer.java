@@ -1,12 +1,10 @@
 package com.example.internship.entity;
 
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Set;
-import java.util.StringJoiner;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -34,7 +32,7 @@ public class Customer {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    private Timestamp lastActivity;
+    private Instant lastActivity;
 
     public final String getFullName() {
         StringBuilder sb = new StringBuilder();

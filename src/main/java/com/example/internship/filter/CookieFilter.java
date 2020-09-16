@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 
 @Component
@@ -29,7 +30,12 @@ public class CookieFilter implements Filter {
             // Создаем анонимного покупателя и добавляем его id в куки
             customerService.customerIdAddToCookie(customerService.createAnonymousCustomer().getId());
         } else {
-            customerService.updateLastActivity(customerId.get());
+            Optional<Customer> customer = customerService.getById(customerId.get());
+            if (customer.isPresent()) {
+                if (customer.get().getLastActivity().compareTo(Instant.now().minusSeconds(3600)) < 0) {
+                    customerService.updateLastActivity(customerId.get());
+                }
+            }
         }
         // Завершаем работу фильтра
         filterChain.doFilter(servletRequest, servletResponse);
