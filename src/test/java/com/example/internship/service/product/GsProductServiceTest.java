@@ -1,5 +1,6 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -46,7 +46,7 @@ class GsProductServiceTest {
             product.setCategory(category);
             product.setName("Phone " + i);
             product.setDescription("Description " + i);
-            product.setPrice(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(i + 1)));
+            product.setPrice(BigDecimal.valueOf(i));
             productService.save(product);
         }
     }
@@ -149,18 +149,74 @@ class GsProductServiceTest {
     }
 
     @Test
-    @DisplayName("Поиск по несуществующей категории")
-    void test() {
+    @DisplayName("Поиск c ограничением цен")
+    void testLimits() {
+        BigDecimal min = BigDecimal.ONE;
+        BigDecimal max = BigDecimal.TEN;
+        final SearchResult result = productService.findByCriteria(
+                null,
+                null,
+                min,
+                max,
+                null,
+                null,
+                null);
+        assertAll(
+                () -> assertTrue(result.getProducts().stream().allMatch(p -> inLimits(p, min, max)))
+        );
+    }
+
+    @Test
+    @DisplayName("Поиск c неправильным ограничением цен")
+    void testIllegalLimits() {
+        BigDecimal min = BigDecimal.ONE;
+        BigDecimal max = BigDecimal.TEN;
+        final SearchResult result = productService.findByCriteria(
+                null,
+                null,
+                max,
+                min,
+                null,
+                null,
+                null);
+        assertAll(
+                () -> assertEquals(result.getProducts().size(), 0, "Должно быть найдено 0 продуктов")
+        );
+    }
+
+    @Test
+    @DisplayName("Переход на существующую страницу")
+    void testExistingPageNumber() {
         final SearchResult result = productService.findByCriteria(
                 null,
                 null,
                 null,
                 null,
-                null,
+                2,
                 null,
                 null);
         assertAll(
-                () -> assertEquals(result.getProducts().size(), 0, "Количество найденных продуктов должно быть равно 0")
+                () -> assertEquals(result.getPageNumber(), 2, "Должен быть совершён переход на 2 страницу")
         );
+    }
+
+    @Test
+    @DisplayName("Переход на несуществующую страницу")
+    void testNonExistingPageNumber() {
+        final SearchResult result = productService.findByCriteria(
+                null,
+                null,
+                null,
+                null,
+                1000, // Заведомо несуществующий номер страницы
+                null,
+                null);
+        assertAll(
+                () -> assertEquals(result.getProducts().size(), 0, "Не должно быть ни одного продукта")
+        );
+    }
+
+    private boolean inLimits(ProductDto.Response.AllWithCategoryId p, BigDecimal min, BigDecimal max) {
+        return p.getPrice().compareTo(min) >= 0 && p.getPrice().compareTo(max) <= 0;
     }
 }

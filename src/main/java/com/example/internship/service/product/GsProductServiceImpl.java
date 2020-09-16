@@ -129,7 +129,10 @@ public class GsProductServiceImpl implements GsProductService {
 
         final boolean[] pages = new boolean[(int) (totalProducts / pageSize + 1)];
         Arrays.fill(pages, false);
-        pages[pageNumber] = true;
+        // Защита от дурака (меня :)
+        if (pageNumber < pages.length) {
+            pages[pageNumber] = true;
+        }
 
         final List<AllWithCategoryId> filteredProducts = productRepository
                 .findAll(specification, pageable)
