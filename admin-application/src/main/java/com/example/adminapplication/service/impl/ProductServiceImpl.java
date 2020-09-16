@@ -5,13 +5,10 @@ import com.example.adminapplication.dto.ProductSearchResult;
 import com.example.adminapplication.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author Ivan Gubanov
@@ -20,65 +17,73 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    @Value("${resttemplate.url}")
-    private String url;
+    private String uri = "/product";
 
-    private String url() {
-        return url + "/product";
+    @Override
+    public void removeProduct(Long id) {
+
+        webClient.post()
+                .uri(uri +"/remove-product")
+                .bodyValue(id)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     @Override
-    public List<ProductDto> findAll() throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-all", null, List.class);
+    public void saveProduct(ProductDto product) {
+
+        webClient.post()
+                .uri(uri + "/save-product")
+                .bodyValue(product)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     @Override
-    public void removeProduct(Long id) throws ResourceAccessException {
-        restTemplate.postForObject(url() + "/remove-product", id, String.class);
-    }
+    public ProductDto findByIdProduct(Long id) {
 
-    @Override
-    public void saveProduct(ProductDto product) throws ResourceAccessException {
-        restTemplate.postForObject(url() + "/save-product", product, String.class);
-    }
-
-    @Override
-    public List<ProductDto> findByName(String name) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-name", name, List.class);
-    }
-
-    @Override
-    public ProductDto findByIdProduct(Long id) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-id", id, ProductDto.class);
+        return webClient.post()
+                .uri(uri + "/find-by-id")
+                .bodyValue(id)
+                .retrieve()
+                .bodyToMono(ProductDto.class)
+                .block();
     }
 
     @Override
     public ProductSearchResult productSearch(String searchText, Long categoryId, BigDecimal priceFrom,
-                                             BigDecimal priceTo, Integer pageSize, Integer pageNumber)
-            throws ResourceAccessException {
+                                             BigDecimal priceTo, Integer pageSize, Integer pageNumber) {
 
-        StringBuilder url = new StringBuilder(url()).append("/search?");
+        StringBuilder uri = new StringBuilder(this.uri).append("/search?");
+
         if (StringUtils.isNotBlank(searchText)) {
-            url.append("searchText=").append(searchText).append("&");
+            uri.append("searchText=").append(searchText).append("&");
         }
         if (categoryId != null && categoryId > 0) {
-            url.append("categoryId=").append(categoryId).append("&");
+            uri.append("categoryId=").append(categoryId).append("&");
         }
         if (priceFrom != null && priceFrom.compareTo(BigDecimal.ZERO) > 0) {
-            url.append("priceFrom=").append(priceFrom).append("&");
+            uri.append("priceFrom=").append(priceFrom).append("&");
         }
         if (priceTo != null && priceTo.compareTo(BigDecimal.ZERO) > 0) {
-            url.append("priceTo=").append(priceTo).append("&");
+            uri.append("priceTo=").append(priceTo).append("&");
         }
         if (pageSize != null && pageSize > 0) {
-            url.append("pageSize=").append(pageSize).append("&");
+            uri.append("pageSize=").append(pageSize).append("&");
         }
         if (pageNumber != null && pageNumber > 0) {
-            url.append("pageNumber=").append(pageNumber - 1).append("&");
+            uri.append("pageNumber=").append(pageNumber - 1).append("&");
         }
-        ProductSearchResult result = restTemplate.getForObject(url.toString(), ProductSearchResult.class);
+        ProductSearchResult result = webClient.get()
+                .uri(uri.toString())
+                .retrieve()
+                .bodyToMono(ProductSearchResult.class)
+                .block();
+
         // Create pagination
         if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
 

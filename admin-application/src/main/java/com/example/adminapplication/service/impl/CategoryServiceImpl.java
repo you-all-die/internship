@@ -3,10 +3,9 @@ package com.example.adminapplication.service.impl;
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.util.List;
 
@@ -17,41 +16,71 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    @Value("${resttemplate.url}")
-    private String url;
-
-    private String url() { return url + "/category"; }
+    private String uri = "/category";
 
     @Override
-    public List<CategoryDto> findAll() throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-all", null, List.class);
+    public List<CategoryDto> findAll() {
+
+        return webClient.post()
+                .uri(uri + "/find-all")
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
     }
 
     @Override
-    public CategoryDto findById(Long id) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-id", id, CategoryDto.class);
+    public CategoryDto findById(Long id) {
+
+        return webClient.post()
+                .uri(uri + "/find-by-id")
+                .bodyValue(id)
+                .retrieve()
+                .bodyToMono(CategoryDto.class)
+                .block();
     }
 
     @Override
-    public List<CategoryDto> findAllSortById() throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-all-sort-by-id", null, List.class);
+    public List<CategoryDto> findAllSortById() {
+
+        return webClient.post()
+                .uri(uri + "/find-all-sort-by-id")
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
     }
 
     @Override
-    public void removeCategory(Long id) throws ResourceAccessException {
+    public void removeCategory(Long id) {
 
-        restTemplate.postForObject(url() + "/remove-category", id, String.class);
+        webClient.post()
+                .uri(uri +"/remove-category")
+                .bodyValue(id)
+                .retrieve()
+                .toBodilessEntity()
+                .block();;
     }
 
     @Override
-    public void addCategory(CategoryDto category) throws ResourceAccessException {
-        restTemplate.postForObject(url() + "/add-category", category, String.class);
+    public void addCategory(CategoryDto category) {
+
+        webClient.post()
+                .uri(uri +"/add-category")
+                .bodyValue(category)
+                .retrieve()
+                .toBodilessEntity()
+                .block();;
     }
 
     @Override
-    public List<CategoryDto> findByName(String name) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-name", name, List.class);
+    public List<CategoryDto> findByName(String name) {
+
+        return webClient.post()
+                .uri(uri + "/find-by-name")
+                .bodyValue(name)
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
     }
 }
