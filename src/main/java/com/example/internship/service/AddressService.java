@@ -9,9 +9,9 @@ import java.util.List;
  * @author Роман Каравашкин
  */
 public interface AddressService {
-    List<AddressDto.Response.Full> getAllById(Long id);
+    List<AddressDto> getAllById(Long id);
 
-    void addAddress(AddressDto.Request.Full addressDto);
+    void addAddress(AddressDto addressDto);
 
-    List<AddressDto.Response.Full> deleteAddress(Long id, Long addressId);
+    List<AddressDto> deleteAddress(Long id, Long addressId);
 }

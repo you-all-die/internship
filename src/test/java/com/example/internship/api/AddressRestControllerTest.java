@@ -42,6 +42,10 @@ public class AddressRestControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(addressRestController).build();
     }
 
+    /**
+     * Тест на получения аддреса по CustomerID
+     * @throws Exception
+     */
     @Test
     public void testGetAddressByUserId() throws Exception {
         objectMapper = new ObjectMapper();
@@ -69,6 +73,10 @@ public class AddressRestControllerTest {
                 .andReturn();
     }
 
+    /**
+     * Тест на добавление аддреса по CustomerId
+     * @throws Exception
+     */
     @Test
     public void testPostAddress() throws Exception {
         objectMapper = new ObjectMapper();
@@ -103,6 +111,11 @@ public class AddressRestControllerTest {
                 .andReturn();
 
     }
+
+    /**
+     * Удаление аддреса по id
+     * @throws Exception
+     */
 
     @Test
     public void testDeleteAddress() throws Exception{
