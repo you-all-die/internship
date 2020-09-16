@@ -34,7 +34,6 @@ public class Customer {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @Column(name="last_activity")
     private Timestamp lastActivity;
 
     public final String getFullName() {

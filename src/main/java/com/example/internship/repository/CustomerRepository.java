@@ -14,5 +14,10 @@ public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaS
     @Transactional
     @Modifying
     @Query("UPDATE Customer c SET c.lastActivity = NOW() WHERE c.id = :id")
-    int setLastActivityForCustomers(@Param(value = "id") long customerId);
+    int setLastActivityForCustomers(@Param(value = "id") Long customerId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE Customer c WHERE c.firstName = NULL AND c.email = NULL AND c.lastActivity < YESTERDAY()")
+    int deleteInactiveAnonymousUsers();
 }
