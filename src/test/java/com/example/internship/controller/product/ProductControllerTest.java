@@ -8,11 +8,11 @@ import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.service.product.GsProductService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("Тест ProductController")
 class ProductControllerTest {
 
     @Autowired
@@ -74,6 +75,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Все параметры равны null (первоначальная загрузка страница)")
     void testWithAllNulls() throws Exception {
         // Ожидается, что будет загружены первые двадцать продуктов,
         // отсортированных по возрастанию цены

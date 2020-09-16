@@ -6,6 +6,8 @@ import com.example.internship.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +33,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories() {
         return categoryRepository.findAllByParentNull().stream()
                 .map(this::convertToAllWithParentAndSubcategories)
@@ -71,6 +74,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
      * @return список идентификаторов категорий
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<Long> findDescendants(final Category category) {
         List<Long> descendants = new ArrayList<>();
         descendants.add(category.getId());
@@ -90,6 +94,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
      * @return список идентификаторов категорий
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<Long> findDescendants(final Long categoryId) {
         if (null == categoryId) {
             return Collections.emptyList();

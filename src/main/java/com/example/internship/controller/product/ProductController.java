@@ -1,31 +1,33 @@
 package com.example.internship.controller.product;
 
 import com.example.internship.dto.product.SearchResult;
-import com.example.internship.entity.Product;
-import com.example.internship.service.CartService;
 import com.example.internship.service.ProductService;
-import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.service.product.GsProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
+
 
 /**
  * @author Самохвалов Юрий Алексеевич
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping(ProductController.BASE_URL)
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
 
+    public static final String BASE_URL = "/product";
+
     private final ProductService productService;
     private final GsProductService gsProductService;
-    private final GsCategoryService categoryService;
 
     /**
      * @author Роман Каравашкин
@@ -51,6 +53,6 @@ public class ProductController {
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
         model.addAttribute("data", data);
-        return "product/index";
+        return BASE_URL + "/index";
     }
 }
