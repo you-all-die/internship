@@ -29,12 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AddressRestControllerTest {
 
     AddressService addressService = mock(AddressService.class);
-    static AddressDto addressDtoOne = mock(AddressDto.class);
-    static AddressDto addressDtoTwo = mock(AddressDto.class);
 
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
+
 
     @BeforeEach
     public void setUp() {
@@ -51,8 +50,8 @@ public class AddressRestControllerTest {
 
     @Test
     public void testGetAddressByUserId() throws Exception {
-        objectMapper = new ObjectMapper();
-        addressDtoOne = createNewAddressDto(1L, 2L, "Mordoviya");
+
+        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Mordoviya");
         final List<AddressDto> addressDtoList = List.of(addressDtoOne);
         Long customerId = addressDtoOne.getCustomerId();
 
@@ -75,6 +74,20 @@ public class AddressRestControllerTest {
                 .andExpect(jsonPath("$[0].comment", is("test1")))
                 .andReturn();
 
+        verify(addressService, times(1)).getAllById(customerId);
+
+    }
+
+    @Test
+    public void testGetNullAddress() throws Exception{
+        AddressDto addressDto = null;
+
+        when(addressService.getAllById(anyLong())).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(get("/api/user/{id}/address",15)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
     /**
@@ -84,162 +97,45 @@ public class AddressRestControllerTest {
      */
     @Test
     public void testPostAddress() throws Exception {
-        objectMapper = new ObjectMapper();
-        addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
+        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
 
         final List<AddressDto> addressDtoList = List.of(addressDtoOne);
+
         Long customerId = addressDtoOne.getCustomerId();
 
         when(addressService.getAllById(customerId)).thenReturn(addressDtoList);
-        doNothing().when(addressService).addAddress(addressDtoOne);
+
 
         mockMvc.perform(post("/api/user/{id}/address", customerId)
                 .content(objectMapper.writeValueAsString(addressDtoOne))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
-        mockMvc.perform(get("/api/user/{id}/address", customerId)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
-                .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].customerId", is(2)))
-                .andExpect(jsonPath("$[0].region", is("Miami")))
-                .andExpect(jsonPath("$[0].city", is("City1")))
-                .andExpect(jsonPath("$[0].district", is("district1")))
-                .andExpect(jsonPath("$[0].street", is("street1")))
-                .andExpect(jsonPath("$[0].house", is("1")))
-                .andExpect(jsonPath("$[0].apartment", is("11")))
-                .andExpect(jsonPath("$[0].comment", is("test1")))
-                .andReturn();
-
+        verify(addressService, times(1)).addAddress(addressDtoOne);
     }
 
     /**
      * Удаление аддреса по id
+     *
      * @throws Exception
      */
 
-
-//    @Test
-//    public void testPostAddress() throws Exception {
-//        objectMapper = new ObjectMapper();
-//        addressDtoOne = createNewAddressDto(1L,2L, "Miami");
-//
-//        final List<AddressDto> addressDtoList = List.of(addressDtoOne);
-//        Long customerId = addressDtoOne.getCustomerId();
-//
-//        when(addressService.getAllById(customerId)).thenReturn(addressDtoList);
-//        doNothing().when(addressService).addAddress(addressDtoOne);
-//
-//        mockMvc.perform(post("/api/user/{id}/address", customerId)
-//                .content(objectMapper.writeValueAsString(addressDtoOne))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//
-//        mockMvc.perform(get("/api/user/{id}/address", customerId)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
-//                .andExpect(jsonPath("$.*", hasSize(1)))
-//                .andExpect(jsonPath("$[0].id", is(1)))
-//                .andExpect(jsonPath("$[0].customerId", is(2)))
-//                .andExpect(jsonPath("$[0].region", is("Miami")))
-//                .andExpect(jsonPath("$[0].city", is("City1")))
-//                .andExpect(jsonPath("$[0].district", is("district1")))
-//                .andExpect(jsonPath("$[0].street", is("street1")))
-//                .andExpect(jsonPath("$[0].house", is("1")))
-//                .andExpect(jsonPath("$[0].apartment", is("11")))
-//                .andExpect(jsonPath("$[0].comment", is("test1")))
-//                .andReturn();
-//
-//    }
-
-
     @Test
-    public void testDeleteAddress() throws Exception{
-        objectMapper = new ObjectMapper();
-        addressDtoOne = createNewAddressDto(1L,2L,"Mexico");
-        addressDtoTwo = createNewAddressDto(2L,2L,"Texas");
-
-        final List<AddressDto> addressDtoList = List.of(addressDtoOne,addressDtoTwo);
+    public void testDeleteAddress() throws Exception {
+        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
+        final List<AddressDto> addressDtoList = List.of(addressDtoOne);
 
         Long customerId = addressDtoOne.getCustomerId();
         Long id = addressDtoOne.getId();
 
-        when(addressService.getAllById(customerId)).thenReturn(addressDtoList);
-        when(addressService.deleteAddress(customerId,id)).thenReturn(addressDtoList);
-        doNothing().when(addressService).addAddress(addressDtoOne);
-        doNothing().when(addressService).addAddress(addressDtoTwo);
-        //doNothing().when(addressService).deleteAddress(customerId,id);
-
-        mockMvc.perform(post("/api/user/{id}/address", customerId)
+        mockMvc.perform(delete("/api/user/{id}/address/{addressId}", customerId, id)
                 .content(objectMapper.writeValueAsString(addressDtoOne))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        mockMvc.perform(post("/api/user/{id}/address", customerId)
-                .content(objectMapper.writeValueAsString(addressDtoTwo))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        mockMvc.perform(get("/api/user/{id}/address", customerId)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
-                .andExpect(jsonPath("$.*", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].customerId", is(2)))
-                .andExpect(jsonPath("$[0].region", is("Mexico")))
-                .andExpect(jsonPath("$[0].city", is("City1")))
-                .andExpect(jsonPath("$[0].district", is("district1")))
-                .andExpect(jsonPath("$[0].street", is("street1")))
-                .andExpect(jsonPath("$[0].house", is("1")))
-                .andExpect(jsonPath("$[0].apartment", is("11")))
-                .andExpect(jsonPath("$[0].comment", is("test1")))
-
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].customerId", is(2)))
-                .andExpect(jsonPath("$[1].region", is("Texas")))
-                .andExpect(jsonPath("$[1].city", is("City1")))
-                .andExpect(jsonPath("$[1].district", is("district1")))
-                .andExpect(jsonPath("$[1].street", is("street1")))
-                .andExpect(jsonPath("$[1].house", is("1")))
-                .andExpect(jsonPath("$[1].apartment", is("11")))
-                .andExpect(jsonPath("$[1].comment", is("test1")))
-                .andReturn();
-
-        mockMvc.perform(delete("/api/user/{id}/address/{addressId}", customerId,id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        mockMvc.perform(get("/api/user/{id}/address", customerId)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-
-                .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
-                .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(2)))
-                .andExpect(jsonPath("$[0].customerId", is(2)))
-                .andExpect(jsonPath("$[0].region", is("Texas")))
-                .andExpect(jsonPath("$[0].city", is("City1")))
-                .andExpect(jsonPath("$[0].district", is("district1")))
-                .andExpect(jsonPath("$[0].street", is("street1")))
-                .andExpect(jsonPath("$[0].house", is("1")))
-                .andExpect(jsonPath("$[0].apartment", is("11")))
-                .andExpect(jsonPath("$[0].comment", is("test1")))
-                .andReturn();
+        verify(addressService, times(1)).deleteAddress(customerId, id);
     }
 
-    private static AddressDto createNewAddressDto(Long id,Long customerId, String region) {
+    private static AddressDto createNewAddressDto(Long id, Long customerId, String region) {
         AddressDto addressDtoOne = new AddressDto();
         addressDtoOne.setId(id);
         addressDtoOne.setCustomerId(customerId);

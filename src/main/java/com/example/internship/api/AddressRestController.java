@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/user/{id}/address")
+@RequestMapping("/api/user/{customerId}/address")
 @RequiredArgsConstructor
 public class AddressRestController {
 
@@ -24,17 +24,23 @@ public class AddressRestController {
     private  final AddressService addressService;
 
     @GetMapping
-    public List<AddressDto> getAllCustomerById(@PathVariable Long id) {
-        return addressService.getAllById(id);
+    public ResponseEntity getAllCustomerById(@PathVariable Long customerId) {
+        List<AddressDto> allById = addressService.getAllById(customerId);
+        if (allById == null||allById.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(allById);
     }
 
     @PostMapping
-    public void addAddress(@RequestBody AddressDto addressDto) {
+    public ResponseEntity addAddress(@RequestBody AddressDto addressDto) {
         addressService.addAddress(addressDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{addressId}")
-    public List<AddressDto> deleteAddressById(@PathVariable Long id, @PathVariable Long addressId) {
-        return addressService.deleteAddress(id, addressId);
+    public ResponseEntity deleteAddressById(@PathVariable Long customerId, @PathVariable Long addressId) {
+         addressService.deleteAddress(customerId, addressId);
+         return ResponseEntity.ok().build();
     }
 }

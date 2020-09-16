@@ -2,6 +2,7 @@ package com.example.internship.service;
 
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface AddressService {
 
     void addAddress(AddressDto addressDto);
 
-    List<AddressDto> deleteAddress(Long id, Long addressId);
+    void deleteAddress(Long id, Long addressId);
 }

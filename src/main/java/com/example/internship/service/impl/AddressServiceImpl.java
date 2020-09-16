@@ -6,6 +6,7 @@ import com.example.internship.repository.AddressesRepository;
 import com.example.internship.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -35,12 +36,13 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void addAddress(AddressDto addressDto) {
         addressesRepository.save(modelMapper.map(addressDto, Address.class));
+
     }
 
     @Override
-    public List<AddressDto> deleteAddress(Long id, Long addressId) {
+    public void deleteAddress(Long id, Long addressId) {
         addressesRepository.deleteById(addressId);
-        return addressesRepository.findAddressByCustomerId(id)
+         addressesRepository.findAddressByCustomerId(id)
                 .stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
