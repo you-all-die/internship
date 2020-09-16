@@ -24,7 +24,7 @@ public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaS
 
     @Transactional
     @Modifying
-    @Query(value = "DELETE customers WHERE first_name = NULL AND email = NULL AND last_activity < YESTERDAY()",
+    @Query(value = "delete FROM customers where first_name is null AND last_activity < 'yesterday'",
             nativeQuery = true)
     int deleteInactiveAnonymousUsers();
 }
