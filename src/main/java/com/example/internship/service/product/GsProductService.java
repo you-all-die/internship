@@ -28,4 +28,5 @@ public interface GsProductService {
             Integer pageNumber,
             Integer pageSize,
             Boolean descendingOrder);
+    void deleteAll();
 }

@@ -19,4 +19,5 @@ public interface GsCategoryService {
     Optional<Category> findById(long id);
     void save(CategoryDto.Request.All categoryDto);
     void delete(long id);
+    void deleteAll();
 }

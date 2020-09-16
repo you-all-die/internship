@@ -116,6 +116,11 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         categoryRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteAll() {
+        categoryRepository.deleteAll();
+    }
+
     private CategoryDto.Response.All convertToAllDto(Category category) {
         return modelMapper.map(category, CategoryDto.Response.All.class);
     }

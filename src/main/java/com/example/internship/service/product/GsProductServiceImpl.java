@@ -154,6 +154,11 @@ public class GsProductServiceImpl implements GsProductService {
                 .build();
     }
 
+    @Override
+    public void deleteAll() {
+        productRepository.deleteAll();
+    }
+
     private AllWithCategoryId convertToAllWithCategoryId(Product product) {
         return modelMapper.map(product, AllWithCategoryId.class);
     }
