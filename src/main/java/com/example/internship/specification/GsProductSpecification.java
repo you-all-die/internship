@@ -51,7 +51,7 @@ public class GsProductSpecification implements Specification<Product> {
             ));
         }
 
-        if (null != categoryIds && !categoryIds.isEmpty()) {
+        if (null != categoryIds) {
             predicates.add(builder.in(root.get(Product_.category).get(Category_.ID)).value(categoryIds));
         }
 
