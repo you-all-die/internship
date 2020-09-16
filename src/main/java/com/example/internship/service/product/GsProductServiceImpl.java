@@ -73,8 +73,8 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
-    public void save(ProductDto.Request.AllWithCategoryId productDto) {
-        productRepository.save(convertToEntity(productDto));
+    public void save(Product product) {
+        productRepository.save(product);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GsProductServiceImpl implements GsProductService {
             Integer pageSize,
             Boolean descendingOrder
     ) {
-        List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
+        List<Long> categoryIds = categoryService.findDescendants(categoryId);
 
         final BigDecimal minimalPrice = productRepository.findMinimalPrice().orElse(BigDecimal.ZERO);
         final BigDecimal maximalPrice = productRepository.findMaximalPrice().orElse(BigDecimal.ZERO);
@@ -167,20 +167,16 @@ public class GsProductServiceImpl implements GsProductService {
         return modelMapper.map(product, ProductDto.Response.Ids.class);
     }
 
-    private Product convertToEntity(ProductDto.Request.AllWithCategoryId dto) {
-        return modelMapper.map(dto, Product.class);
-    }
-
     @PostConstruct
     private void configureMapper() {
         modelMapper
                 .createTypeMap(Product.class, AllWithCategoryId.class)
-                .addMappings(mapper -> {
-                    // подразумевается, что categoryId у продукта не может быть null
-                    mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId);
-                });
+                .addMappings(mapper -> mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId));
         modelMapper
                 .createTypeMap(Product.class, ProductDto.Response.Ids.class)
                 .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
+        modelMapper
+                .createTypeMap(AllWithCategoryId.class, Product.class)
+                .addMappings(mapper -> mapper.map(dto -> categoryService.findById(dto.getCategoryId()), Product::setCategory));
     }
 }

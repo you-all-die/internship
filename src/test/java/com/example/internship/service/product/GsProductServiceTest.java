@@ -1,7 +1,5 @@
 package com.example.internship.service.product;
 
-import com.example.internship.dto.category.CategoryDto;
-import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
@@ -33,15 +31,13 @@ class GsProductServiceTest {
     @BeforeAll
     static void beforeAll(
             @Autowired GsCategoryService categoryService,
-            @Autowired GsProductService productService,
-            @Autowired ModelMapper modelMapper
+            @Autowired GsProductService productService
     ) {
         // Одна общая категория
         Category category = new Category();
         category.setId(CATEGORY_ID);
         category.setName(CATEGORY_NAME);
-        CategoryDto.Request.All categoryDto = modelMapper.map(category, CategoryDto.Request.All.class);
-        categoryService.save(categoryDto);
+        categoryService.save(category);
 
         // Генерация списка продуктов
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
@@ -51,8 +47,7 @@ class GsProductServiceTest {
             product.setName("Phone " + i);
             product.setDescription("Description " + i);
             product.setPrice(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(i + 1)));
-            ProductDto.Request.AllWithCategoryId productDto = modelMapper.map(product, ProductDto.Request.AllWithCategoryId.class);
-            productService.save(productDto);
+            productService.save(product);
         }
     }
 
@@ -133,7 +128,7 @@ class GsProductServiceTest {
                 null);
         assertAll(
                 () -> assertEquals(result.getCategoryId(), CATEGORY_ID, "Не совпадают идентификаторы категории"),
-                () -> assertEquals(result.getProducts().size(), 20, "Количество найденных продуктов должно быть 20")
+                () -> assertEquals(result.getProducts().size(), 20, "Количество продуктов на странице должно быть 20")
         );
     }
 
