@@ -1,15 +1,16 @@
 package com.example.internship.controller.customer;
 
+import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.entity.Customer;
 import com.example.internship.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -26,7 +27,7 @@ public class CustomerController {
 
     @GetMapping("")
     public String viewCustomerList(Model model) {
-        Iterable<Customer> customers = customerService.getAll();
+        final Collection<WithFullName> customers = customerService.getAllWithFullNames();
         model.addAttribute("customers", customers);
         return "customer/index";
     }

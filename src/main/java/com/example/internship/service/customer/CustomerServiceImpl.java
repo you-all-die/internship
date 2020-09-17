@@ -216,7 +216,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @param customer покупатель
      * @return Фамилия Имя Отчество покупателя или {@link ANONYMOUS}
      */
-    private String generateFullName(@NonNull Customer customer) {
+    public final String generateFullName(@NonNull Customer customer) {
         StringBuilder builder = new StringBuilder();
         if (null != customer.getFirstName()) {
             builder.append(customer.getFirstName());

@@ -32,18 +32,4 @@ public class Customer {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    public final String getFullName() {
-        StringBuilder sb = new StringBuilder();
-        if (null != lastName) {
-            sb.append(lastName);
-        }
-        if (null != firstName) {
-            sb.append(" ").append(firstName);
-        }
-        if (null != middleName) {
-            sb.append(" ").append(middleName);
-        }
-        return sb.toString().trim();
-    }
 }
