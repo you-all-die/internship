@@ -1,6 +1,7 @@
 package com.example.adminapplication.controller.categories;
 
 import com.example.adminapplication.dto.CategoryDto;
+import com.example.adminapplication.dto.CategorySearchResult;
 import com.example.adminapplication.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,10 +30,24 @@ public class CategoriesController {
 
             if (categoryName==null) categoryName="";
             model.addAttribute("valueSearchParentCategoryId", parentCategoryId);
-            model.addAttribute("valueSearchPageNumber", pageNumber);
+            model.addAttribute("pageNumber", pageNumber);
             model.addAttribute("valueSearchPageSize", pageSize);
             model.addAttribute("valueSearchName", categoryName);
-            model.addAttribute("categoryList", categoryService.searchResult(categoryName, parentCategoryId, pageSize, pageNumber));
+
+            CategorySearchResult categorySearchResult =
+                    categoryService.searchResult(categoryName, parentCategoryId, pageSize, pageNumber);
+
+            //Определяем количество страниц
+            Long totalCategory = categorySearchResult.getTotalCategory();
+            long totalPage = (long)Math.ceil(totalCategory * 1.0/pageSize);
+            model.addAttribute("totalPage", totalPage);
+
+            //Проверка, чтобы выбранная страница находилась в допустимом диапазоне
+            if(pageNumber >= totalPage) categorySearchResult =
+                    categoryService.searchResult(categoryName, parentCategoryId, pageSize, 0);
+
+
+            model.addAttribute("categoryList", categorySearchResult);
 
         return "categories/categories_api";
     }
@@ -51,16 +66,12 @@ public class CategoriesController {
         //Добавление параметра: поиск по ID родительской категории
         if(parentCategoryId !=null) builder.queryParam("parentCategoryId", parentCategoryId);
         //Добавление параметра: номер страницы
-        if(pageNumber < 0) builder.queryParam("pageNumber", 0);
-        else builder.queryParam("pageNumber", pageNumber);
+        builder.queryParam("pageNumber", pageNumber);
         //Добавление параметра: размер страницы
-        if(pageSize < 1) builder.queryParam("pageSize", 20);
-        else builder.queryParam("pageSize", pageSize);
+        builder.queryParam("pageSize", pageSize);
 
         return "redirect:" + builder.toUriString();
 
-        //Декодировка русских букв для корректного поиска
-        // name = URLEncoder.encode(name, StandardCharsets.UTF_8);
     }
 
     @PostMapping(value = "/category/delete")

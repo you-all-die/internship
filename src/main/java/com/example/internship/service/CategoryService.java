@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.CategorySearchResult;
+import com.example.internship.dto.ParentCategorySearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import com.example.internship.specification.CategorySpecification;
@@ -44,6 +45,7 @@ public class CategoryService {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
 
+    //Метод поиска категорий с параметрами
     public CategorySearchResult search(String name, Long parentId, Integer pageSize, Integer pageNumber) {
 
         CategorySearchResult categorySearchResult = new CategorySearchResult();
@@ -53,7 +55,7 @@ public class CategoryService {
         // Формируем условия для запроса
         specification = draftSpecification(null,"name", name);
         if(parentId!=null) specification =
-                draftSpecification(specification,"parent_id", parentId.toString());
+                draftSpecification(specification,"parentId", parentId.toString());
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
@@ -79,4 +81,9 @@ public class CategoryService {
         }
         return specification;
     }
+
+    public ParentCategorySearchResult searchParentCategory(){
+
+    }
+
 }

@@ -30,6 +30,7 @@ public class CategorySpecification implements Specification<Category> {
             case "parentId":
                 return criteriaBuilder.equal(root.join("parent").get("id"), value.toString());
         }
+
         return null;
     }
 }

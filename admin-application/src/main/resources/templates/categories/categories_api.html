@@ -50,12 +50,17 @@
                 </td>
                 <td>
                     <div class="ui input">
-                        <input class="ui input" name="pageNumber" type="number" th:value="${categoryList.pageNumber}"/>
+                        <select class="ui dropdown"  name="pageNumber"  id="pageNumber">
+                            <option th:each="i : ${#numbers.sequence(1, totalPage)}" th:selected="${i == pageNumber+1}"
+                                    th:value="${i-1}" th:text="${i}">
+                            </option>
+                        </select>
                     </div>
                 </td>
                 <td>
                     <div class="ui input">
-                        <input class="ui input" name="pageSize" type="number" th:value="${categoryList.pageSize}"/>
+                        <input class="ui input" name="pageSize" type="number" max="100" min="1"
+                               th:value="${categoryList.pageSize}"/>
                     </div>
                 </td>
                 <td>
@@ -76,14 +81,14 @@
     <div class="ui container" th:unless="${#arrays.isEmpty(categoryList.category)}">
         <table class="ui celled table">
             <thead>
-            <tr><th th:text="#{categories.name}">Name</th>
+            <tr><th th:text="'ID: ' + #{categories.name}">Name</th>
                 <th th:text="#{categories.parent_category}">Parent category</th>
                 <th colspan="2" th:text="#{categories.action}">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="category: ${categoryList.category}">
-                <td th:text="${category.name}">Name</td>
+                <td th:text="${category.id} + ':  ' + ${category.name}">Name</td>
                 <td th:text="${category?.parent?.name}">Subcategory</td>
                 <td class="right aligned collapsing">
                     <form method="POST" th:action="@{/category/edit(categoryId=${category.id})}">

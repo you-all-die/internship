@@ -67,14 +67,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         //Добавление параметра: поиск по наименованию
         if(!name.isEmpty()) builder.queryParam("searchText", name);
-        System.out.println("---->>>>>>>" + builder.toUriString());
         //Добавление параметра: поиск по ID родительской категории
         if(parentId !=null) builder.queryParam("parentId", parentId);
         //Добавление параметра: номер страницы
         builder.queryParam("pageNumber", pageNumber);
         //Добавление параметра: размер страницы
         builder.queryParam("pageSize", pageSize);
-
         //Декодировка кириллицы
         String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
         return restTemplate.getForObject(url() + result, CategorySearchResult.class);
