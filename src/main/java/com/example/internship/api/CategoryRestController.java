@@ -75,10 +75,10 @@ public class CategoryRestController {
             response = CategorySearchResult.class)
     public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
                                                @ApiParam(value = "поиск по наименованию")
-                                                       Optional<String> searchText,
+                                                       String searchText,
                                                @RequestParam(name = "parentId", required = false)
                                                @ApiParam(value = "поиск id parent")
-                                                       Optional<Long> parentId,
+                                                       Long parentId,
                                                @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                @ApiParam(value = "размер страницы")
                                                        Integer pageSize,
