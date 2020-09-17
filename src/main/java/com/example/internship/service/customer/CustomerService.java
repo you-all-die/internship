@@ -1,4 +1,4 @@
-package com.example.internship.service;
+package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;

@@ -23,5 +23,5 @@ public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaS
     @Modifying
     @Query(value = "delete FROM customers where first_name is null AND (last_activity < 'yesterday' OR last_activity is null)",
             nativeQuery = true)
-    int deleteInactiveAnonymousUsers();
+    Integer deleteInactiveAnonymousUsers();
 }

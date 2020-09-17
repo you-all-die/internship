@@ -1,10 +1,10 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

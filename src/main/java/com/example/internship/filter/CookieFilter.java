@@ -1,6 +1,6 @@
 package com.example.internship.filter;
 
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
