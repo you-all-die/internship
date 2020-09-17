@@ -44,7 +44,7 @@ public class CustomerRestController {
     //Редактирование данных
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
-    public ResponseEntity<?> postUser(@PathVariable Long id, @RequestBody Customer customer) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody Customer customer) {
         Customer customerOld = customerService.getById(id).orElse(null);
         if (customerOld!=null) {
             customerOld.setFirstName(customer.getFirstName());

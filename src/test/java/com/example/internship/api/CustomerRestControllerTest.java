@@ -5,6 +5,7 @@ import com.example.internship.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,9 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CustomerRestControllerTest {
     //Макеты
-    CustomerService customerService = mock(CustomerService.class);
-    Customer customer = mock(Customer.class);
-    Customer customerUpdate = mock(Customer.class);
+    private final CustomerService customerService = mock(CustomerService.class);
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
@@ -53,7 +53,7 @@ public class CustomerRestControllerTest {
     @Test
     public void testGetUser() throws Exception {
         //Создание нового пользователя
-        customer = createNewCustomer("Петров", "petr@gmail.com");
+        Customer customer = createNewCustomer("Петров", "petr@gmail.com");
         //Получение Id для поиска
         long id = customer.getId();
 
@@ -95,18 +95,19 @@ public class CustomerRestControllerTest {
 
     //Тест: редактирование данных пользователя
     @Test
-    public void testPostUser() throws Exception{
+    public void testUpdateUser() throws Exception{
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+
         objectMapper = new ObjectMapper();
         //Создание нового пользователя
-        customer = createNewCustomer("Петров", "petr@gmail.com");
+        Customer customer = createNewCustomer("Петров", "petr@gmail.com");
 
         //Получение Id для поиска
         long id = customer.getId();
 
-        //Создание нового пользователя с измененными данными
+        //Одновление данных пользователя
         //Изменяем фамилию и E-mail
-        customerUpdate = createNewCustomer("Иванов", "petrivanov@gmail.com");
-
+        Customer customerUpdate = createNewCustomer("Иванов", "petrivanov@gmail.com");
         //Обработка метода, подстановка объекта
         when(customerService.getById(id)).thenReturn(Optional.of(customer));
         doNothing().when(customerService).save(customer);
@@ -116,43 +117,28 @@ public class CustomerRestControllerTest {
                 .content(objectMapper.writeValueAsString(customerUpdate))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
-        //Get запрос: проверка внесенных изменений
-        mockMvc.perform(get("/api/user/{id}",id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is((int)id)))
-                .andExpect(jsonPath("$.firstName", is("Петр")))
-                .andExpect(jsonPath("$.middleName", is("Петрович")))
-                .andExpect(jsonPath("$.lastName", is(customerUpdate.getLastName())))
-                .andExpect(jsonPath("$.phone", is("+79271234567")))
-                .andExpect(jsonPath("$.email", is(customerUpdate.getEmail())))
-                .andExpect(jsonPath("$.password", is("password")));
-
         //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(3)).getById(id);
+        verify(customerService, times(1)).getById(id);
         verify(customerService, times(1)).save(customer);
         verifyNoMoreInteractions(customerService);
+
+        //Проверка сохраненных данных
+        verify(customerService).save(customerArgumentCaptor.capture());
+        Customer customerSaved = customerArgumentCaptor.getValue();
+        assertSame(customerSaved.getId(), id);
+        assertEquals(customerSaved.getLastName(), customerUpdate.getLastName());
+        assertEquals(customerSaved.getEmail(), customerUpdate.getEmail());
     }
 
     //Тест: редактирование данных пользователя, обработка ошибки 404
     @Test
-    public void testPostUserNotFound() throws Exception{
+    public void testUpdateUserNotFound() throws Exception{
         objectMapper = new ObjectMapper();
-        //Создание нового пользователя
-        customer = createNewCustomer("Петров", "petr@gmail.com");
-
-        //Получение Id для поиска
-        long id = customer.getId();
-
-        //Создание нового пользователя с измененными данными
-        //Изменяем фамилию и E-mail
-        customerUpdate = createNewCustomer("Иванов", "petrivanov@gmail.com");
-
+        //Обновление данных пользователя
+        Customer customerUpdate = createNewCustomer("Петров", "petr@gmail.com");
+        long id = 3;
         //Обработка метода, подстановка объекта
-        when(customerService.getById(id)).thenReturn(Optional.empty());
-        doNothing().when(customerService).save(customer);
-
+        when(customerService.getById(anyLong())).thenReturn(Optional.empty());
         //Put запрос: внесение изменений в данные пользователя
         mockMvc.perform(put("/api/user/{id}",id)
                 .content(objectMapper.writeValueAsString(customerUpdate))
@@ -166,7 +152,7 @@ public class CustomerRestControllerTest {
 
 
     private Customer createNewCustomer(String lastName, String email){
-        customer = new Customer();
+        Customer customer = new Customer();
         customer.setId((long) 1);
         customer.setFirstName("Петр");
         customer.setMiddleName("Петрович");

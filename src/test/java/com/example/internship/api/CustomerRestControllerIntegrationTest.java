@@ -60,12 +60,13 @@ public class CustomerRestControllerIntegrationTest {
         mockMvc.perform(get("/api/user/search")
                 .param("pageNumber", "0")
                 .param("pageSize", "20")
+                .param("email", "@")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo (print ())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pageNumber", is(0)))
                 .andExpect(jsonPath("$.pageSize", is(20)))
-                .andExpect(jsonPath("$.totalCustomers", is(1)));
+                .andExpect(jsonPath("$.totalCustomers", is(0)));
     }
 
 
@@ -78,13 +79,14 @@ public class CustomerRestControllerIntegrationTest {
         mockMvc.perform(get("/api/user/search")
                 .param("pageNumber", "0")
                 .param("pageSize", "10")
+                .param("email", "@")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo (print ())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pageNumber", is(0)))
                 .andExpect(jsonPath("$.pageSize", is(10)))
-                .andExpect(jsonPath("$.totalCustomers", is(4)))
-                .andExpect(jsonPath("$.customers", hasSize(4)))
+                .andExpect(jsonPath("$.totalCustomers", is(3)))
+                .andExpect(jsonPath("$.customers", hasSize(3)))
                 .andExpect(jsonPath("$.customers.[0].id", is(customerFirst.getId().intValue())))
                 .andExpect(jsonPath("$.customers.[1].firstName", is(customerSecond.getFirstName())))
                 .andExpect(jsonPath("$.customers.[2].email", is(customerThird.getEmail())));
@@ -102,12 +104,13 @@ public class CustomerRestControllerIntegrationTest {
         mockMvc.perform(get("/api/user/search")
                 .param("pageNumber", "1")
                 .param("pageSize", "20")
+                .param("email", "@")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo (print ())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pageNumber", is(1)))
                 .andExpect(jsonPath("$.pageSize", is(20)))
-                .andExpect(jsonPath("$.totalCustomers", is(4)))
+                .andExpect(jsonPath("$.totalCustomers", is(3)))
                 .andExpect(jsonPath("$.customers", hasSize(0)));
     }
 
