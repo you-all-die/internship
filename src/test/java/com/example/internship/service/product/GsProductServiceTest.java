@@ -232,7 +232,7 @@ class GsProductServiceTest {
                 null,
                 null,
                 null,
-                null, // Заведомо несуществующий номер страницы
+                null,
                 1,
                 null);
         assertAll(
@@ -248,11 +248,13 @@ class GsProductServiceTest {
                 SUBCATEGORY_ID,
                 null,
                 null,
-                null, // Заведомо несуществующий номер страницы
+                null,
                 1,
                 null);
         assertAll(
-                () -> assertEquals(result.getBreadcrumbs().size(), 2, "Должна быть две хлебные крошки")
+                () -> assertEquals(result.getBreadcrumbs().size(), 2, "Должна быть две хлебные крошки"),
+                () -> assertEquals(result.getTotal(), 0, "В субкатегории нет ни одного товара"),
+                () -> assertEquals(result.getProducts().size(), 0, "На странице не должно быть ни одного товара")
         );
     }
 
