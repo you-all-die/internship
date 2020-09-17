@@ -109,7 +109,8 @@ public class ProductServiceImpl implements ProductService {
             pageSize = 20;
         }
         // Формируем результат поиска
-        searchResult.setProducts(productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream()
+        searchResult.setProducts(productRepo.findAll(specification, PageRequest.of(pageNumber, pageSize, Sort.by("id")))
+                .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList()));
         searchResult.setPageNumber(pageNumber);

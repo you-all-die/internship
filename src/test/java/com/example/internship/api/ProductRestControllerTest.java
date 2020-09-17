@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -96,10 +95,7 @@ public class ProductRestControllerTest {
         expected.setPageNumber(0);
         expected.setPageSize(20);
         expected.setTotalProducts(2L);
-        List<ProductDto> products = new LinkedList<>();
-        products.add(productOne);
-        products.add(productTwo);
-        expected.setProducts(products);
+        expected.setProducts(List.of(productOne, productTwo));
     }
 
     /**

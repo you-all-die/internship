@@ -1,0 +1,7 @@
+.item {
+    cursor: pointer;
+}
+
+#filter {
+    height: 70vh;
+}

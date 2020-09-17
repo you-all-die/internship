@@ -6,7 +6,7 @@ import com.example.internship.repository.AddressesRepository;
 import com.example.internship.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -27,42 +27,43 @@ public class AddressServiceImpl implements AddressService {
 
 
     @Override
-    public List<AddressDto.Response.Full> getAllById(Long customerId) {
+    public List<AddressDto> getAllById(Long customerId) {
         return addressesRepository.findAddressByCustomerId(customerId)
-                .stream().map(this::convertToFullDto).collect(Collectors.toList());
+                .stream().map(this::convertToDto).collect(Collectors.toList());
 
     }
 
     @Override
-    public void addAddress(AddressDto.Request.Full addressDto) {
+    public void addAddress(AddressDto addressDto) {
         addressesRepository.save(modelMapper.map(addressDto, Address.class));
+
     }
 
     @Override
-    public List<AddressDto.Response.Full> deleteAddress(Long id, Long addressId) {
+    public void deleteAddress(Long id, Long addressId) {
         addressesRepository.deleteById(addressId);
-        return addressesRepository.findAddressByCustomerId(id)
-                .stream().map(this::convertToFullDto).collect(Collectors.toList());
+         addressesRepository.findAddressByCustomerId(id)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 
-    private AddressDto.Response.Full convertToFullDto(Address address) {
-        return modelMapper.map(address, AddressDto.Response.Full.class);
+    private AddressDto convertToDto(Address address) {
+        return modelMapper.map(address, AddressDto.class);
     }
 
-    private Address convertToEntity(AddressDto.Request.Full addressDto) {
+    private Address convertToEntity(AddressDto addressDto) {
         return modelMapper.map(addressDto, Address.class);
     }
 
     @PostConstruct
     private void configureMapper() {
-        modelMapper.createTypeMap(Address.class, AddressDto.Response.Full.class)
+        modelMapper.createTypeMap(Address.class, AddressDto.class)
                 .addMappings(mapper ->
-                        mapper.map(src -> src.getCustomer().getId(), AddressDto.Response.Full::setCustomerId)
+                        mapper.map(src -> src.getCustomer().getId(), AddressDto::setCustomerId)
                 );
 
-        modelMapper.createTypeMap(AddressDto.Request.Full.class, Address.class).addMappings(
-                mapper -> mapper.<Long>map(AddressDto.Request.Full::getCustomerId,
+        modelMapper.createTypeMap(AddressDto.class, Address.class).addMappings(
+                mapper -> mapper.<Long>map(AddressDto::getCustomerId,
                         (target, v) -> target.getCustomer().setId(v)));
 
     }
