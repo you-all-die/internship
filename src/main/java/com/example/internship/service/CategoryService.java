@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,27 +44,39 @@ public class CategoryService {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
 
-    public CategorySearchResult search(Optional<String> name, Optional<Long> parentId, Integer pageSize, Integer pageNumber) {
+    public CategorySearchResult search(String name, Long parentId, Integer pageSize, Integer pageNumber) {
 
         CategorySearchResult categorySearchResult = new CategorySearchResult();
 
-        Specification<Category> specification = Specification.where(
+        Specification<Category> specification;
 
-                new CategorySpecification("name", name.orElse("")));
+        // Формируем условия для запроса
+        specification = draftSpecification(null,"name", name);
+        if(parentId!=null) specification =
+                draftSpecification(specification,"parent_id", parentId.toString());
 
-        if (parentId.isPresent()) {
-            specification = specification.and(new CategorySpecification("parentId", parentId.get()));
-        }
-
-        categorySearchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
+        categorySearchResult.setCategory(categoryRepository.findAll(specification,
+                PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
         categorySearchResult.setPageNumber(pageNumber);
         categorySearchResult.setPageSize(pageSize);
         categorySearchResult.setTotalCategory(categoryRepository.count(specification));
-
         return categorySearchResult;
     }
 
     public void removeAll() {
         categoryRepository.deleteAll();
+    }
+
+    //Метод проверки поля и добавления условия в запрос
+    private Specification<Category> draftSpecification(Specification<Category> specification, String columnName,
+                                                       String optionalName ){
+        if(optionalName !=null){
+            if(specification == null){
+                specification = Specification.where(new CategorySpecification(columnName, optionalName));
+            }else {
+                specification = specification.and(new CategorySpecification(columnName, optionalName));
+            }
+        }
+        return specification;
     }
 }

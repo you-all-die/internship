@@ -1,13 +1,17 @@
 package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.CategoryDto;
+import com.example.adminapplication.dto.CategorySearchResult;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -18,6 +22,7 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final RestTemplate restTemplate;
+
 
     @Value("${resttemplate.url}")
     private String url;
@@ -53,5 +58,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> findByName(String name) throws ResourceAccessException {
         return restTemplate.postForObject(url() + "/find-by-name", name, List.class);
+    }
+
+    @Override
+    public CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber){
+        //Конструктор запроса
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/search");
+
+        //Добавление параметра: поиск по наименованию
+        if(!name.isEmpty()) builder.queryParam("searchText", name);
+        System.out.println("---->>>>>>>" + builder.toUriString());
+        //Добавление параметра: поиск по ID родительской категории
+        if(parentId !=null) builder.queryParam("parentId", parentId);
+        //Добавление параметра: номер страницы
+        builder.queryParam("pageNumber", pageNumber);
+        //Добавление параметра: размер страницы
+        builder.queryParam("pageSize", pageSize);
+
+        //Декодировка кириллицы
+        String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
+        return restTemplate.getForObject(url() + result, CategorySearchResult.class);
     }
 }
