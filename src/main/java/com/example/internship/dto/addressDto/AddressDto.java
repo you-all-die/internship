@@ -5,10 +5,8 @@ import lombok.*;
 /**
  * @author Роман Каравашкин
  */
-@Getter
-@Setter
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto {

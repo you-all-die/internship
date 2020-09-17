@@ -80,7 +80,6 @@ public class AddressRestControllerTest {
 
     @Test
     public void testGetNullAddress() throws Exception{
-        AddressDto addressDto = null;
 
         when(addressService.getAllById(anyLong())).thenReturn(new ArrayList<>());
 
@@ -122,7 +121,7 @@ public class AddressRestControllerTest {
     @Test
     public void testDeleteAddress() throws Exception {
         AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
-        final List<AddressDto> addressDtoList = List.of(addressDtoOne);
+
 
         Long customerId = addressDtoOne.getCustomerId();
         Long id = addressDtoOne.getId();
