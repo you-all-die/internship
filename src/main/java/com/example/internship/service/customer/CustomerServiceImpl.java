@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -202,11 +201,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository
                 .findAll()
                 .stream()
-                .map(this::convertToWithFullNames)
+                .map(this::convertToWithFullName)
                 .collect(toUnmodifiableList());
     }
 
-    private WithFullName convertToWithFullNames(Customer customer) {
+    private WithFullName convertToWithFullName(Customer customer) {
         return mapper.map(customer, WithFullName.class);
     }
 
@@ -235,10 +234,7 @@ public class CustomerServiceImpl implements CustomerService {
     private void configureCustomerMapper() {
         mapper
                 .createTypeMap(Customer.class, WithFullName.class)
-                .addMapping(Customer::getId, WithFullName::setId)
-                .addMapping(this::generateFullName, WithFullName::setFullName)
-                .addMapping(Customer::getPhone, WithFullName::setPhone)
-                .addMapping(Customer::getEmail, WithFullName::setEmail);
+                .addMappings(mapper -> mapper.map(this::generateFullName, WithFullName::setFullName));
     }
 }
 
