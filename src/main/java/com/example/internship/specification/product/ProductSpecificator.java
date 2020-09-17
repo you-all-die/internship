@@ -1,4 +1,4 @@
-package com.example.internship.specification;
+package com.example.internship.specification.product;
 
 import com.example.internship.entity.Category_;
 import com.example.internship.entity.Product;
@@ -20,14 +20,14 @@ import java.util.List;
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-public class GsProductSpecification implements Specification<Product> {
+public class ProductSpecificator implements Specification<Product> {
 
     private final String searchString;
     private final Collection<Long> categoryIds;
     private final BigDecimal lowerLimit;
     private final BigDecimal upperLimit;
 
-    private GsProductSpecification(
+    private ProductSpecificator(
             Builder builder
     ) {
         this.searchString = builder.searchString;
@@ -90,7 +90,7 @@ public class GsProductSpecification implements Specification<Product> {
         }
 
         public Specification<Product> build() {
-            return new GsProductSpecification(this);
+            return new ProductSpecificator(this);
         }
     }
 }
