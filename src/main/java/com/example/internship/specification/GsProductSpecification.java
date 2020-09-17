@@ -5,7 +5,7 @@ import com.example.internship.entity.Product;
 import com.example.internship.entity.Product_;
 import com.example.internship.helper.PredicateHelper;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,9 +38,9 @@ public class GsProductSpecification implements Specification<Product> {
 
     @Override
     public Predicate toPredicate(
-            @NotNull Root<Product> root,
-            @NotNull CriteriaQuery<?> query,
-            @NotNull CriteriaBuilder builder
+            @NonNull Root<Product> root,
+            @NonNull CriteriaQuery<?> query,
+            @NonNull CriteriaBuilder builder
     ) {
         final List<Predicate> predicates = new ArrayList<>();
 
