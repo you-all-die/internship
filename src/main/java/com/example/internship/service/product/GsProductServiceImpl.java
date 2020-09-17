@@ -9,6 +9,7 @@ import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.specification.GsProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -170,12 +171,10 @@ public class GsProductServiceImpl implements GsProductService {
     private void configureMapper() {
         modelMapper
                 .createTypeMap(Product.class, AllWithCategoryId.class)
-                .addMappings(mapper -> {
-                    // подразумевается, что categoryId у продукта не может быть null
-                    mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId);
-                });
+                .addMappings(mapper -> mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId));
         modelMapper
                 .createTypeMap(Product.class, ProductDto.Response.Ids.class)
                 .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
     }
+
 }

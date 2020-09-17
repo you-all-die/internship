@@ -4,11 +4,14 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface CustomerService {
 
     Iterable<Customer> getAll();
+
+    Collection<com.example.internship.dto.customer.CustomerDto.Response.WithFullName> getAllWithFullNames();
 
     Optional<Customer> getById(long id);
     Optional<CustomerDto> getDtoById(Long id);

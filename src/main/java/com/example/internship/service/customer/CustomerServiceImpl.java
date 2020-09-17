@@ -1,31 +1,39 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
+import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
+    private static final String ANONYMOUS = "Анонимный покупатель";
     private final CustomerRepository customerRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -180,5 +188,47 @@ public class CustomerServiceImpl implements CustomerService {
         return specification;
     }
 
+    //======================================================================================================
+
+    @Override
+    public Collection<WithFullName> getAllWithFullNames() {
+        return customerRepository
+                .findAll()
+                .stream()
+                .map(this::convertToAllWithFullNames)
+                .collect(toUnmodifiableList());
+    }
+
+    private WithFullName convertToAllWithFullNames(Customer customer) {
+        return mapper.map(customer, WithFullName.class);
+    }
+
+    @PostConstruct
+    private void configureCustomerMapper() {
+        mapper
+                .createTypeMap(Customer.class, WithFullName.class)
+                .addMappings(mapper -> mapper.map(this::generateFullName, WithFullName::setFullName));
+    }
+
+    /**
+     * Генерирует полное имя покупателя.
+     *
+     * @param customer покупатель
+     * @return Фамилия Имя Отчество покупателя или {@link ANONYMOUS}
+     */
+    private String generateFullName(@NonNull Customer customer) {
+        StringBuilder builder = new StringBuilder();
+        if (null != customer.getFirstName()) {
+            builder.append(customer.getFirstName());
+        }
+        if (null != customer.getMiddleName()) {
+            builder.append(" ").append(customer.getMiddleName());
+        }
+        if (null != customer.getLastName()) {
+            builder.append(" ").append(customer.getLastName());
+        }
+        String fullName = builder.toString().trim();
+        return StringUtils.isNotBlank(fullName) ? fullName : ANONYMOUS;
+    }
 }
 
