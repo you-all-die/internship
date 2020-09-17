@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,7 +38,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper mapper;
-    private final HttpServletResponse response;
 
     public final Iterable<Customer> getAll() {
         return customerRepository.findAll();
@@ -53,8 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.isPresent()) {
             CustomerDto customerDto = convertToDto(customer.get());
             return Optional.of(customerDto);
-        }
-        else {
+        } else {
             return Optional.empty();
         }
     }
@@ -145,7 +144,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customer != null && customer.getEmail() == null;
     }
 
-    public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
+    public CustomerDto getCustomerDto(Customer customer) {
+        return convertToDto(customer);
+    }
 
     private CustomerDto convertToDto(Customer customer) {
         return mapper.map(customer, CustomerDto.class);
@@ -158,17 +159,17 @@ public class CustomerServiceImpl implements CustomerService {
     //Api: поиск по критериям: ФИО, E-mail. Размер страницы, номер страницы
     @Override
     public CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
-                                       Optional<String> lastName,Optional<String> email,
+                                       Optional<String> lastName, Optional<String> email,
                                        Integer pageSize, Integer pageNumber) {
 
         CustomerSearchResult customerSearchResult = new CustomerSearchResult();
         Specification<Customer> specification;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null,"firstName", firstName);
-        specification = draftSpecification(specification,"middleName", middleName);
-        specification = draftSpecification(specification,"lastName", lastName);
-        specification = draftSpecification(specification,"email", email);
+        specification = draftSpecification(null, "firstName", firstName);
+        specification = draftSpecification(specification, "middleName", middleName);
+        specification = draftSpecification(specification, "lastName", lastName);
+        specification = draftSpecification(specification, "email", email);
 
         // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
@@ -183,11 +184,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     //Метод проверки поля и добавления условия в запрос
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
-                                                       Optional<String> optionalName ){
-        if(optionalName.isPresent()){
-            if(specification == null){
+                                                       Optional<String> optionalName) {
+        if (optionalName.isPresent()) {
+            if (specification == null) {
                 specification = Specification.where(new CustomerSpecification(columnName, optionalName.get()));
-            }else {
+            } else {
                 specification = specification.and(new CustomerSpecification(columnName, optionalName.get()));
             }
         }
@@ -203,10 +204,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(this::convertToWithFullName)
                 .collect(toUnmodifiableList());
-    }
-
-    private WithFullName convertToWithFullName(Customer customer) {
-        return mapper.map(customer, WithFullName.class);
     }
 
     /**
@@ -234,7 +231,21 @@ public class CustomerServiceImpl implements CustomerService {
     private void configureCustomerMapper() {
         mapper
                 .createTypeMap(Customer.class, WithFullName.class)
-                .addMappings(mapper -> mapper.map(this::generateFullName, WithFullName::setFullName));
+                .addMappings(mapper -> mapper.skip(WithFullName::setFullName))
+                .setPostConverter(toWithFullNameConverter());
+    }
+
+    private WithFullName convertToWithFullName(Customer customer) {
+        return mapper.map(customer, WithFullName.class);
+    }
+
+    private Converter<Customer, WithFullName> toWithFullNameConverter() {
+        return context -> {
+            Customer source = context.getSource();
+            WithFullName destination = context.getDestination();
+            destination.setFullName(generateFullName(source));
+            return context.getDestination();
+        };
     }
 }
 
