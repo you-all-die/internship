@@ -2,10 +2,14 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
+import com.example.internship.dto.customer.CustomerDto.Response.AllExceptPassword;
 import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
+import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
+import com.example.internship.entity.Customer_;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.specification.CustomerSpecification;
+import com.example.internship.specification.customer.CustomerSpecificator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,6 +41,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class CustomerServiceImpl implements CustomerService {
 
     private static final String ANONYMOUS = "Анонимный покупатель";
+    private static final int DEFAULT_PAGE_SIZE = 20;
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
@@ -206,6 +214,39 @@ public class CustomerServiceImpl implements CustomerService {
                 .collect(toUnmodifiableList());
     }
 
+    @Override
+    public SearchResult findByCriteria(
+            String searchString,
+            Integer pageSize,
+            Integer pageNumber,
+            Boolean ascendingOrder
+    ) {
+        final Sort.Direction direction = (null == ascendingOrder || ascendingOrder) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        final Sort sort = Sort.by(direction, Customer_.LAST_NAME, Customer_.FIRST_NAME, Customer_.MIDDLE_NAME);
+        if (null == pageSize) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        if (null == pageNumber) {
+            pageNumber = 0;
+        }
+        final Pageable pageable = PageRequest.of(pageNumber, pageNumber, sort);
+        final CustomerSpecificator specificator = CustomerSpecificator.builder()
+                .searchString(searchString)
+                .build();
+        final long total = customerRepository.count(specificator);
+        final List<AllExceptPassword> customers = customerRepository
+                .findAll(specificator, pageable)
+                .stream()
+                .map(this::convertToAllExceptPassword)
+                .collect(toUnmodifiableList());
+        return SearchResult.builder()
+                .customers(customers)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .ascendingOrder(null == ascendingOrder || ascendingOrder)
+                .build();
+    }
+
     /**
      * Генерирует полное имя покупателя.
      *
@@ -233,6 +274,10 @@ public class CustomerServiceImpl implements CustomerService {
                 .createTypeMap(Customer.class, WithFullName.class)
                 .addMappings(mapper -> mapper.skip(WithFullName::setFullName))
                 .setPostConverter(toWithFullNameConverter());
+    }
+
+    private AllExceptPassword convertToAllExceptPassword(Customer customer) {
+        return mapper.map(customer, AllExceptPassword.class);
     }
 
     private WithFullName convertToWithFullName(Customer customer) {

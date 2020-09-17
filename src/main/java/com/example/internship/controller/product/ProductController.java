@@ -1,8 +1,6 @@
 package com.example.internship.controller.product;
 
 import com.example.internship.dto.product.SearchResult;
-import com.example.internship.entity.Product;
-import com.example.internship.service.CartService;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.service.product.GsProductService;
