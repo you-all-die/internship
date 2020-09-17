@@ -47,9 +47,8 @@ public class AboutController {
 
     private final OutletService outletService;
 
-    @GetMapping("")
+    @GetMapping
     public String showAboutPage(
-            HttpServletRequest request,
             HttpServletResponse response,
             @NotNull Model model,
             @CookieValue(name = CITY_FILTER_COOKIE_NAME, required = false, defaultValue = "") String cityFilter,

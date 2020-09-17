@@ -30,7 +30,7 @@
             <div class="ui divided items">
                 <div class="item" th:each="orderLine : ${orderLines}">
                     <div class="image">
-                        <img th:src="@{/images/headerLogo.png}">
+                        <img th:src="@{/img/{img}(img=${orderLine.product.picture})}">
                     </div>
                     <div class="content">
                         <a class="header" th:text="${orderLine?.product?.name}"></a>
@@ -74,7 +74,9 @@
                 Total Price
             </div>
         </div>
-        <button class="ui right floated positive button">Checkout</button>
+        <a th:href="@{/cart/checkout}">
+            <button class="ui right floated positive button" >Checkout</button>
+        </a>
     </div>
 </div>
 <footer th:replace="common/main::footer"></footer>

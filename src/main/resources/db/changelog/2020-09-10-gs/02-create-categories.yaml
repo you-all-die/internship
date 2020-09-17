@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-category-number-three
+      author: Самохвалов Юрий Алексеевич
+      comment: Привести категории к общему знаменателю
+      preconditions:
+        - onFail: MARK_RUN
+        - sqlCheck:
+            expectedResult: 0
+            sql: select count(*) from category where id = 3
+      changes:
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: name
+                  value: "Apple"
+              - column:
+                  name: parent_id
+                  value: "1"
