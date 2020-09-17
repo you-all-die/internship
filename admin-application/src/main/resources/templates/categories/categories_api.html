@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title th:text="#{categories.title}">Edit categories</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <h1 class="ui center aligned header">Список категорий</h1>
+    <table class="ui celled table">
+        <tbody>
+        <tr>
+            <td>
+                <form method="POST" action="#" th:action="@{/categories/add}">
+                    <button class="ui primary button" type="submit">Добавить категорию</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="ui celled table">
+        <tbody>
+        <thead>
+    <tr>
+        <th colspan="3">Меню поиска с параметрами</th>
+        <th colspan="1">Всего найдего:</th>
+        <th colspan="1" th:text="${categoryList.totalCategory}"></th>
+    </tr>
+    <tr>
+        <th>Наименование</th>
+        <th>ID родителя</th>
+        <th>Номер страницы</th>
+        <th>Размер страницы</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+        <tbody>
+        <form method="POST" class="ui form" action="#" th:action="@{/categories}">
+            <tr>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" name="name" type="text" th:value="${valueSearchName}"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" name="parentCategoryId" type="number" th:value="${valueSearchParentCategoryId}"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" name="pageNumber" type="number" th:value="${categoryList.pageNumber}"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" name="pageSize" type="number" th:value="${categoryList.pageSize}"/>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <input class="ui button" type="submit" value="Показать"/>
+                    </div>
+                </td>
+            </tr>
+        </form>
+        </tbody>
+    </table>
+
+    <div class="ui container" th:if="${#arrays.isEmpty(categoryList.category)}">
+        <h4>По вашему запросу ничего не найдено...</h4>
+        <a th:href="@{/categories}">Показать полный список</a><br>
+    </div>
+
+    <div class="ui container" th:unless="${#arrays.isEmpty(categoryList.category)}">
+        <table class="ui celled table">
+            <thead>
+            <tr><th th:text="#{categories.name}">Name</th>
+                <th th:text="#{categories.parent_category}">Parent category</th>
+                <th colspan="2" th:text="#{categories.action}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category: ${categoryList.category}">
+                <td th:text="${category.name}">Name</td>
+                <td th:text="${category?.parent?.name}">Subcategory</td>
+                <td class="right aligned collapsing">
+                    <form method="POST" th:action="@{/category/edit(categoryId=${category.id})}">
+                        <button type="submit" name="submit" value="value" class="ui green button"
+                                th:text="#{categories.edit}">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td class="right aligned collapsing">
+                    <form method="POST" th:action="@{/category/delete(categoryId=${category.id})}">
+                        <button type="submit" name="submit" value="value" class="ui red button"
+                                th:text="#{categories.delete}">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
+</html>
