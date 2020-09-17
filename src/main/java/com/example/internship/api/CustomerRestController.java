@@ -34,9 +34,9 @@ public class CustomerRestController {
     //Показать данные конкретного пользователя
     @GetMapping("{id}")
     @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
-    public Object getUser(@PathVariable Long id) {
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
         if(customerService.getById(id).isPresent()) {
-            return customerService.getById(id);
+            return new ResponseEntity<>(customerService.getById(id), HttpStatus.OK);
         }
         return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
