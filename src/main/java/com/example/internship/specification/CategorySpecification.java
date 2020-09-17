@@ -1,8 +1,8 @@
 package com.example.internship.specification;
 
 import com.example.internship.entity.Category;
-import com.example.internship.entity.Product;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,14 +16,17 @@ import javax.persistence.criteria.Root;
 @AllArgsConstructor
 public class CategorySpecification implements Specification<Category> {
 
-    private String key;
-    private Object value;
+    private final String key;
+    private final Object value;
 
     @Override
-    public Predicate toPredicate(Root<Category> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(@NotNull Root<Category> root,
+                                 @NotNull CriteriaQuery<?> criteriaQuery,
+                                 @NotNull CriteriaBuilder criteriaBuilder) {
         switch (key) {
             case "name":
-                return criteriaBuilder.like(root.get("name"), "%" + value + "%");
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
+                        "%" + value.toString().toLowerCase() + "%");
             case "parentId":
                 return criteriaBuilder.equal(root.join("parent").get("id"), value.toString());
         }
