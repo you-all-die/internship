@@ -19,10 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author Самохвалов Юрий Алексеевич
  */
 @Controller
-@RequestMapping("/about")
+@RequestMapping(AboutController.BASE_MAPPING)
 @Slf4j
 @RequiredArgsConstructor
 public class AboutController {
+
+    public static final String BASE_MAPPING = "/about";
 
     private static final String CITY_FILTER_COOKIE_NAME = "cityFilterCookie";
     private static final String LONGITUDE_COOKIE_NAME = "longitudeCookie";

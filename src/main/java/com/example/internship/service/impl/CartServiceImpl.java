@@ -100,7 +100,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean remove(Product product, Long customerId) {
-        Optional<Customer> customer = checkCustomerCart(customerId);;
+        Optional<Customer> customer = checkCustomerCart(customerId);
 
         if (customer.isEmpty()) return false;
 

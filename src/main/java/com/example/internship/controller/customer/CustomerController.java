@@ -15,8 +15,10 @@ import java.util.Optional;
  * @author Самохвалов Юрий Алексеевич
  */
 @Controller
-@RequestMapping("/customer")
+@RequestMapping(CustomerController.BASE_MAPPING)
 public class CustomerController {
+
+    public final static String BASE_MAPPING = "/customer";
 
     @Autowired
     private CustomerService customerService;

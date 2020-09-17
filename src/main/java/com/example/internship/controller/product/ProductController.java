@@ -18,10 +18,12 @@ import java.math.BigDecimal;
  * @author Самохвалов Юрий Алексеевич
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping(ProductController.BASE_MAPPING)
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
+
+    public static final String BASE_MAPPING = "/product";
 
     private final ProductService productService;
     private final GsProductService gsProductService;
