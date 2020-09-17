@@ -6,6 +6,7 @@ import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
+import com.example.internship.repository.OrderLineRepository;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,8 @@ class CartServiceImplTest {
 
     private final CartRepository cartRepository = mock(CartRepository.class);
 
+    private final OrderLineRepository orderLineRepository = mock(OrderLineRepository.class);
+
     private final ModelMapper mapper = mock(ModelMapper.class);
 
     private CartService cartService;
@@ -53,7 +56,7 @@ class CartServiceImplTest {
         cart = new Cart();
         cart.setId(1L);
         cart.setOrderLines(new ArrayList<>() {{
-            add(new OrderLine(ORDER_LINE_ID1, product, 1));
+            add(new OrderLine(ORDER_LINE_ID1, cart, product, 1));
         }});
 
         customer = new Customer();
@@ -63,7 +66,7 @@ class CartServiceImplTest {
         when(customerRepository.findById(eq(CUSTOMER_ID1))).thenReturn(Optional.of(customer));
         when(customerRepository.findById(eq(CUSTOMER_ID2))).thenReturn(Optional.empty());
         when(customerRepository.save(any())).thenReturn(customer);
-        cartService = new CartServiceImpl(customerRepository, productRepository, cartRepository, mapper);
+        cartService = new CartServiceImpl(customerRepository, productRepository, cartRepository, orderLineRepository, mapper);
     }
 
     /**

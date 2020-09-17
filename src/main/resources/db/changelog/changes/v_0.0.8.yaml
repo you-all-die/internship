@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: db/changelog/2020-09-01-01/01-remove-test-customers.yaml

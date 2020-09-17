@@ -2,8 +2,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/2020-08-28-MD/01-add-product-price.yaml
   - include:
-      file: db/changelog/2020-08-28-MD/02-add-customer-for-test.yaml
-  - include:
       file: db/changelog/2020-08-28-IG/01-change-customer-password-size.yaml
   - include:
       file: db/changelog/2020-08-28-MD/02-create-cart-and-order-line-and-order-.yaml
