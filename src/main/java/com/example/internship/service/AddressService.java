@@ -2,6 +2,7 @@ package com.example.internship.service;
 
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ import java.util.List;
  * @author Роман Каравашкин
  */
 public interface AddressService {
-    List<AddressDto.Response.Full> getAllById(Long id);
+    List<AddressDto> getAllById(Long id);
 
-    void addAddress(AddressDto.Request.Full addressDto);
+    void addAddress(AddressDto addressDto);
 
-    List<AddressDto.Response.Full> deleteAddress(Long id, Long addressId);
+    void deleteAddress(Long id, Long addressId);
 }
