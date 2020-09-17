@@ -3,7 +3,7 @@ package com.example.internship.controller.customer;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -35,8 +37,14 @@ public class CustomerRegistrationController {
 
     // Регистрация нового покупателя
     @PostMapping
-    public String newCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult, Model model,
-                              @RequestParam Map<String,String> allParams) {
+    public String newCustomer(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CustomerDto customerDto,
+            BindingResult bindingResult,
+            Model model,
+                              @RequestParam Map<String,String> allParams
+    ) {
         // Если неверно заполнены поля
         if (bindingResult.hasErrors()) {
             return "customer/registration";
@@ -53,7 +61,7 @@ public class CustomerRegistrationController {
         } catch (MailServiceException exception) {
             log.error("Error sending email! {}", exception.toString());
         }
-        return "redirect:/customer/" + customerService.registrationCustomer(customerDto).getId();
+        return "redirect:/customer/" + customerService.registrationCustomer(request, response, customerDto).getId();
     }
 
 }

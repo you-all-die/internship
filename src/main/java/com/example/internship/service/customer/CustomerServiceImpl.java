@@ -5,10 +5,9 @@ import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
-import com.example.internship.service.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,18 +30,14 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private static final String ANONYMOUS = "Анонимный покупатель";
+
     private final CustomerRepository customerRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final ModelMapper mapper;
-
-    private final HttpServletRequest request;
-
     private final HttpServletResponse response;
 
     public final Iterable<Customer> getAll() {
@@ -78,15 +74,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // Регистрация покупателя
-    public CustomerDto registrationCustomer(CustomerDto customerDto) {
+    public CustomerDto registrationCustomer(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            CustomerDto customerDto
+    ) {
         // Получаем id покупателя из куки
-        Long customerId = customerIdFromCookie().orElse(null);
+        Long customerId = customerIdFromCookie(request).orElse(null);
         // Если в куках не найдено или указано неверное значения id покупателя
         if (customerId == null || !isAnonymousCustomer(customerId)) {
             // Создаем нового анонимного покупателя
             customerId = createAnonymousCustomer().getId();
             // Добавляем (перезаписываем) id в куки
-            customerIdAddToCookie(customerId);
+            customerIdAddToCookie(response, customerId);
         }
         // Кодируем пароль
         customerDto.setPassword(passwordEncoder.encode(customerDto.getPassword()));
@@ -101,7 +101,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // Получение id покупателя из куки
-    public Optional<Long> customerIdFromCookie() {
+    public Optional<Long> customerIdFromCookie(
+            HttpServletRequest request
+    ) {
         // Получаем куки из запроса
         Cookie[] cookies = request.getCookies();
         // Если куки не пустые
@@ -118,7 +120,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // Удаление id покупателя из куки
-    public void customerIdDeleteFromCookie() {
+    public void customerIdDeleteFromCookie(
+            HttpServletResponse response
+    ) {
         // Создаем новый куки id покупателя
         Cookie customerIdCookie = new Cookie("customerId", null);
         // Время жизни = 0
@@ -128,11 +132,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // Запись (перезапись) id покупателя в куки
-    public void customerIdAddToCookie(Long customerId) {
+    public void customerIdAddToCookie(
+            HttpServletResponse response,
+            Long customerId
+    ) {
         response.addCookie(new Cookie("customerId", customerId.toString()));
     }
 
-    // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
+    // Проверяем, что id покупателя есть в базе и он еще не зарегистрирован
     public boolean isAnonymousCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
@@ -195,40 +202,43 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository
                 .findAll()
                 .stream()
-                .map(this::convertToAllWithFullNames)
+                .map(this::convertToWithFullNames)
                 .collect(toUnmodifiableList());
     }
 
-    private WithFullName convertToAllWithFullNames(Customer customer) {
+    private WithFullName convertToWithFullNames(Customer customer) {
         return mapper.map(customer, WithFullName.class);
-    }
-
-    @PostConstruct
-    private void configureCustomerMapper() {
-        mapper
-                .createTypeMap(Customer.class, WithFullName.class)
-                .addMappings(mapper -> mapper.map(this::generateFullName, WithFullName::setFullName));
     }
 
     /**
      * Генерирует полное имя покупателя.
      *
      * @param customer покупатель
-     * @return Фамилия Имя Отчество покупателя или {@link ANONYMOUS}
+     * @return Фамилия Имя Отчество покупателя или {@link CustomerServiceImpl#ANONYMOUS}
      */
     public final String generateFullName(@NonNull Customer customer) {
         StringBuilder builder = new StringBuilder();
-        if (null != customer.getFirstName()) {
+        if (StringUtils.isNotBlank(customer.getFirstName())) {
             builder.append(customer.getFirstName());
         }
-        if (null != customer.getMiddleName()) {
+        if (StringUtils.isNotBlank(customer.getMiddleName())) {
             builder.append(" ").append(customer.getMiddleName());
         }
-        if (null != customer.getLastName()) {
+        if (StringUtils.isNotBlank(customer.getLastName())) {
             builder.append(" ").append(customer.getLastName());
         }
         String fullName = builder.toString().trim();
         return StringUtils.isNotBlank(fullName) ? fullName : ANONYMOUS;
+    }
+
+    @PostConstruct
+    private void configureCustomerMapper() {
+        mapper
+                .createTypeMap(Customer.class, WithFullName.class)
+                .addMapping(Customer::getId, WithFullName::setId)
+                .addMapping(this::generateFullName, WithFullName::setFullName)
+                .addMapping(Customer::getPhone, WithFullName::setPhone)
+                .addMapping(Customer::getEmail, WithFullName::setEmail);
     }
 }
 

@@ -2,7 +2,7 @@ package com.example.internship.controller.customer;
 
 import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.entity.Customer;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @GetMapping("")
+    @GetMapping
     public String viewCustomerList(Model model) {
         final Collection<WithFullName> customers = customerService.getAllWithFullNames();
         model.addAttribute("customers", customers);
@@ -61,7 +61,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public String saveCustomer(@ModelAttribute Customer customer) {
         customerService.save(customer);
         return "redirect:/customer";

@@ -1,12 +1,10 @@
 package com.example.internship.controller.cart;
 
 import com.example.internship.dto.OrderLineDto;
-import com.example.internship.entity.Customer;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +26,12 @@ public class CartController {
     private final CustomerService customerService;
 
     @GetMapping
-    public String showCart(Model model) {
+    public String showCart(
+            HttpServletRequest request,
+            Model model
+    ) {
 //        Получение куки customerID
-        Optional<Long> customerId = customerService.customerIdFromCookie();
+        Optional<Long> customerId = customerService.customerIdFromCookie(request);
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
@@ -43,20 +44,26 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addToCart(@RequestParam("productId") Product product)  {
+    public String addToCart(
+            HttpServletRequest request,
+            @RequestParam("productId") Product product
+    ) {
 //        Получение куки customerID
-        Optional<Long> customerId = customerService.customerIdFromCookie();
+        Optional<Long> customerId = customerService.customerIdFromCookie(request);
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
-        cartService.add(product,customerId.get());
+        cartService.add(product, customerId.get());
         return "redirect:/products";
     }
 
     @PostMapping("/remove")
-    public String removeItem(@RequestParam("productId") Product product) {
+    public String removeItem(
+            HttpServletRequest request,
+            @RequestParam("productId") Product product
+    ) {
 //        Получение куки customerID
-        Optional<Long> customerId = customerService.customerIdFromCookie();
+        Optional<Long> customerId = customerService.customerIdFromCookie(request);
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
@@ -65,10 +72,13 @@ public class CartController {
     }
 
     @PostMapping("/update")
-    public String updateItem(@RequestParam("productId") Product product,
-                             @RequestParam("productQuantity") Integer productQuantity) {
+    public String updateItem(
+            HttpServletRequest request,
+            @RequestParam("productId") Product product,
+            @RequestParam("productQuantity") Integer productQuantity
+    ) {
         //        Получение куки customerID
-        Optional<Long> customerId = customerService.customerIdFromCookie();
+        Optional<Long> customerId = customerService.customerIdFromCookie(request);
 //        Если куки нет, редирект на эту же страницу, чтобы кука (установленная через фильтр) записалась в браузер через response
         if (customerId.isEmpty()) return "redirect:/cart";
 
