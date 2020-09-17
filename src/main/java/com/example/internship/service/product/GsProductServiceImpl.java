@@ -5,6 +5,7 @@ import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Product;
+import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.specification.product.ProductSpecification;
@@ -126,7 +127,7 @@ public class GsProductServiceImpl implements GsProductService {
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 
-        final boolean[] pages = new boolean[(int) (totalProducts / pageSize + 1)];
+        final boolean[] pages = new boolean[PageHelper.calculate((int) totalProducts, pageSize)];
         Arrays.fill(pages, false);
         // Защита от дурака (меня :)
         if (pageNumber < pages.length) {
