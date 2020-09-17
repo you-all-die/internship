@@ -2,6 +2,7 @@ package com.example.internship.controller.customer;
 
 import com.example.internship.entity.Customer;
 import com.example.internship.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,12 +17,12 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping(CustomerController.BASE_MAPPING)
+@RequiredArgsConstructor
 public class CustomerController {
 
     public final static String BASE_MAPPING = "/customer";
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @GetMapping("")
     public String viewCustomerList(Model model) {
