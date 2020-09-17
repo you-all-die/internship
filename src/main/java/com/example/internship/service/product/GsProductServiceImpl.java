@@ -7,7 +7,7 @@ import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
-import com.example.internship.specification.GsProductSpecification;
+import com.example.internship.specification.product.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,7 +103,7 @@ public class GsProductServiceImpl implements GsProductService {
         lowerPriceLimit = (null == lowerPriceLimit) ? minimalPrice : lowerPriceLimit;
         upperPriceLimit = (null == upperPriceLimit || upperPriceLimit.equals(BigDecimal.ZERO)) ? maximalPrice : upperPriceLimit;
 
-        final Specification<Product> specification = new GsProductSpecification.Builder()
+        final Specification<Product> specification = new ProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
                 .priceBetween(lowerPriceLimit, upperPriceLimit)
