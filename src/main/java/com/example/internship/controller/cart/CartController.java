@@ -1,17 +1,17 @@
 package com.example.internship.controller.cart;
 
 import com.example.internship.dto.OrderLineDto;
-import com.example.internship.entity.Customer;
 import com.example.internship.entity.Product;
 import com.example.internship.service.CartService;
 import com.example.internship.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +50,7 @@ public class CartController {
         if (customerId.isEmpty()) return "redirect:/cart";
 
         cartService.add(product,customerId.get());
-        return "redirect:/products";
+        return "redirect:/";
     }
 
     @PostMapping("/remove")
