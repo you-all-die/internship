@@ -1,0 +1,15 @@
+<!-- Самохвалов Юрий Алексеевич -->
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="widget (categories, activeId)"
+     class="ui selection list"
+     th:each="category : ${categories}">
+
+    <div th:replace="/product/category-item :: widget (${category}, ${activeId})">Category name</div>
+
+    <th:block th:unless="${#lists.isEmpty(category.subcategories)}">
+        <!-- Список субкатегорий -->
+        <div th:replace="/product/categories-tree :: widget (${category.subcategories}, ${activeId})">
+            Subcategories sublist
+        </div>
+    </th:block>
+</div>

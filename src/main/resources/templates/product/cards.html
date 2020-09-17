@@ -1,0 +1,69 @@
+<!-- Самохвалов Юрий Алексеевич -->
+<th:block th:fragment="widget (products)" xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:unless="${#lists.isEmpty(products)}">
+
+        <th:block th:each="product : ${products}">
+
+            <!-- Карточка товара -->
+            <div class="ui raised card"
+                 th:object="${product}"
+                 th:id="|product*{id}|">
+
+                <!-- Фотография с ценой на ленточке -->
+                <div class="image">
+                    <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
+                    <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
+                </div>
+
+                <!-- Описание -->
+                <div class="content">
+                    <h4 class="header" th:text="*{name}">Name</h4>
+                    <div th:text="*{description}">Description</div>
+                </div>
+
+                <!-- Кнопка добавления в корзину -->
+                <div class="extra content">
+                    <div class="ui right floated icon inverted button"
+                         th:onclick="|confirm('#modal*{id}', *{id})|">
+                        <i class="cart arrow down green link large icon"></i>
+                    </div>
+                </div>
+
+                <!-- Модальное окно подтверждения добавление в корзину -->
+                <div class="ui basic modal" th:id="|modal*{id}|">
+
+                    <!-- Заголовок -->
+                    <div class="ui icon header">
+                        <i class="cart arrow down large icon"></i>
+                        <span th:text="|Добавить в корзину *{name}?|">Add to cart iPhone?</span>
+                    </div>
+
+                    <!-- Содержание диалога (фото) -->
+                    <div class="content">
+                        <div class="ui centered medium image">
+                            <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
+                        </div>
+                    </div>
+
+                    <!-- Кнопки -->
+                    <div class="ui center aligned actions">
+                        <div class="ui green basic approve button" th:text="#{product.cards.modal.yes}">Yes</div>
+                        <div class="ui red basic cancel button" th:text="#{product.cards.modal.no}">No</div>
+                    </div>
+                </div>
+
+            </div>
+        </th:block>
+    </th:block>
+
+    <th:block th:if="${#lists.isEmpty(products)}">
+        <div class="ui segment placeholder">
+            <div class="ui red icon header">
+                <i class="question circle red outline icon"></i>
+                <span th:text="#{product.cards.no_found}">No found</span>
+            </div>
+        </div>
+    </th:block>
+
+</th:block>

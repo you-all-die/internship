@@ -3,10 +3,8 @@ package com.example.adminapplication.service.impl;
 import com.example.adminapplication.dto.ProductStatusDto;
 import com.example.adminapplication.service.ProductStatusService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -17,17 +15,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductStatusServiceImpl implements ProductStatusService {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    @Value("${resttemplate.url}")
-    private String url;
-
-    private String url() {
-        return url + "/product-status";
-    }
+    private String uri = "/product-status";
 
     @Override
-    public List<ProductStatusDto> findAll() throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-all", null, List.class);
+    public List<ProductStatusDto> findAll() {
+
+        return webClient.post()
+                .uri(uri + "/find-all")
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
     }
 }

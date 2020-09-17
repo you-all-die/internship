@@ -1,0 +1,50 @@
+<div class="ui form stacked segment"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="widget (data)">
+
+    <div class="field">
+        <!-- Селектор категорий -->
+        <input type="hidden" th:field="${data.categoryId}">
+        <label th:text="#{product.filter.label.category}"></label>
+        <div class="ui selection list">
+            <div class="item"
+                 th:classappend="!${data.categoryId} ? 'active'"
+                 th:onclick="onCategoryChange()"
+                 th:text="#{product.filter.categories.all}">All
+            </div>
+            <div th:replace="/product/categories-tree :: widget (${data.topCategories}, ${data.categoryId})"></div>
+        </div>
+
+        <!-- Выбор цены -->
+        <div class="field">
+            <label th:text="#{product.filter.label.price}">Price</label>
+            <div th:replace="/product/price-limiter :: widget (${data})"></div>
+        </div>
+
+        <!-- Сортировка -->
+        <div class="field">
+            <label th:text="#{product.filter.label.sort_order}">Sort Order</label>
+            <div class="ui toggle checkbox">
+                <input id="descendingOrder"
+                       type="checkbox"
+                       onclick="onDescendingSortChange(this.checked)"
+                       th:checked="${data.descendingOrder}">
+                <label for="descendingOrder" th:text="#{product.filter.label.descending}">Descending</label>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="field">
+            <label th:text="#{product.filter.label.pagination}">Pagination</label>
+            <div th:replace="/product/paginator :: widget (${data.pages})">
+            </div>
+        </div>
+
+        <!-- Выбор размера страницы -->
+        <div class="field">
+            <label th:text="#{product.filter.label.page_size}">Page Size</label>
+            <div th:replace="/product/page-size :: widget (${data.pageSize})"></div>
+        </div>
+    </div>
+
+</div>

@@ -1,7 +1,6 @@
 /* Самохвалов Юрий Алексеевич */
 
 var map;
-var geolocation;
 
 /*
 Первоначальная загрузка:
@@ -20,7 +19,7 @@ ymaps.ready(function () {
         zoom: 16,
         controls: ['geolocationControl']
     });
-    geolocation = ymaps.geolocation;
+    let geolocation = ymaps.geolocation;
 
     /* Имитировать событие onChange селектора городов для принудительной фильтрации */
     onCityChange($('#citySelector').get(0));
@@ -56,7 +55,7 @@ ymaps.ready(function () {
 });
 
 /* Показать магазины, выбранные в фильтре */
-var onCityChange = function (select) {
+const onCityChange = function (select) {
     let city = select.options[select.selectedIndex].value;
     $.ajax({
         url: '/api/about?city=' + unescape(city),
@@ -66,7 +65,7 @@ var onCityChange = function (select) {
         $(".outlet-item").hide();
         /* Теперь показываем магазины, полученные в ответе сервера */
         data.map(outlet => {
-            var id = 'outlet' + outlet.id;
+            let id = 'outlet' + outlet.id;
             $('#' + id).show();
         });
         /* Сохранить город в куки фильтра */
@@ -81,22 +80,8 @@ var onCityChange = function (select) {
 Сместить карту по координатам.
 Записать новые координаты в куки.
 */
-var centerMap = function (longitude, latitude) {
+const centerMap = function (longitude, latitude) {
     map.panTo([longitude, latitude], { flying: true, duration: 3000 });
     setCookie('longitudeCookie', longitude);
     setCookie('latitudeCookie', latitude);
-}
-
-/* Получить значение куки */
-var getCookie = function (name) {
-    var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    if (results) {
-        return unescape(results[2]);
-    }
-    return null;
-}
-
-/* Сохранить куку */
-var setCookie = function (name, value) {
-    document.cookie = name + '=' + value;
 }
