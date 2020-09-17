@@ -8,6 +8,10 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * @author  Sergey Lapshin
+ */
+
 @Entity
 @Data
 @Table(name = "orders")
@@ -16,25 +20,15 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public String customerFirstName;
-    public String customerLastName;
-//    public String address;
-    public String customerMiddleName;
-    public String customerEmail;
-    public String customerPhone;
+//    Данные пользователя
     public Long customerId;
-    public Long statusId;
-    public Long orderLineId;
+    public String customerFirstName;
+    public String customerMiddleName;
+    public String customerLastName;
+    public String customerPhone;
+    public String customerEmail;
 
-    public Long productCategoryId;
-//    public String productCategoryName;
-    public Long productId;
-    public String productName;
-    public String productDescription;
-    public String productPicture;
-    public BigDecimal productPrice;
-    public Integer productQuantity;
-
+//    Адрес
     public Long addressId;
     public String addressRegion;
     public String addressCity;
@@ -44,29 +38,9 @@ public class Order {
     public String addressApartment;
     public String addressComment;
 
-    //    @OneToMany
-//    @JoinTable(name = "cart_order_line",)
-//    public List<Product> products;
-//    public Long productId;
-//    public Integer productQuantity;
-//    public Long productCategory;
-//    public String productName;
-//    public String productDescription;
-//    public String productPicture;
-//    public Long publicPrice;
+//    Статус заказа (для процессинга)
+    public Long statusId;
 
-
-//    public Order(Customer customer) {
-//        this.customerFirstName = customer.getFirstName();
-//        this.customerLastName = customer.getLastName();
-////        this.address = address;
-//        this.customerMiddleName = customer.getMiddleName();
-//        this.customerEmail = customer.getEmail();
-//        this.customerPhone = customer.getPhone();
-//        this.customerId = customer.getId();
-//        this.statusId = 123L;
-////        this.orderLines = customer.getCart().getOrderLines();
-////        this.productId = orderLine.getProduct().getId();
-////        this.productQuantity = orderLine.getProductQuantity();
-//    }
+    @OneToMany(mappedBy = "id")
+    public List<Item> items;
 }

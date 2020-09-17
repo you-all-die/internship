@@ -19,4 +19,3 @@ databaseChangeLog:
       file: db/changelog/changes/v_0.0.8.yaml
   - include:
       file: db/changelog/changes/v_0.0.9.yaml
-

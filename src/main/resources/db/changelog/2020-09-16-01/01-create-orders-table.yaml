@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-09-16
+      author: Sergey Lapshin
+      comment: create orders teble
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_orders
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_first_name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_middle_name
+                  type: VARCHAR
+              - column:
+                  name: customer_last_name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_phone
+                  type: VARCHAR
+              - column:
+                  name: customer_email
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_region
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_city
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_district
+                  type: VARCHAR
+              - column:
+                  name: address_street
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_house
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_apartment
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_comment
+                  type: VARCHAR
+              - column:
+                  name: status_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
