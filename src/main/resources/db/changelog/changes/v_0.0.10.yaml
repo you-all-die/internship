@@ -10,10 +10,3 @@ databaseChangeLog:
             sql: ALTER TABLE customers ADD COLUMN last_activity TIMESTAMP (0) WITH TIME ZONE;
         - sql:
             sql: ALTER TABLE customers ALTER COLUMN last_activity SET DEFAULT NOW();
-        - sql:
-            sql: CREATE OR REPLACE PROCEDURE public.update_last_activity(IN "customerId" bigint)
-              LANGUAGE 'sql'
-              AS $BODY$
-              update customers last_activity set last_activity = now()
-              where id = "customerId" and (now() - last_activity) > interval '1 day'
-              $BODY$;

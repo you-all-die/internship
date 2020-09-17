@@ -13,18 +13,15 @@ public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaS
     Customer findByEmail(String email);
 
     @Transactional
-    //@Procedure(procedureName = "update_last_activity")
-//    @Query(value = "call update_last_activity(:id)",
-//    nativeQuery = true)
     @Modifying
     @Query(value = "update customers last_activity set last_activity = now() " +
-            "where id = :id and EXTRACT(EPOCH FROM(now() - last_activity)) > 86400",
+            "where id = :id and EXTRACT(EPOCH FROM(now() - last_activity)) > 3600",
             nativeQuery = true)
     void setLastActivityForCustomers(@Param("id") Long customerId);
 
     @Transactional
     @Modifying
-    @Query(value = "delete FROM customers where first_name is null AND last_activity < 'yesterday'",
+    @Query(value = "delete FROM customers where first_name is null AND (last_activity < 'yesterday' OR last_activity is null)",
             nativeQuery = true)
     int deleteInactiveAnonymousUsers();
 }
