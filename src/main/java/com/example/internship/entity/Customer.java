@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -26,8 +27,8 @@ public class Customer {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Address> addresses;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Address> addresses;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")

@@ -32,7 +32,7 @@
                     <tr th:each="customer : ${customers}">
                         <td>
                             <a href="#" style="cursor:pointer"
-                               th:href="@{/customer/{id}/edit(id=${customer.id})}"
+                               th:href="@{/customer/{id}(id=${customer.id})}"
                                th:text="${customer.fullName}">Last First Middle
                             </a>
                         </td>
