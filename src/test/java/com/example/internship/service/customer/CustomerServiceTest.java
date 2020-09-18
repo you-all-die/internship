@@ -2,17 +2,16 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@TestPropertySource("classpath:test.properties")
 class CustomerServiceTest {
 
     private static final String MSG_NAMES_ARE = "Ожидалось %s";
@@ -39,8 +38,8 @@ class CustomerServiceTest {
         }
     }
 
-    @AfterEach
-    void tearDown(
+    @AfterAll
+    static void tearDown(
             @Autowired CustomerService customerService
     ) {
         customerService.deleteAll();

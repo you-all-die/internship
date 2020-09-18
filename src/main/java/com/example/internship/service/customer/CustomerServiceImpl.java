@@ -73,6 +73,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteAll() {
+        customerRepository.deleteAll();
+    }
+
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));
@@ -104,8 +109,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerDto;
     }
-
     // Получение id покупателя из куки
+
     public Optional<Long> customerIdFromCookie(
             HttpServletRequest request
     ) {
@@ -123,8 +128,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return Optional.empty();
     }
-
     // Удаление id покупателя из куки
+
     public void customerIdDeleteFromCookie(
             HttpServletResponse response
     ) {
@@ -266,11 +271,6 @@ public class CustomerServiceImpl implements CustomerService {
             builder.append(" ").append(customer.getMiddleName());
         }
         return builder.toString().trim();
-    }
-
-    @Override
-    public void deleteAll() {
-        customerRepository.deleteAll();
     }
 
     @PostConstruct
