@@ -3,9 +3,12 @@ package com.example.internship.service.category;
 import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +34,7 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories() {
         return categoryRepository.findAllByParentNull().stream()
                 .map(this::convertToAllWithParentAndSubcategories)
@@ -65,13 +69,14 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     /**
-     * Возвращает список идентификаторов категории и всех её наследников
+     * Возвращает список идентификаторов категории и всех её наследников.
      *
      * @param category категория
      * @return список идентификаторов категорий
      */
     @Override
-    public List<Long> findDescendants(final Category category) {
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
+    public List<Long> findDescendants(@NonNull final Category category) {
         List<Long> descendants = new ArrayList<>();
         descendants.add(category.getId());
         category.getSubcategories().forEach(subcategory -> {
@@ -84,15 +89,17 @@ public class GsCategoryServiceImpl implements GsCategoryService {
 
     /**
      * Возвращает список идентификаторов категории и всех её наследников.
+     * Для категории с идентификатором <b>null</b> возвращает список идентификаторов всех категорий.
      * Если категории с указанным идентификатором не существует, возвращает пустой список.
      *
      * @param categoryId идентификатор категории
      * @return список идентификаторов категорий
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<Long> findDescendants(final Long categoryId) {
         if (null == categoryId) {
-            return Collections.emptyList();
+            return categoryRepository.findAll().stream().map(Category::getId).collect(Collectors.toUnmodifiableList());
         }
         final Optional<Category> categoryOptional = findById(categoryId);
         if (categoryOptional.isEmpty()) {
@@ -107,13 +114,18 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public void save(CategoryDto.Request.All categoryDto) {
-        categoryRepository.save(modelMapper.map(categoryDto, Category.class));
+    public void save(Category category) {
+        categoryRepository.save(category);
     }
 
     @Override
     public void delete(long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        categoryRepository.deleteAll();
     }
 
     private CategoryDto.Response.All convertToAllDto(Category category) {
