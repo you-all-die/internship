@@ -1,8 +1,8 @@
 package com.example.internship.specification;
 
 import com.example.internship.entity.Customer;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
