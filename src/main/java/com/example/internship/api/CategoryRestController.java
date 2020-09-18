@@ -1,17 +1,15 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
+import com.example.internship.repository.projection.ParentCategoryProjection;
 import com.example.internship.service.CategoryService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Ivan Gubanov
@@ -89,5 +87,10 @@ public class CategoryRestController {
         return categoryService.search(searchText, parentId, pageSize, pageNumber);
     }
 
+    @GetMapping("/parentCategory")
+    @ApiOperation(value = "Возвращает список родительских категорий", response = ParentCategoryProjection.class)
+    public List<ParentCategoryProjection> searchParentCategory() {
+        return categoryService.getParentCategory();
+    }
 
 }

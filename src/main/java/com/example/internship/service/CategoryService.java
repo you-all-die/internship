@@ -1,9 +1,9 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.ParentCategorySearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
+import com.example.internship.repository.projection.ParentCategoryProjection;
 import com.example.internship.specification.CategorySpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<Category> findAll() {
-        return (List<Category>) categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     public Category findById(Long id) {
@@ -54,8 +54,17 @@ public class CategoryService {
 
         // Формируем условия для запроса
         specification = draftSpecification(null,"name", name);
-        if(parentId!=null) specification =
-                draftSpecification(specification,"parentId", parentId.toString());
+
+        /*Условие для поиска по родительской категории
+         * Если получаем 0 -> поиск категории без потомков
+         * Если пулучаем значение больше 0 -> поиск по выбранному родителю
+        */
+        if (parentId!=null) {
+            if (parentId > 0) specification =
+                    draftSpecification(specification, "parentId", parentId.toString());
+            if (parentId == 0) specification =
+                    draftSpecification(specification, "parentIdNull", parentId.toString());
+        }
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
@@ -82,8 +91,10 @@ public class CategoryService {
         return specification;
     }
 
-    public ParentCategorySearchResult searchParentCategory(){
-
+    //Поиск родительских категорий в общем списке
+    public List<ParentCategoryProjection> getParentCategory(){
+        return categoryRepository.getParentCategory();
     }
+
 
 }

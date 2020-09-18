@@ -2,6 +2,7 @@ package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.dto.CategorySearchResult;
+import com.example.adminapplication.dto.ParentCategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
         return restTemplate.postForObject(url() + "/find-by-name", name, List.class);
     }
 
+    //
     @Override
     public CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber){
         //Конструктор запроса
@@ -77,4 +79,10 @@ public class CategoryServiceImpl implements CategoryService {
         String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
         return restTemplate.getForObject(url() + result, CategorySearchResult.class);
     }
+
+    @Override
+    public List<ParentCategoryDto> getParentCategory() throws ResourceAccessException {
+        return restTemplate.getForObject(url() + "/parentCategory", List.class);
+    }
+
 }

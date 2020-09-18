@@ -28,7 +28,9 @@ public class CategorySpecification implements Specification<Category> {
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
                         "%" + value.toString().toLowerCase() + "%");
             case "parentId":
-                return criteriaBuilder.equal(root.join("parent").get("id"), value.toString());
+                return criteriaBuilder.equal(root.get("parent").get("id"), value.toString());
+            case "parentIdNull":
+                return criteriaBuilder.isNull(root.get("parent").get("id"));
         }
 
         return null;

@@ -1,12 +1,10 @@
-package com.example.internship.dto;
+package com.example.adminapplication.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Getter
-@Setter
-@Builder
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class ParentCategoryDto {
     private Long id;
     private String name;
