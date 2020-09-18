@@ -18,29 +18,28 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
 //    Данные пользователя
-    public Long customerId;
-    public String customerFirstName;
-    public String customerMiddleName;
-    public String customerLastName;
-    public String customerPhone;
-    public String customerEmail;
+    private Long customerId;
+    private String customerFirstName;
+    private String customerMiddleName;
+    private String customerLastName;
+    private String customerPhone;
+    private String customerEmail;
 
 //    Адрес
-    public Long addressId;
-    public String addressRegion;
-    public String addressCity;
-    public String addressDistrict;
-    public String addressStreet;
-    public String addressHouse;
-    public String addressApartment;
-    public String addressComment;
+    private String addressRegion;
+    private String addressCity;
+    private String addressDistrict;
+    private String addressStreet;
+    private String addressHouse;
+    private String addressApartment;
+    private String addressComment;
 
 //    Статус заказа (для процессинга)
-    public Long statusId;
+    private Long statusId;
 
     @OneToMany(mappedBy = "id")
-    public List<Item> items;
+    private List<Item> items;
 }

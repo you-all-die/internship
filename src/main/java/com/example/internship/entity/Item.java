@@ -16,18 +16,18 @@ import java.util.List;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    public Order order;
+    private Order order;
 
-    public Integer itemQuantity;
-    public Long itemCategoryId;
-    public String itemDescription;
-    public String itemName;
-    public String itemPicture;
-    public BigDecimal itemPrice;
+    private Integer itemQuantity;
+    private Long itemCategoryId;
+    private String itemDescription;
+    private String itemName;
+    private String itemPicture;
+    private BigDecimal itemPrice;
 
 
 
