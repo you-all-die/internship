@@ -3,7 +3,6 @@ package com.example.internship.controller.about;
 import com.example.internship.service.OutletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -52,7 +50,7 @@ public class AboutController {
     @GetMapping
     public String showAboutPage(
             HttpServletResponse response,
-            @NotNull Model model,
+            Model model,
             @CookieValue(name = CITY_FILTER_COOKIE_NAME, required = false, defaultValue = "") String cityFilter,
             @CookieValue(name = LONGITUDE_COOKIE_NAME, required = false, defaultValue = "") String longitude,
             @CookieValue(name = LATITUDE_COOKIE_NAME, required = false, defaultValue = "") String latitude
