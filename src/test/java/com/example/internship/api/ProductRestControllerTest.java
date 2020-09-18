@@ -1,5 +1,6 @@
 package com.example.internship.api;
 
+import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.ProductDto;
 import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
@@ -12,9 +13,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,7 +42,8 @@ public class ProductRestControllerTest {
     @BeforeAll
     public static void beforeAll(@Autowired ProductService productService,
                                  @Autowired CategoryService categoryService,
-                                 @Autowired ProductStatusService productStatusService) {
+                                 @Autowired ProductStatusService productStatusService,
+                                 @Autowired ModelMapper mapper) {
         Category categoryOne = new Category();
         categoryOne.setName("Best phones");
         categoryOne.setParent(null);
@@ -54,7 +58,10 @@ public class ProductRestControllerTest {
         productStatus.setDescription("For sale");
         productStatusService.add(productStatus);
 
-        productOne.setCategory(categoryOne);
+        /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+         * Конвертация в дто, в следствие изменения ProductDto.
+         +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ */
+        productOne.setCategory(mapper.map(categoryOne, CategoryDto.class));
         productOne.setName("Iphone 1");
         productOne.setDescription("Iphone 1 is best phone");
         productOne.setPicture("iphone1.jpg");
@@ -62,7 +69,10 @@ public class ProductRestControllerTest {
         productOne.setStatus(productStatus);
         productService.addProduct(productOne);
 
-        productTwo.setCategory(categoryTwo);
+        /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+         * Конвертация в дто, в следствие изменения ProductDto.
+         +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ */
+        productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
         productTwo.setDescription("Iphone 2 is best Iphone 1");
         productTwo.setPicture("iphone2.jpg");
@@ -268,6 +278,11 @@ public class ProductRestControllerTest {
      * - Возвращает все продукты
      */
     @Test
+    /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+     * Здесь происходит много операций по работе с бд. Hibernate не успевает все подгрузить.
+     * Добавлена аннотация @Transactional.
+     +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= */
+    @Transactional
     public void testSaveProductAndFindByIdAndRemoveProductAndFindAll() {
         productRestController.saveProduct(product);
         assertEquals(product, productRestController.findById(3L));

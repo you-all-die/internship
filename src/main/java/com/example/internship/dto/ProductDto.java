@@ -1,8 +1,10 @@
 package com.example.internship.dto;
 
-import com.example.internship.entity.Category;
 import com.example.internship.entity.ProductStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -13,7 +15,10 @@ import java.math.BigDecimal;
 public class ProductDto {
 
     private Long id;
-    private Category category;
+    /** +=+=+=+=+=+=+=+=+=+=+=
+     * Замена на Category DTO.
+     +=+=+=+=+=+=+=+=+=+=+= */
+    private CategoryDto category;
     private String name;
     private String description;
     private String picture;
