@@ -229,4 +229,19 @@ class CustomerServiceTest {
                 () -> assertEquals(false, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, false))
         );
     }
+
+    @Test
+    @DisplayName("Запрос по всем параметрам")
+    void findByCriteriaWithAllParameters() {
+        // Должно найтись 19 покупателей, отсортированных в обратном порядке
+        final SearchResult result = customerService.findByCriteria("9", 0, 10, false);
+        assertAll(
+                () -> assertEquals("99", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 99"),
+                () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(10, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 10)),
+                () -> assertEquals(19, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 19)),
+                () -> assertEquals(false, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, false))
+        );
+    }
 }
