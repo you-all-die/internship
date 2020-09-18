@@ -1,11 +1,11 @@
-package com.example.internship.specification;
+package com.example.internship.specification.product;
 
 import com.example.internship.entity.Category_;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.Product_;
 import com.example.internship.helper.PredicateHelper;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,14 +20,14 @@ import java.util.List;
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-public class GsProductSpecification implements Specification<Product> {
+public class ProductSpecification implements Specification<Product> {
 
     private final String searchString;
     private final Collection<Long> categoryIds;
     private final BigDecimal lowerLimit;
     private final BigDecimal upperLimit;
 
-    private GsProductSpecification(
+    private ProductSpecification(
             Builder builder
     ) {
         this.searchString = builder.searchString;
@@ -38,9 +38,9 @@ public class GsProductSpecification implements Specification<Product> {
 
     @Override
     public Predicate toPredicate(
-            @NotNull Root<Product> root,
-            @NotNull CriteriaQuery<?> query,
-            @NotNull CriteriaBuilder builder
+            @NonNull Root<Product> root,
+            @NonNull CriteriaQuery<?> query,
+            @NonNull CriteriaBuilder builder
     ) {
         final List<Predicate> predicates = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class GsProductSpecification implements Specification<Product> {
             ));
         }
 
-        if (null != categoryIds && !categoryIds.isEmpty()) {
+        if (null != categoryIds) {
             predicates.add(builder.in(root.get(Product_.category).get(Category_.ID)).value(categoryIds));
         }
 
@@ -90,7 +90,7 @@ public class GsProductSpecification implements Specification<Product> {
         }
 
         public Specification<Product> build() {
-            return new GsProductSpecification(this);
+            return new ProductSpecification(this);
         }
     }
 }

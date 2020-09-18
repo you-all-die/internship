@@ -6,13 +6,15 @@
         <!-- Селектор категорий -->
         <input type="hidden" th:field="${data.categoryId}">
         <label th:text="#{product.filter.label.category}"></label>
-        <div class="ui selection list">
-            <div class="item"
-                 th:classappend="!${data.categoryId} ? 'active'"
-                 th:onclick="onCategoryChange()"
-                 th:text="#{product.filter.categories.all}">All
+        <div style="overflow:auto; height: 50vh">
+            <div class="ui selection list">
+                <div class="item"
+                     th:classappend="!${data.categoryId} ? 'active'"
+                     th:onclick="onCategoryChange()"
+                     th:text="#{product.filter.categories.all}">All
+                </div>
+                <div th:replace="/product/categories-tree :: widget (${data.topCategories}, ${data.categoryId})"></div>
             </div>
-            <div th:replace="/product/categories-tree :: widget (${data.topCategories}, ${data.categoryId})"></div>
         </div>
 
         <!-- Выбор цены -->
