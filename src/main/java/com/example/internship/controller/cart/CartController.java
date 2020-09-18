@@ -2,7 +2,7 @@ package com.example.internship.controller.cart;
 
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Product;
-import com.example.internship.service.CartService;
+import com.example.internship.service.cart.CartService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

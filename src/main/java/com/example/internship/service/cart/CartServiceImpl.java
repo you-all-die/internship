@@ -1,4 +1,4 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.cart;
 
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Cart;
@@ -7,9 +7,8 @@ import com.example.internship.entity.OrderLine;
 import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
-import com.example.internship.repository.OrderLineRepository;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.CartService;
+import com.example.internship.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -35,8 +34,6 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
 
     private final CartRepository cartRepository;
-
-    private final OrderLineRepository orderLineRepository;
 
     private final ModelMapper mapper;
 
@@ -66,7 +63,6 @@ public class CartServiceImpl implements CartService {
         OrderLine orderLine = new OrderLine(null, cart, product, 1);
         cart.getOrderLines().add(orderLine);
         cartRepository.save(cart);
-        orderLineRepository.save(orderLine);
         return true;
     }
 
