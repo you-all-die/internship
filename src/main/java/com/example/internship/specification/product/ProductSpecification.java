@@ -20,14 +20,14 @@ import java.util.List;
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-public class ProductSpecificator implements Specification<Product> {
+public class ProductSpecification implements Specification<Product> {
 
     private final String searchString;
     private final Collection<Long> categoryIds;
     private final BigDecimal lowerLimit;
     private final BigDecimal upperLimit;
 
-    private ProductSpecificator(
+    private ProductSpecification(
             Builder builder
     ) {
         this.searchString = builder.searchString;
@@ -90,7 +90,7 @@ public class ProductSpecificator implements Specification<Product> {
         }
 
         public Specification<Product> build() {
-            return new ProductSpecificator(this);
+            return new ProductSpecification(this);
         }
     }
 }
