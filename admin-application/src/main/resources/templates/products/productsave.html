@@ -12,24 +12,24 @@
         <a th:href="@{/products}" class="item" th:text="#{products.productsave.products}">Products</a>
         <div class="right menu">
 
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search..." name="searchname">
-                        <i class="search link icon"></i>
-                    </div>
+            <div class="item">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search..." name="searchname">
+                    <i class="search link icon"></i>
                 </div>
+            </div>
             <a th:href="@{/products${searchname}}" class="ui item" th:text="#{products.productsave.find}">Find</a>
         </div>
     </div><br>
 </div>
 
 <div class="ui container">
-        <div class="ui attached message">
-            <div class="header">
-                <label th:text="${product.id}!=null ? #{products.productsave.edit} : #{products.productsave.add_new}">
-                </label>
-            </div>
+    <div class="ui attached message">
+        <div class="header">
+            <label th:text="${product.id}!=null ? #{products.productsave.edit} : #{products.productsave.add_new}">
+            </label>
         </div>
+    </div>
     <div>
         <form th:action="@{/product/save}" class="ui form attached fluid segment" enctype="multipart/form-data"
               method="post" th:object="${product}">

@@ -12,8 +12,6 @@ import java.util.List;
  */
 public interface OutletRepository extends JpaRepository<Outlet, Long> {
 
-    List<Outlet> findAll();
-
     List<Outlet> findAllByCity(String city);
 
     @Query("select distinct o.city from Outlet o order by city")

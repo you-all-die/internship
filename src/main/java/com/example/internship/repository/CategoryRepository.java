@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category> {
     List<Category> findByNameContainsIgnoreCase(String name);
     List<Category> findAllByOrderByIdAscParentIdAsc();
+    List<Category> findAllByParentNull();
 
 
     @Query(value = "SELECT DISTINCT a.parent_id as id, b.name FROM Category a " +

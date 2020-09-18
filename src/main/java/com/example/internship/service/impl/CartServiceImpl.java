@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -135,7 +136,8 @@ public class CartServiceImpl implements CartService {
 
         if (customer.isEmpty()) return new ArrayList<>();
 
-        return customer.get().getCart().getOrderLines().stream().map(this::convertToDto).collect(Collectors.toList());
+        return customer.get().getCart().getOrderLines().stream().map(this::convertToDto)
+                .sorted(Comparator.comparing(OrderLineDto::getId)).collect(Collectors.toList());
     }
 
     @Override

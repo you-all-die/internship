@@ -1,14 +1,14 @@
 package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.ProductDto;
+import com.example.adminapplication.dto.ProductSearchResult;
 import com.example.adminapplication.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * @author Ivan Gubanov
@@ -17,37 +17,99 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
-    @Value("${resttemplate.url}")
-    private String url;
+    private String uri = "/product";
 
-    private String url() {
-        return url + "/product";
+    @Override
+    public void removeProduct(Long id) {
+
+        webClient.post()
+                .uri(uri +"/remove-product")
+                .bodyValue(id)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     @Override
-    public List<ProductDto> findAll() throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-all", null, List.class);
+    public void saveProduct(ProductDto product) {
+
+        webClient.post()
+                .uri(uri + "/save-product")
+                .bodyValue(product)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     @Override
-    public void removeProduct(Long id) throws ResourceAccessException {
-        restTemplate.postForObject(url() + "/remove-product", id, String.class);
+    public ProductDto findByIdProduct(Long id) {
+
+        return webClient.post()
+                .uri(uri + "/find-by-id")
+                .bodyValue(id)
+                .retrieve()
+                .bodyToMono(ProductDto.class)
+                .block();
     }
 
     @Override
-    public void saveProduct(ProductDto product) throws ResourceAccessException {
-        restTemplate.postForObject(url() + "/save-product", product, String.class);
-    }
+    public ProductSearchResult productSearch(String searchText, Long categoryId, BigDecimal priceFrom,
+                                             BigDecimal priceTo, Integer pageSize, Integer pageNumber) {
 
-    @Override
-    public List<ProductDto> findByName(String name) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-name", name, List.class);
-    }
+        StringBuilder uri = new StringBuilder(this.uri).append("/search?");
 
-    @Override
-    public ProductDto findByIdProduct(Long id) throws ResourceAccessException {
-        return restTemplate.postForObject(url() + "/find-by-id", id, ProductDto.class);
+        if (StringUtils.isNotBlank(searchText)) {
+            uri.append("searchText=").append(searchText).append("&");
+        }
+        if (categoryId != null && categoryId > 0) {
+            uri.append("categoryId=").append(categoryId).append("&");
+        }
+        if (priceFrom != null && priceFrom.compareTo(BigDecimal.ZERO) > 0) {
+            uri.append("priceFrom=").append(priceFrom).append("&");
+        }
+        if (priceTo != null && priceTo.compareTo(BigDecimal.ZERO) > 0) {
+            uri.append("priceTo=").append(priceTo).append("&");
+        }
+        if (pageSize != null && pageSize > 0) {
+            uri.append("pageSize=").append(pageSize).append("&");
+        }
+        if (pageNumber != null && pageNumber > 0) {
+            uri.append("pageNumber=").append(pageNumber - 1).append("&");
+        }
+        ProductSearchResult result = webClient.get()
+                .uri(uri.toString())
+                .retrieve()
+                .bodyToMono(ProductSearchResult.class)
+                .block();
+
+        // Create pagination
+        if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
+
+            result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
+
+            if (result.getPageNumber() != 0) {
+
+                result.setPrevPage(result.getPageNumber());
+
+                if (result.getPrevPage() > 1) {
+                    result.setFirstPage(1);
+                }
+            }
+
+            result.setPageNumber(result.getPageNumber() + 1);
+
+            if (result.getPageNumber() < result.getTotalPages()) {
+
+                result.setNextPage(result.getPageNumber() + 1);
+
+                if (result.getNextPage() < result.getTotalPages()) {
+                    result.setLastPage(result.getTotalPages().intValue());
+                }
+            }
+        }
+
+        return result;
     }
 }
