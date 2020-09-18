@@ -44,11 +44,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: address_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-              - column:
                   name: address_region
                   type: VARCHAR
                   constraints:
