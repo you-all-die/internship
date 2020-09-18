@@ -40,7 +40,6 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private static final String ANONYMOUS = "Анонимный покупатель";
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private final CustomerRepository customerRepository;
@@ -217,19 +216,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public SearchResult findByCriteria(
             String searchString,
-            Integer pageSize,
             Integer pageNumber,
+            Integer pageSize,
             Boolean ascendingOrder
     ) {
         final Sort.Direction direction = (null == ascendingOrder || ascendingOrder) ? Sort.Direction.ASC : Sort.Direction.DESC;
         final Sort sort = Sort.by(direction, Customer_.LAST_NAME, Customer_.FIRST_NAME, Customer_.MIDDLE_NAME);
-        if (null == pageSize) {
-            pageSize = DEFAULT_PAGE_SIZE;
-        }
         if (null == pageNumber) {
             pageNumber = 0;
         }
-        final Pageable pageable = PageRequest.of(pageNumber, pageNumber, sort);
+        if (null == pageSize) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         final CustomerSpecificator specificator = CustomerSpecificator.builder()
                 .searchString(searchString)
                 .build();
@@ -252,7 +251,7 @@ public class CustomerServiceImpl implements CustomerService {
      * Генерирует полное имя покупателя.
      *
      * @param customer покупатель
-     * @return Фамилия Имя Отчество покупателя или {@link CustomerServiceImpl#ANONYMOUS}
+     * @return Фамилия Имя Отчество покупателя или ""
      */
     @Override
     public final String generateFullName(@NonNull Customer customer) {

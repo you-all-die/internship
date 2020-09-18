@@ -44,15 +44,14 @@ public interface CustomerService {
      * Возвращает список пользователей, отобранных по заданным критериям.
      *
      * @param searchString подстрока поиска в именах, телефоне, почте
-     * @param pageSize размер страницы
      * @param pageNumber номер страницы
+     * @param pageSize размер страницы
      * @param ascendingOrder null|true - по возрастанию
      * @return результаты поиска
      */
     SearchResult findByCriteria(
             String searchString,
-            Integer pageSize,
-            Integer pageNumber,
+            Integer pageNumber, Integer pageSize,
             Boolean ascendingOrder
     );
 

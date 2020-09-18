@@ -26,19 +26,23 @@ class CustomerServiceTest {
     private CustomerService customerService;
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll(
+            @Autowired CustomerService customerService
+    ) {
         for (int i = 1; i <= 100; i++) {
             Customer customer = new Customer();
             customer.setLastName("Customer");
             customer.setFirstName(Integer.toString(i));
             customer.setEmail("Customer" + i + "@mail.mu");
-            customer.setPhone(String.format("+7 000 %3d-00-00", i));
+            customer.setPhone(String.format("+7 000 %03d-00-00", i));
             customerService.save(customer);
         }
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown(
+            @Autowired CustomerService customerService
+    ) {
         customerService.deleteAll();
     }
 
@@ -126,6 +130,20 @@ class CustomerServiceTest {
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
                 () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
+    }
+
+    @Test
+    @DisplayName("Поиск покупателей по подстроке в телефоне")
+    void findByCriteriaWithSearchStringInPhone() {
+        // Должен найтись один покупатель с телефоном +7 000 099-00-00
+        final SearchResult result = customerService.findByCriteria("099", null, null, null);
+        assertAll(
+                () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
+                () -> assertEquals(1, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 1)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
