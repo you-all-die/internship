@@ -16,6 +16,8 @@ public interface CustomerService {
     void save(Customer customer);
 
     void delete(long id);
+
+    void deleteAll();
     // Создание нового анонимного покупателя
     CustomerDto createAnonymousCustomer();
     // Регистрация покупателя
@@ -29,7 +31,6 @@ public interface CustomerService {
     // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
     boolean isAnonymousCustomer(Long customerId);
     //Api:поиск по критериям:ФИО, E-mail
-    CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
-                                       Optional<String> lastName, Optional<String> email,
+    CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
                                        Integer pageSize, Integer pageNumber);
 }
