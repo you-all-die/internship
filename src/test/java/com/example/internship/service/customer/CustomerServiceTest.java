@@ -175,4 +175,17 @@ class CustomerServiceTest {
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
+
+    @Test
+    @DisplayName("Переход на несуществующую страницу")
+    void findByCriteriaWithNonExistingPage() {
+        final SearchResult result = customerService.findByCriteria(null, 1000, null, null);
+        assertAll(
+                () -> assertEquals(0, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 0)),
+                () -> assertEquals(1000, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 1000)),
+                () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
+                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
+    }
 }
