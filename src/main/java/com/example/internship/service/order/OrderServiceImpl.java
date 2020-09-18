@@ -26,25 +26,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public boolean makeOrder(Customer customer, CheckoutForm checkoutForm, List<OrderLine> orderLines) {
-        //        Создание заказа и айтема
         Order order = new Order();
-
-//        //        Обязательные поля (контролируются формой)
-//        order.setCustomerFirstName(allParams.get("firstName"));
-//        order.setCustomerLastName(allParams.get("lastName"));
-//        order.setAddressRegion(allParams.get("region"));
-//        order.setAddressCity(allParams.get("city"));
-//        order.setAddressStreet(allParams.get("street"));
-//        order.setAddressHouse(allParams.get("house"));
-//        order.setAddressApartment(allParams.get("apartment"));
-//
-//        //        Необязательные поля
-//        order.setCustomerMiddleName(allParams.containsKey("middleName") ? allParams.get("middleName") : "");
-//        order.setCustomerEmail(allParams.containsKey("email") ? allParams.get("email") : "");
-//        order.setCustomerPhone(allParams.containsKey("phone") ? allParams.get("phone") : "");
-//        order.setAddressDistrict(allParams.containsKey("district") ? allParams.get("district") : "");
-//        order.setAddressComment(allParams.containsKey("comment") ? allParams.get("comment") : "");
-
 
 //                Обязательные поля (контролируются формой)
         order.setCustomerFirstName(checkoutForm.getFirstName());
@@ -62,11 +44,8 @@ public class OrderServiceImpl implements OrderService{
         order.setAddressDistrict(checkoutForm.getDistrict() != null ? checkoutForm.getDistrict() : "");
         order.setAddressComment(checkoutForm.getComment() != null ? checkoutForm.getComment() : "");
 
-        //        Берем значения из других таблиц
-        order.setCustomerId(customer.getId());
-
-//          Брать текстовой значение
         order.setStatus("CREATED");
+        order.setCustomerId(customer.getId());
 
         orderRepository.save(order);
 

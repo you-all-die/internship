@@ -38,7 +38,7 @@ public class Order {
     private String addressComment;
 
 //    Статус заказа (для процессинга)
-    private Long statusId;
+    private String status;
 
     @OneToMany(mappedBy = "id")
     private List<Item> items;
