@@ -35,6 +35,8 @@ public class CustomerSpecification implements Specification<Customer> {
             case "email":
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get("email")),
                         "%" + value.toString().toLowerCase() + "%");
+            case "emailNotNull":
+                return criteriaBuilder.isNotNull(root.get("email"));
         }
         return null;
     }

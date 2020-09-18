@@ -158,6 +158,7 @@ public class CustomerServiceImpl implements CustomerService {
         specification = draftSpecification(specification,"middleName", middleName);
         specification = draftSpecification(specification,"lastName", lastName);
         specification = draftSpecification(specification,"email", email);
+        specification = draftSpecification(specification,"emailNotNull", "islNotNull");
 
         // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
