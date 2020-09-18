@@ -62,4 +62,6 @@ public interface CustomerService {
      * @return Фамилия Имя Отчество или Пустая строка "" (если все имена null или пустые)
      */
     String generateFullName(Customer customer);
+
+    void deleteAll();
 }

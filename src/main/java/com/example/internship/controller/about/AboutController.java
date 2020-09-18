@@ -75,6 +75,6 @@ public class AboutController {
         model.addAttribute("version", version);
         model.addAttribute("apikey", apikey);
         model.addAttribute("mode", mode);
-        return "about/index";
+        return BASE_MAPPING + "/index";
     }
 }

@@ -4,8 +4,8 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Customer_;
 import com.example.internship.helper.PredicateHelper;
 import lombok.Builder;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,9 +26,9 @@ public class CustomerSpecificator implements Specification<Customer> {
     
     @Override
     public Predicate toPredicate(
-            @NotNull Root<Customer> root,
-            @NotNull CriteriaQuery<?> criteriaQuery,
-            @NotNull CriteriaBuilder criteriaBuilder
+            @NonNull Root<Customer> root,
+            @NonNull CriteriaQuery<?> criteriaQuery,
+            @NonNull CriteriaBuilder criteriaBuilder
     ) {
         if (StringUtils.isBlank(searchString)) {
             return null;

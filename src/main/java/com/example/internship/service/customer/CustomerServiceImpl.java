@@ -269,6 +269,11 @@ public class CustomerServiceImpl implements CustomerService {
         return builder.toString().trim();
     }
 
+    @Override
+    public void deleteAll() {
+        customerRepository.deleteAll();
+    }
+
     @PostConstruct
     private void configureCustomerMapper() {
         mapper

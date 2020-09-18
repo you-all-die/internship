@@ -1,6 +1,10 @@
 package com.example.internship.service.customer;
 
+import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
+import com.example.internship.specification.customer.CustomerSpecificator;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +17,24 @@ class CustomerServiceTest {
 
     private static final String MSG_NAMES_ARE = "Ожидалось %s";
     @Autowired
-    private CustomerService customerService;
+    private static CustomerService customerService;
+
+    @BeforeAll
+    static void beforeAll() {
+        for (int i = 1; i <= 100; i++) {
+            Customer customer = new Customer();
+            customer.setLastName("Customer");
+            customer.setFirstName(Integer.toString(i));
+            customer.setEmail("Customer" + i + "@mail.mu");
+            customer.setPhone(String.format("+7 000 %3d-00-00", i));
+            customerService.save(customer);
+        }
+    }
+
+    @AfterEach
+    void tearDown() {
+        customerService.deleteAll();
+    }
 
     @Test
     @DisplayName("Генерация анонимного покупателя")
@@ -88,5 +109,12 @@ class CustomerServiceTest {
         customer.setMiddleName("Отчество");
         String expected = "Фамилия Имя Отчество";
         assertEquals(expected, customerService.generateFullName(customer), () -> String.format(MSG_NAMES_ARE, expected));
+    }
+
+    @Test
+    @DisplayName("Запрос списка покупателей с нулевыми критериями")
+    void findByCriteriaWithNullParameters() {
+        final SearchResult result = customerService.findByCriteria(null, null, null, null);
+
     }
 }
