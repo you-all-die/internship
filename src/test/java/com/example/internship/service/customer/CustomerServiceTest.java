@@ -188,4 +188,17 @@ class CustomerServiceTest {
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
+
+    @Test
+    @DisplayName("Изменение размера страницы")
+    void findByCriteriaWithPageSize() {
+        final SearchResult result = customerService.findByCriteria(null, null, 10, null);
+        assertAll(
+                () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(10, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 10)),
+                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
+    }
 }
