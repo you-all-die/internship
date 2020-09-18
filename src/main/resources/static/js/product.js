@@ -62,7 +62,7 @@ const onPageChange = function (select) {
 
 /* При изменении размера страницы */
 const onPageSizeChange = function (select) {
-    let pageSize = select.options[select.selectedIndex].value
+    let pageSize = select.options[select.selectedIndex].value;
     reload({
         pageSize: pageSize,
         pageNumber: 0,

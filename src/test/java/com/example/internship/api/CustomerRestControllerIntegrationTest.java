@@ -2,7 +2,7 @@ package com.example.internship.api;
 
 
 import com.example.internship.entity.Customer;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /*
  *@author Romodin Aleksey
@@ -37,7 +39,7 @@ public class CustomerRestControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private  CustomerService customerService;
+    private CustomerService customerService;
 
     private Customer customerFirst;
     private Customer customerSecond;
