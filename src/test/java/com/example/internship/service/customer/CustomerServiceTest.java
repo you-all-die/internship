@@ -201,4 +201,18 @@ class CustomerServiceTest {
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
+
+    @Test
+    @DisplayName("Сортировка по возрастанию")
+    void findByCriteriaWithAscendingOrder() {
+        final SearchResult result = customerService.findByCriteria(null, null, 100, true);
+        assertAll(
+                () -> assertEquals("1", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 1"),
+                () -> assertEquals(100, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 100)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(100, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 100)),
+                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
+    }
 }
