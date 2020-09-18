@@ -4,6 +4,7 @@ import com.example.internship.dto.CategorySearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import com.example.internship.specification.CategorySpecification;
+import com.example.internship.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,16 +46,22 @@ public class CategoryService {
         return categoryRepository.findByNameContainsIgnoreCase(name);
     }
 
-    public CategorySearchResult search(Optional<String> name, Optional<Long> parentId, Integer pageSize, Integer pageNumber) {
+    public CategorySearchResult search(String name, Category parent, Integer pageSize, Integer pageNumber) {
 
         CategorySearchResult categorySearchResult = new CategorySearchResult();
 
-        Specification<Category> specification = Specification.where(
-
-                new CategorySpecification("name", name.orElse("")));
-
-        if (parentId.isPresent()) {
-            specification = specification.and(new CategorySpecification("parentId", parentId.get()));
+        if (name == null) {
+            name = "";
+        }
+        Specification<Category> specification = Specification.where(new CategorySpecification("name", name));
+        if (pageNumber == null) {
+            pageNumber = 0;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        if (parent == null) {
+            specification = specification.and(new CategorySpecification("parent", parent));
         }
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));

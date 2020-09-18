@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * @author Aleksey Moiseychev
  */
+@Data
 public class CategorySearchResult {
 
     private List<Category> category;

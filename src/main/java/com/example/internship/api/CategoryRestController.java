@@ -61,7 +61,7 @@ public class CategoryRestController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = Category.class)
-    public Category productData(@PathVariable Long id) {
+    public Category categoryData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
@@ -75,10 +75,10 @@ public class CategoryRestController {
             response = CategorySearchResult.class)
     public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
                                                @ApiParam(value = "поиск по наименованию")
-                                                       Optional<String> searchText,
+                                                       String searchText,
                                                @RequestParam(name = "parentId", required = false)
                                                @ApiParam(value = "поиск id parent")
-                                                       Optional<Long> parentId,
+                                                       Category parent,
                                                @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                @ApiParam(value = "размер страницы")
                                                        Integer pageSize,
@@ -86,7 +86,7 @@ public class CategoryRestController {
                                                @ApiParam(value = "номер страницы")
                                                        Integer pageNumber) {
 
-        return categoryService.search(searchText, parentId, pageSize, pageNumber);
+        return categoryService.search(searchText, parent, pageSize, pageNumber);
     }
 
 
