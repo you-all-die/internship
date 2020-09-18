@@ -26,10 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailServiceImpl userDetailsService;
 
     @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler = new CustomAuthenticationSuccessHandler();
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Autowired
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler = new CustomLogoutSuccessHandler();
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
 //    @Autowired
 //    private RdirectToOriginalUrlAuthenticationSuccessHandler rdirectToOriginalUrlAuthenticationSuccessHandler;

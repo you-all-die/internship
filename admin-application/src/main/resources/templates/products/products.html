@@ -4,7 +4,7 @@
     <title th:text="#{products.title}">Edit products</title>
 </head>
 
-<body>
+<body th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}">
 <div th:replace="common/main :: header"></div>
 
 <div class="ui container">
@@ -12,9 +12,22 @@
         <a th:href="@{/product/add}" class="item" th:text="#{products.add_new}">Add new</a>
         <div class="right menu">
             <div class="item">
-                <form th:action="@{/templates/products}" method="post">
+                <form th:action="@{/products}" method="get">
                     <div class="ui action input">
-                        <input type="text" placeholder="Search..." name="search">
+                        <select class="ui dropdown" name="categoryId">
+                            <option value="" th:text="#{products.all_category}"></option>
+                            <tr th:each="category: ${categories}">
+                                <option th:value="${category.id}" th:text="${category.name}"
+                                        th:selected="${category.id == categoryId}"></option>
+                            </tr>
+                        </select>
+                        <input type="text" name="priceFrom" th:placeholder="#{products.price_from}"
+                               th:value="${priceFrom} ? ${priceFrom}">
+                        <input type="text" name="priceTo" th:placeholder="#{products.price_to}"
+                               th:value="${priceTo} ? ${priceTo}">
+                        <input type="text" name="search" th:placeholder="#{products.search}"
+                               th:value="${searchName} ? ${searchName}">
+                        <input type="hidden" name="pageSize" th:value="${searchResult.pageSize}"/>
                         <button class="ui icon button" type="submit">
                             <i class="search icon"></i>
                         </button>
@@ -22,16 +35,34 @@
                 </form>
             </div>
         </div>
-    </div><br>
+    </div>
+    <br>
 </div>
 
-<div class="ui container" th:if="${#arrays.isEmpty(products)}">
+<div class="ui container" th:if="${#arrays.isEmpty(searchResult.products)}">
     <h4 th:text="#{products.not_found}">Not found...</h4>
     <a th:href="@{/products}" th:text="#{products.show_all}">Show all products</a><br>
 </div>
 
-<div class="ui container" th:unless="${#arrays.isEmpty(products)}">
-    <table class="ui celled table" >
+<div class="ui container" th:unless="${#arrays.isEmpty(searchResult.products)}">
+    <form th:action="@{/products}" method="get">
+        <div class="ui form">
+            <div class="inline fields">
+                <div class="three wide field">
+                    <label th:text="#{products.page_size}"></label>
+                    <input type="text" name="pageSize" th:value="${searchResult.pageSize}">
+                    <input type="hidden" name="search" th:if="${searchName}" th:value="${searchName}"/>
+                    <input type="hidden" name="priceFrom" th:if="${priceFrom}" th:value="${priceFrom}"/>
+                    <input type="hidden" name="priceTo" th:if="${priceTo}" th:value="${priceTo}"/>
+                    <input type="hidden" name="categoryId" th:if="${categoryId}" th:value="${categoryId}"/>
+                </div>
+                <div class="three wide field">
+                    <input class="ui submit button" type="submit" th:value="#{products.apply}">
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="ui celled table">
         <thead>
         <tr>
             <th th:text="#{products.article}">Article</th>
@@ -46,7 +77,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="pr: ${products}">
+        <tr th:each="pr: ${searchResult.products}">
             <td th:text="${pr.id}"/>
             <td th:text="${pr.name}"/>
             <td th:text="${pr.category.id} + '-> ' + ${pr.category.name}"/>
@@ -78,7 +109,37 @@
         </tr>
         </tbody>
     </table>
-</div><br>
+    <div class="ui pagination menu" th:if="${searchResult.totalPages}">
+
+        <a class="item" th:if="${searchResult.firstPage}"
+           th:href="${urlBuilder.fromCurrentRequest()
+           .replaceQueryParam('pageNumber', searchResult.firstPage).toUriString()}"
+           th:text="${searchResult.firstPage}"></a>
+        <div class="disabled item" th:if="${searchResult.firstPage} and ${searchResult.prevPage} > 2">
+            ...
+        </div>
+
+        <a class="item" th:if="${searchResult.prevPage}"
+           th:href="${urlBuilder.fromCurrentRequest()
+           .replaceQueryParam('pageNumber', searchResult.prevPage).toUriString()}"
+           th:text="${searchResult.prevPage}"></a>
+        <a class="active item" th:text="${searchResult.pageNumber}"></a>
+        <a class="item" th:if="${searchResult.nextPage}"
+           th:href="${urlBuilder.fromCurrentRequest()
+           .replaceQueryParam('pageNumber', searchResult.nextPage).toUriString()}"
+           th:text="${searchResult.nextPage}"></a>
+
+        <div class="disabled item" th:if="${searchResult.lastPage} and
+        ${searchResult.nextPage} + 1 < ${searchResult.lastPage}">
+            ...
+        </div>
+        <a class="item" th:if="${searchResult.lastPage}"
+           th:href="${urlBuilder.fromCurrentRequest()
+           .replaceQueryParam('pageNumber', searchResult.lastPage).toUriString()}"
+           th:text="${searchResult.lastPage}"></a>
+    </div>
+</div>
+<br>
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>
