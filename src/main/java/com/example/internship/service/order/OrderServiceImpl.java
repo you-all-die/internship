@@ -1,52 +1,77 @@
 package com.example.internship.service.order;
 
 import com.example.internship.entity.Customer;
+import com.example.internship.entity.Item;
 import com.example.internship.entity.Order;
+import com.example.internship.entity.OrderLine;
+import com.example.internship.repository.ItemRepository;
 import com.example.internship.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
+
+/**
+ * @author  Sergey Lapshin
+ */
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
 
     @Override
-    public Order makeOrder(Customer customer, Map<String, String> allParams) {
-        //        Создание заказа
+    public boolean makeOrder(Customer customer, Map<String, String> allParams, List<OrderLine> orderLines) {
+        //        Создание заказа и айтема
         Order order = new Order();
 
         //        Обязательные поля (контролируются формой)
-        order.customerFirstName = allParams.get("firstName");
-        order.customerLastName = allParams.get("lastName");
-        order.addressRegion = allParams.get("region");
-        order.addressCity = allParams.get("city");
-        order.addressStreet = allParams.get("street");
-        order.addressHouse = allParams.get("house");
-        order.addressApartment = allParams.get("apartment");
+        order.setCustomerFirstName(allParams.get("firstName"));
+        order.setCustomerLastName(allParams.get("lastName"));
+        order.setAddressRegion(allParams.get("region"));
+        order.setAddressCity(allParams.get("city"));
+        order.setAddressStreet(allParams.get("street"));
+        order.setAddressHouse(allParams.get("house"));
+        order.setAddressApartment(allParams.get("apartment"));
 
         //        Необязательные поля
-        order.customerMiddleName = allParams.containsKey("middleName") ? allParams.get("middleName") : "";
-        order.customerEmail = allParams.containsKey("email") ? allParams.get("email") : "";
-        order.customerPhone = allParams.containsKey("phone") ? allParams.get("phone") : "";
-        order.addressDistrict = allParams.containsKey("district") ? allParams.get("district") : "";
-        order.addressComment = allParams.containsKey("comment") ? allParams.get("comment") : "";
+        order.setCustomerMiddleName(allParams.containsKey("middleName") ? allParams.get("middleName") : "");
+        order.setCustomerEmail(allParams.containsKey("email") ? allParams.get("email") : "");
+        order.setCustomerPhone(allParams.containsKey("phone") ? allParams.get("phone") : "");
+        order.setAddressDistrict(allParams.containsKey("district") ? allParams.get("district") : "");
+        order.setAddressComment(allParams.containsKey("comment") ? allParams.get("comment") : "");
 
         //        Берем значения из других таблиц
-        order.customerId = customer.getId();
+        order.setCustomerId(customer.getId());
 
-//          Создать таблицу со статусами (сделать)
-        order.statusId = 12L;
+//          Брать текстовой значение
+        order.setStatusId(12L);
 
-//                Сдесь записываем адрес в базу данных и берем его ID (сделать)
-        order.addressId = 12312L;
+        orderRepository.save(order);
 
-        System.out.println("ORDER TO SAVE: " + order);
-        Order savedOrder = orderRepository.save(order);
+        for (OrderLine orderLine: orderLines) {
+            Item item = new Item();
 
-        return savedOrder;
+            item.setOrder(order);
+            item.setItemCategoryId(orderLine.getProduct().getCategory().getId());
+            item.setItemDescription(orderLine.getProduct().getDescription());
+            item.setItemName(orderLine.getProduct().getName());
+            item.setItemPicture(orderLine.getProduct().getPicture());
+            item.setItemPrice(orderLine.getProduct().getPrice());
+            item.setItemQuantity(orderLine.getProductQuantity());
+
+            itemRepository.save(item);
+        }
+
+
+//        System.out.println("ORDER TO SAVE: " + order);
+//        Order savedOrder = orderRepository.save(order);
+
+
+//        return savedOrder;
+        return true;
     }
 }
