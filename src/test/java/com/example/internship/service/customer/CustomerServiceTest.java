@@ -2,7 +2,6 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
-import com.example.internship.specification.customer.CustomerSpecificator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -10,14 +9,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class CustomerServiceTest {
 
     private static final String MSG_NAMES_ARE = "Ожидалось %s";
+    private static final String MSG_CUSTOMERS_SIZE_IS = "Длина списка покупателей должна быть %d";
+    private static final String MSG_PAGE_NUMBER_IS = "Номер страницы должен быть %d";
+    private static final String MSG_PAGE_SIZE_IS = "Размер страницы должен быть %d";
+    private static final String MSG_TOTAL_IS = "Общее количество покупателей должно быть %d";
+    private static final String MSG_ORDER_IS = "Порядок сортировки должен быть %s";
+
     @Autowired
-    private static CustomerService customerService;
+    private CustomerService customerService;
 
     @BeforeAll
     static void beforeAll() {
@@ -115,6 +121,12 @@ class CustomerServiceTest {
     @DisplayName("Запрос списка покупателей с нулевыми критериями")
     void findByCriteriaWithNullParameters() {
         final SearchResult result = customerService.findByCriteria(null, null, null, null);
-
+        assertAll(
+                () -> assertEquals(20, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 20)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
+                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
     }
 }
