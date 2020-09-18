@@ -26,7 +26,7 @@ public class Customer {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
 
     @OneToOne(cascade = CascadeType.ALL)
