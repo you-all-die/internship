@@ -102,7 +102,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public boolean remove(Product product, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
-        ;
 
         if (customer.isEmpty()) return false;
 
@@ -167,9 +166,10 @@ public class CartServiceImpl implements CartService {
         if (customer.isEmpty()) return Optional.empty();
 
         if (customer.get().getCart() == null) {
-            log.error("Cart for customer: " + customerId + "not exist!");
+            log.error("Cart for customer: " + customerId + " not exist!");
             Cart cart = new Cart();
             cart.setOrderLines(new ArrayList<>());
+            cart.setCustomer(customer.get());
             customer.get().setCart(cart);
             return Optional.of(customerRepository.save(customer.get()));
         }

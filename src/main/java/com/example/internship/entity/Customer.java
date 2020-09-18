@@ -28,8 +28,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private Set<Address> addresses;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
 
     public final String getFullName() {

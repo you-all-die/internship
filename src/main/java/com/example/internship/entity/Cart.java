@@ -18,7 +18,8 @@ public class Cart {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne(mappedBy = "cart")
+    @OneToOne
+    @JoinColumn
     private Customer customer;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)

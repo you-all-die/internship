@@ -15,6 +15,11 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_cart
                     nullable: false
+              - column:
+                  name: customer_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
         - createTable:
             tableName: order_line
             columns:
@@ -39,10 +44,3 @@ databaseChangeLog:
               - column:
                   name: product_quantity
                   type: INT
-        - addColumn:
-            columns:
-              - column:
-                  afterColumn: email
-                  name: cart_id
-                  type: BIGINT
-            tableName: customers

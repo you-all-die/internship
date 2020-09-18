@@ -5,12 +5,12 @@ databaseChangeLog:
       author: Modenov Danil
       changes:
         - addForeignKeyConstraint:
-            constraintName: fk_customer_to_cart_id
-            baseTableName: customers
-            baseColumnNames: cart_id
-            referencedTableName: cart
-            referencedColumnNames: id
-            onDelete: 'RESTRICT'
-            onUpdate: 'CASCADE'
+              constraintName: fk_cart_to_customer_id
+              baseTableName: cart
+              baseColumnNames: customer_id
+              referencedTableName: customers
+              referencedColumnNames: id
+              onDelete: 'CASCADE'
+              onUpdate: 'CASCADE'
 
 # Отношение кастомера к корзине
