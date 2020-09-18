@@ -147,4 +147,18 @@ class CustomerServiceTest {
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
+
+    @Test
+    @DisplayName("Поиск покупателей по подстроке в почте")
+    void findByCriteriaWithSearchStringInEmail () {
+        // Должен найтись один покупатель с почтой Customer75@mail.mu
+        final SearchResult result = customerService.findByCriteria("75@", null, null, null);
+        assertAll(
+                () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
+                () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
+                () -> assertEquals(1, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 1)),
+                () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
+        );
+    }
 }
