@@ -14,7 +14,6 @@ window.onload = function () {
 /* Добавить товар в корзину */
 const addToCart = function (productId) {
     let url = '/product/cart?productId=' + unescape(productId);
-    console.log('POST ' + url);
     $.ajax({
         url: url,
         method: 'POST'
@@ -27,7 +26,6 @@ const addToCart = function (productId) {
 
 /* Диалог подтверждения добавления товара */
 const confirm = function (modalId, productId) {
-    console.log('confirm(' + modalId + ', ' + productId + ')');
     $(modalId).modal({
         blurring: true,
         onApprove: function () { addToCart(productId); }
