@@ -5,9 +5,10 @@ import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Product;
+import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
-import com.example.internship.specification.GsProductSpecification;
+import com.example.internship.specification.product.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,8 +73,8 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
-    public void save(ProductDto.Request.AllWithCategoryId productDto) {
-        productRepository.save(convertToEntity(productDto));
+    public void save(Product product) {
+        productRepository.save(product);
     }
 
     @Override
@@ -97,14 +97,14 @@ public class GsProductServiceImpl implements GsProductService {
             Integer pageSize,
             Boolean descendingOrder
     ) {
-        List<Long> categoryIds = (null != categoryId) ? categoryService.findDescendants(categoryId) : Collections.emptyList();
+        List<Long> categoryIds = categoryService.findDescendants(categoryId);
 
         final BigDecimal minimalPrice = productRepository.findMinimalPrice().orElse(BigDecimal.ZERO);
         final BigDecimal maximalPrice = productRepository.findMaximalPrice().orElse(BigDecimal.ZERO);
         lowerPriceLimit = (null == lowerPriceLimit) ? minimalPrice : lowerPriceLimit;
         upperPriceLimit = (null == upperPriceLimit || upperPriceLimit.equals(BigDecimal.ZERO)) ? maximalPrice : upperPriceLimit;
 
-        final Specification<Product> specification = new GsProductSpecification.Builder()
+        final Specification<Product> specification = new ProductSpecification.Builder()
                 .nameLike(nameLike)
                 .ofCategories(categoryIds)
                 .priceBetween(lowerPriceLimit, upperPriceLimit)
@@ -127,9 +127,12 @@ public class GsProductServiceImpl implements GsProductService {
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 
-        final boolean[] pages = new boolean[(int) (totalProducts / pageSize + 1)];
+        final boolean[] pages = new boolean[PageHelper.calculate((int) totalProducts, pageSize)];
         Arrays.fill(pages, false);
-        pages[pageNumber] = true;
+        // Защита от дурака (меня :)
+        if (pageNumber < pages.length) {
+            pages[pageNumber] = true;
+        }
 
         final List<AllWithCategoryId> filteredProducts = productRepository
                 .findAll(specification, pageable)
@@ -154,6 +157,11 @@ public class GsProductServiceImpl implements GsProductService {
                 .build();
     }
 
+    @Override
+    public void deleteAll() {
+        productRepository.deleteAll();
+    }
+
     private AllWithCategoryId convertToAllWithCategoryId(Product product) {
         return modelMapper.map(product, AllWithCategoryId.class);
     }
@@ -162,20 +170,16 @@ public class GsProductServiceImpl implements GsProductService {
         return modelMapper.map(product, ProductDto.Response.Ids.class);
     }
 
-    private Product convertToEntity(ProductDto.Request.AllWithCategoryId dto) {
-        return modelMapper.map(dto, Product.class);
-    }
-
     @PostConstruct
     private void configureMapper() {
         modelMapper
                 .createTypeMap(Product.class, AllWithCategoryId.class)
-                .addMappings(mapper -> {
-                    // подразумевается, что categoryId у продукта не может быть null
-                    mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId);
-                });
+                .addMappings(mapper -> mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId));
         modelMapper
                 .createTypeMap(Product.class, ProductDto.Response.Ids.class)
                 .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
+        modelMapper
+                .createTypeMap(AllWithCategoryId.class, Product.class)
+                .addMappings(mapper -> mapper.map(dto -> categoryService.findById(dto.getCategoryId()), Product::setCategory));
     }
 }
