@@ -53,6 +53,6 @@ public class ProductController {
                 searchString, categoryId, lowerPriceLimit, upperPriceLimit, pageNumber, pageSize, descendingOrder
         );
         model.addAttribute("data", data);
-        return BASE_URL + "/index";
+        return BASE_MAPPING + "/index";
     }
 }
