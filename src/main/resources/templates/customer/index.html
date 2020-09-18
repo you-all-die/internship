@@ -33,7 +33,7 @@
                         <td>
                             <a href="#" style="cursor:pointer"
                                th:href="@{/customer/{id}(id=${customer.id})}"
-                               th:text="${customer.fullName}">Last First Middle
+                               th:text="${#strings.isEmpty(customer.fullName)} ? #{customer.list.anonymous(${customer.id})} : ${customer.fullName}">Last First Middle
                             </a>
                         </td>
                         <td th:text="${customer.email}">nobody@nowhere.com</td>
