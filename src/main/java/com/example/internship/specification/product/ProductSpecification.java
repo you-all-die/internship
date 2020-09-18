@@ -5,7 +5,6 @@ import com.example.internship.entity.Product;
 import com.example.internship.entity.Product_;
 import com.example.internship.helper.PredicateHelper;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
