@@ -1,7 +1,7 @@
 package com.example.internship.specification;
 
 import com.example.internship.entity.Customer;
-import com.example.internship.entity.Product;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -15,12 +15,13 @@ import javax.persistence.criteria.Root;
  */
 @AllArgsConstructor
 public class CustomerSpecification implements Specification<Customer> {
-    private String key;
-    private Object value;
+    private final String key;
+    private final Object value;
 
     //Параметры для составления запроса
     @Override
-    public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(@NotNull Root<Customer> root, @NotNull CriteriaQuery<?> criteriaQuery,
+                                 @NotNull CriteriaBuilder criteriaBuilder) {
         switch (key) {
             case "firstName":
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")),
@@ -34,6 +35,8 @@ public class CustomerSpecification implements Specification<Customer> {
             case "email":
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get("email")),
                         "%" + value.toString().toLowerCase() + "%");
+            case "emailNotNull":
+                return criteriaBuilder.isNotNull(root.get("email"));
         }
         return null;
     }
