@@ -11,10 +11,7 @@ import com.example.internship.service.order.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +60,7 @@ public class CheckoutController {
 
     // Оформление заказа
     @PostMapping("/checkout/add")
-    public String postCheckout(@RequestParam Map<String, String> allParams) {
+    public String postCheckout(CheckoutForm checkoutForm) {
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
         //Если куки нет, редирект на страницу регистрации
@@ -73,7 +70,7 @@ public class CheckoutController {
         Customer customer = customerOptional.get();
         List<OrderLine> orderLines = customer.getCart().getOrderLines();
 
-        orderService.makeOrder(customer, allParams, orderLines);
+        orderService.makeOrder(customer, checkoutForm, orderLines);
 
         return "/home/index";
     }

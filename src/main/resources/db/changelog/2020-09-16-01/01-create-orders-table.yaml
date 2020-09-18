@@ -75,7 +75,7 @@ databaseChangeLog:
                   name: address_comment
                   type: VARCHAR
               - column:
-                  name: status_id
-                  type: BIGINT
+                  name: status
+                  type: VARCHAR
                   constraints:
                     nullable: false
