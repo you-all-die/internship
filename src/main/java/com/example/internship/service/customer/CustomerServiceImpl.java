@@ -243,6 +243,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customers(customers)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
+                .total(total)
                 .ascendingOrder(null == ascendingOrder || ascendingOrder)
                 .build();
     }
@@ -253,19 +254,19 @@ public class CustomerServiceImpl implements CustomerService {
      * @param customer покупатель
      * @return Фамилия Имя Отчество покупателя или {@link CustomerServiceImpl#ANONYMOUS}
      */
+    @Override
     public final String generateFullName(@NonNull Customer customer) {
         StringBuilder builder = new StringBuilder();
+        if (StringUtils.isNotBlank(customer.getLastName())) {
+            builder.append(customer.getLastName());
+        }
         if (StringUtils.isNotBlank(customer.getFirstName())) {
-            builder.append(customer.getFirstName());
+            builder.append(" ").append(customer.getFirstName());
         }
         if (StringUtils.isNotBlank(customer.getMiddleName())) {
             builder.append(" ").append(customer.getMiddleName());
         }
-        if (StringUtils.isNotBlank(customer.getLastName())) {
-            builder.append(" ").append(customer.getLastName());
-        }
-        String fullName = builder.toString().trim();
-        return StringUtils.isNotBlank(fullName) ? fullName : ANONYMOUS;
+        return builder.toString().trim();
     }
 
     @PostConstruct
