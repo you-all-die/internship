@@ -7,10 +7,8 @@ import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -91,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .block();
     }
 
-    //
+    //Запрос на поиск по критериям
     @Override
     public CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber){
         //Конструктор запроса
@@ -107,12 +105,24 @@ public class CategoryServiceImpl implements CategoryService {
         builder.queryParam("pageSize", pageSize);
         //Декодировка кириллицы
         String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
-        return restTemplate.getForObject(url() + result, CategorySearchResult.class);
+        //return restTemplate.getForObject(url() + result, CategorySearchResult.class);
+
+        return webClient.get()
+                .uri(uri + result)
+                .retrieve()
+                .bodyToMono(CategorySearchResult.class)
+                .block();
+
     }
 
+    //Запрос на поиск родительских категорий
     @Override
     public List<ParentCategoryDto> getParentCategory() throws ResourceAccessException {
-        return restTemplate.getForObject(url() + "/parentCategory", List.class);
+        return webClient.get()
+                .uri(uri + "/parentCategory")
+                .retrieve()
+                .bodyToMono(List.class)
+                .block();
     }
 
 }
