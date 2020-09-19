@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{email.welcome.title}">
+        Добро пожаловать в интернет-магазин Interstellar Ship!
+    </title>
+</head>
+<body>
+<p th:object="${customer}" th:text="#{email.welcome.greetings(*{firstName})}">Добрый день!</p>
+<p th:text="#{email.welcome.happy_to_see}">
+    Рады видеть Вас в интернет-магазине Interstellar Ship!
+</p>
+<p th:text="#{email.welcome.information}">
+    Информацию о товарах можете узнать в нашем каталоге, а также у менеджеров по телефону 8-481-516-23-42
+</p>
+<p th:text="#{email.welcome.happy_shopping}">Удачных покупок!</p>
+</body>
+</html>
