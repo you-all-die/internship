@@ -6,10 +6,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 @Slf4j
 public enum WebHelper {
     ;
 
+    /**
+     * Проверяет, является ли запрос ajax-запросом.
+     *
+     * @param request запрос
+     * @throw {@link ResponseStatusException} если запрос не является ajax-запросом
+     */
     public static void guardAjaxOrNotFound(final HttpServletRequest request) {
         if (!isAjaxRequest(request)) {
             log.warn("An attempt to access the url " + request.getRequestURL() + " via the browser was detected.");

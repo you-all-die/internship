@@ -1,9 +1,8 @@
 package com.example.internship.helper;
 
-import org.springframework.data.jpa.domain.Specification;
-
-import java.util.List;
-
+/**
+ * @author Самохвалов Юрий Алексеевич
+ */
 public enum PredicateHelper {
     ;
 
