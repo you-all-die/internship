@@ -64,6 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
+    public final void deleteAll() {
+        customerRepository.deleteAll();
+    }
+
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));
@@ -143,8 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     //Api: поиск по критериям: ФИО, E-mail. Размер страницы, номер страницы
     @Override
-    public CustomerSearchResult search(Optional<String> firstName, Optional<String> middleName,
-                                       Optional<String> lastName,Optional<String> email,
+    public CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
                                        Integer pageSize, Integer pageNumber) {
 
         CustomerSearchResult customerSearchResult = new CustomerSearchResult();
@@ -155,6 +158,7 @@ public class CustomerServiceImpl implements CustomerService {
         specification = draftSpecification(specification,"middleName", middleName);
         specification = draftSpecification(specification,"lastName", lastName);
         specification = draftSpecification(specification,"email", email);
+        specification = draftSpecification(specification,"emailNotNull", "islNotNull");
 
         // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
@@ -174,12 +178,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     //Метод проверки поля и добавления условия в запрос
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
-                                                       Optional<String> optionalName ){
-        if(optionalName.isPresent()){
+                                                       String optionalName ){
+        if(optionalName!=null){
             if(specification == null){
-                specification = Specification.where(new CustomerSpecification(columnName, optionalName.get()));
+                specification = Specification.where(new CustomerSpecification(columnName, optionalName));
             }else {
-                specification = specification.and(new CustomerSpecification(columnName, optionalName.get()));
+                specification = specification.and(new CustomerSpecification(columnName, optionalName));
             }
         }
         return specification;

@@ -1,9 +1,9 @@
 package com.example.internship.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Set;
 
 /**
@@ -24,8 +24,9 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
-
-    @OneToMany(mappedBy = "customer")
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
 
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)

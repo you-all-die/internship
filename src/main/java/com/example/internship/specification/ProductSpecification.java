@@ -15,8 +15,8 @@ import javax.persistence.criteria.Root;
 @AllArgsConstructor
 public class ProductSpecification implements Specification<Product> {
 
-    private String key;
-    private Object value;
+    private final String key;
+    private final Object value;
 
     @Override
     public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -26,7 +26,8 @@ public class ProductSpecification implements Specification<Product> {
             case "priceTo":
                 return criteriaBuilder.lessThanOrEqualTo(root.get("price"), value.toString());
             case "name":
-                return criteriaBuilder.like(root.get("name"), "%" + value + "%");
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
+                        "%" + value.toString().toLowerCase() + "%");
             case "categoryId":
                 return criteriaBuilder.equal(root.join("category").get("id"), value.toString());
         }
