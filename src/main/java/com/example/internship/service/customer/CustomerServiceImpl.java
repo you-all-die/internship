@@ -7,6 +7,7 @@ import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Customer_;
+import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.specification.CustomerSpecification;
 import com.example.internship.specification.customer.CustomerSpecificator;
@@ -237,7 +238,8 @@ public class CustomerServiceImpl implements CustomerService {
         final CustomerSpecificator specificator = CustomerSpecificator.builder()
                 .searchString(searchString)
                 .build();
-        final long total = customerRepository.count(specificator);
+        final long totalCustomers = customerRepository.count(specificator);
+        final int totalPages = PageHelper.calculateTotalPages(totalCustomers, pageSize);
         final List<AllExceptPassword> customers = customerRepository
                 .findAll(specificator, pageable)
                 .stream()
@@ -247,7 +249,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .customers(customers)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
-                .total(total)
+                .totalPages(totalPages)
+                .totalCustomers(totalCustomers)
                 .ascendingOrder(null == ascendingOrder || ascendingOrder)
                 .build();
     }

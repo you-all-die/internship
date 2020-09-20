@@ -11,6 +11,7 @@ public class SearchResult {
     List<CustomerDto.Response.AllExceptPassword> customers;
     Integer pageNumber;
     Integer pageSize;
-    Long total;
+    Integer totalPages;
+    Long totalCustomers;
     Boolean ascendingOrder;
 }

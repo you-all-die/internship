@@ -1,6 +1,6 @@
 package com.example.internship.controller.customer;
 
-import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
+import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -26,9 +25,20 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public String viewCustomerList(Model model) {
-        final Collection<WithFullName> customers = customerService.getAllWithFullNames();
-        model.addAttribute("customers", customers);
+    public String viewCustomerList(
+            Model model,
+            @RequestParam(required = false) String searchString,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Boolean ascendingOrder
+    ) {
+        final SearchResult data = customerService.findByCriteria(
+                searchString,
+                pageNumber,
+                pageSize,
+                ascendingOrder
+        );
+        model.addAttribute("data", data);
         return BASE_MAPPING + "/index";
     }
 
