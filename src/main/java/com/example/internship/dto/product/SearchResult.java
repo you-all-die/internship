@@ -25,10 +25,12 @@ public class SearchResult {
     boolean[] pages;
     /* Номер текущей страницы */
     Integer pageNumber;
+    /* Количество страницы */
+    Integer totalPages;
     /* Размер страницы */
     Integer pageSize;
     /* Общее количество товаров в запросе */
-    Long total;
+    Long totalProducts;
     /* Минимальная цена товара */
     BigDecimal minimalPrice;
     /* Максимальная цена товара */

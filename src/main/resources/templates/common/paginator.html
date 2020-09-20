@@ -1,0 +1,32 @@
+<!-- Самохвалов Юрий Алексеевич -->
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="widget(currentPage, totalPages, url)"
+     th:if="${totalPages} > 0"
+     class="ui pagination menu">
+
+    <a class="item"
+       th:if="${currentPage} != 0"
+       th:href="@{|url|(pageNumber=0)}"
+       th:text="1">first page</a>
+
+    <div class="disabled item"
+         th:if="${currentPage != 0} and ${currentPage} > 2">...</div>
+
+    <div class="item"
+         th:if="${currentPage} >= 1"
+         th:href="@{|url|(pageNumber=${currentPage})}"
+         th:text="${currentPage}">previous page</div>
+
+    <div class="active item"
+         th:text="${currentPage + 1}">current page</div>
+
+    <div class="item"
+         th:if="true"
+         th:href="@{|url|}"
+         th:text="">next page</div>
+
+    <div class="item"
+         th:if="true"
+         th:href="@{|url|}"
+         th:text="">last page</div>
+</div>

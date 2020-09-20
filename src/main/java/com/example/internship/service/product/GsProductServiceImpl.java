@@ -127,6 +127,7 @@ public class GsProductServiceImpl implements GsProductService {
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 
+        final Integer totalPages = PageHelper.calculate((int) totalProducts, pageSize);
         final boolean[] pages = new boolean[PageHelper.calculate((int) totalProducts, pageSize)];
         Arrays.fill(pages, false);
         // Защита от дурака (меня :)
@@ -147,8 +148,9 @@ public class GsProductServiceImpl implements GsProductService {
                 .breadcrumbs(ancestors)
                 .pages(pages)
                 .pageNumber(pageNumber)
+                .totalPages(totalPages)
                 .pageSize(pageSize)
-                .total(totalProducts)
+                .totalProducts(totalProducts)
                 .minimalPrice(minimalPrice)
                 .maximalPrice(maximalPrice)
                 .lowerPriceLimit(lowerPriceLimit)

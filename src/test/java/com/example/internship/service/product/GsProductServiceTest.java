@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +41,7 @@ class GsProductServiceTest {
     private static final String MSG_MINIMAL_PRICES_ARE_EQUAL = "Минимальная цена должна быть равна нижней границе цен";
     private static final String MSG_MAXIMAL_PRICES_ARE_EQUAL = "Максимальная цена должна быть равна верхней границе цен";
     private static final String MSG_DESCENDING_ORDER_IS = "Флаг сортировки по убыванию должен быть равен %s";
-    private static final String MSG_PAGE_QUANTITY_IS = "Количество страниц должно быть %d";
+    private static final String MSG_PAGES_TOTAL_IS = "Количество страниц должно быть %d";
 
     @Autowired GsProductService productService;
 
@@ -93,7 +92,7 @@ class GsProductServiceTest {
         int pageNumberExpected = 0;
         int totalExpected = (int) PRODUCT_NUMBER;
         int productsExpected = 20;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -108,10 +107,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertTrue(result.getBreadcrumbs().isEmpty(), MSG_BREADCRUMB_LIST_IS_EMPTY),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(result.getPageSize(), 20, () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -124,7 +124,7 @@ class GsProductServiceTest {
         int productsExpected = 1;
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
-        int pageQuantityExpected = 1;
+        int pagesTotalExpected = 1;
         int totalExpected = 1;
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
@@ -140,10 +140,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertTrue(result.getBreadcrumbs().isEmpty(), MSG_BREADCRUMB_LIST_IS_EMPTY),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -156,7 +157,7 @@ class GsProductServiceTest {
         int productsExpected = 0;
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
-        int pageQuantityExpected = 0;
+        int pagesTotalExpected = 0;
         int totalExpected = 0;
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
@@ -172,10 +173,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertTrue(result.getBreadcrumbs().isEmpty(), MSG_BREADCRUMB_LIST_IS_EMPTY),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -190,7 +192,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
         int totalExpected = (int) PRODUCT_NUMBER;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -205,10 +207,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -224,7 +227,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
         int totalExpected = 0;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -239,10 +242,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -257,7 +261,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
         int totalExpected = 10;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         BigDecimal min = BigDecimal.ONE;
         BigDecimal max = BigDecimal.TEN;
@@ -274,10 +278,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getLowerPriceLimit().compareTo(min), 0, () -> String.format(MSG_LOWER_LIMIT_IS, min.toString())),
                 () -> assertEquals(result.getUpperPriceLimit().compareTo(max), 0, () -> String.format(MSG_UPPER_LIMIT_IS, max.toString())),
                 () -> assertTrue(result.getProducts().stream().allMatch(p -> inLimits(p, min, max))),
@@ -293,7 +298,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
         int totalExpected = 0;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         BigDecimal min = BigDecimal.TEN;
         BigDecimal max = BigDecimal.ONE;
@@ -310,10 +315,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getLowerPriceLimit().compareTo(min), 0, () -> String.format(MSG_LOWER_LIMIT_IS, min.toString())),
                 () -> assertEquals(result.getUpperPriceLimit().compareTo(max), 0, () -> String.format(MSG_UPPER_LIMIT_IS, max.toString())),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -328,7 +334,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 2;
         int totalExpected = (int) PRODUCT_NUMBER;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -343,10 +349,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -361,7 +368,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 1000;
         int totalExpected = (int) PRODUCT_NUMBER;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -376,10 +383,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -394,7 +402,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 1;
         int pageNumberExpected = 0;
         int totalExpected = (int) PRODUCT_NUMBER;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -409,10 +417,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -427,7 +436,7 @@ class GsProductServiceTest {
         int pageSizeExpected = 20;
         int pageNumberExpected = 0;
         int totalExpected = 0;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
@@ -442,10 +451,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -460,7 +470,7 @@ class GsProductServiceTest {
         int pageSizeExpected = (int) PRODUCT_NUMBER;
         int pageNumberExpected = 0;
         int totalExpected = 1;
-        int pageQuantityExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
+        int pagesTotalExpected = PageHelper.calculate(totalExpected, pageSizeExpected);
         Boolean orderExpected = true;
         BigDecimal min = BigDecimal.ZERO;
         BigDecimal max = BigDecimal.valueOf(PRODUCT_NUMBER);
@@ -477,10 +487,11 @@ class GsProductServiceTest {
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
-                () -> assertEquals(pageQuantityExpected, result.getPages().length, () -> String.format(MSG_PAGE_QUANTITY_IS, pageQuantityExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getPages().length, () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
+                () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotal(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getLowerPriceLimit().compareTo(min), 0, () -> String.format(MSG_LOWER_LIMIT_IS, min.toString())),
                 () -> assertEquals(result.getUpperPriceLimit().compareTo(max), 0, () -> String.format(MSG_UPPER_LIMIT_IS, max.toString())),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
