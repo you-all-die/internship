@@ -10,3 +10,85 @@ databaseChangeLog:
             sql: ALTER TABLE customers ADD COLUMN last_activity TIMESTAMP (0) WITH TIME ZONE;
         - sql:
             sql: ALTER TABLE customers ALTER COLUMN last_activity SET DEFAULT NOW();
+        - sql:
+            sql: UPDATE customers SET last_activity = NOW();
+  - changeSet:
+      id: 2020-09-15-002
+      author: Murashov Alexey
+      comment: inserting customer_id into cart and cart_id into order_line
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: ALTER TABLE cart ADD COLUMN customer_id BIGINT;
+        - sql:
+            sql: ALTER TABLE order_line ADD COLUMN cart_id BIGINT;
+  - changeSet:
+      id: 2020-09-15-003
+      author: Murashov Alexey
+      comment: fill cart_id column in order_line table
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: UPDATE order_line SET cart_id = (SELECT cart_order_line.cart_id FROM cart_order_line WHERE cart_order_line.order_line_id = order_line.id);
+  - changeSet:
+      id: 2020-09-15-004
+      author: Murashov Alexey
+      comment: fill customer_id column in cart table
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: UPDATE cart SET customer_id = (SELECT customers.id FROM customers WHERE customers.cart_id = cart.id);
+  - changeSet:
+      id: 2020-09-15-005
+      author: Murashov Alexey
+      comment: drop foreingn keys
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: ALTER TABLE customers DROP CONSTRAINT fk_customer_to_cart_id;
+        - sql:
+            sql: ALTER TABLE cart_order_line DROP CONSTRAINT fk_cart_to_order_line_id;
+        - sql:
+            sql: ALTER TABLE cart_order_line DROP CONSTRAINT fk_order_line_to_cart_id;
+  - changeSet:
+      id: 2020-09-15-006
+      author: Murashov Alexey
+      comment: add new fkeys & constraints
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: ALTER TABLE cart ALTER COLUMN customer_id SET NOT NULL;
+        - sql:
+            sql: ALTER TABLE order_line ALTER COLUMN cart_id SET NOT NULL;
+        - addForeignKeyConstraint:
+            constraintName: fk_order_line_to_cart_id
+            baseTableName: order_line
+            baseColumnNames: cart_id
+            referencedTableName: cart
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'CASCADE'
+        - addForeignKeyConstraint:
+            constraintName: fk_cart_to_customer_id
+            baseTableName: cart
+            baseColumnNames: customer_id
+            referencedTableName: customers
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'CASCADE'
+  - changeSet:
+      id: 2020-09-15-007
+      author: Murashov Alexey
+      comment: drop table cart_order_line, drop column customers.cart_id
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - sql:
+            sql: ALTER TABLE customers DROP COLUMN cart_id;
+        - sql:
+            sql: DROP TABLE cart_order_line;
