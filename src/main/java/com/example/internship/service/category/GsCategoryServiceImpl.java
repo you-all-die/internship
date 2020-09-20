@@ -89,17 +89,17 @@ public class GsCategoryServiceImpl implements GsCategoryService {
 
     /**
      * Возвращает список идентификаторов категории и всех её наследников.
-     * Для категории с идентификатором <b>null</b> возвращает список идентификаторов всех категорий.
+     * Для категории с идентификатором <b>null</b> возвращает null.
      * Если категории с указанным идентификатором не существует, возвращает пустой список.
      *
      * @param categoryId идентификатор категории
-     * @return список идентификаторов категорий
+     * @return список идентификаторов категорий или null
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public List<Long> findDescendants(final Long categoryId) {
         if (null == categoryId) {
-            return categoryRepository.findAll().stream().map(Category::getId).collect(Collectors.toUnmodifiableList());
+            return null;
         }
         final Optional<Category> categoryOptional = findById(categoryId);
         if (categoryOptional.isEmpty()) {

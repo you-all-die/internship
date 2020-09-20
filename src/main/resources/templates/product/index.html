@@ -36,16 +36,10 @@
                              class="ui four cards"
                              th:include="/product/cards :: widget (${data.products})">
                         </div>
+                        <div th:replace="/common/paginator :: widget (${data.pageNumber}, ${data.totalPages})"></div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="four wide column"></div>
-                    <div class="twelve wide column">
-                        <!-- Пагинатор -->
-                        <div th:replace="/common/paginator :: widget (${data.pageNumber}, ${data.totalPages}, '/product'"></div>
-                    </div>
-                </div>
             </div>
         </div>
     </body>
