@@ -35,7 +35,7 @@ databaseChangeLog:
                   name: house
                   type: VARCHAR(255)
               - column:
-                  name: apartment
+                  name: appartment
                   type: VARCHAR(255)
               - column:
                   name: comment

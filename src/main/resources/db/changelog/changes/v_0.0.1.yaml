@@ -5,3 +5,5 @@ databaseChangeLog:
         file: db/changelog/2020-08-21-01/02-create-addresses-table.yaml
   - include:
         file: db/changelog/2020-08-21-01/03-add-curstomer-to-addresses-relation.yaml
+  - include:
+        file: db/changelog/2020-08-21-01/04-rename-customer-column-apartment.yaml
