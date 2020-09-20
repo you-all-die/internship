@@ -5,13 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
     Customer findByEmail(String email);
 
+    //обновляет поле последней активности пользователя, если с момента последнего действия прошло больше часа
     @Transactional
     @Modifying
     @Query(value = "update customers last_activity set last_activity = now() " +
@@ -19,9 +19,10 @@ public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaS
             nativeQuery = true)
     void setLastActivityForCustomers(@Param("id") Long customerId);
 
+    //удаляет анонимных пользователей, неактивных более суток
     @Transactional
     @Modifying
-    @Query(value = "delete FROM customers where first_name is null AND (last_activity < 'yesterday' OR last_activity is null)",
+    @Query(value = "delete FROM customers where email is null AND (last_activity < 'yesterday' OR last_activity is null)",
             nativeQuery = true)
     Integer deleteInactiveAnonymousUsers();
 }
