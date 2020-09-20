@@ -7,8 +7,8 @@ import java.util.List;
 
 @Value
 @Builder
-public class SearchResult {
-    List<CustomerDto.Response.AllExceptPassword> customers;
+public class SearchResult<T> {
+    List<T> customers;
     Integer pageNumber;
     Integer pageSize;
     Integer totalPages;

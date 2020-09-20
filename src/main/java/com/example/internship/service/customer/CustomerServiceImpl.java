@@ -240,12 +240,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
         final long totalCustomers = customerRepository.count(specificator);
         final int totalPages = PageHelper.calculateTotalPages(totalCustomers, pageSize);
-        final List<AllExceptPassword> customers = customerRepository
+        final List<WithFullName> customers = customerRepository
                 .findAll(specificator, pageable)
                 .stream()
-                .map(this::convertToAllExceptPassword)
+                .map(this::convertToWithFullName)
                 .collect(toUnmodifiableList());
-        return SearchResult.builder()
+        return SearchResult.<WithFullName>builder()
                 .customers(customers)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)

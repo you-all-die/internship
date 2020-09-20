@@ -37,26 +37,28 @@ public interface CustomerService {
     boolean isAnonymousCustomer(Long customerId);
     //Api:поиск по критериям:ФИО, E-mail
     CustomerSearchResult search(String firstName, String middleName,
-                                       String lastName, String email,
-                                       Integer pageSize, Integer pageNumber);
+                                String lastName, String email,
+                                Integer pageSize, Integer pageNumber);
 
     /**
      * Возвращает список пользователей, отобранных по заданным критериям.
      *
-     * @param searchString подстрока поиска в именах, телефоне, почте
-     * @param pageNumber номер страницы
-     * @param pageSize размер страницы
+     * @param searchString   подстрока поиска в именах, телефоне, почте
+     * @param pageNumber     номер страницы
+     * @param pageSize       размер страницы
      * @param ascendingOrder null|true - по возрастанию
      * @return результаты поиска
      */
-    SearchResult findByCriteria(
+    <T> SearchResult<T> findByCriteria(
             String searchString,
-            Integer pageNumber, Integer pageSize,
+            Integer pageNumber,
+            Integer pageSize,
             Boolean ascendingOrder
     );
 
     /**
      * Собирает вместе Фамилию Имя Отчество покупателя
+     *
      * @param customer Покупатель
      * @return Фамилия Имя Отчество или Пустая строка "" (если все имена null или пустые)
      */
