@@ -24,7 +24,7 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
