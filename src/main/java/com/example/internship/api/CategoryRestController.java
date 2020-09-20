@@ -21,7 +21,7 @@ public class CategoryRestController {
 
     private final CategoryService categoryService;
 
-    @PostMapping(value = "/find-all-sort-by-id")
+    @GetMapping(value = "/find-all-sort-by-id")
     @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
     public List<Category> findAllSortById() {
         return categoryService.findAllSortById();
@@ -39,7 +39,7 @@ public class CategoryRestController {
         categoryService.removeCategory(id);
     }
 
-    @PostMapping(value = "/find-all")
+    @GetMapping(value = "/find-all")
     @ApiOperation(value = "Возвращает все категории", response = List.class)
     public List<Category> findAll() {
         return categoryService.findAll();

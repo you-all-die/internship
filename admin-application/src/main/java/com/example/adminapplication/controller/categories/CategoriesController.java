@@ -50,16 +50,8 @@ public class CategoriesController {
                 categoryService.searchResult(categoryName, parentCategoryId, pageSize, 0);
         model.addAttribute("categoryList", categorySearchResult);
 
-        /*Формирование списка для поиска по родительской категории
-             * Поиск в БД категорий с потомками
-             * + "Показать все"
-             * +  Поиск без родителей
-             */
+        //Список родительских категорий
         List<ParentCategoryDto> parentCategoryList = categoryService.getParentCategory();
-        ParentCategoryDto findAllParentCategory = new ParentCategoryDto((long) -1, "Показать все");
-        ParentCategoryDto notParentCategory = new ParentCategoryDto((long) 0, "Без родителя");
-        parentCategoryList.add(notParentCategory);
-        parentCategoryList.add(findAllParentCategory);
         model.addAttribute("parentCategories", parentCategoryList);
 
         return "categories/categories";
@@ -106,27 +98,19 @@ public class CategoriesController {
 
     @GetMapping({"categories/add"})
     public String addNewCategory(Model model) {
-
         CategoryDto category = new CategoryDto();
         model.addAttribute("category", category);
-        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
         List<CategoryDto> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);
-
         return "categories/category";
     }
 
     @GetMapping({"/category/edit"})
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
-
         CategoryDto category = categoryService.findById(id);
         model.addAttribute("category", category);
-        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
         List<CategoryDto> parentCategories = categoryService.findAll();
-        parentCategories.add(0, defaultParent);
         model.addAttribute("parentCategories", parentCategories);
-
         return "categories/category";
     }
 

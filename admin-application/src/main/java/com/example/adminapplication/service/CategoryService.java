@@ -21,8 +21,6 @@ public interface CategoryService {
 
     void addCategory(CategoryDto category);
 
-    List<CategoryDto> findByName(String name);
-
     CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber);
 
     List<ParentCategoryDto> getParentCategory();

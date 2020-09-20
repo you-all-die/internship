@@ -6,12 +6,12 @@ import com.example.adminapplication.dto.ParentCategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,21 +23,31 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final WebClient webClient;
 
-    private String uri = "/category";
+    private final String uri = "/category";
 
+
+    //Показать все категории + новая строка "Без категории"
     @Override
     public List<CategoryDto> findAll() {
-
-        return webClient.post()
+        List<CategoryDto> parentCategories =  webClient.get()
                 .uri(uri + "/find-all")
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(CategoryDto.class)
+                .collectList()
                 .block();
+
+        //Новая строка
+        CategoryDto defaultParent = new CategoryDto((long) -1, "Без категории", null);
+        if (parentCategories == null) parentCategories = new ArrayList<>();
+        parentCategories.add(0, defaultParent);
+
+        return parentCategories;
     }
 
+
+    //Поиск категории по ID
     @Override
     public CategoryDto findById(Long id) {
-
         return webClient.post()
                 .uri(uri + "/find-by-id")
                 .bodyValue(id)
@@ -46,48 +56,43 @@ public class CategoryServiceImpl implements CategoryService {
                 .block();
     }
 
+
+    //Показать все категории, отсортированные по ID
     @Override
     public List<CategoryDto> findAllSortById() {
-
-        return webClient.post()
+        return webClient.get()
                 .uri(uri + "/find-all-sort-by-id")
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(CategoryDto.class)
+                .collectList()
                 .block();
     }
 
+
+    //Удаление категории по ID
     @Override
     public void removeCategory(Long id) {
-
         webClient.post()
                 .uri(uri +"/remove-category")
                 .bodyValue(id)
                 .retrieve()
                 .toBodilessEntity()
-                .block();;
+                .block();
     }
 
+
+    //Добавление новой категории
     @Override
     public void addCategory(CategoryDto category) {
-
         webClient.post()
                 .uri(uri +"/add-category")
                 .bodyValue(category)
                 .retrieve()
                 .toBodilessEntity()
-                .block();;
-    }
-
-    @Override
-    public List<CategoryDto> findByName(String name) {
-
-        return webClient.post()
-                .uri(uri + "/find-by-name")
-                .bodyValue(name)
-                .retrieve()
-                .bodyToMono(List.class)
                 .block();
     }
+
+
 
     //Запрос на поиск по критериям
     @Override
@@ -105,7 +110,6 @@ public class CategoryServiceImpl implements CategoryService {
         builder.queryParam("pageSize", pageSize);
         //Декодировка кириллицы
         String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
-        //return restTemplate.getForObject(url() + result, CategorySearchResult.class);
 
         return webClient.get()
                 .uri(uri + result)
@@ -115,14 +119,31 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    //Запрос на поиск родительских категорий
+    /*Запрос на поиск родительских категорий
+     * Добавляем строку "Показать все"
+     * Добавляем строку "Без родителя"
+    */
     @Override
-    public List<ParentCategoryDto> getParentCategory() throws ResourceAccessException {
-        return webClient.get()
+    public List<ParentCategoryDto> getParentCategory(){
+        //Get-запрос из БД
+        List<ParentCategoryDto> parentCategoryList =  webClient.get()
                 .uri(uri + "/parentCategory")
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(ParentCategoryDto.class)
+                .collectList()
                 .block();
+
+        if (parentCategoryList == null) {
+            parentCategoryList = new ArrayList<>();
+        }
+
+        //Новые строки
+        ParentCategoryDto findAllParentCategory = new ParentCategoryDto((long) -1, "Показать все");
+        ParentCategoryDto notParentCategory = new ParentCategoryDto((long) 0, "Без родителя");
+        parentCategoryList.add(notParentCategory);
+        parentCategoryList.add(findAllParentCategory);
+
+        return parentCategoryList;
     }
 
 }
