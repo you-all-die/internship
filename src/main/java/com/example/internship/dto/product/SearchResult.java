@@ -21,8 +21,6 @@ public class SearchResult {
     List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
     /* Родительские категории для хлебных крошек */
     List<CategoryDto.Response.All> breadcrumbs;
-    /* Страницы */
-    boolean[] pages;
     /* Номер текущей страницы */
     Integer pageNumber;
     /* Количество страницы */

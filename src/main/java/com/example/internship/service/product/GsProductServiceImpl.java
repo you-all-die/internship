@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -127,13 +126,7 @@ public class GsProductServiceImpl implements GsProductService {
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 
-        final Integer totalPages = PageHelper.calculate((int) totalProducts, pageSize);
-        final boolean[] pages = new boolean[PageHelper.calculate((int) totalProducts, pageSize)];
-        Arrays.fill(pages, false);
-        // Защита от дурака (меня :)
-        if (pageNumber < pages.length) {
-            pages[pageNumber] = true;
-        }
+        final Integer totalPages = PageHelper.calculateTotalPages((int) totalProducts, pageSize);
 
         final List<AllWithCategoryId> filteredProducts = productRepository
                 .findAll(specification, pageable)
@@ -146,7 +139,6 @@ public class GsProductServiceImpl implements GsProductService {
                 .products(filteredProducts)
                 .topCategories(topCategories)
                 .breadcrumbs(ancestors)
-                .pages(pages)
                 .pageNumber(pageNumber)
                 .totalPages(totalPages)
                 .pageSize(pageSize)
