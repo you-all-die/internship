@@ -2,7 +2,10 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -20,6 +23,7 @@ class CustomerServiceTest {
     private static final String MSG_PAGE_SIZE_IS = "Размер страницы должен быть %d";
     private static final String MSG_TOTAL_IS = "Общее количество покупателей должно быть %d";
     private static final String MSG_ORDER_IS = "Порядок сортировки должен быть %s";
+    private static final String MSG_TOTAL_PAGES_IS = "Количество страниц должно быть %d";
 
     @Autowired
     private CustomerService customerService;
@@ -128,7 +132,8 @@ class CustomerServiceTest {
                 () -> assertEquals(20, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 20)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(5, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 5)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -142,7 +147,8 @@ class CustomerServiceTest {
                 () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
-                () -> assertEquals(1, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 1)),
+                () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
+                () -> assertEquals(1, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 1)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -156,7 +162,8 @@ class CustomerServiceTest {
                 () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
-                () -> assertEquals(1, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 1)),
+                () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
+                () -> assertEquals(1, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 1)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -170,7 +177,8 @@ class CustomerServiceTest {
                 () -> assertEquals(20, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 20)),
                 () -> assertEquals(1, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 1)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(5, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 5)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -183,7 +191,8 @@ class CustomerServiceTest {
                 () -> assertEquals(0, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 0)),
                 () -> assertEquals(1000, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 1000)),
                 () -> assertEquals(20, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 20)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(5, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 5)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -196,7 +205,8 @@ class CustomerServiceTest {
                 () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(10, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 10)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(10, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 10)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -209,8 +219,9 @@ class CustomerServiceTest {
                 () -> assertEquals("1", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 1"),
                 () -> assertEquals(100, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 100)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
                 () -> assertEquals(100, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 100)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(true, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, true))
         );
     }
@@ -223,8 +234,9 @@ class CustomerServiceTest {
                 () -> assertEquals("1", result.getCustomers().get(99).getFirstName(), "Имя последнего покупателя должно быть 1"),
                 () -> assertEquals(100, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 100)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
                 () -> assertEquals(100, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 100)),
-                () -> assertEquals(100, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 100)),
+                () -> assertEquals(100, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 100)),
                 () -> assertEquals(false, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, false))
         );
     }
@@ -238,8 +250,9 @@ class CustomerServiceTest {
                 () -> assertEquals("99", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 99"),
                 () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
+                () -> assertEquals(2, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 2)),
                 () -> assertEquals(10, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, 10)),
-                () -> assertEquals(19, result.getTotal(), () -> String.format(MSG_TOTAL_IS, 19)),
+                () -> assertEquals(19, result.getTotalCustomers(), () -> String.format(MSG_TOTAL_IS, 19)),
                 () -> assertEquals(false, result.getAscendingOrder(), () -> String.format(MSG_ORDER_IS, false))
         );
     }
