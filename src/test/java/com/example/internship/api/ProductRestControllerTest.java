@@ -5,7 +5,7 @@ import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.ProductStatus;
-import com.example.internship.service.CategoryService;
+import com.example.internship.service.category.CategoryService;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
 import org.junit.jupiter.api.AfterAll;

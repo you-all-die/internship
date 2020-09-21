@@ -1,15 +1,14 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.ProductSearchResult;
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Category;
-import com.example.internship.service.CategoryService;
+import com.example.internship.service.category.CategoryService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +24,13 @@ public class CategoryRestController {
 
     @PostMapping(value = "/find-all-sort-by-id")
     @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
-    public List<Category> findAllSortById() {
+    public List<CategoryDto.Response.AllWithParentIdParentName> findAllSortById() {
         return categoryService.findAllSortById();
     }
 
     @PostMapping(value = "/find-by-name")
     @ApiOperation(value = "Возвращает категорию по ее названию", response = List.class)
-    public List<Category> findByName(@RequestBody String name) {
+    public List<CategoryDto.Response.AllWithParentIdParentName> findByName(@RequestBody String name) {
         return categoryService.findByName(name);
     }
 
@@ -43,25 +42,27 @@ public class CategoryRestController {
 
     @PostMapping(value = "/find-all")
     @ApiOperation(value = "Возвращает все категории", response = List.class)
-    public List<Category> findAll() {
+    public List<CategoryDto.Response.AllWithParentIdParentName> findAll() {
         return categoryService.findAll();
     }
 
     @PostMapping(value = "/find-by-id")
-    @ApiOperation(value = "Возвращает категорию по id", response = Category.class)
-    public Category findById(@RequestBody Long id) {
+    @ApiOperation(value = "Возвращает категорию по id",
+            response = CategoryDto.Response.AllWithParentIdParentName.class)
+    public CategoryDto.Response.AllWithParentIdParentName findById(@RequestBody Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping(value = "/add-category")
     @ApiOperation(value = "Сохраняет категорию в БД")
-    public void addCategory(@RequestBody Category category) {
+    public void addCategory(@RequestBody CategoryDto.Request.All category) {
         categoryService.addCategory(category);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = Category.class)
-    public Category productData(@PathVariable Long id) {
+    @ApiOperation(value = "Возвращает информацию о категории, по значению id.",
+            response = CategoryDto.Response.AllWithParentIdParentName.class)
+    public CategoryDto.Response.AllWithParentIdParentName categoryData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 

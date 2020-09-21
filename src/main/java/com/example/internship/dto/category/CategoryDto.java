@@ -14,8 +14,8 @@ public enum CategoryDto {
     ;
 
     private interface Id {
-        long getId();
-        void setId(long id);
+        Long getId();
+        void setId(Long id);
     }
 
     private interface Name {
@@ -31,6 +31,11 @@ public enum CategoryDto {
     private interface ParentId {
         Long getParentId();
         void setParentId(Long parentId);
+    }
+
+    private interface ParentName {
+        String getParentName();
+        void setParentName(String parentName);
     }
 
     private interface Subcategories {
@@ -49,10 +54,11 @@ public enum CategoryDto {
         ;
 
         @Data
-        public static class All implements Id, Name, ParentId {
-            private long id;
+        public static class All implements Id, Name, ParentId, ParentName {
+            private Long id;
             private String name;
             private Long parentId;
+            private String parentName;
         }
     }
 
@@ -61,7 +67,7 @@ public enum CategoryDto {
 
         @Data
         public static class All implements Id, Name {
-            private long id;
+            private Long id;
             private String name;
         }
 
@@ -69,6 +75,13 @@ public enum CategoryDto {
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithParentId extends All implements ParentId {
             private Long parentId;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = true)
+        public static class AllWithParentIdParentName extends All implements ParentId, ParentName {
+            private Long parentId;
+            private String parentName;
         }
 
         @Data
@@ -91,7 +104,7 @@ public enum CategoryDto {
 
         @Data
         public static class IdOnly implements Id {
-            private long id;
+            private Long id;
         }
     }
 }
