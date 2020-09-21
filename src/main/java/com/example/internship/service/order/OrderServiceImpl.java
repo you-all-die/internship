@@ -27,9 +27,10 @@ public class OrderServiceImpl implements OrderService{
     public boolean makeOrder(Customer customer, CheckoutForm checkoutForm, List<OrderLine> orderLines) {
         Order order = new Order();
 
-//                Обязательные поля (контролируются формой)
+        //        Обязательные поля (контролируются формой)
         order.setCustomerFirstName(checkoutForm.getFirstName());
         order.setCustomerLastName(checkoutForm.getLastName());
+        order.setCustomerEmail(checkoutForm.getEmail());
         order.setAddressRegion(checkoutForm.getRegion());
         order.setAddressCity(checkoutForm.getCity());
         order.setAddressStreet(checkoutForm.getStreet());
@@ -38,7 +39,6 @@ public class OrderServiceImpl implements OrderService{
 
         //        Необязательные поля
         order.setCustomerMiddleName(checkoutForm.getMiddleName() != null ? checkoutForm.getMiddleName() : "");
-        order.setCustomerEmail(checkoutForm.getEmail() != null ? checkoutForm.getEmail() : "");
         order.setCustomerPhone(checkoutForm.getPhone() != null ? checkoutForm.getPhone() : "");
         order.setAddressDistrict(checkoutForm.getDistrict() != null ? checkoutForm.getDistrict() : "");
         order.setAddressComment(checkoutForm.getComment() != null ? checkoutForm.getComment() : "");
