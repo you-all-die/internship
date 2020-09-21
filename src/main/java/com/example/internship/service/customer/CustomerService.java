@@ -56,13 +56,5 @@ public interface CustomerService {
             Boolean ascendingOrder
     );
 
-    /**
-     * Собирает вместе Фамилию Имя Отчество покупателя
-     *
-     * @param customer Покупатель
-     * @return Фамилия Имя Отчество или Пустая строка "" (если все имена null или пустые)
-     */
-    String generateFullName(Customer customer);
-
     void deleteAll();
 }

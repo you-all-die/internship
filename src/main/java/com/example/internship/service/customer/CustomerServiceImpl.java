@@ -7,14 +7,13 @@ import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Customer_;
+import com.example.internship.helper.JoinHelper;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.specification.CustomerSpecification;
 import com.example.internship.specification.customer.CustomerSpecificator;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -255,27 +254,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
-    /**
-     * Генерирует полное имя покупателя.
-     *
-     * @param customer покупатель
-     * @return Фамилия Имя Отчество покупателя или ""
-     */
-    @Override
-    public final String generateFullName(@NonNull Customer customer) {
-        StringBuilder sb = new StringBuilder();
-        if (StringUtils.isNotBlank(customer.getLastName())) {
-            sb.append(customer.getLastName());
-        }
-        if (StringUtils.isNotBlank(customer.getFirstName())) {
-            sb.append(" ").append(customer.getFirstName());
-        }
-        if (StringUtils.isNotBlank(customer.getMiddleName())) {
-            sb.append(" ").append(customer.getMiddleName());
-        }
-        return sb.toString().trim();
-    }
-
     @PostConstruct
     private void configureCustomerMapper() {
         mapper
@@ -295,9 +273,11 @@ public class CustomerServiceImpl implements CustomerService {
     private Converter<Customer, WithFullName> toWithFullNameConverter() {
         return context -> {
             Customer customer = context.getSource();
-            WithFullName destination = context.getDestination();
-            destination.setFullName(generateFullName(customer));
-            return context.getDestination();
+            WithFullName withFullName = context.getDestination();
+            withFullName.setFullName(
+                    JoinHelper.join(" ", customer.getLastName(), customer.getFirstName(), customer.getMiddleName())
+            );
+            return withFullName;
         };
     }
 }
