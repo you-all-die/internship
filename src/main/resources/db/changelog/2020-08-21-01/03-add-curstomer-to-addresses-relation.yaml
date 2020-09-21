@@ -10,4 +10,4 @@ databaseChangeLog:
             referencedTableName: customers
             referencedColumnNames: id
             onDelete: 'CASCADE'
-            onUpdate: 'RESTRICT'
+            onUpdate: 'RESTRICT' 

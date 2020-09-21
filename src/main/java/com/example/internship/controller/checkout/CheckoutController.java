@@ -57,7 +57,7 @@ public class CheckoutController {
         return "cart/checkout";
 
     }
-
+ 
     // Оформление заказа
     @PostMapping("/checkout/add")
     public String postCheckout(CheckoutForm checkoutForm) {
