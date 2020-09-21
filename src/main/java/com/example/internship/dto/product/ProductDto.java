@@ -15,11 +15,6 @@ public enum ProductDto {
         ;
 
         @Data
-        public static class Ids implements Id {
-            private long id;
-        }
-
-        @Data
         public static class All implements Id, Name, Description, Picture, Price {
             private Long id;
             private String name;
