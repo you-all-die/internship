@@ -59,12 +59,12 @@ public class AddressServiceImpl implements AddressService {
     private void configureMapper() {
         modelMapper.createTypeMap(Address.class, AddressDto.class)
                 .addMappings(mapper ->
-                        mapper.map(src -> src.getCustomer().getId(), AddressDto::setCustomerId)
+                        mapper.map(src -> src.getCustomerId(), AddressDto::setCustomerId)
                 );
 
         modelMapper.createTypeMap(AddressDto.class, Address.class).addMappings(
                 mapper -> mapper.<Long>map(AddressDto::getCustomerId,
-                        (target, v) -> target.getCustomer().setId(v)));
+                        (target, v) -> target.setCustomerId(v)));
 
     }
 }

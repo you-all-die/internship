@@ -25,9 +25,9 @@ public class Customer {
     private String phone;
     private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
-    @JsonIgnore
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
