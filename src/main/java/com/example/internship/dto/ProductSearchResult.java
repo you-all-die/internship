@@ -9,10 +9,9 @@ import java.util.List;
  * @author Ivan Gubanov
  */
 @Data
-@Component
 public class ProductSearchResult {
     private List<ProductDto> products;
     private Integer pageNumber;
     private Integer pageSize;
-    private Integer totalProducts;
+    private Long totalProducts;
 }

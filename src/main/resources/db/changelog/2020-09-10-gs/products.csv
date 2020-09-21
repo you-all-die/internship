@@ -1,0 +1,52 @@
+category_id,name,description,picture,status_id,price
+3,iPhone 1,Great Apple phone,iphone7.jpg,1,100.00
+3,iPhone 2,Great Apple phone,iphone7.jpg,1,200.00
+3,iPhone 3,Great Apple phone,iphone7.jpg,1,300.00
+3,iPhone 4,Great Apple phone,iphone7.jpg,1,400.00
+3,iPhone 5,Great Apple phone,iphone7.jpg,1,500.00
+3,iPhone 6,Great Apple phone,iphone7.jpg,1,600.00
+3,iPhone 7,Great Apple phone,iphone7.jpg,1,700.00
+3,iPhone 8,Great Apple phone,iphone8.jpg,1,800.00
+3,iPhone 9,Great Apple phone,iphone8.jpg,1,900.00
+3,iPhone 10,Great Apple phone,iphone10.jpg,1,1000.00
+3,iPhone 11,Great Apple phone,iphone10.jpg,1,1100.00
+1,Xiaomi 1,Super Chinese Android Phone,iphone7.jpg,1,100.00
+1,Xiaomi 2,Super Chinese Android Phone,iphone7.jpg,1,200.00
+1,Xiaomi 3,Super Chinese Android Phone,iphone7.jpg,1,300.00
+1,Xiaomi 4,Super Chinese Android Phone,iphone7.jpg,1,400.00
+1,Xiaomi 5,Super Chinese Android Phone,iphone7.jpg,1,500.00
+1,Xiaomi 6,Super Chinese Android Phone,iphone7.jpg,1,600.00
+1,Xiaomi 7,Super Chinese Android Phone,iphone7.jpg,1,700.00
+1,Xiaomi 8,Super Chinese Android Phone,iphone7.jpg,1,800.00
+1,Xiaomi 9,Super Chinese Android Phone,iphone7.jpg,1,900.00
+1,Xiaomi 10,Super Chinese Android Phone,iphone7.jpg,1,1000.00
+1,Xiaomi 1S,Super Chinese Android Phone,iphone8.jpg,1,100.00
+1,Xiaomi 2S,Super Chinese Android Phone,iphone8.jpg,1,200.00
+1,Xiaomi 3S,Super Chinese Android Phone,iphone8.jpg,1,300.00
+1,Xiaomi 4S,Super Chinese Android Phone,iphone8.jpg,1,400.00
+1,Xiaomi 5S,Super Chinese Android Phone,iphone8.jpg,1,500.00
+1,Xiaomi 6S,Super Chinese Android Phone,iphone8.jpg,1,600.00
+1,Xiaomi 7S,Super Chinese Android Phone,iphone8.jpg,1,700.00
+1,Xiaomi 8S,Super Chinese Android Phone,iphone8.jpg,1,800.00
+1,Xiaomi 9S,Super Chinese Android Phone,iphone8.jpg,1,900.00
+1,Xiaomi 10S,Super Chinese Android Phone,iphone8.jpg,1,1000.00
+1,Xiaomi 1 Note,Super Chinese Android Phone,iphone10.jpg,1,100.00
+1,Xiaomi 2 Note,Super Chinese Android Phone,iphone10.jpg,1,200.00
+1,Xiaomi 3 Note,Super Chinese Android Phone,iphone10.jpg,1,300.00
+1,Xiaomi 4 Note,Super Chinese Android Phone,iphone10.jpg,1,400.00
+1,Xiaomi 5 Note,Super Chinese Android Phone,iphone10.jpg,1,500.00
+1,Xiaomi 6 Note,Super Chinese Android Phone,iphone10.jpg,1,600.00
+1,Xiaomi 7 Note,Super Chinese Android Phone,iphone10.jpg,1,700.00
+1,Xiaomi 8 Note,Super Chinese Android Phone,iphone10.jpg,1,800.00
+1,Xiaomi 9 Note,Super Chinese Android Phone,iphone10.jpg,1,900.00
+1,Xiaomi 10 Note,Super Chinese Android Phone,iphone10.jpg,1,1000.00
+2,Tablet 1 Note,Super Chinese Android Tablet,iphone10.jpg,1,100.00
+2,Tablet 2 Note,Super Chinese Android Tablet,iphone10.jpg,1,200.00
+2,Tablet 3 Note,Super Chinese Android Tablet,iphone10.jpg,1,300.00
+2,Tablet 4 Note,Super Chinese Android Tablet,iphone10.jpg,1,400.00
+2,Tablet 5 Note,Super Chinese Android Tablet,iphone10.jpg,1,500.00
+2,Tablet 6 Note,Super Chinese Android Tablet,iphone10.jpg,1,600.00
+2,Tablet 7 Note,Super Chinese Android Tablet,iphone10.jpg,1,700.00
+2,Tablet 8 Note,Super Chinese Android Tablet,iphone10.jpg,1,800.00
+2,Tablet 9 Note,Super Chinese Android Tablet,iphone10.jpg,1,900.00
+2,Tablet 10 Note,Super Chinese Android Tablet,iphone10.jpg,1,1000.00
