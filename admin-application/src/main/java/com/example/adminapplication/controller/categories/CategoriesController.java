@@ -58,9 +58,7 @@ public class CategoriesController {
 
     @GetMapping({"/category/add"})
     public String addNewCategory(Model model) {
-
-        CategoryDto category = new CategoryDto();
-        model.addAttribute("category", category);
+        model.addAttribute("category", new CategoryDto());
         List<CategoryDto> parentCategories = categoryService.findAll();
         model.addAttribute("parentCategories", parentCategories);
 

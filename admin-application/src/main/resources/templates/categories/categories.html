@@ -12,7 +12,7 @@
         <tr>
             <td>
                 <form method="POST" action="#" th:action="@{/category/add}">
-                    <button class="ui primary button" th:text="#{categories.add_category}">
+                    <button class="ui primary basic button" th:text="#{categories.add_category}">
                         Add category
                     </button>
                 </form>
@@ -49,7 +49,7 @@
             <td th:text="${category?.parentName}">Subcategory</td>
             <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/category/edit(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="ui green button"
+                    <button type="submit" name="submit" value="value" class="ui green basic button"
                             th:text="#{categories.edit}">
                         Edit
                     </button>
@@ -57,7 +57,7 @@
             </td>
             <td class="right aligned collapsing">
                 <form method="POST" th:action="@{/category/delete(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="ui red button"
+                    <button type="submit" name="submit" value="value" class="ui red basic button"
                             th:text="#{categories.delete}">
                         Delete
                     </button>
