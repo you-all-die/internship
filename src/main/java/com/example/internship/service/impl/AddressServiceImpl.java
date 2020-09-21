@@ -6,7 +6,6 @@ import com.example.internship.repository.AddressesRepository;
 import com.example.internship.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -51,21 +50,12 @@ public class AddressServiceImpl implements AddressService {
         return modelMapper.map(address, AddressDto.class);
     }
 
-    private Address convertToEntity(AddressDto addressDto) {
-        return modelMapper.map(addressDto, Address.class);
-    }
-
     @PostConstruct
     private void configureMapper() {
         modelMapper.createTypeMap(Address.class, AddressDto.class)
                 .addMappings(mapper ->
-                        mapper.map(src -> src.getCustomerId(), AddressDto::setCustomerId)
+                        mapper.map(src -> src.getCustomer().getId(), AddressDto::setCustomerId)
                 );
-
-        modelMapper.createTypeMap(AddressDto.class, Address.class).addMappings(
-                mapper -> mapper.<Long>map(AddressDto::getCustomerId,
-                        (target, v) -> target.setCustomerId(v)));
-
     }
 }
 

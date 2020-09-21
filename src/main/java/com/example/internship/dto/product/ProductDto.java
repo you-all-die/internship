@@ -11,8 +11,29 @@ import java.math.BigDecimal;
 public enum ProductDto {
     ;
 
-    private interface Id {
-        long getId();
+    public enum Response {
+        ;
+
+        @Data
+        public static class Ids implements Id {
+            private long id;
+        }
+
+        @Data
+        public static class All implements Id, Name, Description, Picture, Price {
+            private Long id;
+            private String name;
+            private String description;
+            private String picture;
+            private BigDecimal price;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = true)
+        public static class AllWithCategoryId extends All implements CategoryId {
+            private Long categoryId;
+        }
+
     }
 
     private interface Name {
@@ -31,51 +52,11 @@ public enum ProductDto {
         BigDecimal getPrice();
     }
 
+    private interface Id {
+        Long getId();
+    }
+
     private interface CategoryId {
-        long getCategoryId();
-    }
-
-    public enum Request {
-        ;
-
-        @Data
-        public static class All implements Id, Name, Description, Picture, Price {
-            long id;
-            String name;
-            String description;
-            String picture;
-            BigDecimal price;
-        }
-
-        @Data
-        @EqualsAndHashCode(callSuper = true)
-        public static class AllWithCategoryId extends All implements CategoryId {
-            long categoryId;
-        }
-    }
-
-    public enum Response {
-        ;
-
-        @Data
-        public static class Ids implements Id {
-            private long id;
-        }
-
-        @Data
-        public static class All implements Id, Name, Description, Picture, Price {
-            private long id;
-            private String name;
-            private String description;
-            private String picture;
-            private BigDecimal price;
-        }
-
-        @Data
-        @EqualsAndHashCode(callSuper = true)
-        public static class AllWithCategoryId extends All implements CategoryId {
-            private long categoryId;
-        }
-
+        Long getCategoryId();
     }
 }
