@@ -1,8 +1,9 @@
-package com.example.internship.service;
+package com.example.internship.service.category;
 
 import com.example.internship.dto.CategorySearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
+import com.example.internship.service.category.CategoryService;
 import com.example.internship.specification.CategorySpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<Category> findAll() {
