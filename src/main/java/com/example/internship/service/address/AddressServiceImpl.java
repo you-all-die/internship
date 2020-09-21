@@ -3,16 +3,15 @@ package com.example.internship.service.address;
 import com.example.internship.dto.address.AddressDto.Response.ForList;
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
+import com.example.internship.helper.JoinHelper;
 import com.example.internship.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 @RequiredArgsConstructor
@@ -77,14 +76,14 @@ public class AddressServiceImpl implements AddressService {
         };
     }
 
-    public final String generateFullAddress(Address address) {
-        return List.of(
+    private String generateFullAddress(Address address) {
+        return JoinHelper.join(" ",
                 address.getRegion(),
                 address.getCity(),
                 address.getDistrict(),
                 address.getStreet(),
                 address.getHouse(),
                 address.getApartment()
-        ).stream().filter(StringUtils::isNotBlank).collect(joining(" "));
+        );
     }
 }
