@@ -6,15 +6,12 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.*;
 import com.example.internship.service.impl.CartServiceImpl;
 import com.example.internship.service.impl.CustomerServiceImpl;
-import com.example.internship.service.item.ItemServiceImpl;
 import com.example.internship.service.order.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -30,7 +27,6 @@ public class CheckoutController {
     private final CartServiceImpl cartService;
 
     private final OrderServiceImpl orderService;
-    private final ItemServiceImpl itemService;
 
 
     //Переход на страницу оформления заказа из корзины
@@ -57,7 +53,7 @@ public class CheckoutController {
         return "cart/checkout";
 
     }
- 
+
     // Оформление заказа
     @PostMapping("/checkout/add")
     public String postCheckout(CheckoutForm checkoutForm) {

@@ -1,11 +1,7 @@
 package com.example.internship.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.GeneratorType;
-import org.hibernate.mapping.Set;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,6 +36,9 @@ public class Order {
 //    Статус заказа (для процессинга)
     private String status;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(
+            mappedBy = "id",
+            cascade = CascadeType.ALL
+    )
     private List<Item> items;
 }

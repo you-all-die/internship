@@ -5,10 +5,10 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Item;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
-import com.example.internship.repository.ItemRepository;
 import com.example.internship.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,11 +21,11 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
-    private final ItemRepository itemRepository;
 
     @Override
     public boolean makeOrder(Customer customer, CheckoutForm checkoutForm, List<OrderLine> orderLines) {
         Order order = new Order();
+        List<Item> items = new ArrayList<>();
 
         //        Обязательные поля (контролируются формой)
         order.setCustomerFirstName(checkoutForm.getFirstName());
@@ -46,8 +46,6 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus("CREATED");
         order.setCustomerId(customer.getId());
 
-        orderRepository.save(order);
-
         for (OrderLine orderLine: orderLines) {
             Item item = new Item();
 
@@ -58,10 +56,13 @@ public class OrderServiceImpl implements OrderService{
             item.setItemPicture(orderLine.getProduct().getPicture());
             item.setItemPrice(orderLine.getProduct().getPrice());
             item.setItemQuantity(orderLine.getProductQuantity());
-
-            itemRepository.save(item);
+            
+            items.add(item);
         }
 
+        order.setItems(items);
+
+        orderRepository.save(order);
         return true;
     }
 }
