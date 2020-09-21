@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="common/main :: common_header (~{::title}, _, _)">
+        <meta content="Самохвалов Юрий Алексеевич" name="author">
+        <title>Address Editor</title>
+    </head>
+    <body>
+        <div class="ui main grid container">
+            <div class="row">
+                <div class="column">
+                    <form class="ui form" method="post" th:action="@{/address}" th:object="address">
+                        <input th:field="*{id}" type="hidden">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
