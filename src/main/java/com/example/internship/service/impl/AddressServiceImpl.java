@@ -2,7 +2,7 @@ package com.example.internship.service.impl;
 
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
-import com.example.internship.repository.AddressesRepository;
+import com.example.internship.repository.AddressRepository;
 import com.example.internship.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,28 +20,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
-    private final AddressesRepository addressesRepository;
+    private final AddressRepository addressRepository;
 
     private final ModelMapper modelMapper;
 
 
     @Override
     public List<AddressDto> getAllById(Long customerId) {
-        return addressesRepository.findAddressByCustomerId(customerId)
+        return addressRepository.findAddressByCustomerId(customerId)
                 .stream().map(this::convertToDto).collect(Collectors.toList());
 
     }
 
     @Override
     public void addAddress(AddressDto addressDto) {
-        addressesRepository.save(modelMapper.map(addressDto, Address.class));
+        addressRepository.save(modelMapper.map(addressDto, Address.class));
 
     }
 
     @Override
     public void deleteAddress(Long id, Long addressId) {
-        addressesRepository.deleteById(addressId);
-         addressesRepository.findAddressByCustomerId(id)
+        addressRepository.deleteById(addressId);
+        addressRepository.findAddressByCustomerId(id)
                 .stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
