@@ -220,7 +220,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public SearchResult findByCriteria(
+    public SearchResult<WithFullName> findByCriteria(
             String searchString,
             Integer pageNumber,
             Integer pageSize,
@@ -263,17 +263,17 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public final String generateFullName(@NonNull Customer customer) {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         if (StringUtils.isNotBlank(customer.getLastName())) {
-            builder.append(customer.getLastName());
+            sb.append(customer.getLastName());
         }
         if (StringUtils.isNotBlank(customer.getFirstName())) {
-            builder.append(" ").append(customer.getFirstName());
+            sb.append(" ").append(customer.getFirstName());
         }
         if (StringUtils.isNotBlank(customer.getMiddleName())) {
-            builder.append(" ").append(customer.getMiddleName());
+            sb.append(" ").append(customer.getMiddleName());
         }
-        return builder.toString().trim();
+        return sb.toString().trim();
     }
 
     @PostConstruct
@@ -294,11 +294,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Converter<Customer, WithFullName> toWithFullNameConverter() {
         return context -> {
-            Customer source = context.getSource();
+            Customer customer = context.getSource();
             WithFullName destination = context.getDestination();
-            destination.setFullName(generateFullName(source));
+            destination.setFullName(generateFullName(customer));
             return context.getDestination();
         };
     }
 }
-

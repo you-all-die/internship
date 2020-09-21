@@ -49,7 +49,7 @@ public interface CustomerService {
      * @param ascendingOrder null|true - по возрастанию
      * @return результаты поиска
      */
-    <T> SearchResult<T> findByCriteria(
+    SearchResult<WithFullName> findByCriteria(
             String searchString,
             Integer pageNumber,
             Integer pageSize,

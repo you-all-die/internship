@@ -1,6 +1,6 @@
 package com.example.internship.service.customer;
 
-import com.example.internship.dto.customer.CustomerDto.Response.AllExceptPassword;
+import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import org.junit.jupiter.api.AfterAll;
@@ -128,7 +128,7 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Запрос списка покупателей с нулевыми критериями")
     void findByCriteriaWithNullParameters() {
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, null, null, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, null, null, null);
         assertAll(
                 () -> assertEquals(20, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 20)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
@@ -143,7 +143,7 @@ class CustomerServiceTest {
     @DisplayName("Поиск покупателей по подстроке в телефоне")
     void findByCriteriaWithSearchStringInPhone() {
         // Должен найтись один покупатель с телефоном +7 000 099-00-00
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria("099", null, null, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria("099", null, null, null);
         assertAll(
                 () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
@@ -158,7 +158,7 @@ class CustomerServiceTest {
     @DisplayName("Поиск покупателей по подстроке в почте")
     void findByCriteriaWithSearchStringInEmail () {
         // Должен найтись один покупатель с почтой Customer75@mail.mu
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria("75@", null, null, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria("75@", null, null, null);
         assertAll(
                 () -> assertEquals(1, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 1)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
@@ -173,7 +173,7 @@ class CustomerServiceTest {
     @DisplayName("Переход на существующую страницу")
     void findByCriteriaWithSecondPage () {
         // Должна возвратиться вторая страница
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, 1, null, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, 1, null, null);
         assertAll(
                 () -> assertEquals(20, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 20)),
                 () -> assertEquals(1, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 1)),
@@ -187,7 +187,7 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Переход на несуществующую страницу")
     void findByCriteriaWithNonExistingPage() {
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, 1000, null, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, 1000, null, null);
         assertAll(
                 () -> assertEquals(0, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 0)),
                 () -> assertEquals(1000, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 1000)),
@@ -201,7 +201,7 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Изменение размера страницы")
     void findByCriteriaWithPageSize() {
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, null, 10, null);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, null, 10, null);
         assertAll(
                 () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
@@ -215,9 +215,9 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Сортировка по возрастанию")
     void findByCriteriaWithAscendingOrder() {
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, null, 100, true);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, null, 100, true);
         assertAll(
-                () -> assertEquals("1", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 1"),
+                () -> assertEquals("Customer 1", result.getCustomers().get(0).getFullName(), "Имя первого покупателя должно быть Customer 1"),
                 () -> assertEquals(100, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 100)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
@@ -230,9 +230,9 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Сортировка по убыванию")
     void findByCriteriaWithDescendingOrder() {
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria(null, null, 100, false);
+        final SearchResult<WithFullName> result = customerService.findByCriteria(null, null, 100, false);
         assertAll(
-                () -> assertEquals("1", result.getCustomers().get(99).getFirstName(), "Имя последнего покупателя должно быть 1"),
+                () -> assertEquals("Customer 1", result.getCustomers().get(99).getFullName(), "Имя последнего покупателя должно быть Customer 1"),
                 () -> assertEquals(100, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 100)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(1, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 1)),
@@ -246,9 +246,9 @@ class CustomerServiceTest {
     @DisplayName("Запрос по всем параметрам")
     void findByCriteriaWithAllParameters() {
         // Должно найтись 19 покупателей, отсортированных в обратном порядке
-        final SearchResult<AllExceptPassword> result = customerService.findByCriteria("9", 0, 10, false);
+        final SearchResult<WithFullName> result = customerService.findByCriteria("9", 0, 10, false);
         assertAll(
-                () -> assertEquals("99", result.getCustomers().get(0).getFirstName(), "Имя первого покупателя должно быть 99"),
+                () -> assertEquals("Customer 99", result.getCustomers().get(0).getFullName(), "Имя первого покупателя должно быть Customer 99"),
                 () -> assertEquals(10, result.getCustomers().size(), () -> String.format(MSG_CUSTOMERS_SIZE_IS, 10)),
                 () -> assertEquals(0, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, 0)),
                 () -> assertEquals(2, result.getTotalPages(), () -> String.format(MSG_TOTAL_PAGES_IS, 2)),

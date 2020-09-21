@@ -6,7 +6,6 @@ import com.example.internship.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.StringJoiner;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
-@Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
@@ -50,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
         };
     }
 
-    private String generateFullAddress(Address address) {
+    public final String generateFullAddress(Address address) {
         return new StringJoiner(", ")
                 .add(address.getRegion())
                 .add(address.getCity())

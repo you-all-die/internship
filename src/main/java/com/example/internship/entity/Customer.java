@@ -25,7 +25,7 @@ public class Customer {
     private String phone;
     private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "customerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses;
 
     @OneToOne(cascade = CascadeType.ALL)
