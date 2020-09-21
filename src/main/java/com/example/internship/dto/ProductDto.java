@@ -15,9 +15,6 @@ import java.math.BigDecimal;
 public class ProductDto {
 
     private Long id;
-    /** +=+=+=+=+=+=+=+=+=+=+=
-     * Замена на Category DTO.
-     +=+=+=+=+=+=+=+=+=+=+= */
     private CategoryDto category;
     private String name;
     private String description;

@@ -58,9 +58,6 @@ public class ProductRestControllerTest {
         productStatus.setDescription("For sale");
         productStatusService.add(productStatus);
 
-        /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-         * Конвертация в дто, в следствие изменения ProductDto.
-         +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ */
         productOne.setCategory(mapper.map(categoryOne, CategoryDto.class));
         productOne.setName("Iphone 1");
         productOne.setDescription("Iphone 1 is best phone");
@@ -69,9 +66,6 @@ public class ProductRestControllerTest {
         productOne.setStatus(productStatus);
         productService.addProduct(productOne);
 
-        /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-         * Конвертация в дто, в следствие изменения ProductDto.
-         +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ */
         productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
         productTwo.setDescription("Iphone 2 is best Iphone 1");
