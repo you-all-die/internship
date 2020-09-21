@@ -7,60 +7,56 @@
     <body>
         <div th:replace="common/main :: header"></div>
 
-        <div class="ui main container">
+        <div class="ui main grid container">
 
             <form class="ui form" th:action="@{/customer}" th:object="${customer}" method="post">
-                <div class="ui grid">
+                <div class="row">
 
-                    <div class="row">
+                    <div class="column">
 
-                        <div class="column">
+                        <h3 class="ui dividing header" th:text="#{customer.profile.header}">Customer profile</h3>
 
-                            <h3 class="ui dividing header" th:text="#{customer.profile.header}">Customer profile</h3>
+                        <input th:field="*{id}" type="hidden">
 
-                            <input th:field="*{id}" type="hidden">
-
-                            <div class="ui three fields">
-                                <div class="field">
-                                    <label th:text="#{customer.profile.last_name}">Last Name</label>
-                                    <input autofocus th:field="*{lastName}" type="text">
-                                </div>
-                                <div class="field">
-                                    <label th:text="#{customer.profile.first_name}">First Name</label>
-                                    <input th:field="*{firstName}" type="text">
-                                </div>
-                                <div class="field">
-                                    <label th:text="#{customer.profile.middle_name}">Middle Name</label>
-                                    <input th:field="*{middleName}" type="text">
-                                </div>
+                        <div class="ui three fields">
+                            <div class="field">
+                                <label th:text="#{customer.profile.last_name}">Last Name</label>
+                                <input autofocus th:field="*{lastName}" type="text">
                             </div>
+                            <div class="field">
+                                <label th:text="#{customer.profile.first_name}">First Name</label>
+                                <input th:field="*{firstName}" type="text">
+                            </div>
+                            <div class="field">
+                                <label th:text="#{customer.profile.middle_name}">Middle Name</label>
+                                <input th:field="*{middleName}" type="text">
+                            </div>
+                        </div>
 
-                            <div class="ui two fields">
-                                <div class="required field">
-                                    <label th:text="#{customer.profile.email}">Email</label>
-                                    <input th:field="*{email}" type="text">
-                                </div>
-                                <div class="field">
-                                    <label th:text="#{customer.profile.phone}">Phone</label>
-                                    <input th:field="*{phone}" type="text">
-                                </div>
+                        <div class="ui two fields">
+                            <div class="required field">
+                                <label th:text="#{customer.profile.email}">Email</label>
+                                <input th:field="*{email}" type="text">
+                            </div>
+                            <div class="field">
+                                <label th:text="#{customer.profile.phone}">Phone</label>
+                                <input th:field="*{phone}" type="text">
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="centered four wide row">
-                        <button class="ui blue button" th:text="#{customer.profile.save}" type="submit">Save
+                <div class="centered four wide row">
+                    <div class="column">
+                        <button class="ui primary button" th:text="#{customer.profile.save}" type="submit">
+                            Save
                         </button>
-                        <a class="ui red button"
-                           th:href="@{/customer/{id}/delete(id=*{id})}"
-                           th:if="*{id}"
-                           th:text="#{customer.profile.delete}">Delete
-                        </a>
                     </div>
                 </div>
             </form>
 
         </div>
+
         <footer th:replace="common/main::footer"></footer>
     </body>
 </html>

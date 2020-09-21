@@ -8,8 +8,7 @@
         <div th:replace="common/main :: header"></div>
         <div class="ui main grid container">
             <div class="row">
-                <div class="ui container">
-
+                <div class="column">
                     <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
                         Header
                     </h4>
@@ -41,12 +40,26 @@
                 </div>
             </div>
 
+            <div class="centered four wide row">
+                <div class="center aligned column">
+                    <a class="ui primary button"
+                       th:href="@{/customer/{id}/edit(id=${customer.id})}"
+                       th:text="#{customer.view.edit}">Edit
+                    </a>
+                    <a class="ui button"
+                       th:href="@{/customer/{id}/delete(id=${customer.id})}"
+                       th:text="#{customer.view.delete}">Delete
+                    </a>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="ui container">
                     <div th:replace="/customer/addresses :: widget (${customer.addresses})"></div>
                 </div>
             </div>
         </div>
+
         <footer th:replace="common/main::footer"></footer>
     </body>
 </html>
