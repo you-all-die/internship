@@ -1,7 +1,7 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.addressDto.AddressDto;
-import com.example.internship.service.AddressService;
+import com.example.internship.service.address.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

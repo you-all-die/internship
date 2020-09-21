@@ -8,12 +8,14 @@ import com.example.internship.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 
+@Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
@@ -39,17 +41,18 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.deleteById(addressId);
     }
 
+    private AddressDto convertToDto(Address address) {
+        return mapper.map(address, AddressDto.class);
+    }
+
+    //============================================================================================================//
+
     @Override
     public List<ForList> getAllByCustomerId(Long customerId) {
         return addressRepository.findAddressByCustomerId(customerId)
                 .stream()
                 .map(this::convertToForList)
                 .collect(toUnmodifiableList());
-    }
-
-
-    private AddressDto convertToDto(Address address) {
-        return mapper.map(address, AddressDto.class);
     }
 
     private ForList convertToForList(Address address) {

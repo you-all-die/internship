@@ -1,0 +1,23 @@
+<div th:fragment="widget (addresses)"
+     xmlns:th="http://www.thymeleaf.org">
+
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th th:text="#{addresses.table.header.full_address}">Full Address</th>
+                <th th:text="#{addresses.table.header.comment}">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="address : ${addresses}" th:unless="#lists.isEmpty(${addresses})">
+                <td th:text="${address.fullAddress}">New York City, 5th Avenue, 220b</td>
+                <td th:text="${address.comment}">Sherlock Holmes wasn't there</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(addresses)}">
+                <td th:text="#{addresses.table.empty_list}">No addresses</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

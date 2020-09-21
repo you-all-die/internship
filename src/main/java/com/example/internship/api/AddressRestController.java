@@ -1,11 +1,8 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.addressDto.AddressDto;
-import com.example.internship.entity.Address;
-import com.example.internship.service.AddressService;
-import lombok.AllArgsConstructor;
+import com.example.internship.service.address.AddressService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
