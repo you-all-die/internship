@@ -1,11 +1,19 @@
 package com.example.internship.dto.address;
 
+import lombok.Data;
+
 public enum AddressDto {
     ;
 
     public enum Response {
         ;
 
+        @Data
+        public static class ForList implements Id, FullAddress, Comment {
+            private Long id;
+            private String fullAddress;
+            private String Comment;
+        }
     }
 
     private interface Id {
@@ -42,5 +50,9 @@ public enum AddressDto {
 
     private interface Comment {
         String getComment();
+    }
+
+    private interface FullAddress {
+        String getFullAddress();
     }
 }
