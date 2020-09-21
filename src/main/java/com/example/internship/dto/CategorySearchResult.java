@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author Aleksey Moiseychev
@@ -16,6 +17,7 @@ public class CategorySearchResult {
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalCategory;
+    //private Category parent;
 
     public CategorySearchResult(List<Category> category, Integer pageNumber, Integer pageSize, Long totalCategory) {
         this.category = category;
