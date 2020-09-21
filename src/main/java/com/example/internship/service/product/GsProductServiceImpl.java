@@ -1,7 +1,6 @@
 package com.example.internship.service.product;
 
 import com.example.internship.dto.category.CategoryDto;
-import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Product;
@@ -45,13 +44,6 @@ public class GsProductServiceImpl implements GsProductService {
     public List<AllWithCategoryId> findAllByCategoryId(long categoryId) {
         return productRepository.findAllByCategoryId(categoryId).stream()
                 .map(this::convertToAllWithCategoryId)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
-    public List<ProductDto.Response.Ids> findAllIdByCategoryId(long categoryId) {
-        return productRepository.findAllByCategoryId(categoryId).stream()
-                .map(this::convertToIds)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -160,18 +152,11 @@ public class GsProductServiceImpl implements GsProductService {
         return modelMapper.map(product, AllWithCategoryId.class);
     }
 
-    private ProductDto.Response.Ids convertToIds(Product product) {
-        return modelMapper.map(product, ProductDto.Response.Ids.class);
-    }
-
     @PostConstruct
     private void configureMapper() {
         modelMapper
                 .createTypeMap(Product.class, AllWithCategoryId.class)
                 .addMappings(mapper -> mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId));
-        modelMapper
-                .createTypeMap(Product.class, ProductDto.Response.Ids.class)
-                .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
         modelMapper
                 .createTypeMap(AllWithCategoryId.class, Product.class)
                 .addMappings(mapper -> mapper.map(dto -> categoryService.findById(dto.getCategoryId()), Product::setCategory));

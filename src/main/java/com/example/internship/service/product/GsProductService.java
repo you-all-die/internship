@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface GsProductService {
     List<ProductDto.Response.AllWithCategoryId> findAll();
     List<ProductDto.Response.AllWithCategoryId> findAllByCategoryId(long categoryId);
-    List<ProductDto.Response.Ids> findAllIdByCategoryId(long categoryId);
     Optional<ProductDto.Response.AllWithCategoryId> findById(long id);
     Optional<BigDecimal> findMinimalPrice();
     Optional<BigDecimal> findMaximalPrice();

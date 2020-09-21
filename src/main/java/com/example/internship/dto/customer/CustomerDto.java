@@ -1,39 +1,10 @@
 package com.example.internship.dto.customer;
 
 import lombok.Data;
-import lombok.Value;
 
 public enum CustomerDto {
     ;
 
-    private interface Id {
-        Long getId();
-        void setId(Long id);
-    }
-
-    private interface Names {
-        String getFirstName();
-        void setFirstName(String firstName);
-        String getMiddleName();
-        void setMiddleName(String middleName);
-        String getLastName();
-        void setLastName(String lastName);
-    }
-
-    private interface Phone {
-        String getPhone();
-        void setPhone(String phone);
-    }
-
-    private interface Email {
-        String getEmail();
-        void setEmail(String email);
-    }
-
-    private interface FullName {
-        String getFullName();
-        void setFullName(String fullName);
-    }
 
     public enum Response {
         ;
@@ -61,5 +32,27 @@ public enum CustomerDto {
             String phone;
             String email;
         }
+    }
+
+    private interface Id {
+        Long getId();
+    }
+
+    private interface Names {
+        String getFirstName();
+        String getMiddleName();
+        String getLastName();
+    }
+
+    private interface Phone {
+        String getPhone();
+    }
+
+    private interface Email {
+        String getEmail();
+    }
+
+    private interface FullName {
+        String getFullName();
     }
 }
