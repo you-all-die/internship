@@ -1,7 +1,7 @@
 package com.example.internship.service.category;
 
+import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import com.example.internship.specification.CategorySpecification;
@@ -22,15 +22,15 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    public List<CategoryDto.Response.AllWithParentIdParentName> findAll() {
+    public List<CategoryDto> findAll() {
         return categoryRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CategoryDto.Response.AllWithParentIdParentName findById(Long id) {
+    public CategoryDto findById(Long id) {
         return convertToDto(categoryRepository.findById(id).orElse(new Category()));
     }
 
-    public List<CategoryDto.Response.AllWithParentIdParentName> findAllSortById() {
+    public List<CategoryDto> findAllSortById() {
         return categoryRepository.findAllByOrderByIdAscParentIdAsc().stream()
                 .map(this::convertToDto).collect(Collectors.toList());
     }
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public void addCategory(CategoryDto.Request.All category) {
+    public void addCategory(CategoryDto category) {
 //        if (null == category.getParent().getId()) {
 //            category.setParent(null);
 //        }
@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
-    public List<CategoryDto.Response.AllWithParentIdParentName> findByName(String name) {
+    public List<CategoryDto> findByName(String name) {
         return categoryRepository.findByNameContainsIgnoreCase(name).stream()
                 .map(this::convertToDto).collect(Collectors.toList());
     }
@@ -82,21 +82,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @PostConstruct
     private void configureMapper() {
-        modelMapper.createTypeMap(Category.class, CategoryDto.Response.AllWithParentIdParentName.class)
-                .addMappings(mapper -> mapper.map(src -> src.getParent().getName(),
-                        CategoryDto.Response.AllWithParentIdParentName::setParentName))
-                .addMappings(mapper -> mapper.map(src -> src.getParent().getId(),
-                        CategoryDto.Response.AllWithParentIdParentName::setParentId));
+        modelMapper.createTypeMap(Category.class, CategoryDto.class)
+                .addMappings(mapper -> {
+                    mapper.map(src -> src.getParent().getName(),
+                            CategoryDto::setParentName);
+                    mapper.map(src -> src.getParent().getId(),
+                            CategoryDto::setParentId);
+                });
 
-        modelMapper.createTypeMap(CategoryDto.Request.All.class, Category.class)
-                .addMappings(mapper -> mapper.<Long>map(CategoryDto.Request.All::getParentId, (target, v) -> target.getParent().setId(v)));
+        modelMapper.createTypeMap(CategoryDto.class, Category.class)
+                .addMappings(mapper -> {
+                    mapper.<Long>map(CategoryDto::getParentId, (target, v) -> target.getParent().setId(v));
+                    mapper.<String>map(CategoryDto::getParentName, (target, v) -> target.getParent().setName(v));
+                });
     }
 
-    private CategoryDto.Response.AllWithParentIdParentName convertToDto(Category category) {
-        return modelMapper.map(category, CategoryDto.Response.AllWithParentIdParentName.class);
+    private CategoryDto convertToDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
-    private Category convertToEntity(CategoryDto.Request.All categoryDto) {
+    private Category convertToEntity(CategoryDto categoryDto) {
         return modelMapper.map(categoryDto, Category.class);
     }
 }

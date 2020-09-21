@@ -1,8 +1,7 @@
 package com.example.internship.api;
 
+import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.category.CategoryDto;
-import com.example.internship.entity.Category;
 import com.example.internship.service.category.CategoryService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,13 +23,13 @@ public class CategoryRestController {
 
     @PostMapping(value = "/find-all-sort-by-id")
     @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
-    public List<CategoryDto.Response.AllWithParentIdParentName> findAllSortById() {
+    public List<CategoryDto> findAllSortById() {
         return categoryService.findAllSortById();
     }
 
     @PostMapping(value = "/find-by-name")
     @ApiOperation(value = "Возвращает категорию по ее названию", response = List.class)
-    public List<CategoryDto.Response.AllWithParentIdParentName> findByName(@RequestBody String name) {
+    public List<CategoryDto> findByName(@RequestBody String name) {
         return categoryService.findByName(name);
     }
 
@@ -42,27 +41,27 @@ public class CategoryRestController {
 
     @PostMapping(value = "/find-all")
     @ApiOperation(value = "Возвращает все категории", response = List.class)
-    public List<CategoryDto.Response.AllWithParentIdParentName> findAll() {
+    public List<CategoryDto> findAll() {
         return categoryService.findAll();
     }
 
     @PostMapping(value = "/find-by-id")
     @ApiOperation(value = "Возвращает категорию по id",
-            response = CategoryDto.Response.AllWithParentIdParentName.class)
-    public CategoryDto.Response.AllWithParentIdParentName findById(@RequestBody Long id) {
+            response = CategoryDto.class)
+    public CategoryDto findById(@RequestBody Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping(value = "/add-category")
     @ApiOperation(value = "Сохраняет категорию в БД")
-    public void addCategory(@RequestBody CategoryDto.Request.All category) {
+    public void addCategory(@RequestBody CategoryDto category) {
         categoryService.addCategory(category);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Возвращает информацию о категории, по значению id.",
-            response = CategoryDto.Response.AllWithParentIdParentName.class)
-    public CategoryDto.Response.AllWithParentIdParentName categoryData(@PathVariable Long id) {
+            response = CategoryDto.class)
+    public CategoryDto categoryData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
