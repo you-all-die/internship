@@ -77,6 +77,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteAll();
     }
 
+    @Override
+    public Optional<Customer> findById(Long id) {
+        return customerRepository.findById(id);
+    }
+
     // Создание нового анонимного покупателя
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));

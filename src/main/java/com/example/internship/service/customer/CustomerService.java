@@ -57,4 +57,6 @@ public interface CustomerService {
     );
 
     void deleteAll();
+
+    Optional<Customer> findById(Long id);
 }

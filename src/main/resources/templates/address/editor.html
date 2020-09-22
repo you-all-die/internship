@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:include="common/main :: common_header (~{::title}, _, _)">
+    <head th:include="common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
         <meta content="Самохвалов Юрий Алексеевич" name="author">
         <title>Address Editor</title>
+        <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css"
+              rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
+        <script th:src="@{/js/address.js}"></script>
     </head>
     <body>
+        <div th:replace="/common/main :: header">Header</div>
         <div class="ui main grid container">
             <div class="row">
                 <div class="column">
-                    <form class="ui form" method="post" th:action="@{/address}" th:object="address">
-                        <input th:field="*{id}" type="hidden">
-                        <select class="ui search dropdown" id="address">
-                        </select>
+                    <form class="ui form" method="post" th:action="@{/address}">
+                        <input id="token" th:value="${token}" type="hidden">
+                        <input th:field="${customerId}" type="hidden">
+                        <!--                        <input th:field="*{id}" type="hidden">-->
+                        <div class="field">
+                            <input id="address">
+                        </div>
                     </form>
                 </div>
             </div>
