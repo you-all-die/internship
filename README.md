@@ -9,7 +9,20 @@ Checkstyle - это инструмент разработки, который п
 с требованиями Sun Java Style Guide:
 <br>
 https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
-
+<br>
+**Проект не будет компилироваться, если присутствуют ошибки по checkstyle!!!**
+<br>
+Для компиляции проекта, без проверок по checkstyle, закомментируйте в pom.xml у плагина maven-checkstyle-plugin:
+<br>
+`<executions>
+    <execution>
+        <phase>process-sources</phase>
+            <goals>
+                <goal>check</goal>
+            </goals>
+    </execution>
+</executions>`
+<br>
 Maven:
 <br>
 генерируем и запускаем сайт с отчетом по проверки стиля:
@@ -37,9 +50,10 @@ https://plugins.jetbrains.com/plugin/1065-checkstyle-idea
 <br>
 `Settings -> Tools -> Checkstyle `
 <br>
-Выбираем `Configuration File`
+Устанавливаем `Configuration File`
 <br>
-`Sun Checks`
+выбираем файл из папки проекта:
+`checkstyle.xml`
 <br>
 <br>
 <br>
