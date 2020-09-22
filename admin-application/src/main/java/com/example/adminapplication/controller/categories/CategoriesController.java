@@ -1,6 +1,7 @@
 package com.example.adminapplication.controller.categories;
 
 import com.example.adminapplication.dto.CategoryDto;
+import com.example.adminapplication.dto.CategorySearchRequest;
 import com.example.adminapplication.dto.CategorySearchResult;
 import com.example.adminapplication.dto.ParentCategoryDto;
 import com.example.adminapplication.service.CategoryService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -23,60 +23,31 @@ public class CategoriesController {
     private final CategoryService categoryService;
 
     @GetMapping(value = "/categories")
-    public String saveDataForm(@RequestParam(value = "name", defaultValue = "") String categoryName,
-                               @RequestParam(value = "parentCategoryId", defaultValue = "-1") Long parentCategoryId,
-                               @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-                               @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize,
-                               Model model) {
+    public String getCategoriesWithParameters(
+            @ModelAttribute("categorySearchRequest") CategorySearchRequest categorySearchRequest, Model model){
 
-        model.addAttribute("parentCategoryId", parentCategoryId);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("categoryName", categoryName);
-
-        //Не учитывать родительскую категорию при выборе "Показать все"
-        if (parentCategoryId == -1) parentCategoryId = null;
-
+        model.addAttribute("categorySearchRequest", categorySearchRequest);
         CategorySearchResult categorySearchResult =
-                categoryService.searchResult(categoryName, parentCategoryId, pageSize, pageNumber);
+                categoryService.searchResult(
+                        categorySearchRequest.getName(),
+                        categorySearchRequest.getParentCategoryId(),
+                        categorySearchRequest.getPageSize(),
+                        categorySearchRequest.getPageNumber());
 
         //Определяем количество страниц
         Long totalCategory = categorySearchResult.getTotalCategory();
-        long totalPage = (long)Math.ceil(totalCategory * 1.0/pageSize);
+        long totalPage = 0;
+        if (categorySearchResult.getTotalCategory()>categorySearchRequest.getPageSize()) {
+            totalPage = (long) Math.ceil(totalCategory * 1.0 / categorySearchRequest.getPageSize());
+        }
         model.addAttribute("totalPage", totalPage);
-
-        //Проверка, чтобы выбранная страница находилась в допустимом диапазоне, при изменении условий поиска
-        if(pageNumber >= totalPage) categorySearchResult =
-                categoryService.searchResult(categoryName, parentCategoryId, pageSize, 0);
         model.addAttribute("categoryList", categorySearchResult);
 
-        //Список родительских категорий
-        List<ParentCategoryDto> parentCategoryList = categoryService.getParentCategory();
+        //Список родительских категорий с потомками
+        List<ParentCategoryDto> parentCategoryList = categoryService.getParentCategoriesWithChildren();
         model.addAttribute("parentCategories", parentCategoryList);
 
         return "categories/categories";
-    }
-
-    //Обработка поискового блока c параметрами
-    @PostMapping(value = "/categories")
-    public String findCategory(@RequestParam(value = "name", required = false) String name,
-                               @RequestParam(value = "parentCategoryId") Long parentCategoryId,
-                               @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-                               @RequestParam(value = "pageSize") Integer pageSize,
-                               Model model) {
-        //Конструктор запроса
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/categories");
-        //Добавление параметра: поиск по наименованию
-        if(!name.isEmpty()) builder.queryParam("name", name.toLowerCase());
-        //Добавление параметра: поиск по ID родительской категории
-        builder.queryParam("parentCategoryId", parentCategoryId);
-        //Добавление параметра: номер страницы
-        builder.queryParam("pageNumber", pageNumber);
-        //Добавление параметра: размер страницы
-        builder.queryParam("pageSize", pageSize);
-
-        return "redirect:" + builder.toUriString();
-
     }
 
     @PostMapping(value = "/category/delete")
@@ -86,21 +57,11 @@ public class CategoriesController {
         return "redirect:/categories";
     }
 
-    @PostMapping(value = "/category/edit")
-    public String editCategory(@RequestParam("categoryId") Long id, Model model) {
-        return "redirect:/category/edit?categoryId=" + id;
-    }
-
-    @PostMapping(value = "categories/add")
-    public String addCategory(Model model) {
-        return "redirect:/categories/add";
-    }
-
     @GetMapping({"categories/add"})
     public String addNewCategory(Model model) {
         CategoryDto category = new CategoryDto();
         model.addAttribute("category", category);
-        List<CategoryDto> parentCategories = categoryService.findAll();
+        List<CategoryDto> parentCategories = categoryService.findAllSortById();
         model.addAttribute("parentCategories", parentCategories);
         return "categories/category";
     }
@@ -109,14 +70,13 @@ public class CategoriesController {
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
         CategoryDto category = categoryService.findById(id);
         model.addAttribute("category", category);
-        List<CategoryDto> parentCategories = categoryService.findAll();
+        List<CategoryDto> parentCategories = categoryService.findAllSortById();
         model.addAttribute("parentCategories", parentCategories);
         return "categories/category";
     }
 
     @PostMapping(value = "/category/save")
     public String saveCategory(@ModelAttribute("category") CategoryDto category, BindingResult result, Model model) {
-
         categoryService.addCategory(category);
         return "redirect:/categories";
     }

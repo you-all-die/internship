@@ -20,6 +20,7 @@
             </div>
             <div class="field">
                 <select th:field="*{parent.id}">
+                    <option th:value="-1">Без категории</option>
                     <option th:each="parentCat : ${parentCategories}" th:value="${parentCat.id}"
                             th:text="${parentCat.name}" th:selected="${parentCat.id==parent?.id}">
                     </option>

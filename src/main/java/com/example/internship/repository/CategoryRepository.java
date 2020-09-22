@@ -18,6 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
     @Query(value = "SELECT DISTINCT a.parent_id as id, b.name FROM Category a " +
             "INNER JOIN Category b on a.parent_id = b.id " +
             "ORDER BY a.parent_id", nativeQuery = true)
-    List<ParentCategoryProjection> getParentCategory();
+    List<ParentCategoryProjection> getParentCategoriesWithChildren();
 }
 

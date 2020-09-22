@@ -59,12 +59,11 @@ public class CategoryService {
          * Если получаем 0 -> поиск категории без потомков
          * Если пулучаем значение больше 0 -> поиск по выбранному родителю
         */
-        if (parentId!=null) {
-            if (parentId > 0) specification =
-                    draftSpecification(specification, "parentId", parentId.toString());
-            if (parentId == 0) specification =
-                    draftSpecification(specification, "parentIdNull", parentId.toString());
-        }
+        if (parentId > 0) specification =
+                draftSpecification(specification, "parentId", parentId.toString());
+        if (parentId == 0) specification =
+                draftSpecification(specification, "parentIdNull", parentId.toString());
+
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
@@ -92,8 +91,8 @@ public class CategoryService {
     }
 
     //Поиск родительских категорий в общем списке
-    public List<ParentCategoryProjection> getParentCategory(){
-        return categoryRepository.getParentCategory();
+    public List<ParentCategoryProjection> getParentCategoriesWithChildren(){
+        return categoryRepository.getParentCategoriesWithChildren();
     }
 
 

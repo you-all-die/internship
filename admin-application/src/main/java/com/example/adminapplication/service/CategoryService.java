@@ -11,8 +11,6 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    List<CategoryDto> findAll();
-
     CategoryDto findById(Long id);
 
     List<CategoryDto> findAllSortById();
@@ -23,6 +21,6 @@ public interface CategoryService {
 
     CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber);
 
-    List<ParentCategoryDto> getParentCategory();
+    List<ParentCategoryDto> getParentCategoriesWithChildren();
 
 }

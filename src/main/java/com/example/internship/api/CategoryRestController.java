@@ -15,7 +15,7 @@ import java.util.List;
  * @author Ivan Gubanov
  */
 @RestController
-@RequestMapping("/api/category/")
+@RequestMapping("/api/category")
 @AllArgsConstructor
 public class CategoryRestController {
 
@@ -25,30 +25,12 @@ public class CategoryRestController {
     @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
     public List<Category> findAllSortById() {
         return categoryService.findAllSortById();
-    }
+    }    
 
-    @PostMapping(value = "/find-by-name")
-    @ApiOperation(value = "Возвращает категорию по ее названию", response = List.class)
-    public List<Category> findByName(@RequestBody String name) {
-        return categoryService.findByName(name);
-    }
-
-    @PostMapping(value = "/remove-category")
+    @DeleteMapping(value = "/remove/{id}")
     @ApiOperation(value = "Удаляем категорию по id")
-    public void removeCategory(@RequestBody Long id) {
+    public void removeCategory(@PathVariable Long id) {
         categoryService.removeCategory(id);
-    }
-
-    @GetMapping(value = "/find-all")
-    @ApiOperation(value = "Возвращает все категории", response = List.class)
-    public List<Category> findAll() {
-        return categoryService.findAll();
-    }
-
-    @PostMapping(value = "/find-by-id")
-    @ApiOperation(value = "Возвращает категорию по id", response = Category.class)
-    public Category findById(@RequestBody Long id) {
-        return categoryService.findById(id);
     }
 
     @PostMapping(value = "/add-category")
@@ -58,7 +40,7 @@ public class CategoryRestController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = Category.class)
+    @ApiOperation(value = "Возвращает категорию по id.", response = Category.class)
     public Category productData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
@@ -87,10 +69,11 @@ public class CategoryRestController {
         return categoryService.search(searchText, parentId, pageSize, pageNumber);
     }
 
-    @GetMapping("/parentCategory")
-    @ApiOperation(value = "Возвращает список родительских категорий", response = ParentCategoryProjection.class)
-    public List<ParentCategoryProjection> searchParentCategory() {
-        return categoryService.getParentCategory();
+    @GetMapping("/parentCategoriesWithChildren")
+    @ApiOperation(value = "Возвращает список родительских категорий, у которых есть наследники",
+            response = ParentCategoryProjection.class)
+    public List<ParentCategoryProjection> searchParentCategories() {
+        return categoryService.getParentCategoriesWithChildren();
     }
 
 }
