@@ -21,7 +21,7 @@ public interface CustomerService {
      * @param id идентификатор пользователя.
      * @return пользователя.
      */
-    Optional<Customer> getById(long id);
+    Optional<Customer> getById(Long id);
 
     /**
      * Возвращает ДТО пользователя по id.
@@ -43,7 +43,7 @@ public interface CustomerService {
      *
      * @param id идентификатор пользователя.
      */
-    void delete(long id);
+    void delete(Long id);
 
     /**
      * Удаляет всех пользователей.
