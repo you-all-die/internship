@@ -40,4 +40,5 @@ public class AddressController {
         model.addAttribute("token", token);
         return "/address/editor";
     }
+
 }
