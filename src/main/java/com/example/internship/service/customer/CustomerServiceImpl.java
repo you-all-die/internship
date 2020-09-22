@@ -2,7 +2,6 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
-import com.example.internship.dto.customer.CustomerDto.Response.AllExceptPassword;
 import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
@@ -260,10 +259,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .createTypeMap(Customer.class, WithFullName.class)
                 .addMappings(mapper -> mapper.skip(WithFullName::setFullName))
                 .setPostConverter(toWithFullNameConverter());
-    }
-
-    private AllExceptPassword convertToAllExceptPassword(Customer customer) {
-        return mapper.map(customer, AllExceptPassword.class);
     }
 
     private WithFullName convertToWithFullName(Customer customer) {
