@@ -3,6 +3,7 @@ package com.example.internship.service;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
+import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
 
@@ -22,6 +23,13 @@ public interface CustomerService {
      * @return пользователя.
      */
     Optional<Customer> getById(Long id);
+
+    /**
+     * Получение пользователя из аутентификации.
+     *
+     * @return аутентифицированного пользователя.
+     */
+    Optional<CustomerDto> getFromAuthentication(Authentication authentication);
 
     /**
      * Возвращает ДТО пользователя по id.

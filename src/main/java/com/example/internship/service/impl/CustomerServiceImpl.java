@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,15 @@ public class CustomerServiceImpl implements CustomerService {
         else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<CustomerDto> getFromAuthentication(Authentication authentication) {
+        if (Objects.isNull(authentication)) {
+            return Optional.empty();
+        }
+        Customer customer = customerRepository.findByEmail(authentication.getName());
+        return customer != null ? Optional.of(convertToDto(customer)) : Optional.empty();
     }
 
     @Override
