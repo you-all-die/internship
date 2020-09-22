@@ -1,7 +1,6 @@
 package com.example.internship.service.dadata;
 
-import com.kuliginstepan.dadata.client.domain.Suggestion;
-import com.kuliginstepan.dadata.client.domain.address.Address;
+import com.example.internship.dto.dadata.DadataAddressDto.Response.ValueOnly;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,8 @@ class DadataServiceTest {
     @Test
     @DisplayName("Получение адресной подсказки от dadata.ru")
     void testAddressSuggestion() {
-        final List<Suggestion<Address>> suggestions = dadataService
-                .getSuggestionForAddress("краснодар красная 158")
-                .collectList()
-                .block();
+        final List<ValueOnly> suggestions = dadataService
+                .getSuggestionForAddress("краснодар красная 158");
         assertAll(
                 () -> {
                     assertNotNull(suggestions);

@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/dadata")
+@RequestMapping(DadataController.BASE_MAPPING)
 @RequiredArgsConstructor
 public class DadataController {
 
+    public static final String BASE_MAPPING = "/dadata";
+    public static final String ADDRESS_MAPPING = "/address";
+
     private final DadataService dadataService;
 
-    @GetMapping("/address")
+    @GetMapping(ADDRESS_MAPPING)
     public List<ValueOnly> getSuggestionForAddress(@RequestParam String query) {
         return dadataService.getSuggestionForAddress(query);
     }

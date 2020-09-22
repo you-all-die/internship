@@ -55,7 +55,15 @@
 
             <div class="row">
                 <div class="ui container">
-                    <div th:replace="/address/table :: widget (${customer.addresses})"></div>
+                    <div th:replace="/address/index :: widget (${customer.addresses})"></div>
+                </div>
+            </div>
+
+            <div class="centered row">
+                <div class="center aligned column">
+                    <a class="ui green button" th:href="@{/address/create(customerId=${customer.id})}">
+                        Добавить адрес
+                    </a>
                 </div>
             </div>
         </div>

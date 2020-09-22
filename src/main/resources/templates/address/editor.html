@@ -10,7 +10,8 @@
                 <div class="column">
                     <form class="ui form" method="post" th:action="@{/address}" th:object="address">
                         <input th:field="*{id}" type="hidden">
-
+                        <select class="ui search dropdown" id="address">
+                        </select>
                     </form>
                 </div>
             </div>
