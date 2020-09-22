@@ -10,9 +10,13 @@ import com.example.internship.service.order.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 /**
  * @author Sergey Lapshin
@@ -24,8 +28,6 @@ import java.util.Optional;
 public class CheckoutController {
 
     private final CustomerServiceImpl customerService;
-    private final CartServiceImpl cartService;
-
     private final OrderServiceImpl orderService;
 
 
@@ -56,7 +58,8 @@ public class CheckoutController {
 
     // Оформление заказа
     @PostMapping("/checkout/add")
-    public String postCheckout(CheckoutForm checkoutForm) {
+    public String postCheckout(@Validated CheckoutForm checkoutForm, BindingResult bindingResult, Model model) {
+
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
         //Если куки нет, редирект на страницу регистрации
@@ -64,6 +67,14 @@ public class CheckoutController {
 
         Optional<Customer> customerOptional = customerService.getById(customerId.get());
         Customer customer = customerOptional.get();
+
+        //Если передали пустые обязательные поля
+        if (bindingResult.hasErrors()) {
+            CustomerDto customerDto = customerService.getCustomerDto(customer);
+            model.addAttribute("customer", customerDto);
+            return "cart/checkout";
+        }
+
         List<OrderLine> orderLines = customer.getCart().getOrderLines();
 
         orderService.makeOrder(customer, checkoutForm, orderLines);
