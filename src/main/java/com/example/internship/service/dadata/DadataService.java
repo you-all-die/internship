@@ -1,10 +1,10 @@
 package com.example.internship.service.dadata;
 
-import com.kuliginstepan.dadata.client.domain.Suggestion;
-import com.kuliginstepan.dadata.client.domain.address.Address;
-import reactor.core.publisher.Flux;
+import com.example.internship.dto.dadata.DadataAddressDto.Response.ValueOnly;
+
+import java.util.List;
 
 public interface DadataService {
 
-    Flux<Suggestion<Address>> getSuggestionForAddress(String query);
+    List<ValueOnly> getSuggestionForAddress(String query);
 }

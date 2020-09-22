@@ -1,8 +1,7 @@
 package com.example.internship.controller.dadata;
 
+import com.example.internship.dto.dadata.DadataAddressDto.Response.ValueOnly;
 import com.example.internship.service.dadata.DadataService;
-import com.kuliginstepan.dadata.client.domain.Suggestion;
-import com.kuliginstepan.dadata.client.domain.address.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ public class DadataController {
     private final DadataService dadataService;
 
     @GetMapping("/address")
-    public List<Suggestion<Address>> getSuggestionForAddress(@RequestParam String query) {
-        return dadataService.getSuggestionForAddress(query).collectList().block();
+    public List<ValueOnly> getSuggestionForAddress(@RequestParam String query) {
+        return dadataService.getSuggestionForAddress(query);
     }
 }
