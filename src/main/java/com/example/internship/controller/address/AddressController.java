@@ -22,7 +22,7 @@ public class AddressController {
 
     private final CustomerService customerService;
 
-    @Value("${dadata.client.token:6eae6552e64fd96bedfdd8903608c0deac102b4a}")
+    @Value("${dadata.client.token}")
     private String token;
 
     @GetMapping(CREATE_ADDRESS_MAPPING)
