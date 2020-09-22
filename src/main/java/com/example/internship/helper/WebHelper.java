@@ -1,5 +1,6 @@
 package com.example.internship.helper;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,14 +11,14 @@ import javax.servlet.http.HttpServletRequest;
  * @author Самохвалов Юрий Алексеевич
  */
 @Slf4j
-public enum WebHelper {
-    ;
+@UtilityClass
+public class WebHelper {
 
     /**
      * Проверяет, является ли запрос ajax-запросом.
+     * Если нет, возбуждает исключение {@link ResponseStatusException}.
      *
      * @param request запрос
-     * @throw {@link ResponseStatusException} если запрос не является ajax-запросом
      */
     public static void guardAjaxOrNotFound(final HttpServletRequest request) {
         if (!isAjaxRequest(request)) {

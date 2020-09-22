@@ -1,10 +1,12 @@
 package com.example.internship.helper;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-public enum PredicateHelper {
-    ;
+@UtilityClass
+public class PredicateHelper {
 
     /**
      * Возвращает паттерн, используемый в выражении LIKE.

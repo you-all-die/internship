@@ -1,10 +1,12 @@
 package com.example.internship.helper;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @author Самохвалов Юрий Алексеевич
  */
-public enum PageHelper {
-    ;
+@UtilityClass
+public class PageHelper {
 
     /**
      * Возвратить количество страниц, нужное для отображения элементов

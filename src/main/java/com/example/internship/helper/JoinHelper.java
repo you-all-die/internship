@@ -1,9 +1,10 @@
 package com.example.internship.helper;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
-public enum JoinHelper {
-    ;
+@UtilityClass
+public class JoinHelper {
 
     /**
      * Объединяет строковые параметры, игнорируя значения, равные `null`.
