@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CheckoutController {
 
+    //TODO: Используется имплементация сервиса, а не его интерфейс. Нужно переделать на интерфейс.
     private final CustomerServiceImpl customerService;
 //    private final CheckoutService checkoutService;
 

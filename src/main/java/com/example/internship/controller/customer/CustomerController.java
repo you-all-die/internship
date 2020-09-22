@@ -1,14 +1,18 @@
 package com.example.internship.controller.customer;
 
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
+import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 /**
@@ -28,15 +32,17 @@ public class CustomerController {
         return "customer/index";
     }
 
+    //TODO: Удалить при рефакторинге PathVariable id;
     @GetMapping("/{id}")
-    public String viewCustomerProfile(@PathVariable Long id, Model model) {
-        Optional<Customer> customer = customerService.getById(id);
+    public String viewCustomerProfile(@PathVariable Long id, Authentication authentication, Model model) {
+        Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+
         if (customer.isPresent()) {
             model.addAttribute("customer", customer.get());
             return "customer/view";
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
+
+        throw new EntityNotFoundException("Customer not found");
     }
 
     @GetMapping("/add")
