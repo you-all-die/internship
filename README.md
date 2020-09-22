@@ -14,14 +14,7 @@ https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
 <br>
 Для компиляции проекта, без проверок по checkstyle, закомментируйте в pom.xml у плагина maven-checkstyle-plugin:
 <br>
-`<executions>
-    <execution>
-        <phase>process-sources</phase>
-            <goals>
-                <goal>check</goal>
-            </goals>
-    </execution>
-</executions>`
+`<executions> ... </executions>`
 <br>
 Maven:
 <br>
