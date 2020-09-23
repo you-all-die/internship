@@ -15,7 +15,6 @@ public interface CategoryService {
     List<CategoryDto> findAllSortById();
     void removeCategory(Long id);
     void addCategory(CategoryDto category);
-    void addCategory(Category category);
     List<CategoryDto> findByName(String name);
     CategorySearchResult search(String name, Long parentId, Integer pageSize, Integer pageNumber);
     void removeAll();

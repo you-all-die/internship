@@ -44,11 +44,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(this.convertToEntity(category));
     }
 
-    @Override
-    public void addCategory(Category category) {
-        categoryRepository.save(category);
-    }
-
     public List<CategoryDto> findByName(String name) {
         return categoryRepository.findByNameContainsIgnoreCase(name).stream()
                 .map(this::convertToDto).collect(Collectors.toList());
@@ -76,7 +71,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification,
-                PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
+                PageRequest.of(pageNumber, pageSize)).stream()
+                .map(this::convertToDto).collect(Collectors.toList()));
+
         categorySearchResult.setPageNumber(pageNumber);
         categorySearchResult.setPageSize(pageSize);
         categorySearchResult.setTotalCategory(categoryRepository.count(specification));
