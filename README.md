@@ -1,3 +1,55 @@
+**CheckStyle плагин для maven и idea**
+
+Checkstyle - это инструмент разработки, который помогает программистам писать код Java,соответствующий стандарту
+ кодирования. Он автоматизирует процесс проверки кода Java, чтобы избавить людей от этой скучной (но важной) задачи. 
+ Это делает его идеальным для проектов, которые хотят обеспечить соблюдение стандарта кодирования.
+
+Проверка стиля будет производиться в соответсвии
+<br>
+с требованиями Sun Java Style Guide:
+<br>
+https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
+<br>
+**Проект не будет компилироваться, если присутствуют ошибки по checkstyle!!!**
+<br>
+Для компиляции проекта, без проверок по checkstyle, закомментируйте в pom.xml у плагина maven-checkstyle-plugin:
+<br>
+`<executions> ... </executions>`
+<br>
+Maven:
+<br>
+генерируем и запускаем сайт с отчетом по проверки стиля:
+<br>
+`mvn site:site ` - генерация сайта с документацией проекта
+<br>
+`mvn site:run` - запуск сайта локально, будет доступен по адресу
+<br>
+http://localhost:8888/ - вся документация
+<br>
+Что-бы избежать бага (не отображается исходный код, при нажатии на номер строки),
+при первом запуске (после clean) необходимо перейти по ссылке(для генерации jxr файлов):
+<br>
+http://localhost:8888/xref/index.html
+<br>
+http://localhost:8888/checkstyle.html - отчет по проверки стиля
+<br>
+Idea:
+<br>
+Скачиваем и устанавливаем CheckStyle плагин:
+<br>
+https://plugins.jetbrains.com/plugin/1065-checkstyle-idea
+<br>
+Настраиваем плагин:
+<br>
+`Settings -> Tools -> Checkstyle `
+<br>
+Устанавливаем `Configuration File`
+<br>
+выбираем файл из папки проекта:
+`checkstyle.xml`
+<br>
+<br>
+<br>
 - Intellij IDEA
 - maven
 - git

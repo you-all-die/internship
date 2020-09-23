@@ -1,6 +1,8 @@
 package com.example.adminapplication.service;
 
 import com.example.adminapplication.dto.CategoryDto;
+import com.example.adminapplication.dto.CategorySearchResult;
+import com.example.adminapplication.dto.ParentCategoryDto;
 
 import java.util.List;
 
@@ -8,8 +10,6 @@ import java.util.List;
  * @author Ivan Gubanov
  */
 public interface CategoryService {
-
-    List<CategoryDto> findAll();
 
     CategoryDto findById(Long id);
 
@@ -19,6 +19,8 @@ public interface CategoryService {
 
     void addCategory(CategoryDto category);
 
-    List<CategoryDto> findByName(String name);
+    CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber);
+
+    List<ParentCategoryDto> getParentCategoriesWithChildren();
 
 }

@@ -3,6 +3,7 @@ package com.example.internship.service.category;
 import com.example.internship.dto.CategorySearchResult;
 import com.example.internship.dto.CategoryDto;
 import com.example.internship.entity.Category;
+import com.example.internship.repository.projection.ParentCategoryProjection;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public interface CategoryService {
     void addCategory(CategoryDto category);
     void addCategory(Category category);
     List<CategoryDto> findByName(String name);
-    CategorySearchResult search(Optional<String> name, Optional<Long> parentId, Integer pageSize, Integer pageNumber);
+    CategorySearchResult search(String name, Long parentId, Integer pageSize, Integer pageNumber);
     void removeAll();
+    List<CategoryDto> getParentCategoriesWithChildren();
 }

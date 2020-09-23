@@ -4,6 +4,7 @@ import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.CategorySearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
+import com.example.internship.repository.projection.ParentCategoryProjection;
 import com.example.internship.specification.CategorySpecification;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -40,9 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public void addCategory(CategoryDto category) {
-//        if (null == category.getParent().getId()) {
-//            category.setParent(null);
-//        }
         categoryRepository.save(this.convertToEntity(category));
     }
 
@@ -56,23 +54,32 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CategorySearchResult search(Optional<String> name, Optional<Long> parentId, Integer pageSize, Integer pageNumber) {
+    //Метод поиска категорий с параметрами
+    public CategorySearchResult search(String name, Long parentId, Integer pageSize, Integer pageNumber) {
 
         CategorySearchResult categorySearchResult = new CategorySearchResult();
 
-        Specification<Category> specification = Specification.where(
+        Specification<Category> specification;
 
-                new CategorySpecification("name", name.orElse("")));
+        // Формируем условия для запроса
+        specification = draftSpecification(null,"name", name);
 
-        if (parentId.isPresent()) {
-            specification = specification.and(new CategorySpecification("parentId", parentId.get()));
+        /*Условие для поиска по родительской категории
+         * Если получаем 0 -> поиск категории без потомков
+         * Если пулучаем значение больше 0 -> поиск по выбранному родителю
+         */
+        if (parentId != null) {
+            if (parentId > 0) specification =
+                    draftSpecification(specification, "parentId", parentId.toString());
+            if (parentId == 0) specification =
+                    draftSpecification(specification, "parentIdNull", parentId.toString());
         }
 
-        categorySearchResult.setCategory(categoryRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
+        categorySearchResult.setCategory(categoryRepository.findAll(specification,
+                PageRequest.of(pageNumber, pageSize)).stream().collect(Collectors.toList()));
         categorySearchResult.setPageNumber(pageNumber);
         categorySearchResult.setPageSize(pageSize);
         categorySearchResult.setTotalCategory(categoryRepository.count(specification));
-
         return categorySearchResult;
     }
 
@@ -103,5 +110,28 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Category convertToEntity(CategoryDto categoryDto) {
         return modelMapper.map(categoryDto, Category.class);
+    }
+
+    private CategoryDto convertFromProjection(ParentCategoryProjection projection) {
+        return modelMapper.map(projection, CategoryDto.class);
+    }
+
+    //Метод проверки поля и добавления условия в запрос
+    private Specification<Category> draftSpecification(Specification<Category> specification, String columnName,
+                                                       String optionalName ){
+        if(optionalName !=null){
+            if(specification == null){
+                specification = Specification.where(new CategorySpecification(columnName, optionalName));
+            }else {
+                specification = specification.and(new CategorySpecification(columnName, optionalName));
+            }
+        }
+        return specification;
+    }
+
+    //Поиск родительских категорий в общем списке
+    public List<CategoryDto> getParentCategoriesWithChildren(){
+        return categoryRepository.getParentCategoriesWithChildren().stream()
+                .map(this::convertFromProjection).collect(Collectors.toList());
     }
 }

@@ -17,6 +17,10 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring.fox.version>3.0.0</spring.fox.version>
+		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+		<maven-project-info-reports-plugin.version>3.1.1</maven-project-info-reports-plugin.version>
+		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
+		<maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -78,7 +82,73 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<executions>
+<!--					<execution>-->
+<!--						<phase>process-sources</phase>-->
+<!--						<goals>-->
+<!--							<goal>check</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+				</executions>
+				<configuration>
+					<failsOnError>true</failsOnError>
+					<consoleOutput>true</consoleOutput>
+					<configLocation>../checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven-jxr-plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>jxr</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<reports>
+							<report>test-jxr</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
