@@ -2,7 +2,7 @@ package com.example.internship.api;
 
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

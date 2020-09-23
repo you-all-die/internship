@@ -7,7 +7,8 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.CartService;
+import com.example.internship.service.cart.CartService;
+import com.example.internship.service.cart.CartServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -53,7 +54,7 @@ class CartServiceImplTest {
         cart = new Cart();
         cart.setId(1L);
         cart.setOrderLines(new ArrayList<>() {{
-            add(new OrderLine(ORDER_LINE_ID1, product, 1));
+            add(new OrderLine(ORDER_LINE_ID1, cart, product, 1));
         }});
 
         customer = new Customer();

@@ -24,12 +24,12 @@ public class Customer {
     private String password;
     private String phone;
     private String email;
+
     @JsonIgnore
     @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
 
     public final String getFullName() {

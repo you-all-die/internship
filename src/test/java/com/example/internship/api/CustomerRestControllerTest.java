@@ -1,7 +1,7 @@
 package com.example.internship.api;
 
 import com.example.internship.entity.Customer;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

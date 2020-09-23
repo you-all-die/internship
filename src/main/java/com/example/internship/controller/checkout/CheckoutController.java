@@ -3,7 +3,7 @@ package com.example.internship.controller.checkout;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
-import com.example.internship.service.impl.CustomerServiceImpl;
+import com.example.internship.service.customer.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

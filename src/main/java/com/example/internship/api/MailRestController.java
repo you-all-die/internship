@@ -1,10 +1,9 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.entity.Customer;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

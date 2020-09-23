@@ -2,8 +2,7 @@ package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
-import com.example.internship.repository.CustomerRepository;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;

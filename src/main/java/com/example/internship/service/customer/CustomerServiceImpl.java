@@ -1,10 +1,10 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -179,6 +179,12 @@ public class CustomerServiceImpl implements CustomerService {
         return customerSearchResult;
     }
 
+    @Override
+    public void updateLastActivity(Long customerId) {
+        customerRepository.setLastActivityForCustomers(customerId);
+    }
+
+    //Метод проверки поля и добавления условия в запрос
     /**
      * Проверка полей и добавление в запрос.
      *

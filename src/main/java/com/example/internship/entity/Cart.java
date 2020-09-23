@@ -18,10 +18,11 @@ public class Cart {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "cart_order_line",
-            joinColumns = {@JoinColumn(name = "cart_id")},
-            inverseJoinColumns = {@JoinColumn(name = "order_line_id")})
+    @OneToOne
+    @JoinColumn
+    private Customer customer;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines;
 
 }
