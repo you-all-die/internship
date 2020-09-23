@@ -3,9 +3,8 @@ package com.example.internship.api;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.service.customer.CustomerService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +25,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/user/")
-@Api( value = "customers")
-
 public class CustomerRestController {
     private final CustomerService customerService;
 
     //Показать данные конкретного пользователя
     @GetMapping("{id}")
-    @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
+    @Operation(summary = "Получение данных пользователя по идентификатору")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
-        if(customerService.getById(id).isPresent()) {
+        if (customerService.getById(id).isPresent()) {
             return new ResponseEntity<>(customerService.getById(id), HttpStatus.OK);
         }
         return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
@@ -43,10 +40,10 @@ public class CustomerRestController {
 
     //Редактирование данных
     @PutMapping("{id}")
-    @ApiOperation(value = "Редактирование данных")
+    @Operation(summary = "Редактирование данных")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody Customer customer) {
         Customer customerOld = customerService.getById(id).orElse(null);
-        if (customerOld!=null) {
+        if (customerOld != null) {
             customerOld.setFirstName(customer.getFirstName());
             customerOld.setMiddleName(customer.getMiddleName());
             customerOld.setLastName(customer.getLastName());
@@ -63,19 +60,19 @@ public class CustomerRestController {
 
     //Поиск пользователей
     @GetMapping("search")
-    @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
+    @Operation(summary = "Поиск пользователей")
     public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false)
-                                               @ApiParam(value = "Поиск по имени") String firstName,
+                                           @Parameter(description = "Поиск по имени") String firstName,
                                            @RequestParam(name = "middleName", required = false)
-                                           @ApiParam(value = "Поиск по отчеству") String middleName,
+                                           @Parameter(description = "Поиск по отчеству") String middleName,
                                            @RequestParam(name = "lastName", required = false)
-                                               @ApiParam(value = "Поиск по фамилии") String lastName,
+                                           @Parameter(description = "Поиск по фамилии") String lastName,
                                            @RequestParam(name = "email", required = false)
-                                               @ApiParam(value = "Поиск по email") String email,
+                                           @Parameter(description = "Поиск по email") String email,
                                            @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                               @ApiParam(value = "Размер страницы") Integer pageSize,
+                                           @Parameter(description = "Размер страницы") Integer pageSize,
                                            @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                               @ApiParam(value = "Номер страницы") Integer pageNumber) {
+                                           @Parameter(description = "Номер страницы") Integer pageNumber) {
 
         return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
 

@@ -3,7 +3,7 @@ package com.example.internship.api;
 
 import com.example.internship.entity.ProductStatus;
 import com.example.internship.service.ProductStatusService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +19,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductStatusRestController {
 
-    private ProductStatusService productStatusService;
+    private final ProductStatusService productStatusService;
 
     @PostMapping("/find-all")
-    @ApiOperation(value = "Возвращает все статусы", response = List.class)
+    @Operation(summary = "Возвращает все статусы")
     public List<ProductStatus> findAll() {
         return productStatusService.findAll();
     }

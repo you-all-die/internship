@@ -1,15 +1,13 @@
 package com.example.internship.api;
 
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.service.CategoryService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,66 +22,60 @@ public class CategoryRestController {
     private final CategoryService categoryService;
 
     @PostMapping(value = "/find-all-sort-by-id")
-    @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
+    @Operation(summary = "Возвращает все категории отсортированные по id.")
     public List<Category> findAllSortById() {
         return categoryService.findAllSortById();
     }
 
     @PostMapping(value = "/find-by-name")
-    @ApiOperation(value = "Возвращает категорию по ее названию", response = List.class)
+    @Operation(summary = "Возвращает категорию по ее названию")
     public List<Category> findByName(@RequestBody String name) {
         return categoryService.findByName(name);
     }
 
     @PostMapping(value = "/remove-category")
-    @ApiOperation(value = "Удаляем категорию по id")
+    @Operation(summary = "Удаляем категорию по id")
     public void removeCategory(@RequestBody Long id) {
         categoryService.removeCategory(id);
     }
 
     @PostMapping(value = "/find-all")
-    @ApiOperation(value = "Возвращает все категории", response = List.class)
+    @Operation(summary = "Возвращает все категории")
     public List<Category> findAll() {
         return categoryService.findAll();
     }
 
     @PostMapping(value = "/find-by-id")
-    @ApiOperation(value = "Возвращает категорию по id", response = Category.class)
+    @Operation(summary = "Возвращает категорию по id")
     public Category findById(@RequestBody Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping(value = "/add-category")
-    @ApiOperation(value = "Сохраняет категорию в БД")
+    @Operation(summary = "Сохраняет категорию в БД")
     public void addCategory(@RequestBody Category category) {
         categoryService.addCategory(category);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Возвращает информацию о продукте, по значениею его id.", response = Category.class)
+    @Operation(summary = "Возвращает информацию о продукте, по значениею его id.")
     public Category productData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
     @GetMapping("/search")
-    @ApiOperation(value = "Возвращает список категории согласно заданным критериям поиска.",
-            notes = "В запросе search могут указываться:\n" +
-                    "- pageSize количество возвращаемых категорий (значение по умолчанию 20)\n" +
-                    "- pageNumber номер страницы (значение по умолчанию 1)\n" +
-                    "- parentId поиск по id parent\n" +
-                    "- searchText - поиск по наименованию",
-            response = CategorySearchResult.class)
+    @Operation(summary = "Возвращает список категории согласно заданным критериям поиска.")
     public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
-                                               @ApiParam(value = "поиск по наименованию")
+                                               @Parameter(description = "поиск по наименованию")
                                                        Optional<String> searchText,
                                                @RequestParam(name = "parentId", required = false)
-                                               @ApiParam(value = "поиск id parent")
+                                               @Parameter(description = "поиск id parent")
                                                        Optional<Long> parentId,
                                                @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                               @ApiParam(value = "размер страницы")
+                                               @Parameter(description = "размер страницы")
                                                        Integer pageSize,
                                                @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                               @ApiParam(value = "номер страницы")
+                                               @Parameter(description = "номер страницы")
                                                        Integer pageNumber) {
 
         return categoryService.search(searchText, parentId, pageSize, pageNumber);

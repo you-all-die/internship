@@ -1,13 +1,12 @@
 package com.example.internship.api;
 
 import com.example.internship.service.customer.CustomerCleanerService;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 /**
  * @author Murashov A.A
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user/")
-@Api(value = "customers")
 public class CustomerCleanerRestController {
     private final CustomerCleanerService cleanerService;
 
