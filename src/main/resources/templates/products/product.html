@@ -1,45 +1,55 @@
 <!-- Роман Каравашкин-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="common/main :: common_header(~{::title},_,_)">
-    <title>Product id</title>
+<head th:replace="common/fomain :: common_header(~{::title},_,~{::script})">
+    <meta charset="UTF-8">
+    <meta name="author" content="Роман Каравашкин">
+    <title th:text="${product.name}"></title>
+    <script th:src="@{/js/addToCart.js}"></script>
+
 </head>
 <body>
 <div th:replace="/common/main :: header"></div>
 
+<div th:each="pr: ${product}" class="ui main container">
 
-<div class="ui main container">
-    <div class="container">
-        <div th:each="product : ${product}"/>
-        <div class="name product" th:text="${product?.name}">
-            <p>name</p>
-        </div>
-        <img th:src="@{/images/headerLogo.png}"/>
-        <div class="id product" th:text="${product?.id}">
-            <p> id</p>
-        </div>
-        <div class="price" th:text="${product?.price}">
-            <p>price</p>
-        </div>
-        <div class="description" th:text="${product?.description}">
-            <p>description</p>
+    <h1 class="ui header " th:text="'Смартфон  '+${product.name}"/>
+
+    <div class="ui two column divided grid">
+        <div class="stretched row">
+            <div class="column">
+                <div class="ui segment">
+                    <img class="ui fluid image" src="/images/p1.jpg" th:src="'/img/' + ${pr.picture}"/>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="ui segment">
+                    <h1 class="ui header" th:text="${product.price}+' Руб.'"/>
+
+                    <button class="ui yellow button" th:onclick="|testOne(${product.id})|">Добавить в корзину</button>
+
+
+                </div>
+                <div class="ui segment">
+
+                    <h3 class="ui header" th:text="'ID: '+${product?.id}"/>
+                    <h3 class="ui header" th:text="'Description: '+${product.description}"></h3>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
+                        of type and scrambled it to make a type specimen book. It has survived not only five centuries,
+                        but also the leap into electronic typesetting, remaining essentially unchanged. It was
+                        popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                        and more recently with desktop publishing software like Aldus PageMaker including versions of
+                        Lorem Ipsum.</p>
+                </div>
+            </div>
+
         </div>
     </div>
-
-    <form method="post" th:action="@{/cart/add}">
-        <div class="right floated">
-            <input type="hidden" name="productId" th:value="${product?.id}"/>
-
-            <button type="submit" class="ui teal animated button" tabindex="0">
-                <div class="hidden content">Add</div>
-                <div class="visible content">
-                    <i class="cart plus icon"></i>
-                </div>
-            </button>
-        </div>
-    </form>
-
 </div>
+
+
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>

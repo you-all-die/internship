@@ -13,7 +13,8 @@
                 <i class="shopping cart icon"></i>
                 Cart is empty!
             </div>
-            <form method="get" th:action="@{/products}">
+            <!--            Изменил ссылку с "products" на "product" (Р.Карвашкин)-->
+            <form method="get" th:action="@{/product}">
                 <div class="inline">
                     <button type="submit" class="ui button">
                         Go to products!
@@ -74,9 +75,11 @@
                 Total Price
             </div>
         </div>
+
         <a th:href="@{/cart/checkout}">
             <button class="ui right floated positive button" >Checkout</button>
         </a>
+
     </div>
 </div>
 <footer th:replace="common/main::footer"></footer>
