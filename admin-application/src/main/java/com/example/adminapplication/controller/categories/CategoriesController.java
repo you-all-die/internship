@@ -3,7 +3,6 @@ package com.example.adminapplication.controller.categories;
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.dto.CategorySearchRequest;
 import com.example.adminapplication.dto.CategorySearchResult;
-import com.example.adminapplication.dto.ParentCategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,7 @@ public class CategoriesController {
 
     @GetMapping(value = "/categories")
     public String getCategoriesWithParameters(
-            @ModelAttribute("categorySearchRequest") CategorySearchRequest categorySearchRequest, Model model){
+            @ModelAttribute("categorySearchRequest") CategorySearchRequest categorySearchRequest, Model model) {
 
         model.addAttribute("categorySearchRequest", categorySearchRequest);
         CategorySearchResult categorySearchResult =
@@ -37,14 +36,14 @@ public class CategoriesController {
         //Определяем количество страниц
         Long totalCategory = categorySearchResult.getTotalCategory();
         long totalPage = 0;
-        if (categorySearchResult.getTotalCategory()>categorySearchRequest.getPageSize()) {
+        if (categorySearchResult.getTotalCategory() > categorySearchRequest.getPageSize()) {
             totalPage = (long) Math.ceil(totalCategory * 1.0 / categorySearchRequest.getPageSize());
         }
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("categoryList", categorySearchResult);
 
         //Список родительских категорий с потомками
-        List<ParentCategoryDto> parentCategoryList = categoryService.getParentCategoriesWithChildren();
+        List<CategoryDto> parentCategoryList = categoryService.getParentCategoriesWithChildren();
         model.addAttribute("parentCategories", parentCategoryList);
 
         return "categories/categories";

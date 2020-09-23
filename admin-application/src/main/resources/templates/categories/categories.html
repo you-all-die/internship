@@ -87,7 +87,7 @@
             <tbody>
             <tr th:each="category: ${categoryList.category}">
                 <td th:text="${category.id} + ':  ' + ${category.name}">Name</td>
-                <td th:text="${category?.parent?.name}">Subcategory</td>
+                <td th:text="${category?.parentName}">Subcategory</td>
                 <td class="right aligned collapsing">
                     <form th:action="@{/category/edit}" method="get">
                         <button type="submit" name="categoryId" th:value="${category.id}" class="ui primary basic button"

@@ -2,7 +2,6 @@ package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.dto.CategorySearchResult;
-import com.example.adminapplication.dto.ParentCategoryDto;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -96,12 +95,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     //Запрос на поиск родительских категорий
     @Override
-    public List<ParentCategoryDto> getParentCategoriesWithChildren(){
+    public List<CategoryDto> getParentCategoriesWithChildren(){
         //Get-запрос из БД
         return webClient.get()
                 .uri(uri + "/parentCategoriesWithChildren")
                 .retrieve()
-                .bodyToFlux(ParentCategoryDto.class)
+                .bodyToFlux(CategoryDto.class)
                 .collectList()
                 .block();
 
