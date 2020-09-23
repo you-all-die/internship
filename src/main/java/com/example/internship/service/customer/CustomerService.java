@@ -3,34 +3,115 @@ package com.example.internship.service.customer;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
+import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
 
 public interface CustomerService {
 
+    /**
+     * Получение всех пользователей.
+     *
+     * @return Перечисление пользователей.
+     */
     Iterable<Customer> getAll();
 
-    Optional<Customer> getById(long id);
+    /**
+     * Возвращает пользователя по id.
+     *
+     * @param id идентификатор пользователя.
+     * @return пользователя.
+     */
+    Optional<Customer> getById(Long id);
+
+    /**
+     * Получение пользователя из аутентификации.
+     *
+     * @return аутентифицированного пользователя.
+     */
+    Optional<CustomerDto> getFromAuthentication(Authentication authentication);
+
+    /**
+     * Возвращает ДТО пользователя по id.
+     *
+     * @param id идентификатор пользователя.
+     * @return ДТО пользователя.
+     */
     Optional<CustomerDto> getDtoById(Long id);
 
+    /**
+     * Сохраняет пользователя.
+     *
+     * @param customer пользователь.
+     */
     void save(Customer customer);
 
-    void delete(long id);
+    /**
+     * Удаляет пользователя по id.
+     *
+     * @param id идентификатор пользователя.
+     */
+    void delete(Long id);
 
+    /**
+     * Удаляет всех пользователей.
+     */
     void deleteAll();
-    // Создание нового анонимного покупателя
+
+
+    /**
+     * Создает нового анонимного пользователя.
+     *
+     * @return ДТО пользователя с присвоенным id.
+     */
     CustomerDto createAnonymousCustomer();
-    // Регистрация покупателя
+
+    /**
+     * Регистрация покупателя.
+     *
+     * @param customerDto ДТО пользователя.
+     * @return ДТО пользователя из параметра.
+     */
     CustomerDto registrationCustomer(CustomerDto customerDto);
-    // Получение id покупателя из куки
+
+    /**
+     * Возвращает id пользователя из куки.
+     *
+     * @return id пользователя.
+     */
     Optional<Long> customerIdFromCookie();
-    // Удаление id покупателя из куки
+
+    /**
+     * Удаляет id пользователя из куки.
+     */
     void customerIdDeleteFromCookie();
-    // Запись (перезапись) id покупателя в куки
+
+    /**
+     * Создает или перезаписывает id пользователя в куки.
+     *
+     * @param customerId id пользователя.
+     */
     void customerIdAddToCookie(Long customerId);
-    // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
+
+    /**
+     * Проверяет анонимный ли пользователь и есть ли он в бд.
+     *
+     * @param customerId id пользователя.
+     * @return true - если существует, false если нет.
+     */
     boolean isAnonymousCustomer(Long customerId);
-    //Api:поиск по критериям:ФИО, E-mail
+
+    /**
+     * Поиск пользователя по критериям.
+     *
+     * @param firstName имя пользователя.
+     * @param middleName отчество пользователя.
+     * @param lastName фамилия пользователя.
+     * @param email email пользователя.
+     * @param pageSize размер страницы.
+     * @param pageNumber номер страницы.
+     * @return форму данных поиска.
+     */
     CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
                                        Integer pageSize, Integer pageNumber);
 

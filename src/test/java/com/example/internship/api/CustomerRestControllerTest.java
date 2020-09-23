@@ -74,7 +74,7 @@ public class CustomerRestControllerTest {
                 .andExpect(jsonPath("$.password", is("password")));
 
         //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(2)).getById(1);
+        verify(customerService, times(2)).getById(1L);
         verifyNoMoreInteractions(customerService);
     }
 
@@ -88,7 +88,7 @@ public class CustomerRestControllerTest {
                 .andExpect(status().isNotFound());
 
         //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(1)).getById(1);
+        verify(customerService, times(1)).getById(1L);
         verifyNoMoreInteractions(customerService);
     }
 

@@ -6,11 +6,12 @@ import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.service.customer.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -36,11 +38,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final HttpServletResponse response;
 
+    @Override
     public final Iterable<Customer> getAll() {
         return customerRepository.findAll();
     }
 
-    public final Optional<Customer> getById(long id) {
+    @Override
+    public final Optional<Customer> getById(Long id) {
         return customerRepository.findById(id);
     }
 
@@ -56,24 +60,36 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public Optional<CustomerDto> getFromAuthentication(Authentication authentication) {
+        if (Objects.isNull(authentication)) {
+            return Optional.empty();
+        }
+        Customer customer = customerRepository.findByEmail(authentication.getName());
+        return customer != null ? Optional.of(convertToDto(customer)) : Optional.empty();
+    }
+
+    @Override
     public final void save(Customer customer) {
         customerRepository.save(customer);
     }
 
-    public final void delete(long id) {
+    @Override
+    public final void delete(Long id) {
         customerRepository.deleteById(id);
     }
 
+    @Override
     public final void deleteAll() {
         customerRepository.deleteAll();
     }
 
-    // Создание нового анонимного покупателя
+    @Override
     public CustomerDto createAnonymousCustomer() {
         return convertToDto(customerRepository.save(new Customer()));
     }
 
-    // Регистрация покупателя
+    @Override
     public CustomerDto registrationCustomer(CustomerDto customerDto) {
         // Получаем id покупателя из куки
         Long customerId = customerIdFromCookie().orElse(null);
@@ -96,7 +112,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDto;
     }
 
-    // Получение id покупателя из куки
+    @Override
     public Optional<Long> customerIdFromCookie() {
         // Получаем куки из запроса
         Cookie[] cookies = request.getCookies();
@@ -113,7 +129,7 @@ public class CustomerServiceImpl implements CustomerService {
         return Optional.empty();
     }
 
-    // Удаление id покупателя из куки
+    @Override
     public void customerIdDeleteFromCookie() {
         // Создаем новый куки id покупателя
         Cookie customerIdCookie = new Cookie("customerId", null);
@@ -123,29 +139,21 @@ public class CustomerServiceImpl implements CustomerService {
         response.addCookie(customerIdCookie);
     }
 
-    // Запись (перезапись) id покупателя в куки
+    @Override
     public void customerIdAddToCookie(Long customerId) {
         response.addCookie(new Cookie("customerId", customerId.toString()));
     }
 
-    // Проверяем, что id покупателя есть в базе и он еще не зарегестрирован
+    @Override
     public boolean isAnonymousCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
         return customer != null && customer.getEmail() == null;
     }
 
+    // TODO: Используется только в CheckoutController, есть смысл написать конвертацию в ДТО CheckoutController!
     public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
 
-    private CustomerDto convertToDto(Customer customer) {
-        return mapper.map(customer, CustomerDto.class);
-    }
-
-    private Customer convertToModel(CustomerDto customerDto) {
-        return mapper.map(customerDto, Customer.class);
-    }
-
-    //Api: поиск по критериям: ФИО, E-mail. Размер страницы, номер страницы
     @Override
     public CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
                                        Integer pageSize, Integer pageNumber) {
@@ -177,17 +185,44 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     //Метод проверки поля и добавления условия в запрос
+    /**
+     * Проверка полей и добавление в запрос.
+     *
+     * @param specification ???
+     * @param columnName ???
+     * @param optionalName ???
+     * @return ???
+     */
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
-                                                       String optionalName ){
-        if(optionalName!=null){
-            if(specification == null){
+                                                       String optionalName) {
+        if (optionalName != null) {
+            if (specification == null) {
                 specification = Specification.where(new CustomerSpecification(columnName, optionalName));
-            }else {
+            } else {
                 specification = specification.and(new CustomerSpecification(columnName, optionalName));
             }
         }
         return specification;
     }
 
-}
+    /**
+     * Конвертирует сущность пользователя в ДТО.
+     *
+     * @param customer сущность пользователя.
+     * @return ДТО пользователя.
+     */
+    private CustomerDto convertToDto(Customer customer) {
+        return mapper.map(customer, CustomerDto.class);
+    }
 
+    /**
+     * Конвертирует ДТО пользователя в сущность.
+     *
+     * @param customerDto ДТО пользователя.
+     * @return сущность пользователя.
+     */
+    private Customer convertToModel(CustomerDto customerDto) {
+        return mapper.map(customerDto, Customer.class);
+    }
+
+}

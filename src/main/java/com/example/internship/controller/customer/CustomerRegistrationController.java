@@ -53,7 +53,9 @@ public class CustomerRegistrationController {
         } catch (MailServiceException exception) {
             log.error("Error sending email! {}", exception.toString());
         }
-        return "redirect:/customer/" + customerService.registrationCustomer(customerDto).getId();
+
+        customerService.registrationCustomer(customerDto);
+        return "redirect:/login";
     }
 
 }
