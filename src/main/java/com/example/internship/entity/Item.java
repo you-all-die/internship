@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author  Sergey Lapshin
@@ -28,7 +27,5 @@ public class Item {
     private String itemName;
     private String itemPicture;
     private BigDecimal itemPrice;
-
-
 
 }

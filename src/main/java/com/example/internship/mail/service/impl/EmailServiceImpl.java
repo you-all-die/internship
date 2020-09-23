@@ -1,7 +1,7 @@
 package com.example.internship.mail.service.impl;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.mail.dto.TestOrderDto;
+import com.example.internship.dto.OrderDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -64,28 +63,51 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+//    @Override
+//    public boolean sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
+//        if (null == customer) {
+//            throw new MailServiceException("Invalid customer", new NullPointerException());
+//        }
+//
+//        if (null == customer.getEmail()) {
+//            throw new MailServiceException("Invalid e-mail", new NullPointerException());
+//        }
+//
+//        if (null == order || null == order.getOrderLines()) {
+//            throw new MailServiceException("Invalid order data", new NullPointerException());
+//        }
+//
+//        Context thymeleafContext = new Context();
+//        Map<String, Object> templateModel = new HashMap<>();
+//        templateModel.put("customer", customer);
+//        templateModel.put("order", order);
+//        templateModel.put("orderLines", order.getOrderLines());
+//        thymeleafContext.setVariables(templateModel);
+//        String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
+//        return sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
+//    }
+
     @Override
-    public boolean sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
+    public boolean sendOrderDetailsMessage(CustomerDto customer, OrderDto order) throws MailServiceException {
         if (null == customer) {
             throw new MailServiceException("Invalid customer", new NullPointerException());
         }
 
-        if (null == customer.getEmail()) {
-            throw new MailServiceException("Invalid e-mail", new NullPointerException());
+        if (null == order) {
+            throw new MailServiceException("Invalid order data", new NullPointerException());
         }
 
-        if (null == order || null == order.getOrderLines()) {
-            throw new MailServiceException("Invalid order data", new NullPointerException());
+        if (null == order.getCustomerEmail()) {
+            throw new MailServiceException("Invalid e-mail", new NullPointerException());
         }
 
         Context thymeleafContext = new Context();
         Map<String, Object> templateModel = new HashMap<>();
-        templateModel.put("customer", customer);
         templateModel.put("order", order);
-        templateModel.put("orderLines", order.getOrderLines());
+        templateModel.put("totalPrice", order.getTotalPrice());
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
-        return sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
+        return sendHtmlMessage(order.getCustomerEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
     }
 
     @Override
