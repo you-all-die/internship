@@ -6,13 +6,13 @@
 <body>
 <div th:replace="common/main :: header"></div>
 <div class="ui main container">
-    <h1 class="ui center aligned header">Список категорий</h1>
+    <h1 class="ui center aligned header" th:text="#{categories.header}">Список категорий</h1>
     <table class="ui celled table">
         <tbody>
         <tr>
             <td>
                 <form action="#" th:action="@{/categories/add}">
-                    <button class="ui primary button" type="submit">Добавить категорию</button>
+                    <button class="ui primary button" type="submit" th:text="#{categories.add_button}">Добавить категорию</button>
                 </form>
             </td>
         </tr>
@@ -23,15 +23,15 @@
         <tbody>
         <thead>
     <tr>
-        <th colspan="3">Меню поиска с параметрами</th>
-        <th colspan="1">Всего найдего:</th>
+        <th colspan="3" th:text="#{categories.search.header}">Меню поиска с параметрами</th>
+        <th colspan="1" th:text="#{categories.search.total_found}">Всего найдего:</th>
         <th colspan="1" th:text="${categoryList.totalCategory}"></th>
     </tr>
     <tr>
-        <th>Наименование</th>
-        <th>ID родителя</th>
-        <th>Размер страницы</th>
-        <th colspan="2">Действие</th>
+        <th th:text="#{categories.search.name}">Наименование</th>
+        <th th:text="#{categories.search.parent}">ID родителя</th>
+        <th th:text="#{categories.search.category_per_page}">Размер страницы</th>
+        <th colspan="2" th:text="#{categories.search.action}">Действие</th>
     </tr>
     </thead>
 
@@ -46,8 +46,8 @@
                 <td>
                     <div class="ui input">
                         <select class="ui dropdown" th:field="*{parentCategoryId}">
-                            <option th:value="-1" th:selected="${parentCategoryId == -1}">Показать все</option>
-                            <option th:value="0" th:selected="${parentCategoryId == 0}">Без родителя</option>
+                            <option th:value="-1" th:selected="${parentCategoryId == -1}" th:text="#{categories.search.selector.show_all}">Показать все</option>
+                            <option th:value="0" th:selected="${parentCategoryId == 0}" th:text="#{categories.search.selector.no_parent}">Без родителя</option>
                             <option th:each="i : ${parentCategories}"
                                     th:value="${i.id}" th:text="'ID:' + ${i.id} + ' -> ' + ${i.name}"
                                     th:selected="${i.id == parentCategoryId}"></option>
@@ -61,7 +61,7 @@
                 </td>
                 <td>
                     <div>
-                        <button class="ui button" type="submit">Показать</button>
+                        <button class="ui button" type="submit" th:text="#{categories.search.button.show}">Показать</button>
                     </div>
                 </td>
             </tr>
@@ -72,8 +72,8 @@
     <div th:replace="/common/paginator :: widget (${categorySearchRequest.pageNumber}, ${totalPage})"></div><br><br>
 
     <div class="ui container" th:if="${#arrays.isEmpty(categoryList.category)}">
-        <h4>По вашему запросу ничего не найдено...</h4>
-        <a th:href="@{/categories}">Показать полный список</a><br>
+        <h4 th:text="#{categories.empty_request}">По вашему запросу ничего не найдено...</h4>
+        <a th:href="@{/categories}" th:text="#{categories.show_all}">Показать полный список</a><br>
     </div>
 
     <div class="ui container" th:unless="${#arrays.isEmpty(categoryList.category)}">
