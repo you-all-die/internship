@@ -50,7 +50,7 @@ public class CategoryRestController {
             notes = "В запросе search могут указываться:\n" +
                     "- pageSize количество возвращаемых категорий (значение по умолчанию 20)\n" +
                     "- pageNumber номер страницы (значение по умолчанию 1)\n" +
-                    "- parentId поиск по id parent\n" +
+                    "- parentId поиск по id parent('0'- поиск категорий без родителя)\n" +
                     "- searchText - поиск по наименованию",
             response = CategorySearchResult.class)
     public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
