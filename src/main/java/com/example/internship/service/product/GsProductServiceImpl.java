@@ -1,8 +1,10 @@
 package com.example.internship.service.product;
 
 import com.example.internship.dto.category.CategoryDto;
+import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.SearchResult;
+import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.ProductRepository;
@@ -10,6 +12,7 @@ import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.specification.product.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -64,8 +67,9 @@ public class GsProductServiceImpl implements GsProductService {
     }
 
     @Override
-    public void save(Product product) {
-        productRepository.save(product);
+    public Product save(ProductDto.Request.All productDto) {
+        Product productEntity = modelMapper.map(productDto, Product.class);
+        return productRepository.save(productEntity);
     }
 
     @Override
@@ -148,18 +152,35 @@ public class GsProductServiceImpl implements GsProductService {
         productRepository.deleteAll();
     }
 
-    private AllWithCategoryId convertToAllWithCategoryId(Product product) {
-        return modelMapper.map(product, AllWithCategoryId.class);
-    }
-
     @PostConstruct
     private void configureMapper() {
         modelMapper
                 .createTypeMap(Product.class, AllWithCategoryId.class)
-                .addMappings(mapper -> mapper.map(src -> src.getCategory().getId(), AllWithCategoryId::setCategoryId));
+                .addMappings(mapper -> mapper.map(entity -> entity.getCategory().getId(), AllWithCategoryId::setCategoryId));
         modelMapper
                 .createTypeMap(AllWithCategoryId.class, Product.class)
                 .addMappings(mapper -> mapper.map(dto -> categoryService.findById(dto.getCategoryId()), Product::setCategory));
+        modelMapper
+                .createTypeMap(ProductDto.Request.All.class, Product.class)
+                .addMappings(mapper -> mapper.skip(Product::setCategory))
+                .setPostConverter(this::convertRequestAllToEntity);
     }
 
+    /* конвертер */
+    private AllWithCategoryId convertToAllWithCategoryId(Product product) {
+        return modelMapper.map(product, AllWithCategoryId.class);
+    }
+
+    /* конвертер */
+    private Product convertRequestAllToEntity(MappingContext<ProductDto.Request.All, Product> context) {
+        Long categoryId = context.getSource().getCategoryId();
+        Product product = context.getDestination();
+        if (categoryId == null) {
+            product.setCategory(null);
+        } else {
+            final Optional<Category> categoryOptional = categoryService.findById(categoryId);
+            product.setCategory(categoryOptional.orElse(null));
+        }
+        return product;
+    }
 }

@@ -1,9 +1,9 @@
 package com.example.internship.service.product;
 
+import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
-import com.example.internship.entity.Product;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.service.category.GsCategoryService;
 import org.junit.jupiter.api.AfterAll;
@@ -51,27 +51,27 @@ class GsProductServiceTest {
             @Autowired GsProductService productService
     ) {
         // Одна общая категория
-        Category category = new Category();
-        category.setId(CATEGORY_ID);
-        category.setName(CATEGORY_NAME);
-        categoryService.save(category);
+        CategoryDto.Request.All categoryDto = new CategoryDto.Request.All();
+        categoryDto.setId(CATEGORY_ID);
+        categoryDto.setName(CATEGORY_NAME);
+        Category category = categoryService.save(categoryDto);
 
         // Субкатегория для проверки крошек
-        Category subcategory = new Category();
-        subcategory.setId(SUBCATEGORY_ID);
-        subcategory.setParent(category);
-        subcategory.setName("Sub" + CATEGORY_NAME);
-        categoryService.save(subcategory);
+        CategoryDto.Request.All subcategoryDto = new CategoryDto.Request.All();
+        subcategoryDto.setId(SUBCATEGORY_ID);
+        subcategoryDto.setParentId(category.getId());
+        subcategoryDto.setName("Sub" + CATEGORY_NAME);
+        categoryService.save(subcategoryDto);
 
         // Генерация списка продуктов
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
-            Product product = new Product();
-            product.setId(i);
-            product.setCategory(category);
-            product.setName("Phone " + i);
-            product.setDescription("Description " + i);
-            product.setPrice(BigDecimal.valueOf(i));
-            productService.save(product);
+            ProductDto.Request.All productDto = new ProductDto.Request.All();
+            productDto.setId(i);
+            productDto.setCategoryId(category.getId());
+            productDto.setName("Phone " + i);
+            productDto.setDescription("Description " + i);
+            productDto.setPrice(BigDecimal.valueOf(i));
+            productService.save(productDto);
         }
     }
 

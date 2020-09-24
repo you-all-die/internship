@@ -114,8 +114,9 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public void save(Category category) {
-        categoryRepository.save(category);
+    public Category save(CategoryDto.Request.All dto) {
+        Category entity = modelMapper.map(dto, Category.class);
+        return categoryRepository.save(entity);
     }
 
     @Override

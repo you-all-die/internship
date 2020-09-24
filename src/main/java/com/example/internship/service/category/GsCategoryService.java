@@ -17,7 +17,7 @@ public interface GsCategoryService {
     List<Long> findDescendants(Category category);
     List<Long> findDescendants(Long categoryId);
     Optional<Category> findById(long id);
-    void save(Category category);
+    Category save(CategoryDto.Request.All category);
     void delete(long id);
     void deleteAll();
 }

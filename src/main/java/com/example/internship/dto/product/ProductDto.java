@@ -11,6 +11,20 @@ import java.math.BigDecimal;
 public enum ProductDto {
     ;
 
+    public enum Request {
+        ;
+
+        @Data
+        public static class All implements Id, Name, Description, Picture, Price, CategoryId {
+            private Long id;
+            private String name;
+            private String description;
+            private String picture;
+            private BigDecimal price;
+            private Long categoryId;
+        }
+    }
+
     public enum Response {
         ;
 
@@ -53,5 +67,9 @@ public enum ProductDto {
 
     private interface CategoryId {
         Long getCategoryId();
+    }
+
+    private interface Category {
+        Long getCategory();
     }
 }

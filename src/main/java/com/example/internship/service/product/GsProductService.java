@@ -17,7 +17,7 @@ public interface GsProductService {
     Optional<ProductDto.Response.AllWithCategoryId> findById(long id);
     Optional<BigDecimal> findMinimalPrice();
     Optional<BigDecimal> findMaximalPrice();
-    void save(Product product);
+    Product save(ProductDto.Request.All product);
     void delete(long id);
     long count();
     SearchResult findByCriteria(
