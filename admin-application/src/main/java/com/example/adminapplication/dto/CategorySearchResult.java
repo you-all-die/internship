@@ -1,17 +1,15 @@
-package com.example.internship.dto;
+package com.example.adminapplication.dto;
 
-import com.example.internship.entity.Category;
+/*
+ *@author Romodin Aleksey
+ */
+
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * @author Aleksey Moiseychev
- */
 @Data
 public class CategorySearchResult {
-
     private List<CategoryDto> category;
     private Integer pageNumber;
     private Integer pageSize;
