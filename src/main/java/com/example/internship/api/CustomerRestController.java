@@ -2,7 +2,7 @@ package com.example.internship.api;
 
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 /*
  * @author Romodin Aleksey
@@ -33,24 +31,20 @@ import java.util.Optional;
 public class CustomerRestController {
     private final CustomerService customerService;
 
-    //Показать всех пользователей
-    @GetMapping("")
-    @ApiOperation(value = "Показать список пользователей", response = Iterable.class)
-    public Iterable<Customer> list() {
-        return customerService.getAll();
-    }
-
     //Показать данные конкретного пользователя
     @GetMapping("{id}")
     @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
-    public Optional<Customer> getUser(@PathVariable Long id) {
-        return customerService.getById(id);
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        if(customerService.getById(id).isPresent()) {
+            return new ResponseEntity<>(customerService.getById(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
 
     //Редактирование данных
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
-    public ResponseEntity<?> postUser(@PathVariable Long id, @RequestBody Customer customer) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody Customer customer) {
         Customer customerOld = customerService.getById(id).orElse(null);
         if (customerOld!=null) {
             customerOld.setFirstName(customer.getFirstName());
@@ -61,23 +55,23 @@ public class CustomerRestController {
             customerOld.setEmail(customer.getEmail());
             customerOld.setPassword(customer.getPassword());
             customerOld.setPhone(customer.getPhone());
-            customerService.save(customer);
+            customerService.save(customerOld);
             return new ResponseEntity<>("Данные пользователя обновлены!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Пользователь не найден", HttpStatus.OK);
+        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
     }
 
     //Поиск пользователей
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
     public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false)
-                                               @ApiParam(value = "Поиск по имени") Optional<String> firstName,
+                                               @ApiParam(value = "Поиск по имени") String firstName,
                                            @RequestParam(name = "middleName", required = false)
-                                           @ApiParam(value = "Поиск по отчеству") Optional<String> middleName,
+                                           @ApiParam(value = "Поиск по отчеству") String middleName,
                                            @RequestParam(name = "lastName", required = false)
-                                               @ApiParam(value = "Поиск по фамилии") Optional<String> lastName,
+                                               @ApiParam(value = "Поиск по фамилии") String lastName,
                                            @RequestParam(name = "email", required = false)
-                                               @ApiParam(value = "Поиск по email") Optional<String> email,
+                                               @ApiParam(value = "Поиск по email") String email,
                                            @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                @ApiParam(value = "Размер страницы") Integer pageSize,
                                            @RequestParam(name = "pageNumber", required = false, defaultValue = "0")

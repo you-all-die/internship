@@ -1,11 +1,10 @@
 package com.example.internship.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.StringJoiner;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -26,11 +25,11 @@ public class Customer {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    @OneToMany(mappedBy = "customerId")
     private Set<Address> addresses;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
 
     public final String getFullName() {

@@ -12,7 +12,7 @@ public enum ProductDto {
     ;
 
     private interface Id {
-        long getId();
+        Long getId();
     }
 
     private interface Name {
@@ -32,7 +32,7 @@ public enum ProductDto {
     }
 
     private interface CategoryId {
-        long getCategoryId();
+        Long getCategoryId();
     }
 
     public enum Request {
@@ -40,7 +40,7 @@ public enum ProductDto {
 
         @Data
         public static class All implements Id, Name, Description, Picture, Price {
-            long id;
+            Long id;
             String name;
             String description;
             String picture;
@@ -50,7 +50,7 @@ public enum ProductDto {
         @Data
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithCategoryId extends All implements CategoryId {
-            long categoryId;
+            Long categoryId;
         }
     }
 
@@ -59,12 +59,12 @@ public enum ProductDto {
 
         @Data
         public static class Ids implements Id {
-            private long id;
+            private Long id;
         }
 
         @Data
         public static class All implements Id, Name, Description, Picture, Price {
-            private long id;
+            private Long id;
             private String name;
             private String description;
             private String picture;
@@ -74,7 +74,7 @@ public enum ProductDto {
         @Data
         @EqualsAndHashCode(callSuper = true)
         public static class AllWithCategoryId extends All implements CategoryId {
-            private long categoryId;
+            private Long categoryId;
         }
 
     }

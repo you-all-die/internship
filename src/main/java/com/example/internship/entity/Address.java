@@ -15,14 +15,13 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
     private String region;
     private String city;
     private String district;
     private String street;
     private String house;
     private String apartment;
-    private String Comment;
+    private String comment;
 }

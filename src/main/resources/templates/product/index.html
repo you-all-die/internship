@@ -38,8 +38,15 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="four wide column"></div>
+                    <div class="twelve wide column">
+                        <div th:replace="/common/paginator :: widget (${data.pageNumber}, ${data.totalPages})"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
     </body>
 </html>

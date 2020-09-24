@@ -22,6 +22,10 @@ public class OrderLine {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;

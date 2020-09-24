@@ -21,14 +21,14 @@ public class SearchResult {
     List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
     /* Родительские категории для хлебных крошек */
     List<CategoryDto.Response.All> breadcrumbs;
-    /* Страницы */
-    boolean[] pages;
     /* Номер текущей страницы */
     Integer pageNumber;
+    /* Количество страницы */
+    Integer totalPages;
     /* Размер страницы */
     Integer pageSize;
     /* Общее количество товаров в запросе */
-    Long total;
+    Long totalProducts;
     /* Минимальная цена товара */
     BigDecimal minimalPrice;
     /* Максимальная цена товара */
