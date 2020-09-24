@@ -2,7 +2,7 @@ package com.example.internship.api;
 
 import com.example.internship.api.dto.OrderLineForm;
 import com.example.internship.dto.OrderLineDto;
-import com.example.internship.service.CartService;
+import com.example.internship.service.cart.CartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -3,7 +3,7 @@ package com.example.internship.controller.customer;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
-import com.example.internship.service.CustomerService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -53,7 +53,9 @@ public class CustomerRegistrationController {
         } catch (MailServiceException exception) {
             log.error("Error sending email! {}", exception.toString());
         }
-        return "redirect:/customer/" + customerService.registrationCustomer(customerDto).getId();
+
+        customerService.registrationCustomer(customerDto);
+        return "redirect:/login";
     }
 
 }

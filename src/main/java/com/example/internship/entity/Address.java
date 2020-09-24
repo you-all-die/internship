@@ -23,5 +23,5 @@ public class Address {
     private String street;
     private String house;
     private String apartment;
-    private String Comment;
+    private String comment;
 }

@@ -3,6 +3,7 @@ package com.example.internship.config;
 import com.example.internship.security.CustomAuthenticationSuccessHandler;
 import com.example.internship.security.CustomLogoutSuccessHandler;
 import com.example.internship.service.impl.UserDetailServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,32 +14,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailServiceImpl userDetailsService;
+    private final UserDetailServiceImpl userDetailsService;
 
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    @Autowired
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
-//    @Autowired
-//    private RdirectToOriginalUrlAuthenticationSuccessHandler rdirectToOriginalUrlAuthenticationSuccessHandler;
-
-    /*
-	 	Кодирование пароля пользователей - с помощью BCrypt.
-	 	Алгоритм BCrypt, генерирует случайную соль, для каждого пароля и хранит соль внутри самого хеш-значения.
-	 	BCrypt генерирует строку длиной 60.
-	*/
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,31 +36,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
-                .csrf()
-                .disable()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                    .antMatchers(
+                            "/",
+                            "/css/**",
+                            "/images/**",
+                            "/js/**",
+                            "/img/**",
+                            "/registration",
+                            "/product/**",
+                            "/about/**",
+                            "/aboutv1/**",
+                            "/customer/**",
+                            "/cart/**",
+                            "/api/**",
+                            "/swagger-ui/**",
+                            "/swagger-resources/**",
+                            "/configuration/ui",
+                            "/configuration/security",
+                            "/webjars/**",
+                            "/v2/api-docs"
+                    ).permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-//                    Устанавливаем хэндлер для обработки логики после успешной авторизации
-                .successHandler(customAuthenticationSuccessHandler)
+                    .formLogin()
+                    .loginPage("/login").permitAll()
+                    .successHandler(customAuthenticationSuccessHandler)
                 .and()
-//                Если явно не указано, при logout переходим не страницу login
-                .logout()
-//                    Устанавливаем хэндлер для обработки логики после успешной авторизации
-                .logoutSuccessHandler(customLogoutSuccessHandler)
-//                    После logout удаляем куку с сессией
-                .deleteCookies("JSESSIONID");
-
+                    .logout()
+                    .clearAuthentication(true)
+                    .logoutSuccessHandler(customLogoutSuccessHandler)
+                    .deleteCookies("JSESSIONID")
+                .and()
+                    .csrf()
+                    .disable();
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth)  {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -84,5 +84,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
-
 }
