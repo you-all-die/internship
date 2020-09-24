@@ -1,0 +1,43 @@
+<!-- Самохвалов Юрий Алексеевич -->
+<div class="ui pagination menu"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="widget (currentPage, totalPages)"
+     th:if="${totalPages} > 0"
+     th:with="url=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}">
+
+    <!--Первая страница (текущая не нулевая) -->
+    <a class="item"
+       th:if="${currentPage} > 0"
+       th:href="${url.fromCurrentRequest().replaceQueryParam('pageNumber', 0).build(true).toUriString()}">1
+    </a>
+    <!-- Разделитель -->
+    <div class="disabled item"
+         th:if="${currentPage} >= 3">...
+    </div>
+    <!-- Предыдущая перед текущей -->
+    <a class="item"
+       th:if="${currentPage} >= 2"
+       th:href="${url.fromCurrentRequest().replaceQueryParam('pageNumber', currentPage - 1).build(true).toUriString()}"
+       th:text="${currentPage}">previous page
+    </a>
+    <!-- Текущая страница -->
+    <div class="active item"
+         th:text="${currentPage + 1}">current page
+    </div>
+    <!-- Следующая за текущей -->
+    <a class="item"
+       th:if="${totalPages - currentPage} > 2"
+       th:href="${url.fromCurrentRequest().replaceQueryParam('pageNumber', currentPage + 1).build(true).toUriString()}"
+       th:text="${currentPage + 2}">next page
+    </a>
+    <!-- Разделитель -->
+    <div class="disabled item"
+         th:if="${totalPages - currentPage} > 3">...
+    </div>
+    <!-- Последняя страница -->
+    <a class="item"
+       th:if="${totalPages - currentPage} > 1"
+       th:href="${url.fromCurrentRequest().replaceQueryParam('pageNumber', totalPages - 1).build(true).toUriString()}"
+       th:text="${totalPages}">last page
+    </a>
+</div>

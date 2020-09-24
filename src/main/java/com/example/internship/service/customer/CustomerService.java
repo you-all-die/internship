@@ -1,4 +1,4 @@
-package com.example.internship.service;
+package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
@@ -114,4 +114,7 @@ public interface CustomerService {
      */
     CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
                                        Integer pageSize, Integer pageNumber);
+
+    //обновление времени последней активности
+    void updateLastActivity(Long customerId);
 }

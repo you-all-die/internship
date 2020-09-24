@@ -1,4 +1,4 @@
-package com.example.internship.service.impl;
+package com.example.internship.service.cart;
 
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.entity.Cart;
@@ -8,7 +8,7 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.CartService;
+import com.example.internship.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -57,11 +57,12 @@ public class CartServiceImpl implements CartService {
 
         if (checkOrderLine.isPresent()) {
             checkOrderLine.get().setProductQuantity(checkOrderLine.get().getProductQuantity() + 1);
-           cartRepository.save(cart);
+            cartRepository.save(cart);
             return true;
         }
 
-        cart.getOrderLines().add(new OrderLine(null, product, 1));
+        OrderLine orderLine = new OrderLine(null, cart, product, 1);
+        cart.getOrderLines().add(orderLine);
         cartRepository.save(cart);
         return true;
     }
@@ -101,7 +102,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean remove(Product product, Long customerId) {
-        Optional<Customer> customer = checkCustomerCart(customerId);;
+        Optional<Customer> customer = checkCustomerCart(customerId);
 
         if (customer.isEmpty()) return false;
 
@@ -132,7 +133,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<OrderLineDto> findAll(Long customerId) {
-        Optional<Customer> customer =  checkCustomerCart(customerId);
+        Optional<Customer> customer = checkCustomerCart(customerId);
 
         if (customer.isEmpty()) return new ArrayList<>();
 
@@ -150,13 +151,14 @@ public class CartServiceImpl implements CartService {
 
         return orderLines.stream()
                 .filter(value -> value.getProduct().getPrice() != null &&
-                        value.getProduct().getPrice().compareTo(BigDecimal.ZERO) > 0 )
+                        value.getProduct().getPrice().compareTo(BigDecimal.ZERO) > 0)
                 .map(value -> value.getProduct().getPrice().multiply(BigDecimal.valueOf(value.getProductQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
      * Проверят существует ли пользователь и есть ли у него корзина.
+     *
      * @param customerId id пользователя.
      * @return возвращает пользователя, если существует.
      */
@@ -165,10 +167,11 @@ public class CartServiceImpl implements CartService {
 
         if (customer.isEmpty()) return Optional.empty();
 
-        if (customer.get().getCart() == null){
-            log.error("Cart for customer: " + customerId + "not exist!");
-            Cart cart  = new Cart();
+        if (customer.get().getCart() == null) {
+            log.error("Cart for customer: " + customerId + " not exist!");
+            Cart cart = new Cart();
             cart.setOrderLines(new ArrayList<>());
+            cart.setCustomer(customer.get());
             customer.get().setCart(cart);
             return Optional.of(customerRepository.save(customer.get()));
         }
@@ -182,6 +185,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * Конвертирует линии заказов в DTO.
+     *
      * @param orderLine линия заказа.
      * @return линия заказа конвертированная в DTO.
      */
@@ -190,12 +194,13 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     *  Проверяет есть ли продукт в корзине.
+     * Проверяет есть ли продукт в корзине.
+     *
      * @param orderLines заказы в корзине
-     * @param product продукт который мы хотим проверить.
+     * @param product    продукт который мы хотим проверить.
      * @return линия заказа с товаром из корзины, если существует.
      */
     private Optional<OrderLine> getOrderLineByProduct(List<OrderLine> orderLines, Product product) {
-       return orderLines.stream().filter(orderLine -> orderLine.getProduct().equals(product)).findFirst();
+        return orderLines.stream().filter(orderLine -> orderLine.getProduct().equals(product)).findFirst();
     }
 }
