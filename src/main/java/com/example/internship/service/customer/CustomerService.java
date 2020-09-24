@@ -113,8 +113,16 @@ public interface CustomerService {
      * @return форму данных поиска.
      */
     CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
-                                       Integer pageSize, Integer pageNumber);
+                                Integer pageSize, Integer pageNumber);
 
     //обновление времени последней активности
     void updateLastActivity(Long customerId);
+
+    /**
+     * Метод чек  стайл проверяет пользователя с почтой.
+     *
+     * @param email почта пользователя.
+     * @return возращает пользователя, если null пользователь не найден.
+     */
+    Customer checkEmail(String email);
 }

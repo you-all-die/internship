@@ -4,7 +4,6 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
-import com.example.internship.service.customer.CustomerService;
 import com.example.internship.specification.CustomerSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -184,13 +183,27 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.setLastActivityForCustomers(customerId);
     }
 
+    /**
+     * Метод проверяет в на наличие пользователя с такой почтой.
+     *
+     * @param email почта пользователя
+     * @return Customer
+     */
+    @Override
+    public Customer checkEmail(final String email) {
+
+        return customerRepository.findByEmail(email);
+    }
+
+
     //Метод проверки поля и добавления условия в запрос
+
     /**
      * Проверка полей и добавление в запрос.
      *
      * @param specification ???
-     * @param columnName ???
-     * @param optionalName ???
+     * @param columnName    ???
+     * @param optionalName  ???
      * @return ???
      */
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
