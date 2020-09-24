@@ -6,8 +6,6 @@ import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.service.category.GsCategoryService;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,14 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestPropertySource("classpath:test.properties")
 @SpringBootTest
 @DisplayName("Тест сервиса GsProductService")
-@Slf4j
 class GsProductServiceTest {
 
     private static final long PRODUCT_NUMBER = 100L;
@@ -76,13 +72,9 @@ class GsProductServiceTest {
             productDto.setPrice(BigDecimal.valueOf(i));
             productService.save(productDto);
         }
-
-        // TODO убрать после отладки
-        final List<ProductDto.Response.AllWithCategoryId> products = productService.findAll();
-        products.forEach(p -> log.debug(p.toString()));
     }
 
-    @AfterAll
+/*    @AfterAll
     static void afterAll(
             @Autowired GsCategoryService categoryService,
             @Autowired GsProductService productService
@@ -90,7 +82,7 @@ class GsProductServiceTest {
         // Удаляем следы пребывания в тестовой базе
         productService.deleteAll();
         categoryService.deleteAll();
-    }
+    }*/
 
     @Test
     @DisplayName("Все аргументы равны null")
