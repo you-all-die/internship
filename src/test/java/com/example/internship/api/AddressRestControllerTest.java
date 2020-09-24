@@ -1,7 +1,7 @@
 package com.example.internship.api;
 
-import com.example.internship.dto.addressDto.AddressDto;
-import com.example.internship.service.AddressService;
+import com.example.internship.refactoringdto.AddressDto;
+import com.example.internship.service.address.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +16,13 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,11 +84,11 @@ public class AddressRestControllerTest {
     }
 
     @Test
-    public void testGetNullAddress() throws Exception{
+    public void testGetNullAddress() throws Exception {
 
         when(addressService.getAllById(anyLong())).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/api/user/{id}/address",15)
+        mockMvc.perform(get("/api/user/{id}/address", 15)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
