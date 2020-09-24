@@ -2,6 +2,7 @@ package com.example.adminapplication.service;
 
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.dto.CategorySearchResult;
+import com.example.adminapplication.dto.CategorySearchRequest;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface CategoryService {
 
     void addCategory(CategoryDto category);
 
-    CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber);
+    CategorySearchResult searchResult(CategorySearchRequest request);
 
     List<CategoryDto> getParentCategoriesWithChildren();
 

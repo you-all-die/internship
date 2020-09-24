@@ -2,6 +2,7 @@ package com.example.adminapplication.service.impl;
 
 import com.example.adminapplication.dto.CategoryDto;
 import com.example.adminapplication.dto.CategorySearchResult;
+import com.example.adminapplication.dto.CategorySearchRequest;
 import com.example.adminapplication.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findById(Long id) {
         return webClient.get()
-                .uri(uri + "/"+id)
+                .uri(uri + "/" + id)
                 .retrieve()
                 .bodyToMono(CategoryDto.class)
                 .block();
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void removeCategory(Long id) {
         webClient.delete()
-                .uri(uri +"/remove/"+id)
+                .uri(uri + "/remove/" + id)
                 .retrieve()
                 .bodyToMono(CategoryDto.class)
                 .block();
@@ -63,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void addCategory(CategoryDto category) {
         webClient.post()
-                .uri(uri +"/add-category")
+                .uri(uri + "/add-category")
                 .bodyValue(category)
                 .retrieve()
                 .toBodilessEntity()
@@ -72,18 +73,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     //Запрос на поиск по критериям
     @Override
-    public CategorySearchResult searchResult(String name, Long parentId, Integer pageSize, Integer pageNumber){
+    public CategorySearchResult searchResult(CategorySearchRequest request) {
         //Конструктор запроса
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/search");
 
         //Добавление параметра: поиск по наименованию
-        if(StringUtils.isNotBlank(name)) builder.queryParam("searchText", name);
+        if (StringUtils.isNotBlank(request.getName())) builder.queryParam("searchText", request.getName());
         //Добавление параметра: поиск по ID родительской категории
-        if(parentId !=null) builder.queryParam("parentId", parentId);
+        if (request.getParentCategoryId() != null) builder.queryParam("parentId", request.getParentCategoryId());
         //Добавление параметра: номер страницы
-        builder.queryParam("pageNumber", pageNumber);
+        builder.queryParam("pageNumber", request.getPageNumber());
         //Добавление параметра: размер страницы
-        builder.queryParam("pageSize", pageSize);
+        builder.queryParam("pageSize", request.getPageSize());
         //Декодировка кириллицы
         String result = URLDecoder.decode(builder.toUriString(), StandardCharsets.UTF_8);
         return webClient.get()
@@ -95,7 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     //Запрос на поиск родительских категорий
     @Override
-    public List<CategoryDto> getParentCategoriesWithChildren(){
+    public List<CategoryDto> getParentCategoriesWithChildren() {
         //Get-запрос из БД
         return webClient.get()
                 .uri(uri + "/parentCategoriesWithChildren")

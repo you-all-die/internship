@@ -27,11 +27,7 @@ public class CategoriesController {
 
         model.addAttribute("categorySearchRequest", categorySearchRequest);
         CategorySearchResult categorySearchResult =
-                categoryService.searchResult(
-                        categorySearchRequest.getName(),
-                        categorySearchRequest.getParentCategoryId(),
-                        categorySearchRequest.getPageSize(),
-                        categorySearchRequest.getPageNumber());
+                categoryService.searchResult(categorySearchRequest);
 
         //Определяем количество страниц
         Long totalCategory = categorySearchResult.getTotalCategory();
