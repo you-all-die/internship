@@ -8,18 +8,13 @@ import com.example.internship.entity.Product;
 import com.example.internship.repository.CartRepository;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.repository.ProductRepository;
-import com.example.internship.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Comparator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -171,7 +166,6 @@ public class CartServiceImpl implements CartService {
             log.error("Cart for customer: " + customerId + " not exist!");
             Cart cart = new Cart();
             cart.setOrderLines(new ArrayList<>());
-            cart.setCustomer(customer.get());
             customer.get().setCart(cart);
             return Optional.of(customerRepository.save(customer.get()));
         }

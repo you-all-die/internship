@@ -8,7 +8,7 @@ import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.impl.EmailServiceImpl;
-import com.example.internship.service.impl.CustomerServiceImpl;
+import com.example.internship.service.customer.CustomerServiceImpl;
 import com.example.internship.service.order.OrderServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
