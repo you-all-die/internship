@@ -6,6 +6,7 @@ import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.service.category.GsCategoryService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class GsProductServiceTest {
 
     private static final long PRODUCT_NUMBER = 100L;
-    private static final long CATEGORY_ID = 1L;
-    private static final long SUBCATEGORY_ID = CATEGORY_ID + 1;
     private static final String CATEGORY_NAME = "Category";
     private static final String MSG_CATEGORY_IS_NULL = "Категория должна быть null";
     private static final String MSG_CATEGORY_IS = "Категория должна быть %d";
@@ -42,6 +41,9 @@ class GsProductServiceTest {
     private static final String MSG_DESCENDING_ORDER_IS = "Флаг сортировки по убыванию должен быть равен %s";
     private static final String MSG_PAGES_TOTAL_IS = "Количество страниц должно быть %d";
 
+    private static Long categoryId;
+    private static Long subcategoryId;
+
     @Autowired GsProductService productService;
 
     @BeforeAll
@@ -50,23 +52,22 @@ class GsProductServiceTest {
             @Autowired GsProductService productService
     ) {
         // Одна общая категория
-        CategoryDto.Request.All categoryDto = new CategoryDto.Request.All();
-        categoryDto.setId(CATEGORY_ID);
+        final CategoryDto.Request.All categoryDto = new CategoryDto.Request.All();
         categoryDto.setName(CATEGORY_NAME);
-        Category category = categoryService.save(categoryDto);
+        final Category category = categoryService.save(categoryDto);
+        categoryId = category.getId();
 
         // Субкатегория для проверки крошек
-        CategoryDto.Request.All subcategoryDto = new CategoryDto.Request.All();
-        subcategoryDto.setId(SUBCATEGORY_ID);
-        subcategoryDto.setParentId(category.getId());
+        final CategoryDto.Request.All subcategoryDto = new CategoryDto.Request.All();
+        subcategoryDto.setParentId(categoryId);
         subcategoryDto.setName("Sub" + CATEGORY_NAME);
-        categoryService.save(subcategoryDto);
+        final Category subcategory = categoryService.save(subcategoryDto);
+        subcategoryId = subcategory.getId();
 
         // Генерация списка продуктов
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
             ProductDto.Request.All productDto = new ProductDto.Request.All();
-            productDto.setId(i);
-            productDto.setCategoryId(CATEGORY_ID);
+            productDto.setCategoryId(categoryId);
             productDto.setName("Phone " + i);
             productDto.setDescription("Description " + i);
             productDto.setPrice(BigDecimal.valueOf(i));
@@ -74,7 +75,7 @@ class GsProductServiceTest {
         }
     }
 
-/*    @AfterAll
+    @AfterAll
     static void afterAll(
             @Autowired GsCategoryService categoryService,
             @Autowired GsProductService productService
@@ -82,7 +83,7 @@ class GsProductServiceTest {
         // Удаляем следы пребывания в тестовой базе
         productService.deleteAll();
         categoryService.deleteAll();
-    }*/
+    }
 
     @Test
     @DisplayName("Все аргументы равны null")
@@ -192,21 +193,21 @@ class GsProductServiceTest {
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
-                CATEGORY_ID,
+                categoryId,
                 null,
                 null,
                 null,
                 null,
                 null);
         assertAll(
-                () -> assertEquals(CATEGORY_ID, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, CATEGORY_ID)),
+                () -> assertEquals(categoryId, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, categoryId)),
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
                 () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(), () -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -429,21 +430,21 @@ class GsProductServiceTest {
         Boolean orderExpected = null;
         final SearchResult result = productService.findByCriteria(
                 null,
-                SUBCATEGORY_ID,
+                subcategoryId,
                 null,
                 null,
                 null,
                 null,
                 null);
         assertAll(
-                () -> assertEquals(SUBCATEGORY_ID, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, SUBCATEGORY_ID)),
+                () -> assertEquals(subcategoryId, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, subcategoryId)),
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
                 () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(), () -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getMinimalPrice(), result.getLowerPriceLimit(), MSG_MINIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(result.getMaximalPrice(), result.getUpperPriceLimit(), MSG_MAXIMAL_PRICES_ARE_EQUAL),
                 () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
@@ -459,29 +460,28 @@ class GsProductServiceTest {
         int pageNumberExpected = 0;
         int totalExpected = 1;
         int pagesTotalExpected = PageHelper.calculateTotalPages(totalExpected, pageSizeExpected);
-        Boolean orderExpected = true;
         BigDecimal min = BigDecimal.ZERO;
         BigDecimal max = BigDecimal.valueOf(PRODUCT_NUMBER);
         final SearchResult result = productService.findByCriteria(
                 "Phone 99",
-                CATEGORY_ID,
+                categoryId,
                 min,
                 max,
                 pageNumberExpected,
                 pageSizeExpected,
-                orderExpected);
+                true);
         assertAll(
-                () -> assertEquals(CATEGORY_ID, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, CATEGORY_ID)),
+                () -> assertEquals(categoryId, result.getCategoryId(), () -> String.format(MSG_CATEGORY_IS, categoryId)),
                 () -> assertEquals(productsExpected, result.getProducts().size(), () -> String.format(MSG_PRODUCT_NUMBER_IS, productsExpected)),
                 () -> assertFalse(result.getTopCategories().isEmpty(), MSG_TOP_CATEGORY_LIST_IS_NOT_EMPTY),
                 () -> assertEquals(breadcrumbsSizeExpected, result.getBreadcrumbs().size(), () -> String.format(MSG_BREADCRUMBS_SIZE_IS, breadcrumbsSizeExpected)),
                 () -> assertEquals(pagesTotalExpected, result.getTotalPages(), () -> String.format(MSG_PAGES_TOTAL_IS, pagesTotalExpected)),
                 () -> assertEquals(pageNumberExpected, result.getPageNumber(), () -> String.format(MSG_PAGE_NUMBER_IS, pageNumberExpected)),
                 () -> assertEquals(pageSizeExpected, result.getPageSize(), () -> String.format(MSG_PAGE_SIZE_IS, pageSizeExpected)),
-                () -> assertEquals(totalExpected, result.getTotalProducts(),() -> String.format(MSG_TOTAL_IS, totalExpected)),
+                () -> assertEquals(totalExpected, result.getTotalProducts(), () -> String.format(MSG_TOTAL_IS, totalExpected)),
                 () -> assertEquals(result.getLowerPriceLimit().compareTo(min), 0, () -> String.format(MSG_LOWER_LIMIT_IS, min.toString())),
                 () -> assertEquals(result.getUpperPriceLimit().compareTo(max), 0, () -> String.format(MSG_UPPER_LIMIT_IS, max.toString())),
-                () -> assertEquals(orderExpected, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, orderExpected))
+                () -> assertEquals(true, result.getDescendingOrder(), () -> String.format(MSG_DESCENDING_ORDER_IS, true))
         );
     }
 
