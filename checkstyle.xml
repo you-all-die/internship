@@ -27,7 +27,7 @@
         https://checkstyle.org/config.html#Checker
         <property name="basedir" value="${basedir}"/>
     -->
-    <property name="severity" value="error"/>
+    <property name="severity" value="warning"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
 
@@ -88,11 +88,11 @@
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
         <module name="InvalidJavadocPosition"/>
-        <module name="JavadocMethod"/>
+<!--        <module name="JavadocMethod"/>-->
         <module name="JavadocType"/>
 <!--        <module name="JavadocVariable"/>-->
         <module name="JavadocStyle"/>
-        <module name="MissingJavadocMethod"/>
+<!--        <module name="MissingJavadocMethod"/>-->
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
@@ -150,10 +150,10 @@
         <!-- See https://checkstyle.org/config_coding.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+<!--        <module name="HiddenField"/>-->
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
+<!--        <module name="MagicNumber"/>-->
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="SimplifyBooleanExpression"/>
