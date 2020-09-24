@@ -124,5 +124,5 @@ public interface CustomerService {
      * @param email почта пользователя.
      * @return возращает пользователя, если null пользователь не найден.
      */
-    Customer checkEmail(String email);
+    boolean checkEmail(String email);
 }

@@ -186,13 +186,12 @@ public class CustomerServiceImpl implements CustomerService {
     /**
      * Метод проверяет в на наличие пользователя с такой почтой.
      *
-     * @param email почта пользователя
+     * @param email почта пользователя.
      * @return Customer
      */
     @Override
-    public Customer checkEmail(final String email) {
-
-        return customerRepository.findByEmail(email);
+    public boolean checkEmail(final String email) {
+        return customerRepository.existsByEmail(email);
     }
 
 
