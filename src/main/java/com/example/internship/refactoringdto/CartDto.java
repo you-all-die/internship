@@ -23,10 +23,6 @@ public class CartDto {
     @Schema(description = "id корзины")
     private Long id;
 
-    @Schema(description = "Покупатель")
-    @NotNull
-    private CustomerDto customer;
-
     @Schema(description = "Список товаров в корзине")
     private List<OrderLineDto> orderLines;
 }

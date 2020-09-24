@@ -27,7 +27,7 @@ public class AddressDto {
     @NotNull
     private Long customerId;
 
-    @Schema(description = "Область")
+    @Schema(description = "Регион")
     @Size(max = 255)
     private String region;
 
