@@ -13,38 +13,6 @@ import java.util.List;
 public enum CategoryDto {
     ;
 
-    private interface Id {
-        long getId();
-        void setId(long id);
-    }
-
-    private interface Name {
-        String getName();
-        void setName(String name);
-    }
-
-    private interface Parent {
-        Category getParent();
-        void setParent(Category parent);
-    }
-
-    private interface ParentId {
-        Long getParentId();
-        void setParentId(Long parentId);
-    }
-
-    private interface Subcategories {
-        List<Category> getSubcategories();
-    }
-
-    private interface Ancestors {
-        List<Response.IdOnly> getAncestors();
-    }
-
-    private interface Descendants {
-        List<Response.IdOnly> getDescendants();
-    }
-
     public enum Request {
         ;
 
@@ -93,5 +61,37 @@ public enum CategoryDto {
         public static class IdOnly implements Id {
             private long id;
         }
+    }
+
+    private interface Id {
+        long getId();
+        void setId(long id);
+    }
+
+    private interface Name {
+        String getName();
+        void setName(String name);
+    }
+
+    private interface Parent {
+        Category getParent();
+        void setParent(Category parent);
+    }
+
+    private interface ParentId {
+        Long getParentId();
+        void setParentId(Long parentId);
+    }
+
+    private interface Subcategories {
+        List<Category> getSubcategories();
+    }
+
+    private interface Ancestors {
+        List<Response.IdOnly> getAncestors();
+    }
+
+    private interface Descendants {
+        List<Response.IdOnly> getDescendants();
     }
 }

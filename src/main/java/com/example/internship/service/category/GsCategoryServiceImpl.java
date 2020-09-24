@@ -6,10 +6,12 @@ import com.example.internship.repository.CategoryRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -127,6 +129,27 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     @Override
     public void deleteAll() {
         categoryRepository.deleteAll();
+    }
+
+    @PostConstruct
+    public void configureModelMapper() {
+        modelMapper
+                .createTypeMap(CategoryDto.Request.All.class, Category.class)
+                .addMappings(mapper -> mapper.skip(Category::setParent))
+                .setPostConverter(this::convertRequestAllToEntity);
+    }
+
+    private Category convertRequestAllToEntity(MappingContext<CategoryDto.Request.All, Category> context) {
+        final CategoryDto.Request.All dto = context.getSource();
+        final Category entity = context.getDestination();
+        final Long parentId = dto.getParentId();
+        if (null == parentId) {
+            entity.setParent(null);
+        } else {
+            final Optional<Category> categoryOptional = categoryRepository.findById(dto.getParentId());
+            entity.setParent(categoryOptional.orElse(null));
+        }
+        return entity;
     }
 
     private CategoryDto.Response.All convertToAllDto(Category category) {

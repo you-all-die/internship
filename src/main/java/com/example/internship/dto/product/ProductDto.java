@@ -68,8 +68,4 @@ public enum ProductDto {
     private interface CategoryId {
         Long getCategoryId();
     }
-
-    private interface Category {
-        Long getCategory();
-    }
 }
