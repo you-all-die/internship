@@ -1,6 +1,7 @@
 package com.example.internship.service.category;
 
 import com.example.internship.dto.category.CategoryDto;
+import com.example.internship.dto.category.CategoryDto.Response.AllWithSubcategories;
 import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import lombok.NonNull;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 /**
  * @author Самохвалов Юрий Алексеевич
@@ -29,33 +31,11 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto.Response.AllWithParentSubcategories> findAll() {
-        return categoryRepository.findAll().stream()
-                .map(this::convertToAllWithParentAndSubcategories)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
-    public List<CategoryDto.Response.AllWithParentSubcategories> findTopCategories() {
+    public List<AllWithSubcategories> findTopCategories() {
         return categoryRepository.findAllByParentNull().stream()
-                .map(this::convertToAllWithParentAndSubcategories)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
-    public List<CategoryDto.Response.All> findAncestors(final Category category) {
-        if (null == category) {
-            return Collections.emptyList();
-        }
-        final List<Category> ancestors = new ArrayList<>();
-        ancestors.add(category);
-        Category parent = category.getParent();
-        while (parent != null) {
-            ancestors.add(0, parent);
-            parent = parent.getParent();
-        }
-        return ancestors.stream().map(this::convertToAllDto).collect(Collectors.toUnmodifiableList());
+                .map(this::convertToAllWithSubcategories)
+                .collect(toUnmodifiableList());
     }
 
     @Override
@@ -68,25 +48,6 @@ public class GsCategoryServiceImpl implements GsCategoryService {
             return Collections.emptyList();
         }
         return findAncestors(categoryOptional.get());
-    }
-
-    /**
-     * Возвращает список идентификаторов категории и всех её наследников.
-     *
-     * @param category категория
-     * @return список идентификаторов категорий
-     */
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
-    public List<Long> findDescendants(@NonNull final Category category) {
-        List<Long> descendants = new ArrayList<>();
-        descendants.add(category.getId());
-        category.getSubcategories().forEach(subcategory -> {
-                    descendants.add(subcategory.getId());
-                    descendants.addAll(findDescendants(subcategory));
-                }
-        );
-        return descendants;
     }
 
     /**
@@ -122,13 +83,34 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
-    public void delete(long id) {
-        categoryRepository.deleteById(id);
-    }
-
-    @Override
     public void deleteAll() {
         categoryRepository.deleteAll();
+    }
+
+    private List<CategoryDto.Response.All> findAncestors(final Category category) {
+        if (null == category) {
+            return Collections.emptyList();
+        }
+        final List<Category> ancestors = new ArrayList<>();
+        ancestors.add(category);
+        Category parent = category.getParent();
+        while (parent != null) {
+            ancestors.add(0, parent);
+            parent = parent.getParent();
+        }
+        return ancestors.stream().map(this::convertToAll).collect(toUnmodifiableList());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
+    private List<Long> findDescendants(@NonNull final Category category) {
+        List<Long> descendants = new ArrayList<>();
+        descendants.add(category.getId());
+        category.getSubcategories().forEach(subcategory -> {
+                    descendants.add(subcategory.getId());
+                    descendants.addAll(findDescendants(subcategory));
+                }
+        );
+        return descendants;
     }
 
     @PostConstruct
@@ -137,6 +119,20 @@ public class GsCategoryServiceImpl implements GsCategoryService {
                 .createTypeMap(CategoryDto.Request.All.class, Category.class)
                 .addMappings(mapper -> mapper.skip(Category::setParent))
                 .setPostConverter(this::convertRequestAllToEntity);
+        modelMapper
+                .createTypeMap(Category.class, AllWithSubcategories.class)
+                .addMappings(mapper -> mapper.skip(AllWithSubcategories::setSubcategories))
+                .setPostConverter(this::categoryToAllWithCategoriesPostConverter);
+    }
+
+    private AllWithSubcategories categoryToAllWithCategoriesPostConverter(MappingContext<Category, AllWithSubcategories> context) {
+        Category entity = context.getSource();
+        AllWithSubcategories dto = context.getDestination();
+        final List<AllWithSubcategories> subcategories = entity.getSubcategories().stream()
+                .map(this::convertToAllWithSubcategories)
+                .collect(toUnmodifiableList());
+        dto.setSubcategories(subcategories);
+        return dto;
     }
 
     private Category convertRequestAllToEntity(MappingContext<CategoryDto.Request.All, Category> context) {
@@ -152,11 +148,11 @@ public class GsCategoryServiceImpl implements GsCategoryService {
         return entity;
     }
 
-    private CategoryDto.Response.All convertToAllDto(Category category) {
-        return modelMapper.map(category, CategoryDto.Response.All.class);
+    private AllWithSubcategories convertToAllWithSubcategories(Category category) {
+        return modelMapper.map(category, AllWithSubcategories.class);
     }
 
-    private CategoryDto.Response.AllWithParentSubcategories convertToAllWithParentAndSubcategories(Category category) {
-        return modelMapper.map(category, CategoryDto.Response.AllWithParentSubcategories.class);
+    private CategoryDto.Response.All convertToAll(Category category) {
+        return modelMapper.map(category, CategoryDto.Response.All.class);
     }
 }

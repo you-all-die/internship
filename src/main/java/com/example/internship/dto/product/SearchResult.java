@@ -18,7 +18,7 @@ public class SearchResult {
     /* Список продуктов на страницу */
     List<ProductDto.Response.AllWithCategoryId> products;
     /* Категории высшего уровня */
-    List<CategoryDto.Response.AllWithParentSubcategories> topCategories;
+    List<CategoryDto.Response.AllWithSubcategories> topCategories;
     /* Родительские категории для хлебных крошек */
     List<CategoryDto.Response.All> breadcrumbs;
     /* Номер текущей страницы */

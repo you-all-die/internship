@@ -118,7 +118,7 @@ public class GsProductServiceImpl implements GsProductService {
         }
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
 
-        final List<CategoryDto.Response.AllWithParentSubcategories> topCategories = categoryService.findTopCategories();
+        final List<CategoryDto.Response.AllWithSubcategories> topCategories = categoryService.findTopCategories();
 
         final List<CategoryDto.Response.All> ancestors = categoryService.findAncestors(categoryId);
 

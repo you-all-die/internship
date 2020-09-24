@@ -6,6 +6,7 @@ import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.service.category.GsCategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -15,12 +16,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestPropertySource("classpath:test.properties")
 @SpringBootTest
 @DisplayName("Тест сервиса GsProductService")
+@Slf4j
 class GsProductServiceTest {
 
     private static final long PRODUCT_NUMBER = 100L;
@@ -67,12 +70,16 @@ class GsProductServiceTest {
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
             ProductDto.Request.All productDto = new ProductDto.Request.All();
             productDto.setId(i);
-            productDto.setCategoryId(category.getId());
+            productDto.setCategoryId(CATEGORY_ID);
             productDto.setName("Phone " + i);
             productDto.setDescription("Description " + i);
             productDto.setPrice(BigDecimal.valueOf(i));
             productService.save(productDto);
         }
+
+        // TODO убрать после отладки
+        final List<ProductDto.Response.AllWithCategoryId> products = productService.findAll();
+        products.forEach(p -> log.debug(p.toString()));
     }
 
     @AfterAll
