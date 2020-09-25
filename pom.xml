@@ -267,6 +267,9 @@
                             <invokerPackage>com.example.internship.client.invoker</invokerPackage>
                             <generatorName>java</generatorName>
                             <library>webclient</library>
+                            <configOptions>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>
