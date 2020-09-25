@@ -2,6 +2,8 @@ package com.example.internship.api;
 
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.service.address.AddressService;
+import com.example.internship.refactoringdto.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +31,6 @@ public class AddressRestController {
      * GET запрос, возвращает все адреса покупателя.
      *
      * @param customerId идентификатор покупателя
-     *
      * @return возвращает список всех адресов покупателя если они есть, иначе http status 404
      */
     @GetMapping
@@ -45,11 +46,11 @@ public class AddressRestController {
      *
      * @param customerId идентификатор покупателя
      * @param addressDto новый адрес
-     *
      * @return http status 200, если адрес добавлен, иначе http status 400
      */
     @PostMapping
     public ResponseEntity<AddressDto> addAddressToCustomer(@PathVariable Long customerId,
+                                                           @JsonView(View.NoId.class)
                                                            @RequestBody AddressDto addressDto) {
 
         addressDto.setCustomerId(customerId);
@@ -64,18 +65,14 @@ public class AddressRestController {
      * DELETE запрос, удаляет адрес у покупателя.
      *
      * @param customerId идентификатор покупателя
-     * @param addressId идентификатор адреса
-     *
+     * @param addressId  идентификатор адреса
      * @return http status 200, если адрес удален, иначе http status 400
      */
     @DeleteMapping("/{addressId}")
     public ResponseEntity<?> deleteAddressById(@PathVariable Long customerId,
                                                @PathVariable Long addressId) {
 
-        if (!addressService.deleteAddress(customerId, addressId)) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok().build();
+        return addressService.deleteAddress(customerId, addressId) ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }
