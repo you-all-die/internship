@@ -33,7 +33,7 @@ public class AddressRestController {
     }
 
     @PostMapping
-    public ResponseEntity addAddress(@RequestBody AddressDto addressDto) {
+    public ResponseEntity addAddress(@PathVariable Long customerId, @RequestBody AddressDto addressDto) {
         addressService.addAddress(addressDto);
         return ResponseEntity.ok().build();
     }

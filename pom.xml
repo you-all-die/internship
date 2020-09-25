@@ -246,6 +246,31 @@
                     <outputFileName>openapi.yaml</outputFileName>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.directory}/openapi.yaml</inputSpec>
+                            <groupId>com.example</groupId>
+                            <artifactId>open-api-client</artifactId>
+                            <apiPackage>com.example.internship.client.api</apiPackage>
+                            <artifactVersion>0.1</artifactVersion>
+                            <modelPackage>com.example.internship.client.model</modelPackage>
+                            <invokerPackage>com.example.internship.client.invoker</invokerPackage>
+                            <generatorName>java</generatorName>
+                            <library>webclient</library>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
