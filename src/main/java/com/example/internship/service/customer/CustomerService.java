@@ -1,7 +1,7 @@
 package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.dto.CustomerSearchResult;
+import com.example.internship.api.from.CustomerSearchFrom;
 import com.example.internship.entity.Customer;
 import org.springframework.security.core.Authentication;
 
@@ -25,6 +25,14 @@ public interface CustomerService {
     Optional<Customer> getById(Long id);
 
     /**
+     * Возвращает ДТО пользователя по id.
+     *
+     * @param id индентификатор пользователя.
+     * @return ДТО пользователя или null, если пользователь не найден.
+     */
+    com.example.internship.refactoringdto.CustomerDto getByIdRef(Long id);
+
+    /**
      * Получение пользователя из аутентификации.
      *
      * @return аутентифицированного пользователя.
@@ -36,8 +44,18 @@ public interface CustomerService {
      *
      * @param id идентификатор пользователя.
      * @return ДТО пользователя.
+     *
+     * @deprecated
      */
     Optional<CustomerDto> getDtoById(Long id);
+
+    /**
+     * Обновляет данные пользователя.
+     *
+     * @param customerDto данные пользователя для обновления.
+     * @return Дто пользователя с новыми данными или null, если пользователь не обновлен
+     */
+    com.example.internship.refactoringdto.CustomerDto update(com.example.internship.refactoringdto.CustomerDto customerDto);
 
     /**
      * Сохраняет пользователя.
@@ -112,8 +130,8 @@ public interface CustomerService {
      * @param pageNumber номер страницы.
      * @return форму данных поиска.
      */
-    CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
-                                       Integer pageSize, Integer pageNumber);
+    CustomerSearchFrom search(String firstName, String middleName, String lastName, String email,
+                              Integer pageSize, Integer pageNumber);
 
     //обновление времени последней активности
     void updateLastActivity(Long customerId);

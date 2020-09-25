@@ -26,35 +26,35 @@ public class OutletDto {
     private long id;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String city;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String name;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 128)
     private String address;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String phone;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 32)
     private String openingHours;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     private double longitude;
 
     @Schema(description = "todo")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     private double latitude;
 }

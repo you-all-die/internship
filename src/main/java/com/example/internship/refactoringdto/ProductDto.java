@@ -32,27 +32,27 @@ public class ProductDto {
     private CategoryDto category;
 
     @Schema(description = "Имя")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     @NotNull
     private String name;
 
     @Schema(description = "Описание")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String description;
 
     @Schema(description = "Изображение")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String picture;
 
     @Schema(description = "Цена")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     private BigDecimal price;
 
     @Schema(description = "Статус продукта")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @NotNull
     private ProductStatusDto status;
 }

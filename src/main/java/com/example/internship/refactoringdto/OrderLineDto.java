@@ -27,17 +27,17 @@ public class OrderLineDto {
     private Long id;
 
     @Schema(description = "Корзина")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @NotNull
     private CartDto cart;
 
     @Schema(description = "Продукт")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @NotNull
     private ProductDto product;
 
     @Schema(description = "Количество продуктов")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Min(1)
     private Integer productQuantity;
 }

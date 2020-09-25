@@ -26,12 +26,12 @@ public class AddressShopDto {
     private Long shopId;
 
     @Schema(description = "Адрес магазина")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 256)
     private String address;
 
     @Schema(description = "Время работы")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     @Size(max = 64)
     private String schedule;
 }
