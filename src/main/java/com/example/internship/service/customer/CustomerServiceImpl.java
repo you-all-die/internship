@@ -50,7 +50,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public com.example.internship.refactoringdto.CustomerDto getByIdRef(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        return convertToDtoRef(customer.orElse(null));
+
+        return customer.map(this::convertToDtoRef).orElse(null);
     }
 
     @Override
