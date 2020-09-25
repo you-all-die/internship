@@ -1,5 +1,6 @@
 package com.example.internship.refactoringdto;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 /**
  * @author Ivan Gubanov
  */
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,6 +23,7 @@ import javax.validation.constraints.Size;
 public class ProductStatusDto {
 
     @Schema(description = "id статуса продукта")
+    @JsonView(View.All.class)
     private Long id;
 
     @Schema(description = "Описание")

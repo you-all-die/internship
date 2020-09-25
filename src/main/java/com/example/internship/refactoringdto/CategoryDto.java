@@ -1,5 +1,6 @@
 package com.example.internship.refactoringdto;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @author Ivan Gubanov
  */
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +24,7 @@ import java.util.List;
 public class CategoryDto {
 
     @Schema(description = "id категории")
+    @JsonView(View.All.class)
     private Long id;
 
     @Schema(description = "Название категории")
