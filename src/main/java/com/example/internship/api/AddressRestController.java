@@ -75,7 +75,7 @@ public class AddressRestController {
     @JsonView(View.Public.class)
     public ResponseEntity<AddressDto> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
                                                            @PathVariable Long customerId,
-                                                           @ApiParam(value = "Данные адреса") @JsonView(View.Public.class)
+                                                           @ApiParam(value = "Данные адреса") @JsonView(View.Update.class)
                                                            @Valid @RequestBody AddressDto address,
                                                            BindingResult bindingResult) {
 
