@@ -47,6 +47,11 @@ public class CustomerRegistrationController {
             return "customer/registration";
         }
 
+        if (customerService.checkEmail(customerDto.getEmail())) {
+            model.addAttribute("errorMessage", "Пользователь с таким 'email' уже существует.");
+            return "customer/registration";
+        }
+
         // регистрация покупателя и редирект на страницу его профиля и отправка письма на почту
         try {
             emailService.sendRegistrationWelcomeMessage(customerDto);

@@ -205,6 +205,17 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.setLastActivityForCustomers(customerId);
     }
 
+    /**
+     * Метод проверяет в на наличие пользователя с такой почтой.
+     *
+     * @param email почта пользователя.
+     * @return Customer
+     */
+    @Override
+    public boolean checkEmail(final String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
     //Метод проверки поля и добавления условия в запрос
     /**
      * Проверка полей и добавление в запрос.

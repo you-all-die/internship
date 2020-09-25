@@ -11,6 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 public  interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
     Customer findByEmail(String email);
 
+    /**
+     * Проверка уникальности почты.
+     *
+     * @param email почта пользователя
+     * @return возращает true если нашел, и false если не нашел.
+     */
+    boolean existsByEmail(String email);
+
     //обновляет поле последней активности пользователя, если с момента последнего действия прошло больше часа
     @Transactional
     @Modifying
