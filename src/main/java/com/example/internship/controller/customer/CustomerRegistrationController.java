@@ -47,7 +47,7 @@ public class CustomerRegistrationController {
             return "customer/registration";
         }
 
-        if (customerService.checkEmail(customerDto.getEmail()) != null) {
+        if (customerService.checkEmail(customerDto.getEmail())) {
             model.addAttribute("errorMessage", "Пользователь с таким 'email' уже существует.");
             return "customer/registration";
         }
