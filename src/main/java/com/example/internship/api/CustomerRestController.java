@@ -26,7 +26,7 @@ import javax.validation.Valid;
 /**
  * @author Romodin Aleksey
  * <p>
- * Refactoring by Modenov.D 25.09.20
+ * Refactoring by Danil Movenov 25.09.20
  */
 
 @RestController
@@ -37,7 +37,7 @@ public class CustomerRestController {
     private final CustomerService customerService;
 
     /**
-     * Получение данных пользователя по id.
+     * GET запрос, возвращает данные пользователя по id.
      *
      * @param id идентификатор пользователя
      * @return http status 200 и пользователя или http status 400, если пользователь не найден
@@ -59,7 +59,7 @@ public class CustomerRestController {
     }
 
     /**
-     * Поиск пользователя по критериям.
+     * GET запрос, поиск пользователя по критериям.
      *
      * @param firstName  имя
      * @param middleName отчество
@@ -93,7 +93,7 @@ public class CustomerRestController {
     }
 
     /**
-     * Редактирование данных пользователя.
+     * PUT запрос, редактирование данных пользователя.
      *
      * @param id       идентификатор пользователя.
      * @param customer данные пользователя для редактирования.
