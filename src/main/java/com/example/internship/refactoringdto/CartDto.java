@@ -26,6 +26,6 @@ public class CartDto {
     private Long id;
 
     @Schema(description = "Список товаров в корзине")
-    @JsonView(View.NoId.class)
+    @JsonView(View.Public.class)
     private List<OrderLineDto> orderLines;
 }

@@ -52,7 +52,7 @@ public interface CustomerService {
     /**
      * Обновляет данные пользователя.
      *
-     * @param customerDto обновление данных пользователя.
+     * @param customerDto данные пользователя для обновления.
      * @return Дто пользователя с новыми данными или null, если пользователь не обновлен
      */
     com.example.internship.refactoringdto.CustomerDto update(com.example.internship.refactoringdto.CustomerDto customerDto);
