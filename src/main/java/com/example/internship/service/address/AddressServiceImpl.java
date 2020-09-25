@@ -3,15 +3,19 @@ package com.example.internship.service.address;
 import com.example.internship.entity.Address;
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.repository.AddressesRepository;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * @author Роман Каравашкин
+ * <p>
+ * Refactoring by Ivan Gubanov 25.09.20
  */
 
 @Service
@@ -20,28 +24,55 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressesRepository addressesRepository;
 
+    private final CustomerService customerService;
+
     private final ModelMapper modelMapper;
 
     @Override
-    public List<AddressDto> getAllById(Long customerId) {
+    public List<AddressDto> getAllByCustomerId(Long customerId) {
 
-        return addressesRepository.findAddressByCustomerId(customerId).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        if (customerService.getByIdRef(customerId) != null) {
+
+            return addressesRepository.findAddressByCustomerId(customerId).stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
     }
 
     @Override
-    public AddressDto addAddress(AddressDto addressDto) {
+    public AddressDto addAddressToCustomer(AddressDto addressDto) {
 
-        return convertToDto(addressesRepository.save(convertToEntity(addressDto)));
+        if (customerService.getByIdRef(addressDto.getCustomerId()) != null) {
+            return convertToDto(addressesRepository.save(convertToEntity(addressDto)));
+        }
+
+        return null;
     }
 
     @Override
-    public boolean deleteAddress(Long id, Long addressId) {
+    public boolean deleteAddressFromCustomerByIds(Long customerId, Long addressId) {
 
-        addressesRepository.deleteById(addressId);
+        if (getAddressFromCustomerByIds(customerId, addressId) != null) {
+            addressesRepository.deleteById(addressId);
 
-        return addressesRepository.existsById(addressId);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public AddressDto getAddressFromCustomerByIds(Long customerId, Long addressId) {
+
+        if (customerService.getByIdRef(customerId) != null) {
+            Optional<Address> address = addressesRepository.findById(addressId);
+
+            return address.map(this::convertToDto).orElse(null);
+        }
+
+        return null;
     }
 
 
@@ -54,19 +85,6 @@ public class AddressServiceImpl implements AddressService {
 
         return modelMapper.map(addressDto, Address.class);
     }
-
-//    @PostConstruct
-//    private void configureMapper() {
-//        modelMapper.createTypeMap(Address.class, AddressDto.class)
-//                .addMappings(mapper ->
-//                        mapper.map(src -> src.getCustomerId(), AddressDto::setCustomerId)
-//                );
-//
-//        modelMapper.createTypeMap(AddressDto.class, Address.class).addMappings(
-//                mapper -> mapper.<Long>map(AddressDto::getCustomerId,
-//                        (target, v) -> target.setCustomerId(v)));
-//
-//    }
 }
 
 

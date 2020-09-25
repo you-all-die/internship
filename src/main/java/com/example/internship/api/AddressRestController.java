@@ -2,8 +2,6 @@ package com.example.internship.api;
 
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.service.address.AddressService;
-import com.example.internship.refactoringdto.View;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,8 @@ import java.util.List;
 
 /**
  * @author Роман каравашкин
+ * <p>
+ * Refactoring by Ivan Gubanov 25.09.20
  */
 
 @RestController
@@ -36,9 +36,9 @@ public class AddressRestController {
     @GetMapping
     public ResponseEntity<List<AddressDto>> getAllAddressesByCustomerId(@PathVariable Long customerId) {
 
-        List<AddressDto> allById = addressService.getAllById(customerId);
+        List<AddressDto> allById = addressService.getAllByCustomerId(customerId);
 
-        return allById.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
+        return (allById == null || allById.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
     }
 
     /**
@@ -50,15 +50,12 @@ public class AddressRestController {
      */
     @PostMapping
     public ResponseEntity<AddressDto> addAddressToCustomer(@PathVariable Long customerId,
-                                                           @JsonView(View.NoId.class)
                                                            @RequestBody AddressDto addressDto) {
 
         addressDto.setCustomerId(customerId);
-        if (addressService.addAddress(addressDto) == null) {
-            return ResponseEntity.badRequest().build();
-        }
 
-        return ResponseEntity.ok().build();
+        return addressService.addAddressToCustomer(addressDto) == null ? ResponseEntity.badRequest().build()
+                : ResponseEntity.ok().build();
     }
 
     /**
@@ -69,10 +66,10 @@ public class AddressRestController {
      * @return http status 200, если адрес удален, иначе http status 400
      */
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<?> deleteAddressById(@PathVariable Long customerId,
-                                               @PathVariable Long addressId) {
+    public ResponseEntity<?> deleteAddressFromCustomerByIds(@PathVariable Long customerId,
+                                                            @PathVariable Long addressId) {
 
-        return addressService.deleteAddress(customerId, addressId) ? ResponseEntity.ok().build()
+        return addressService.deleteAddressFromCustomerByIds(customerId, addressId) ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 }
