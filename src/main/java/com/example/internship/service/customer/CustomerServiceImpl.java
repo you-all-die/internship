@@ -254,7 +254,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @param customerDto ДТО пользователя.
      * @return сущность пользователя.
      */
-    private Customer convertToModelRef(com.example.internship.refactoringdto.CustomerDto customerDto) {
+    private Customer convertToEntity(com.example.internship.refactoringdto.CustomerDto customerDto) {
         return mapper.map(customerDto, Customer.class);
     }
 

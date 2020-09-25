@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 public class AddressDto {
 
     @Schema(description = "id адреса")
-    @JsonView(View.All.class)
+    @JsonView({View.All.class, View.Public.class})
     private Long id;
 
     @Schema(description = "id покупателя")
