@@ -1,7 +1,7 @@
 package com.example.internship.service.customer;
 
-import com.example.internship.dto.CustomerDto;
 import com.example.internship.api.from.CustomerSearchFrom;
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.specification.CustomerSpecification;

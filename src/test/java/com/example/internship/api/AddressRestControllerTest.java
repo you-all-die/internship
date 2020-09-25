@@ -44,7 +44,7 @@ public class AddressRestControllerTest {
     private static final AddressDto BAD_ADDRESS = new AddressDto();
 
     @BeforeAll
-    public static void beforeEach() {
+    public static void beforeAll() {
 
         ADDRESS.setCustomerId(12L);
         ADDRESS.setId(1L);

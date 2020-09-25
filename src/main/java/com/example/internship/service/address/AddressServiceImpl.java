@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,48 +32,47 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public List<AddressDto> getAllByCustomerId(Long customerId) {
 
-        if (customerService.getByIdRef(customerId) != null) {
-
-            return addressesRepository.findAddressByCustomerId(customerId).stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
+        if (Objects.isNull(customerService.getByIdRef(customerId))) {
+            return null;
         }
 
-        return null;
+        return addressesRepository.findAddressByCustomerId(customerId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public AddressDto addAddressToCustomer(AddressDto addressDto) {
 
-        if (customerService.getByIdRef(addressDto.getCustomerId()) != null) {
-            return convertToDto(addressesRepository.save(convertToEntity(addressDto)));
+        if (Objects.isNull(customerService.getByIdRef(addressDto.getCustomerId()))) {
+            return null;
         }
 
-        return null;
+        return convertToDto(addressesRepository.save(convertToEntity(addressDto)));
     }
 
     @Override
     public boolean deleteAddressFromCustomerByIds(Long customerId, Long addressId) {
 
-        if (getAddressFromCustomerByIds(customerId, addressId) != null) {
-            addressesRepository.deleteById(addressId);
-
-            return true;
+        if (Objects.isNull(getAddressFromCustomerByIds(customerId, addressId))) {
+            return false;
         }
 
-        return false;
+        addressesRepository.deleteById(addressId);
+
+        return true;
     }
 
     @Override
     public AddressDto getAddressFromCustomerByIds(Long customerId, Long addressId) {
 
-        if (customerService.getByIdRef(customerId) != null) {
-            Optional<Address> address = addressesRepository.findById(addressId);
-
-            return address.map(this::convertToDto).orElse(null);
+        if (Objects.isNull(customerService.getByIdRef(customerId))) {
+            return null;
         }
 
-        return null;
+        Optional<Address> address = addressesRepository.findById(addressId);
+
+        return address.map(this::convertToDto).orElse(null);
     }
 
 
@@ -86,6 +86,3 @@ public class AddressServiceImpl implements AddressService {
         return modelMapper.map(addressDto, Address.class);
     }
 }
-
-
-

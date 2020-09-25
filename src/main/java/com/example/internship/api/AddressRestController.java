@@ -38,24 +38,25 @@ public class AddressRestController {
 
         List<AddressDto> allById = addressService.getAllByCustomerId(customerId);
 
-        return (allById == null || allById.isEmpty()) ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
+        return allById == null || allById.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
     }
 
     /**
      * POST запрос, добавляет новый адрес для покупателя.
      *
      * @param customerId идентификатор покупателя
-     * @param addressDto новый адрес
+     * @param address    новый адрес
      * @return http status 200, если адрес добавлен, иначе http status 400
      */
     @PostMapping
     public ResponseEntity<AddressDto> addAddressToCustomer(@PathVariable Long customerId,
-                                                           @RequestBody AddressDto addressDto) {
+                                                           @RequestBody AddressDto address) {
 
-        addressDto.setCustomerId(customerId);
+        address.setCustomerId(customerId);
 
-        return addressService.addAddressToCustomer(addressDto) == null ? ResponseEntity.badRequest().build()
-                : ResponseEntity.ok().build();
+        AddressDto addressDto = addressService.addAddressToCustomer(address);
+
+        return addressDto != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     /**
