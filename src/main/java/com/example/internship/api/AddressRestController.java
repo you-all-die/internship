@@ -70,7 +70,7 @@ public class AddressRestController {
     @Schema(implementation = AddressDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Адреса добавлен"),
-            @ApiResponse(code = 404, message = "Неправильные данные")
+            @ApiResponse(code = 400, message = "Неправильные данные")
     })
     @JsonView(View.Public.class)
     public ResponseEntity<AddressDto> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
@@ -102,7 +102,7 @@ public class AddressRestController {
     @Schema(implementation = AddressDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Адрес удален"),
-            @ApiResponse(code = 404, message = "Неправильные данные")
+            @ApiResponse(code = 400, message = "Неправильные данные")
     })
     @JsonView(View.Public.class)
     public ResponseEntity<?> deleteAddressFromCustomerByIds(@ApiParam(value = "Идентификатор пользователя")
