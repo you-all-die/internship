@@ -92,3 +92,18 @@ databaseChangeLog:
             sql: ALTER TABLE customers DROP COLUMN cart_id;
         - sql:
             sql: DROP TABLE cart_order_line;
+  - changeSet:
+      id: 2020-09-25-008
+      author: Karavashkin Roman
+      comment: coment
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - addUniqueConstraint:
+            catalogName: internship
+            columnNames: email
+            constraintName: add_unique_email
+            initiallyDeferred: true
+            schemaName: public
+            tableName: customers
+            validate: true
