@@ -33,7 +33,7 @@ public class CustomerSearchFrom {
     @JsonView(View.Public.class)
     private Integer pageSize;
 
-    @Schema(description = "Всего пользователей")
+    @Schema(description = "Количество найденных пользователей")
     @JsonView(View.Public.class)
     private Long totalCustomers;
 }

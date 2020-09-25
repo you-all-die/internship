@@ -37,7 +37,7 @@ public class CustomerRestController {
     private final CustomerService customerService;
 
     /**
-     * Получение данных пользователя по id
+     * Получение данных пользователя по id.
      *
      * @param id идентификатор пользователя
      * @return http status 200 и пользователя или http status 400, если пользователь не найден
@@ -59,13 +59,14 @@ public class CustomerRestController {
     }
 
     /**
+     * Поиск пользователя по критериям.
      *
-     * @param firstName
-     * @param middleName
-     * @param lastName
-     * @param email
-     * @param pageSize
-     * @param pageNumber
+     * @param firstName имя
+     * @param middleName отчество
+     * @param lastName фамилия
+     * @param email email
+     * @param pageSize размер страницы
+     * @param pageNumber номер страницы
      * @return
      */
     @GetMapping("search")
