@@ -1,0 +1,5 @@
+<datalist id="suggestions"
+          th:fragment="widget (suggestions)"
+          xmlns:th="http://www.thymeleaf.org">
+    <option th:each="suggestion : ${suggestions}" th:value="${suggestion.value}"></option>
+</datalist>

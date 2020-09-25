@@ -1,42 +1,30 @@
 package com.example.internship.dto.dadata;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 
-public enum DadataAddressDto {
-    ;
+@UtilityClass
+public class DadataAddressDto {
 
-    public enum Request {
-        ;
-
-        @Data
-        public static class QueryOnly implements Query {
-            private String query;
-        }
+    @Data
+    public static class QueryOnly implements Query {
+        private String query;
     }
 
-    public enum Response {
-        ;
+    @Data
+    public static class ValueOnly implements Value {
+        private String value;
+    }
 
-        @Data
-        public static class ValueOnly implements Value {
-            private String value;
-        }
-
-        @Data
-        public static class WithUnrestrictedValue implements Value, UnrestrictedValue {
-            private String value;
-            private String unrestrictedValue;
-        }
+    @Data
+    public static class WithUnrestrictedValue implements Value, UnrestrictedValue {
+        private String value;
+        private String unrestrictedValue;
     }
 
     private interface Query {
         String getQuery();
         void setQuery(String query);
-    }
-
-    private interface Count {
-        Integer getCount();
-        void setCount(Integer count);
     }
 
     private interface Value {

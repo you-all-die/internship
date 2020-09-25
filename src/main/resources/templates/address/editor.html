@@ -17,12 +17,13 @@
             <div class="row">
                 <div class="column">
                     <form class="ui form" method="post" th:action="@{/address}">
-                        <input id="token" th:value="${token}" type="hidden">
                         <input th:field="${customerId}" type="hidden">
                         <!--                        <input th:field="*{id}" type="hidden">-->
                         <div class="field">
                             <label>Адрес</label>
-                            <input id="address">
+                            <input autocomplete="on" id="address" list="suggestions">
+                            <datalist id="suggestions">
+                            </datalist>
                         </div>
                     </form>
                 </div>
