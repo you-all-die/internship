@@ -27,42 +27,42 @@ public class AddressDto {
     private Long id;
 
     @Schema(description = "id покупателя")
-    @NotNull
     @JsonView(View.NoId.class)
+    @NotNull
     private Long customerId;
 
     @Schema(description = "Регион")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String region;
 
     @Schema(description = "Город")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String city;
 
     @Schema(description = "Район")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String district;
 
     @Schema(description = "Улица")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String street;
 
     @Schema(description = "Дом")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String house;
 
     @Schema(description = "Квартира")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String apartment;
 
     @Schema(description = "Комментарий")
-    @Size(max = 255)
     @JsonView(View.NoId.class)
+    @Size(max = 255)
     private String comment;
 }

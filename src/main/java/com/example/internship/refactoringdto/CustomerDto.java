@@ -27,33 +27,33 @@ public class CustomerDto {
     private Long id;
 
     @Schema(description = "Имя")
-    @Size(max = 64)
     @JsonView(View.NoId.class)
+    @Size(max = 64)
     private String firstName;
 
     @Schema(description = "Отчество")
-    @Size(max = 64)
     @JsonView(View.NoId.class)
+    @Size(max = 64)
     private String middleName;
 
     @Schema(description = "Фамилия")
-    @Size(max = 64)
     @JsonView(View.NoId.class)
+    @Size(max = 64)
     private String lastName;
 
     @Schema(description = "Пароль")
-    @Size(max = 60)
     @JsonView(View.NoId.class)
+    @Size(max = 60)
     private String password;
 
     @Schema(description = "Телефон")
-    @Size(max = 64)
     @JsonView(View.NoId.class)
+    @Size(max = 64)
     private String phone;
 
     @Schema(description = "Почта")
-    @Size(max = 64)
     @JsonView(View.NoId.class)
+    @Size(max = 64)
     private String email;
 
     @Schema(description = "Список адресов")
@@ -61,6 +61,6 @@ public class CustomerDto {
     private Set<AddressDto> addresses;
 
     @Schema(description = "Корзина")
-    @JsonView({View.NoId.class, View.All.class})
+    @JsonView(View.NoId.class)
     private CartDto cart;
 }
