@@ -1,21 +1,27 @@
 package com.example.internship.api;
 
+import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.CategorySearchResult;
-import com.example.internship.entity.Category;
-import com.example.internship.service.CategoryService;
+import com.example.internship.service.category.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Ivan Gubanov
  */
 @RestController
-@RequestMapping("/api/category/")
+@RequestMapping("/api/category")
 @AllArgsConstructor
 public class CategoryRestController {
 
@@ -23,43 +29,43 @@ public class CategoryRestController {
 
     @PostMapping(value = "/find-all-sort-by-id")
     @Operation(summary = "Возвращает все категории отсортированные по id.")
-    public List<Category> findAllSortById() {
+    public List<CategoryDto> findAllSortById() {
         return categoryService.findAllSortById();
     }
 
     @PostMapping(value = "/find-by-name")
     @Operation(summary = "Возвращает категорию по ее названию")
-    public List<Category> findByName(@RequestBody String name) {
+    public List<CategoryDto> findByName(@RequestBody String name) {
         return categoryService.findByName(name);
     }
 
-    @PostMapping(value = "/remove-category")
+    @DeleteMapping(value = "/remove/{id}")
     @Operation(summary = "Удаляем категорию по id")
-    public void removeCategory(@RequestBody Long id) {
+    public void removeCategory(@PathVariable Long id) {
         categoryService.removeCategory(id);
     }
 
-    @PostMapping(value = "/find-all")
+    @GetMapping(value = "/find-all")
     @Operation(summary = "Возвращает все категории")
-    public List<Category> findAll() {
+    public List<CategoryDto> findAll() {
         return categoryService.findAll();
     }
 
     @PostMapping(value = "/find-by-id")
     @Operation(summary = "Возвращает категорию по id")
-    public Category findById(@RequestBody Long id) {
+    public CategoryDto findById(@RequestBody Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping(value = "/add-category")
     @Operation(summary = "Сохраняет категорию в БД")
-    public void addCategory(@RequestBody Category category) {
+    public void addCategory(@RequestBody CategoryDto category) {
         categoryService.addCategory(category);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Возвращает информацию о продукте, по значениею его id.")
-    public Category productData(@PathVariable Long id) {
+    public CategoryDto categoryData(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
@@ -67,10 +73,10 @@ public class CategoryRestController {
     @Operation(summary = "Возвращает список категории согласно заданным критериям поиска.")
     public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
                                                @Parameter(description = "поиск по наименованию")
-                                                       Optional<String> searchText,
+                                                       String searchText,
                                                @RequestParam(name = "parentId", required = false)
                                                @Parameter(description = "поиск id parent")
-                                                       Optional<Long> parentId,
+                                                       Long parentId,
                                                @RequestParam(name = "pageSize", required = false, defaultValue = "20")
                                                @Parameter(description = "размер страницы")
                                                        Integer pageSize,
@@ -81,5 +87,10 @@ public class CategoryRestController {
         return categoryService.search(searchText, parentId, pageSize, pageNumber);
     }
 
+    @GetMapping("/parentCategoriesWithChildren")
+    @Operation(summary = "Возвращает список родительских категорий, у которых есть наследники")
+    public List<CategoryDto> searchParentCategories() {
+        return categoryService.getParentCategoriesWithChildren();
+    }
 
 }
