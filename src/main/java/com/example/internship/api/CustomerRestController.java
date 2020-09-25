@@ -25,7 +25,7 @@ import javax.validation.Valid;
 
 /**
  * @author Romodin Aleksey
- *
+ * <p>
  * Refactoring by Modenov.D 25.09.20
  */
 
@@ -51,7 +51,7 @@ public class CustomerRestController {
     @Schema(implementation = CustomerDto.class)
     @JsonView(View.Public.class)
     public ResponseEntity<CustomerDto> getById(@ApiParam(value = "Идентификатор пользователя")
-                                                   @PathVariable("id") Long id) {
+                                               @PathVariable("id") Long id) {
 
         CustomerDto customer = customerService.getByIdRef(id);
 
@@ -61,11 +61,11 @@ public class CustomerRestController {
     /**
      * Поиск пользователя по критериям.
      *
-     * @param firstName имя
+     * @param firstName  имя
      * @param middleName отчество
-     * @param lastName фамилия
-     * @param email email
-     * @param pageSize размер страницы
+     * @param lastName   фамилия
+     * @param email      email
+     * @param pageSize   размер страницы
      * @param pageNumber номер страницы
      * @return пользователь по критериям
      */
@@ -95,10 +95,10 @@ public class CustomerRestController {
     /**
      * Редактирование данных пользователя.
      *
-     * @param id идентификатор пользователя.
+     * @param id       идентификатор пользователя.
      * @param customer данные пользователя для редактирования.
      * @return http status 200 если изменения успешны, http status 400, если пользователь не найден
-     *                                                  или не удается изменить данные.
+     * или не удается изменить данные.
      */
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
@@ -110,11 +110,13 @@ public class CustomerRestController {
     @Schema(implementation = CustomerDto.class)
     @JsonView(View.Public.class)
     public ResponseEntity<CustomerDto> updateUser(@ApiParam(value = "Идентификатор пользователя")
-                                            @PathVariable("id") Long id,
-                                        @ApiParam(value = "Данные для редактирования") @JsonView(View.Update.class)
-                                            @Valid @RequestBody CustomerDto customer, BindingResult bindingResult) {
+                                                  @PathVariable("id") Long id,
+                                                  @ApiParam(value = "Данные для редактирования") @JsonView(View.Update.class)
+                                                  @Valid @RequestBody CustomerDto customer, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) return ResponseEntity.badRequest().build();
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         customer.setId(id);
         CustomerDto customerDto = customerService.update(customer);
