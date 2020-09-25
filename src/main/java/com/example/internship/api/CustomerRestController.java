@@ -67,7 +67,7 @@ public class CustomerRestController {
      * @param email email
      * @param pageSize размер страницы
      * @param pageNumber номер страницы
-     * @return
+     * @return пользователь по критериям
      */
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей")
