@@ -135,4 +135,12 @@ public interface CustomerService {
 
     //обновление времени последней активности
     void updateLastActivity(Long customerId);
+
+    /**
+     * Метод чек  стайл проверяет пользователя с почтой.
+     *
+     * @param email почта пользователя.
+     * @return возращает пользователя, если null пользователь не найден.
+     */
+    boolean checkEmail(String email);
 }
