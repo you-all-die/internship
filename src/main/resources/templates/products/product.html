@@ -11,7 +11,7 @@
 <body>
 <div th:replace="/common/main :: header"></div>
 
-<div th:each="pr: ${product}" class="ui main container">
+<div th:each="pr: ${product}" class="ui container">
     <!-- Дерево предков категорий -->
     <div class="row">
         <div class="ui breadcrumb">
@@ -52,27 +52,19 @@
                             <i class="shopping cart icon" ></i>  Добавить в корзину
                         </button>
                     </div>
-                    <div class="column">
-                        <br>
+                    <!--Предоставляемые сервисы-->
+                    <div class="column"><br>
                         <div class="item">
-                            <h4>
-                                <i class="shipping fast icon"></i>  Быстрая доставка
-                            </h4>
+                            <h4><i class="shipping fast icon"></i>  Быстрая доставка</h4>
                         </div><br>
                         <div class="item">
-                            <h4>
-                                <i class="wrench icon"></i>  Гарантия 24месяца
-                            </h4>
+                            <h4><i class="wrench icon"></i>  Гарантия 24месяца</h4>
                         </div><br>
                         <div class="item">
-                            <h4>
-                                <i class="credit card outline icon"></i>  Visa, MasterCard, МИР
-                            </h4>
+                            <h4><i class="credit card outline icon"></i>  Visa, MasterCard, МИР</h4>
                         </div><br>
                         <div class="item">
-                            <h4>
-                                <i class="credit card icon"></i>  Покупка в кредит
-                            </h4>
+                            <h4><i class="credit card icon"></i>  Покупка в кредит</h4>
                         </div>
                     </div>
                 </div>
@@ -82,46 +74,56 @@
                 <p th:text="${product.description}"></p>
             </div>
         </div>
-
-
     </div>
 </div>
 
 <!--Комментарии к товару-->
-<div th:each="pr: ${product}" class="ui main container">
-    <h3>Комментарии</h3><hr>
+<div  class="ui main container">
+    <h3><span>Комментарии </span><span th:text="'(' + ${searchFeedbacks.totalFeedbacks} + ')'"
+                                       th:if="${searchFeedbacks.totalFeedbacks != null}"></span></h3><hr>
+    <div class="ui container" th:if="${#arrays.isEmpty(searchFeedbacks.feedbacks)}">
+        <br><h4>Ни одного комментария не найдено... Будь первым.</h4><br>
+    </div>
     <!--Блок отображения существующих комментариев к товару-->
-    <div class="ui comments">
-        <div class="comment">
+    <div class="ui comments" th:unless="${#arrays.isEmpty(searchFeedbacks.feedbacks)}">
+        <div th:each="f:${searchFeedbacks.feedbacks}" class="comment">
             <div class="avatar">
                 <img src="/img/comment_icon.png">
             </div>
             <div class="content">
-                <div class="author"><label>Николай</label></div>
+                <div class="author"><label th:text="${f.authorName}"></label></div>
                 <div class="metadata">
-                    <div class="date">24.09.2020</div>
+                    <span class="date" th:text="'Дата: ' + ${f.datePublication.toString().substring(0, 10)}"></span>
                 </div>
-                <div class="text">
-                    Отличный телефон, пользуюсь почти 3 года, нареканий нет. Рекомендую.
+                <div class="text" th:text="${f.feedbackText}"></div><br><hr>
+                <div class="actions" th:if=
+                        "${(customerId == f.authorId and customerId != null) or
+                           (aCustomerId == f.authorId and aCustomerId != null)}">
+                    <form th:action="@{'/product/' + ${product.id} + '/deleteFeedback'}" method="post">
+                        <button type="submit" name="feedbackId" th:value="${f.id}" class="circular ui icon button">
+                            <i class="trash alternate icon"></i>
+                        </button>
+                        <span class="reply">  Вы можете удалить свой отзыв.</span>
+                    </form>
                 </div>
-            </div>
+            </div><br>
         </div>
     </div><br><hr>
 
     <!--Пагинатор для комментариев-->
-    <div th:replace="/common/paginator :: widget (1, 5)"></div><br><br>
+    <div th:replace="/common/paginator :: widget (${searchFeedbacks.pageNumber}, ${totalPage})"></div><br><br>
 
     <!--Форма добавление нового комментария-->
     <div class="ui comments">
         <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
             <h5 class="ui dividing header">Добавить новый комментарий</h5>
-            <div class="field" th:if="${customerName == null}">
+            <div class="field" th:if="${customerId == null}">
                 <label>Ваше имя:</label>
                 <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
             </div>
             <div class="field">
                 <label>Текст комментария:</label>
-                <textarea name="textComment" required maxlength="300"></textarea>
+                <textarea name="textComment" required maxlength="500"></textarea>
             </div>
             <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
         </form>

@@ -5,20 +5,22 @@
 </head>
 <body>
 <div th:replace="common/main :: header"></div>
-<div class="ui main container">
+<div class="ui container">
     <h2 class="ui header">Популярные товары</h2>
     <div class="ui five column grid">
         <div th:each="pr: ${products}" class="column">
-            <div class="ui left aligned raised segment">
+            <div class="ui raised segment">
                 <h4><a th:href="'product/' + ${pr.id}" th:text="${pr.name}"/></h4>
-                <div class="ui red ribbon label"><p>АКЦИЯ</p></div>
-                <div class="ui center aligned container">
-                    <p><a th:href="'product/' + ${pr.id}">
-                        <img th:src="'/img/' + ${pr.picture}"  width="150" height="150" border="0"></a>
-                    </p>
-                </div>
+                <div class="ui red ribbon label">АКЦИЯ</div>
+                <a class="ui medium image" th:href="'product/' + ${pr.id}">
+                    <img th:src="'/img/' + ${pr.picture}"></a>
             </div>
         </div>
+    </div>
+</div>
+<div class="ui main container">
+    <div class="ui raised segment">
+        <img class="ui fluid image" src="/img/stock.png">
     </div>
 </div>
 <footer th:replace="common/main::footer"></footer>
