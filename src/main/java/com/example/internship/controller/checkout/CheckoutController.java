@@ -4,8 +4,6 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
-import com.example.internship.entity.Order;
-import com.example.internship.entity.OrderLine;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import com.example.internship.service.customer.CustomerService;
@@ -19,8 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * @author Sergey Lapshin
@@ -34,6 +32,8 @@ public class CheckoutController {
     private final CustomerService customerService;
     private final OrderService orderService;
     private final EmailService emailService;
+
+    private static Logger log = Logger.getLogger(CheckoutController.class.getName());
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
@@ -54,8 +54,8 @@ public class CheckoutController {
         if (cart == null) return "redirect:/cart";
 
 
-        CustomerDto customer = customerService.getCustomerDto(optionalCustomer.get());
-                model.addAttribute("customer", customer);
+        CustomerDto customerDto = customerService.convertToDto(optionalCustomer.get());
+        model.addAttribute("customer", customerDto);
         return "cart/checkout";
 
     }
@@ -71,7 +71,7 @@ public class CheckoutController {
 
         Optional<Customer> customerOptional = customerService.getById(customerId.get());
         Customer customer = customerOptional.get();
-        CustomerDto customerDto = customerService.getCustomerDto(customer);
+        CustomerDto customerDto = customerService.convertToDto(customer);
 
         //Если передали пустые обязательные поля
         if (bindingResult.hasErrors()) {
@@ -79,15 +79,12 @@ public class CheckoutController {
             return "cart/checkout";
         }
 
-        List<OrderLine> orderLines = customer.getCart().getOrderLines();
-
-        Order order = orderService.makeOrder(customer, checkoutForm, orderLines);
-        OrderDto orderDto = orderService.convertToDto(order);
-        if (order != null) {
+        OrderDto orderDto = orderService.makeOrder(customer, checkoutForm);
+        if (orderDto != null) {
             try {
                 emailService.sendOrderDetailsMessage(customerDto, orderDto);
             } catch (MailServiceException e) {
-                e.printStackTrace();
+                log.info("Can't send order details email");
             }
         }
 

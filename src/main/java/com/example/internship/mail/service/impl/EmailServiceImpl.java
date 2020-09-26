@@ -63,30 +63,6 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-//    @Override
-//    public boolean sendOrderDetailsMessage(CustomerDto customer, TestOrderDto order)  throws MailServiceException {
-//        if (null == customer) {
-//            throw new MailServiceException("Invalid customer", new NullPointerException());
-//        }
-//
-//        if (null == customer.getEmail()) {
-//            throw new MailServiceException("Invalid e-mail", new NullPointerException());
-//        }
-//
-//        if (null == order || null == order.getOrderLines()) {
-//            throw new MailServiceException("Invalid order data", new NullPointerException());
-//        }
-//
-//        Context thymeleafContext = new Context();
-//        Map<String, Object> templateModel = new HashMap<>();
-//        templateModel.put("customer", customer);
-//        templateModel.put("order", order);
-//        templateModel.put("orderLines", order.getOrderLines());
-//        thymeleafContext.setVariables(templateModel);
-//        String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
-//        return sendHtmlMessage(customer.getEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
-//    }
-
     @Override
     public boolean sendOrderDetailsMessage(CustomerDto customer, OrderDto order) throws MailServiceException {
         if (null == customer) {
