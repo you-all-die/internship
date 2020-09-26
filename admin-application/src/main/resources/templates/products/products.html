@@ -57,7 +57,7 @@
                     <input type="hidden" name="categoryId" th:if="${categoryId}" th:value="${categoryId}"/>
                 </div>
                 <div class="three wide field">
-                    <input class="ui submit button" type="submit" th:value="#{products.apply}">
+                    <input class="ui primary basic button" type="submit" th:value="#{products.apply}">
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
             <td th:text="${pr.description}"/>
             <td th:text="${pr.price}"/>
             <td>
-                <img th:src="'/img/' + ${pr.picture}" class="ui mini rounded image">
+                <img th:src="'/img_product/' + ${pr.picture}" class="ui mini rounded image">
                 <div class="content">
                     <div class="sub header" th:text="${pr.picture}"/>
                 </div>

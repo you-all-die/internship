@@ -17,15 +17,14 @@ public class ProductStatusServiceImpl implements ProductStatusService {
 
     private final WebClient webClient;
 
-    private String uri = "/product-status";
-
     @Override
     public List<ProductStatusDto> findAll() {
 
-        return webClient.post()
-                .uri(uri + "/find-all")
+        return webClient.get()
+                .uri("/product-status/find-all")
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(ProductStatusDto.class)
+                .collectList()
                 .block();
     }
 }

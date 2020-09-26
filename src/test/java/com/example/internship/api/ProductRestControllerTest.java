@@ -6,9 +6,9 @@ import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.ProductStatus;
-import com.example.internship.service.CategoryService;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
+import com.example.internship.service.category.CategoryService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,15 +44,21 @@ public class ProductRestControllerTest {
                                  @Autowired CategoryService categoryService,
                                  @Autowired ProductStatusService productStatusService,
                                  @Autowired ModelMapper mapper) {
-        Category categoryOne = new Category();
+        CategoryDto categoryOne = new CategoryDto();
         categoryOne.setName("Best phones");
-        categoryOne.setParent(null);
+        categoryOne.setParentId(null);
+        categoryOne.setParentName(null);
         categoryService.addCategory(categoryOne);
 
-        Category categoryTwo = new Category();
+        CategoryDto categoryTwo = new CategoryDto();
         categoryTwo.setName("Super best phones");
-        categoryTwo.setParent(null);
+        categoryTwo.setParentId(null);
+        categoryTwo.setParentName(null);
         categoryService.addCategory(categoryTwo);
+
+        Category categoryThree = new Category();
+        categoryThree.setName("Super best phones");
+        categoryThree.setParent(null);
 
         ProductStatus productStatus = new ProductStatus();
         productStatus.setDescription("For sale");
@@ -74,7 +80,7 @@ public class ProductRestControllerTest {
         productTwo.setStatus(productStatus);
         productService.addProduct(productTwo);
 
-        product.setCategory(categoryOne);
+        product.setCategory(categoryThree);
         product.setName("Iphone 3");
         product.setDescription("Iphone 3 is best Iphone 2");
         product.setPicture("iphone3.jpg");
