@@ -6,66 +6,108 @@
 <body>
 <div th:replace="common/main :: header"></div>
 <div class="ui main container">
-    <h1 class="ui center aligned header" th:text="#{categories.categories_list}">Categories list</h1>
+    <h1 class="ui center aligned header" th:text="#{categories.header}">Список категорий</h1>
     <table class="ui celled table">
         <tbody>
         <tr>
             <td>
-                <form method="POST" action="#" th:action="@{/category/add}">
-                    <button class="ui primary button" th:text="#{categories.add_category}">
-                        Add category
-                    </button>
+                <form action="#" th:action="@{/categories/add}">
+                    <button class="ui primary button" type="submit" th:text="#{categories.add_button}">Добавить категорию</button>
                 </form>
             </td>
+        </tr>
+        </tbody>
+    </table>
 
-            <td class="right aligned collapsing">
-                <form method="POST" class="ui form" action="#" th:action="@{/templates/categories}">
-                    <div class="fields">
-                    <div class="field">
-                        <div class="ui input">
-                            <input class="ui input" th:placeholder="#{categories.find_name}" placeholder="Name..."
-                                   th:name="name" name="name" id="name" type="text"/>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <input class="ui button" type="submit" value="Find" th:value="#{categories.find}"/>
-                    </div>
-                    </div>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
     <table class="ui celled table">
-        <thead>
-        <tr><th th:text="#{categories.name}">Name</th>
-            <th th:text="#{categories.parent_category}">Parent category</th>
-            <th colspan="2" th:text="#{categories.action}">Action</th>
-        </tr>
-        </thead>
         <tbody>
-        <tr th:each="category: ${categoryList}">
-            <td th:text="${category.name}">Name</td>
-            <td th:text="${category?.parent?.name}">Subcategory</td>
-            <td class="right aligned collapsing">
-                <form method="POST" th:action="@{/category/edit(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="ui green button"
-                            th:text="#{categories.edit}">
-                        Edit
-                    </button>
-                </form>
-            </td>
-            <td class="right aligned collapsing">
-                <form method="POST" th:action="@{/category/delete(categoryId=${category.id})}">
-                    <button type="submit" name="submit" value="value" class="ui red button"
-                            th:text="#{categories.delete}">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
+        <thead>
+    <tr>
+        <th colspan="3" th:text="#{categories.search.header}">Меню поиска с параметрами</th>
+        <th colspan="1" th:text="#{categories.search.total_found}">Всего найдего:</th>
+        <th colspan="1" th:text="${categoryList.totalCategory}"></th>
+    </tr>
+    <tr>
+        <th th:text="#{categories.search.name}">Наименование</th>
+        <th th:text="#{categories.search.parent}">ID родителя</th>
+        <th th:text="#{categories.search.category_per_page}">Размер страницы</th>
+        <th colspan="2" th:text="#{categories.search.action}">Действие</th>
+    </tr>
+    </thead>
+
+        <tbody>
+        <form class="ui form" action="#" th:action="@{/categories}" th:object="${categorySearchRequest}">
+            <tr>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" type="text" th:field="*{name}"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <select class="ui dropdown" th:field="*{parentCategoryId}">
+                            <option th:value="-1" th:selected="${parentCategoryId == -1}" th:text="#{categories.search.selector.show_all}">Показать все</option>
+                            <option th:value="0" th:selected="${parentCategoryId == 0}" th:text="#{categories.search.selector.no_parent}">Без родителя</option>
+                            <option th:each="i : ${parentCategories}"
+                                    th:value="${i.id}" th:text="'ID:' + ${i.id} + ' -> ' + ${i.name}"
+                                    th:selected="${i.id == parentCategoryId}"></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input class="ui input" type="number" max="100" min="1" th:field="*{pageSize}"/>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <button class="ui button" type="submit" th:text="#{categories.search.button.show}">Показать</button>
+                    </div>
+                </td>
+            </tr>
+        </form>
         </tbody>
     </table>
+
+    <div th:replace="/common/paginator :: widget (${categorySearchRequest.pageNumber}, ${totalPage})"></div><br><br>
+
+    <div class="ui container" th:if="${#arrays.isEmpty(categoryList.category)}">
+        <h4 th:text="#{categories.empty_request}">По вашему запросу ничего не найдено...</h4>
+        <a th:href="@{/categories}" th:text="#{categories.show_all}">Показать полный список</a><br>
+    </div>
+
+    <div class="ui container" th:unless="${#arrays.isEmpty(categoryList.category)}">
+        <table class="ui celled table">
+            <thead>
+            <tr><th th:text="'ID: ' + #{categories.name}">Name</th>
+                <th th:text="#{categories.parent_category}">Parent category</th>
+                <th colspan="2" th:text="#{categories.action}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category: ${categoryList.category}">
+                <td th:text="${category.id} + ':  ' + ${category.name}">Name</td>
+                <td th:text="${category?.parentName}">Subcategory</td>
+                <td class="right aligned collapsing">
+                    <form th:action="@{/category/edit}" method="get">
+                        <button type="submit" name="categoryId" th:value="${category.id}" class="ui primary basic button"
+                                th:text="#{categories.edit}">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td class="right aligned collapsing">
+                    <form th:action="@{/category/delete}" method="post">
+                        <button type="submit" name="categoryId" th:value="${category.id}" class="ui negative basic button"
+                                th:text="#{categories.delete}">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <footer th:replace="common/main::footer"></footer>
 </body>

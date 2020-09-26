@@ -16,5 +16,6 @@ public class CategoryDto {
     private Long id;
     @Size(max = 64)
     private String name;
-    private CategoryDto parent;
+    private Long parentId;
+    private String parentName;
 }

@@ -14,8 +14,8 @@ public enum CategoryDto {
     ;
 
     private interface Id {
-        long getId();
-        void setId(long id);
+        Long getId();
+        void setId(Long id);
     }
 
     private interface Name {
@@ -50,7 +50,7 @@ public enum CategoryDto {
 
         @Data
         public static class All implements Id, Name, ParentId {
-            private long id;
+            private Long id;
             private String name;
             private Long parentId;
         }
@@ -61,7 +61,7 @@ public enum CategoryDto {
 
         @Data
         public static class All implements Id, Name {
-            private long id;
+            private Long id;
             private String name;
         }
 
@@ -91,7 +91,7 @@ public enum CategoryDto {
 
         @Data
         public static class IdOnly implements Id {
-            private long id;
+            private Long id;
         }
     }
 }
