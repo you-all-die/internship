@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -29,4 +31,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private ProductStatus status;
+
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
 }
