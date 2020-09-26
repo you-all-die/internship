@@ -12,44 +12,125 @@
 <div th:replace="/common/main :: header"></div>
 
 <div th:each="pr: ${product}" class="ui main container">
-
-    <h1 class="ui header " th:text="'Смартфон  '+${product.name}"/>
-
-    <div class="ui two column divided grid">
-        <div class="stretched row">
-            <div class="column">
-                <div class="ui segment">
-                    <img class="ui fluid image" src="/images/p1.jpg" th:src="'/img/' + ${pr.picture}"/>
-                </div>
-            </div>
-
-            <div class="column">
-                <div class="ui segment">
-                    <h1 class="ui header" th:text="${product.price}+' Руб.'"/>
-
-                    <button class="ui yellow button" th:onclick="|testOne(${product.id})|">Добавить в корзину</button>
-
-
-                </div>
-                <div class="ui segment">
-
-                    <h3 class="ui header" th:text="'ID: '+${product?.id}"/>
-                    <h3 class="ui header" th:text="'Description: '+${product.description}"></h3>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                        of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-                        but also the leap into electronic typesetting, remaining essentially unchanged. It was
-                        popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of
-                        Lorem Ipsum.</p>
-                </div>
-            </div>
-
+    <!-- Дерево предков категорий -->
+    <div class="row">
+        <div class="ui breadcrumb">
+            <a th:href="@{/product}" class="section">Каталог</a>
+            <th:block th:each="category : ${breadcrumb}">
+                <i class="right angle icon divider"></i>
+                <a th:href="@{/product?categoryId=} + ${category.id}" class="section" th:text="${category.name}">Child</a>
+            </th:block>
         </div>
+    </div>
+
+    <!-- Название и код товара -->
+    <h1 class="ui header " th:text="${product.name}"/>
+    <h10 class="ui header " th:text="'Код товара: ' + ${product.id}"/><br><br>
+
+    <div class="ui two column grid">
+
+        <!--Блок с изображением-->
+        <div class="column">
+            <div class="ui raised segment">
+                <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
+                <img class="ui fluid image" src="/img/default.jpg" th:src="'/img/' + ${pr.picture}"/>
+            </div>
+        </div>
+
+        <!--Блок c описанием-->
+        <div class="column">
+            <div class="ui segment">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <p><b>Цена:</b></p>
+                        <div>
+                            <h2><span class="ui header" th:text="${product?.price}"/><i class="ruble sign icon"></i></h2>
+                        </div>
+                        <div class="ui teal tag label" th:if="${product.status.id == 1}">В наличии</div><br>
+                        <div class="ui red tag label" th:if="${product.status.id == 2}">Нет в наличии</div><br><br>
+                        <button class="ui yellow button" th:onclick="|testOne(${product.id})|" th:if="${product.status.id == 1}">
+                            <i class="shopping cart icon" ></i>  Добавить в корзину
+                        </button>
+                    </div>
+                    <div class="column">
+                        <br>
+                        <div class="item">
+                            <h4>
+                                <i class="shipping fast icon"></i>  Быстрая доставка
+                            </h4>
+                        </div><br>
+                        <div class="item">
+                            <h4>
+                                <i class="wrench icon"></i>  Гарантия 24месяца
+                            </h4>
+                        </div><br>
+                        <div class="item">
+                            <h4>
+                                <i class="credit card outline icon"></i>  Visa, MasterCard, МИР
+                            </h4>
+                        </div><br>
+                        <div class="item">
+                            <h4>
+                                <i class="credit card icon"></i>  Покупка в кредит
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment">
+                <h3 class="ui header">Описание товара</h3>
+                <p th:text="${product.description}"></p>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!--Комментарии к товару-->
+<div th:each="pr: ${product}" class="ui main container">
+    <h3>Комментарии</h3><hr>
+    <!--Блок отображения существующих комментариев к товару-->
+    <div class="ui comments">
+        <div class="comment">
+            <div class="avatar">
+                <img src="/img/comment_icon.png">
+            </div>
+            <div class="content">
+                <div class="author"><label>Николай</label></div>
+                <div class="metadata">
+                    <div class="date">24.09.2020</div>
+                </div>
+                <div class="text">
+                    Отличный телефон, пользуюсь почти 3 года, нареканий нет. Рекомендую.
+                </div>
+            </div>
+        </div>
+    </div><br><hr>
+
+    <!--Пагинатор для комментариев-->
+    <div th:replace="/common/paginator :: widget (1, 5)"></div><br><br>
+
+    <!--Форма добавление нового комментария-->
+    <div class="ui comments">
+        <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
+            <h5 class="ui dividing header">Добавить новый комментарий</h5>
+            <div class="field" th:if="${customerName == null}">
+                <label>Ваше имя:</label>
+                <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
+            </div>
+            <div class="field">
+                <label>Текст комментария:</label>
+                <textarea name="textComment" required maxlength="300"></textarea>
+            </div>
+            <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
+        </form>
     </div>
 </div>
 
 
 <footer th:replace="common/main::footer"></footer>
+
+
 </body>
 </html>
