@@ -7,9 +7,9 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.mail.exception.MailServiceException;
-import com.example.internship.mail.service.impl.EmailServiceImpl;
-import com.example.internship.service.customer.CustomerServiceImpl;
-import com.example.internship.service.order.OrderServiceImpl;
+import com.example.internship.mail.service.EmailService;
+import com.example.internship.service.customer.CustomerService;
+import com.example.internship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,9 +31,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CheckoutController {
 
-    private final CustomerServiceImpl customerService;
-    private final OrderServiceImpl orderService;
-    private final EmailServiceImpl emailService;
+    private final CustomerService customerService;
+    private final OrderService orderService;
+    private final EmailService emailService;
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
@@ -49,7 +49,7 @@ public class CheckoutController {
         Cart cart = optionalCustomer.get().getCart();
 
         System.out.println("CART: " + cart);
-//        System.out.println("CART: " + cart);
+
 //        Корзина создается при переходе по /cart
         if (cart == null) return "redirect:/cart";
 
@@ -61,7 +61,7 @@ public class CheckoutController {
     }
 
     // Оформление заказа
-    @PostMapping("/checkout/add")
+    @PostMapping("/checkout")
     public String postCheckout(@Validated CheckoutForm checkoutForm, BindingResult bindingResult, Model model) {
 
         //Получение куки customerID
