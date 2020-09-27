@@ -173,7 +173,7 @@ databaseChangeLog:
         - sqlFile:
             dbms: 'postgresql'
             encoding: UTF-8
-            path: db/changelog/default-values/feebbacks.sql
+            path: db/changelog/default-values/feedbacks.sql
             relativeToChangelogFile: false
             splitStatements: true
             stripComments: true
@@ -204,6 +204,33 @@ databaseChangeLog:
             dbms: 'postgresql'
             encoding: UTF-8
             path: db/changelog/default-values/category.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true
+  - changeSet:
+      id: 2020-09-27-01
+      author: Romodin Aleksey
+      comment: modifyDataType
+      changes:
+        - modifyDataType:
+            columnName: description
+            newDataType: VARCHAR(1500)
+            tableName: product
+  - changeSet:
+      id: 2020-09-27-02
+      comment: Update description product
+      author: Romodin Aleksey
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 0
+                sql: select count(*) from product;
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: UTF-8
+            path: db/changelog/default-values/product_update_description.sql
             relativeToChangelogFile: false
             splitStatements: true
             stripComments: true
