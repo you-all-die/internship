@@ -107,28 +107,29 @@
                     </form>
                 </div><br>
             </div>
-        </div><br><hr>
-
-        <!--Пагинатор для комментариев-->
-        <div th:replace="/common/paginator :: widget (${feedbacksList.pageNumber}, ${totalPage})"></div><br><br>
-
-        <!--Форма добавление нового комментария-->
-        <div class="ui comments">
-            <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
-                <h5 class="ui dividing header">Добавить новый комментарий</h5>
-                <div class="field" th:if="${customerId == null}">
-                    <label>Ваше имя:</label>
-                    <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
-                </div>
-                <div class="field">
-                    <label>Текст комментария:</label>
-                    <textarea name="textComment" required maxlength="500"></textarea>
-                </div>
-                <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
-            </form>
         </div>
+    </div><br><hr>
 
+    <!--Пагинатор для комментариев-->
+    <div th:replace="/common/paginator :: widget (${feedbacksList.pageNumber}, ${totalPage})"></div><br><br>
+
+    <!--Форма добавление нового комментария-->
+    <div class="ui comments">
+        <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
+            <h5 class="ui dividing header">Добавить новый комментарий</h5>
+            <div class="field" th:if="${customerId == null}">
+                <label>Ваше имя:</label>
+                <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
+            </div>
+            <div class="field">
+                <label>Текст комментария:</label>
+                <textarea name="textComment" required maxlength="500"></textarea>
+            </div>
+            <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
+        </form>
     </div>
+
+
 </div>
 
 <footer th:replace="common/main::footer"></footer>
