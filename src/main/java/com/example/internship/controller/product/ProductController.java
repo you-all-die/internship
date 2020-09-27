@@ -14,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,8 +42,7 @@ public class ProductController {
     private final GsCategoryService categoryService;
     private final FeedbackService feedbackService;
 
-    /** Отображение подробной информации о выбранном товаре
-     *
+    /**
      * @param id код продукта
      * @param pageNumber номер страницы для отображения отзывов
      * @param authentication авторизация пользователя
@@ -85,8 +88,7 @@ public class ProductController {
         return "products/product";
     }
 
-    /** Добавление нового отзыва о товаре
-     *
+    /**
      * @param productId код продукта
      * @param customerName имя пользователя, если он без авторизации
      * @param feedbackText текст комментария
@@ -97,25 +99,25 @@ public class ProductController {
     public String addNewCommentProduct(@PathVariable("id") Long productId,
                                        @RequestParam(value = "customerName", required = false) String customerName,
                                        @RequestParam("textComment") String feedbackText,
-                                       Authentication authentication){
+                                       Authentication authentication
+    ) {
         Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
-        if (customer.isPresent()){
+        if (customer.isPresent()) {
             feedbackService.addFeedback(productId, customer.get().getId(), customer.get().getFirstName(), feedbackText);
-        }else {
+        } else {
             Long aCustomerId = customerService.customerIdFromCookie().orElse(null);
             feedbackService.addFeedback(productId, aCustomerId, customerName, feedbackText);
         }
         return "redirect:" + BASE_URL + "/" + productId;
     }
 
-    /** Удаление отзыва автором
-     *
+    /**
      * @param id код продукта
      * @param feedbackId код комментария
      * @return возврат на страницу просматриваемого товара
      */
     @PostMapping("/{id}/deleteFeedback")
-    public String delFeedback(@PathVariable("id") Long id, @RequestParam("feedbackId") Long feedbackId){
+    public String delFeedback(@PathVariable("id") Long id, @RequestParam("feedbackId") Long feedbackId) {
         feedbackService.deleteFeedback(feedbackId);
         return "redirect:" + BASE_URL + "/" + id;
     }

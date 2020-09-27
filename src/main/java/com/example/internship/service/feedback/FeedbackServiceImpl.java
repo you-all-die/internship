@@ -25,8 +25,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final ModelMapper modelMapper;
 
-    /** Поиск комментариев о товаре
-     *
+    /**
      * @param productId код продукта
      * @param authorId код автора отзыва
      * @param pageSize размер страницы с отзывами
@@ -34,15 +33,15 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @return получение результата поиска
      */
     @Override
-    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber){
+    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber) {
         FeedbackSearchResult feedbackSearchResult = new FeedbackSearchResult();
         Specification<Feedback> specification;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null,"productId", productId.toString());
-        if (authorId!=null)
-            specification = draftSpecification(specification ,"authorId", authorId.toString());
-
+        specification = draftSpecification(null, "productId", productId.toString());
+        if (authorId != null) {
+            specification = draftSpecification(specification, "authorId", authorId.toString());
+        }
         feedbackSearchResult.setFeedbacks(feedbackRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize, Sort.by("datePublication").ascending()))
                 .stream().map(this::convertToDto).collect(Collectors.toList()));
@@ -54,15 +53,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackSearchResult;
     }
 
-    /** Добавление нового комментария
-     *
+    /**
      * @param productId код продукта
      * @param authorId код автора
      * @param authorName имя автора
      * @param feedbackText текст отзыва
      */
     @Override
-    public void addFeedback(Long productId, Long authorId, String authorName, String feedbackText){
+    public void addFeedback(Long productId, Long authorId, String authorName, String feedbackText) {
         Feedback feedback = new Feedback();
         feedback.setDatePublication(new Date());
         feedback.setProductId(productId);
@@ -72,36 +70,35 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedbackRepository.save(feedback);
     }
 
-    /** Удаление отзыва автором
-     *
+    /**
      * @param id код комментария
      */
     @Override
-    public  void deleteFeedback(Long id){
-        if (feedbackRepository.findById(id).isPresent()) feedbackRepository.deleteById(id);
+    public  void deleteFeedback(Long id) {
+        if (feedbackRepository.findById(id).isPresent()) {
+            feedbackRepository.deleteById(id);
+        }
     }
 
-    /** Формирование условий поиска
-     *
+    /**
      * @param specification спецификация для поиска
      * @param columnName имя столбца
      * @param optionalName значение переменной
      * @return получение спецификации
      */
     private Specification<Feedback> draftSpecification(
-            Specification<Feedback> specification, String columnName, String optionalName ){
-        if(optionalName !=null){
-            if(specification == null){
+            Specification<Feedback> specification, String columnName, String optionalName) {
+        if (optionalName != null) {
+            if (specification == null) {
                 specification = Specification.where(new FeedbackSpecification(columnName, optionalName));
-            }else {
+            } else {
                 specification = specification.and(new FeedbackSpecification(columnName, optionalName));
             }
         }
         return specification;
     }
 
-    /** Конвертация в DTO
-     *
+    /**
      * @param feedback сущность Комментарий
      * @return возврат DTO
      */

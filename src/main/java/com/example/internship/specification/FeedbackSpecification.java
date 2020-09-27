@@ -26,8 +26,7 @@ public class FeedbackSpecification implements Specification<Feedback> {
                 return criteriaBuilder.equal(root.get("productId"), value.toString());
             case "authorId":
                 return criteriaBuilder.equal(root.get("authorId"), value.toString());
+            default: throw new RuntimeException("unreachable");
         }
-
-        return null;
     }
 }
