@@ -24,36 +24,39 @@ public class CategoryServiceImpl implements CategoryService {
     //Поиск категории по ID
     @Override
     public CategoryDto findById(Long id) {
-        return modelMapper.map(categoryApi.findById(id).block(), CategoryDto.class);
+        return modelMapper.map(categoryApi.getCategory(id).block(), CategoryDto.class);
     }
 
 
     //Показать все категории, отсортированные по ID
     @Override
-    public List<CategoryDto> findAllSortById() {
-        return categoryApi.findAllSortById().map(this::convertToDto).collectList().block();
+    public List<CategoryDto> findAll() {
+        return categoryApi.findAllCategories().map(this::convertToDto).collectList().block();
     }
 
 
     //Удаление категории по ID
     @Override
     public void removeCategory(Long id) {
-        categoryApi.removeCategory(id);
+        categoryApi.deleteCategory(id).block();
     }
 
 
     //Добавление новой категории
     @Override
     public void addCategory(CategoryDto category) {
-        categoryApi.addCategory(convertToModel(category));
+        categoryApi.addCategory(convertToModel(category)).block();
     }
 
     //Запрос на поиск по критериям
     @Override
     public CategorySearchResult searchResult(CategorySearchRequest request) {
         return modelMapper.map(
-                categoryApi.categorySearch(request.getName(), request.getParentCategoryId(),
-                        request.getPageNumber(), request.getPageSize()).block(),
+                categoryApi.categorySearch(request.getName().isBlank() ? null : request.getName(),
+                        request.getParentCategoryId(),
+                        request.getPageSize() > 0 ? request.getPageSize() : null,
+                        request.getPageNumber() > 0 ? request.getPageNumber() : null)
+                        .block(),
                 CategorySearchResult.class);
     }
 

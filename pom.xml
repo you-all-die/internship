@@ -266,9 +266,16 @@
                             <modelPackage>com.example.internship.client.model</modelPackage>
                             <invokerPackage>com.example.internship.client.invoker</invokerPackage>
                             <generatorName>java</generatorName>
+                            <generateApis>true</generateApis>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateAliasAsModel>false</generateAliasAsModel>
                             <library>webclient</library>
                             <configOptions>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <java8>true</java8>
                             </configOptions>
                         </configuration>
                     </execution>
