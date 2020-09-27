@@ -4,11 +4,14 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.entity.Cart;
 import com.example.internship.entity.Customer;
+import com.example.internship.entity.Order;
+import com.example.internship.entity.OrderLine;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import com.example.internship.service.customer.CustomerService;
 import com.example.internship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,8 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * @author Sergey Lapshin
@@ -27,31 +30,32 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
+@Slf4j
 public class CheckoutController {
 
     private final CustomerService customerService;
     private final OrderService orderService;
     private final EmailService emailService;
 
-    private static Logger log = Logger.getLogger(CheckoutController.class.getName());
-
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
-    public String getCheckout(Model model) {
+    public String getCheckout(final Model model) {
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
         //Если куки нет, редирект на страницу регистрации
-        if (customerId.isEmpty()) return "redirect:/registration";
+        if (customerId.isEmpty()) {
+            return "redirect:/registration";
+        }
 
         //Ищем пользователя по Id
         Optional<Customer> optionalCustomer = customerService.getById(customerId.get());
 
         Cart cart = optionalCustomer.get().getCart();
 
-        System.out.println("CART: " + cart);
+        if (cart == null) {
+            return "redirect:/cart";
+        }
 
-//        Корзина создается при переходе по /cart
-        if (cart == null) return "redirect:/cart";
 
 
         CustomerDto customerDto = customerService.convertToDto(optionalCustomer.get());
@@ -71,7 +75,7 @@ public class CheckoutController {
 
         Optional<Customer> customerOptional = customerService.getById(customerId.get());
         Customer customer = customerOptional.get();
-        CustomerDto customerDto = customerService.convertToDto(customer);
+        CustomerDto customerDto = customerService.getCustomerDto(customer);
 
         //Если передали пустые обязательные поля
         if (bindingResult.hasErrors()) {
