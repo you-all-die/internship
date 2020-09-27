@@ -27,9 +27,10 @@ public class OrderServiceImpl implements OrderService{
     private final ModelMapper mapper;
 
     @Override
-    public Order makeOrder(Customer customer, CheckoutForm checkoutForm, List<OrderLine> orderLines) {
+    public OrderDto makeOrder(Customer customer, CheckoutForm checkoutForm) {
         Order order = new Order();
         List<Item> items = new ArrayList<>();
+        List<OrderLine> orderLines = customer.getCart().getOrderLines();
 
         //        Обязательные поля (контролируются формой)
         order.setCustomerFirstName(checkoutForm.getFirstName());
@@ -68,10 +69,12 @@ public class OrderServiceImpl implements OrderService{
 
         orderRepository.save(order);
 
-        return order;
+        OrderDto orderDto = convertToDto(order);
+
+        return orderDto;
     }
 
-    public OrderDto convertToDto(Order order) {
+    private OrderDto convertToDto(Order order) {
         return mapper.map(order, OrderDto.class);
     }
 

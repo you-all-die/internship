@@ -7,10 +7,11 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.mail.exception.MailServiceException;
-import com.example.internship.mail.service.impl.EmailServiceImpl;
-import com.example.internship.service.customer.CustomerServiceImpl;
-import com.example.internship.service.order.OrderServiceImpl;
+import com.example.internship.mail.service.EmailService;
+import com.example.internship.service.customer.CustomerService;
+import com.example.internship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,11 +30,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
+@Slf4j
 public class CheckoutController {
 
-    private final CustomerServiceImpl customerService;
-    private final OrderServiceImpl orderService;
-    private final EmailServiceImpl emailService;
+    private final CustomerService customerService;
+    private final OrderService orderService;
+    private final EmailService emailService;
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
@@ -55,13 +57,15 @@ public class CheckoutController {
         }
 
 
-        CustomerDto customer = customerService.getCustomerDto(optionalCustomer.get());
-                model.addAttribute("customer", customer);
+
+        CustomerDto customerDto = customerService.convertToDto(optionalCustomer.get());
+        model.addAttribute("customer", customerDto);
         return "cart/checkout";
+
     }
 
     // Оформление заказа
-    @PostMapping("/checkout/add")
+    @PostMapping("/checkout")
     public String postCheckout(@Validated CheckoutForm checkoutForm, BindingResult bindingResult, Model model) {
 
         //Получение куки customerID
@@ -79,15 +83,12 @@ public class CheckoutController {
             return "cart/checkout";
         }
 
-        List<OrderLine> orderLines = customer.getCart().getOrderLines();
-
-        Order order = orderService.makeOrder(customer, checkoutForm, orderLines);
-        OrderDto orderDto = orderService.convertToDto(order);
-        if (order != null) {
+        OrderDto orderDto = orderService.makeOrder(customer, checkoutForm);
+        if (orderDto != null) {
             try {
                 emailService.sendOrderDetailsMessage(customerDto, orderDto);
             } catch (MailServiceException e) {
-                e.printStackTrace();
+                log.info("Can't send order details email");
             }
         }
 
