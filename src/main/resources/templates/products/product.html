@@ -24,8 +24,8 @@
     </div>
 
     <!-- Название и код товара -->
-    <h1 class="ui header " th:text="${product.name}"/>
-    <h10 class="ui header " th:text="'Код товара: ' + ${product.id}"/><br><br>
+    <h1 class="ui header " th:text="${product.name}"></h1>
+    <h10 class="ui header " th:text="'Код товара: ' + ${product.id}"></h10><br><br>
 
     <div class="ui two column grid">
 
@@ -44,7 +44,7 @@
                     <div class="column">
                         <p><b>Цена:</b></p>
                         <div>
-                            <h2><span class="ui header" th:text="${product?.price}"/><i class="ruble sign icon"></i></h2>
+                            <h2><span class="ui header" th:text="${product?.price}"></span><i class="ruble sign icon"></i></h2>
                         </div>
                         <div class="ui teal tag label" th:if="${product.status.id == 1}">В наличии</div><br>
                         <div class="ui red tag label" th:if="${product.status.id == 2}">Нет в наличии</div><br><br>
@@ -79,14 +79,14 @@
 
 <!--Комментарии к товару-->
 <div  class="ui main container">
-    <h3><span>Комментарии </span><span th:text="'(' + ${searchFeedbacks.totalFeedbacks} + ')'"
-                                       th:if="${searchFeedbacks.totalFeedbacks != null}"></span></h3><hr>
-    <div class="ui container" th:if="${#arrays.isEmpty(searchFeedbacks.feedbacks)}">
+    <h3><span>Комментарии </span><span th:text="'(' + ${feedbacksList.totalFeedbacks} + ')'"
+                                       th:if="${feedbacksList.totalFeedbacks != null}"></span></h3><hr>
+    <div class="ui container" th:if="${#arrays.isEmpty(feedbacksList.feedbacks)}">
         <br><h4>Ни одного комментария не найдено... Будь первым.</h4><br>
     </div>
     <!--Блок отображения существующих комментариев к товару-->
-    <div class="ui comments" th:unless="${#arrays.isEmpty(searchFeedbacks.feedbacks)}">
-        <div th:each="f:${searchFeedbacks.feedbacks}" class="comment">
+    <div class="ui comments" th:unless="${#arrays.isEmpty(feedbacksList.feedbacks)}">
+        <div th:each="f:${feedbacksList.feedbacks}" class="comment">
             <div class="avatar">
                 <img src="/img/comment_icon.png">
             </div>
@@ -105,34 +105,33 @@
                         </button>
                         <span class="reply">  Вы можете удалить свой отзыв.</span>
                     </form>
+                </div><br>
+            </div>
+        </div><br><hr>
+
+        <!--Пагинатор для комментариев-->
+        <div th:replace="/common/paginator :: widget (${feedbacksList.pageNumber}, ${totalPage})"></div><br><br>
+
+        <!--Форма добавление нового комментария-->
+        <div class="ui comments">
+            <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
+                <h5 class="ui dividing header">Добавить новый комментарий</h5>
+                <div class="field" th:if="${customerId == null}">
+                    <label>Ваше имя:</label>
+                    <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
                 </div>
-            </div><br>
+                <div class="field">
+                    <label>Текст комментария:</label>
+                    <textarea name="textComment" required maxlength="500"></textarea>
+                </div>
+                <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
+            </form>
         </div>
-    </div><br><hr>
 
-    <!--Пагинатор для комментариев-->
-    <div th:replace="/common/paginator :: widget (${searchFeedbacks.pageNumber}, ${totalPage})"></div><br><br>
-
-    <!--Форма добавление нового комментария-->
-    <div class="ui comments">
-        <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
-            <h5 class="ui dividing header">Добавить новый комментарий</h5>
-            <div class="field" th:if="${customerId == null}">
-                <label>Ваше имя:</label>
-                <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
-            </div>
-            <div class="field">
-                <label>Текст комментария:</label>
-                <textarea name="textComment" required maxlength="500"></textarea>
-            </div>
-            <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
-        </form>
     </div>
 </div>
 
-
 <footer th:replace="common/main::footer"></footer>
-
 
 </body>
 </html>
