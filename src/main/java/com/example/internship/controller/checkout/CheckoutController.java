@@ -37,27 +37,27 @@ public class CheckoutController {
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
-    public String getCheckout(Model model) {
+    public String getCheckout(final Model model) {
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
         //Если куки нет, редирект на страницу регистрации
-        if (customerId.isEmpty()) return "redirect:/registration";
+        if (customerId.isEmpty()) {
+            return "redirect:/registration";
+        }
 
         //Ищем пользователя по Id
         Optional<Customer> optionalCustomer = customerService.getById(customerId.get());
 
         Cart cart = optionalCustomer.get().getCart();
 
-        System.out.println("CART: " + cart);
-//        System.out.println("CART: " + cart);
-//        Корзина создается при переходе по /cart
-        if (cart == null) return "redirect:/cart";
+        if (cart == null) {
+            return "redirect:/cart";
+        }
 
 
         CustomerDto customer = customerService.getCustomerDto(optionalCustomer.get());
                 model.addAttribute("customer", customer);
         return "cart/checkout";
-
     }
 
     // Оформление заказа
