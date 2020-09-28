@@ -72,7 +72,6 @@ public class OrderServiceImpl implements OrderService{
         order.setDate(new Timestamp(System.currentTimeMillis()));
 
         orderRepository.save(order);
-        System.out.println(order.getCustomerId());
         cartService.removeAll(order.getCustomerId());
 
         OrderDto orderDto = convertToDto(order);
