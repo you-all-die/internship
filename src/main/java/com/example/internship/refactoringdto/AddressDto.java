@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class AddressDto {
 
     @Schema(description = "id адреса")
@@ -28,7 +29,6 @@ public class AddressDto {
 
     @Schema(description = "id покупателя")
     @JsonView({View.Public.class})
-    @NotNull
     private Long customerId;
 
     @Schema(description = "Регион")
