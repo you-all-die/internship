@@ -14,7 +14,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +48,9 @@ public class CartServiceImpl implements CartService {
     public boolean add(Product product, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty() || Objects.isNull(product)) return false;
+        if (customer.isEmpty() || Objects.isNull(product)) {
+            return false;
+        }
 
         Cart cart = customer.get().getCart();
         List<OrderLine> orderLines = cart.getOrderLines();
@@ -73,7 +79,9 @@ public class CartServiceImpl implements CartService {
     public boolean updateQuantity(Product product, Integer productQuantity, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty() || productQuantity <= 0) return false;
+        if (customer.isEmpty() || productQuantity <= 0) {
+            return false;
+        }
 
         Cart cart = customer.get().getCart();
         List<OrderLine> orderLines = cart.getOrderLines();
@@ -99,7 +107,9 @@ public class CartServiceImpl implements CartService {
     public boolean remove(Product product, Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty()) return false;
+        if (customer.isEmpty()) {
+            return false;
+        }
 
         Cart cart = customer.get().getCart();
         Optional<OrderLine> orderLine = getOrderLineByProduct(cart.getOrderLines(), product);
@@ -117,10 +127,12 @@ public class CartServiceImpl implements CartService {
     public boolean removeAll(Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty()) return false;
+        if (customer.isEmpty()) {
+            return false;
+        }
 
         Cart cart = customer.get().getCart();
-        cart.setOrderLines(null);
+        cart.getOrderLines().clear();
         cartRepository.save(cart);
         return true;
     }
@@ -129,7 +141,9 @@ public class CartServiceImpl implements CartService {
     public List<OrderLineDto> findAll(Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty()) return new ArrayList<>();
+        if (customer.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         return customer.get().getCart().getOrderLines().stream().map(this::convertToDto)
                 .sorted(Comparator.comparing(OrderLineDto::getId)).collect(Collectors.toList());
@@ -139,13 +153,15 @@ public class CartServiceImpl implements CartService {
     public BigDecimal getTotalPrice(Long customerId) {
         Optional<Customer> customer = checkCustomerCart(customerId);
 
-        if (customer.isEmpty()) return BigDecimal.ZERO;
+        if (customer.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
 
         List<OrderLine> orderLines = customer.get().getCart().getOrderLines();
 
         return orderLines.stream()
-                .filter(value -> value.getProduct().getPrice() != null &&
-                        value.getProduct().getPrice().compareTo(BigDecimal.ZERO) > 0)
+                .filter(value -> value.getProduct().getPrice() != null
+                        && value.getProduct().getPrice().compareTo(BigDecimal.ZERO) > 0)
                 .map(value -> value.getProduct().getPrice().multiply(BigDecimal.valueOf(value.getProductQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -159,7 +175,9 @@ public class CartServiceImpl implements CartService {
     private Optional<Customer> checkCustomerCart(Long customerId) {
         Optional<Customer> customer = customerRepository.findById(customerId);
 
-        if (customer.isEmpty()) return Optional.empty();
+        if (customer.isEmpty()) {
+            return Optional.empty();
+        }
 
         if (customer.get().getCart() == null) {
             log.error("Cart for customer: " + customerId + " not exist!");
