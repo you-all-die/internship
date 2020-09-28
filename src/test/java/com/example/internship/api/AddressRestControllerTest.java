@@ -43,11 +43,11 @@ public class AddressRestControllerTest {
 
     private static final AddressDto BAD_ADDRESS = new AddressDto();
 
+    private static final Long CUSTOMER_ID = 12L;
+
     @BeforeAll
     public static void beforeAll() {
 
-        ADDRESS.setCustomerId(12L);
-        ADDRESS.setId(1L);
         ADDRESS.setRegion("Region");
         ADDRESS.setDistrict("District");
         ADDRESS.setCity("City");
@@ -58,11 +58,11 @@ public class AddressRestControllerTest {
 
         BAD_ADDRESS.setCustomerId(0L);
 
-        when(ADDRESS_SERVICE.getAllByCustomerId(ADDRESS.getCustomerId())).thenReturn(List.of(ADDRESS));
+        when(ADDRESS_SERVICE.getAllByCustomerId(CUSTOMER_ID)).thenReturn(List.of(ADDRESS));
         when(ADDRESS_SERVICE.getAllByCustomerId(0L)).thenReturn(null);
-        when(ADDRESS_SERVICE.addAddressToCustomer(ADDRESS.getCustomerId(), ADDRESS)).thenReturn(ADDRESS);
+        when(ADDRESS_SERVICE.addAddressToCustomer(CUSTOMER_ID, ADDRESS)).thenReturn(ADDRESS);
         when(ADDRESS_SERVICE.addAddressToCustomer(BAD_ADDRESS.getCustomerId(), BAD_ADDRESS)).thenReturn(null);
-        when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(ADDRESS.getCustomerId(), ADDRESS.getId())).thenReturn(true);
+        when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(CUSTOMER_ID, 1L)).thenReturn(true);
         when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(0L, 0L)).thenReturn(false);
     }
 
@@ -74,13 +74,11 @@ public class AddressRestControllerTest {
     @Test
     public void getAllAddressesByCustomerIdSucessTest() throws Exception {
 
-        mockMvc.perform(get("/api/customers/{customerId}/addresses", ADDRESS.getCustomerId())
+        mockMvc.perform(get("/api/customers/{customerId}/addresses", CUSTOMER_ID)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].customerId", is(12)))
                 .andExpect(jsonPath("$[0].region", is("Region")))
                 .andExpect(jsonPath("$[0].city", is("City")))
                 .andExpect(jsonPath("$[0].district", is("District")))
@@ -89,7 +87,7 @@ public class AddressRestControllerTest {
                 .andExpect(jsonPath("$[0].apartment", is("Apartment")))
                 .andExpect(jsonPath("$[0].comment", is("Comment")));
 
-        verify(ADDRESS_SERVICE, times(1)).getAllByCustomerId(ADDRESS.getCustomerId());
+        verify(ADDRESS_SERVICE, times(1)).getAllByCustomerId(CUSTOMER_ID);
     }
 
     /**
@@ -115,7 +113,7 @@ public class AddressRestControllerTest {
     @Test
     public void addAddressToCustomerSuccessTest() throws Exception {
 
-        mockMvc.perform(post("/api/customers/{customerId}/addresses", ADDRESS.getCustomerId())
+        mockMvc.perform(post("/api/customers/{customerId}/addresses", CUSTOMER_ID)
                 .content(objectMapper.writeValueAsString(ADDRESS))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -142,8 +140,7 @@ public class AddressRestControllerTest {
      */
     @Test
     public void deleteAddressFromCustomerByIdsSuccessTest() throws Exception {
-        mockMvc.perform(delete("/api/customers/{customerId}/addresses/{addressId}",
-                ADDRESS.getCustomerId(), ADDRESS.getId())
+        mockMvc.perform(delete("/api/customers/{customerId}/addresses/{addressId}", CUSTOMER_ID, 1L)
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
