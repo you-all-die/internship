@@ -161,23 +161,6 @@ databaseChangeLog:
             onDelete: 'CASCADE'
             onUpdate: 'RESTRICT'
   - changeSet:
-      id: 2020-09-25-03
-      comment: Insert default feedbacks
-      author: Romodin Aleksey
-      preConditions:
-        - onFail: MARK_RAN
-        - sqlCheck:
-            expectedResult: 0
-            sql: select count(*) from feedback;
-      changes:
-        - sqlFile:
-            dbms: 'postgresql'
-            encoding: UTF-8
-            path: db/changelog/default-values/feedbacks.sql
-            relativeToChangelogFile: false
-            splitStatements: true
-            stripComments: true
-  - changeSet:
       id: 2020-09-25-04
       comment: Updating the price value if it is null
       author: Romodin Aleksey

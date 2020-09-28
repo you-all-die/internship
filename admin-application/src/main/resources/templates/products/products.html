@@ -81,7 +81,8 @@
             <td th:text="${pr.id}"/>
             <td th:text="${pr.name}"/>
             <td th:text="${pr.category.id} + '-> ' + ${pr.category.name}"/>
-            <td th:text="${pr.description.substring(0, 50)}"/>
+            <td th:text="${pr.description == null} ? 'Нет описания' :
+                   (${pr.description.length() > 30} ? ${pr.description.substring(0, 30)} + ' ...' : ${pr.description})"/>
             <td th:text="${pr.price}"/>
             <td>
                 <img th:src="'/img/' + ${pr.picture}" class="ui mini rounded image">
