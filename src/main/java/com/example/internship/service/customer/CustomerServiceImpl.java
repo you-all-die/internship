@@ -76,8 +76,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public com.example.internship.refactoringdto.CustomerDto update(com.example.internship.refactoringdto.CustomerDto customerDto) {
-        Customer customer = customerRepository.findById(customerDto.getId()).orElse(null);
+    public com.example.internship.refactoringdto.CustomerDto update(Long customerId, com.example.internship.refactoringdto.CustomerDto customerDto) {
+        Customer customer = customerRepository.findById(customerId).orElse(null);
 
         if (Objects.isNull(customer)) return null;
 
@@ -86,8 +86,11 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLastName(customerDto.getLastName());
         customer.setEmail(customerDto.getEmail());
         customer.setPhone(customerDto.getPhone());
+        customerRepository.save(customer);
 
-        return convertToDtoRef(customerRepository.save(customer));
+        customerDto.setId(customerId);
+
+        return customerDto;
     }
 
     @Override

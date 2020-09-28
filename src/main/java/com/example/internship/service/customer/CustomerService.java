@@ -52,10 +52,11 @@ public interface CustomerService {
     /**
      * Обновляет данные пользователя.
      *
+     * @param customerId идентификатор пользователя.
      * @param customerDto данные пользователя для обновления.
-     * @return Дто пользователя с новыми данными или null, если пользователь не обновлен
+     * @return Дто пользователя с новыми данными или null, если пользователь не обновлен.
      */
-    com.example.internship.refactoringdto.CustomerDto update(com.example.internship.refactoringdto.CustomerDto customerDto);
+    com.example.internship.refactoringdto.CustomerDto update(Long customerId, com.example.internship.refactoringdto.CustomerDto customerDto);
 
     /**
      * Сохраняет пользователя.

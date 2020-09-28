@@ -118,8 +118,7 @@ public class CustomerRestController {
             return ResponseEntity.badRequest().build();
         }
 
-        customer.setId(id);
-        CustomerDto customerDto = customerService.update(customer);
+        CustomerDto customerDto = customerService.update(id, customer);
 
         return customerDto != null ? ResponseEntity.ok(customerDto) : ResponseEntity.notFound().build();
     }
