@@ -40,12 +40,23 @@ databaseChangeLog:
                   type: VARCHAR
                   constraints:
                     nullable: false
-              - column:
+              -
+                column:
                   name: item_picture
                   type: VARCHAR
-              - column:
+              -
+                column:
                   name: item_price
                   type: BIGINT
                   constraints:
                     nullable: false
+        -
+          addForeignKeyConstraint:
+            constraintName: fk_orders_items
+            baseTableName: items
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'
                     

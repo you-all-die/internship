@@ -81,6 +81,7 @@ public class EmailServiceImpl implements EmailService {
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("order", order);
         templateModel.put("totalPrice", order.getTotalPrice());
+        templateModel.put("date", order.getDate());
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail/order", thymeleafContext);
         return sendHtmlMessage(order.getCustomerEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);

@@ -122,7 +122,6 @@ public class CartServiceImpl implements CartService {
         Cart cart = customer.get().getCart();
         cart.setOrderLines(null);
         cartRepository.save(cart);
-
         return true;
     }
 

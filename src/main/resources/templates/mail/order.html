@@ -13,8 +13,7 @@
 <p th:object="${order}"
    th:text="*{customerFirstName != null} ? #{email.order.welcome.registered(*{customerFirstName})} : #{email.order.welcome.anonymous}">
     Добрый день!</p>
-<!--<p th:object="${order}" th:text="*{customerFirstName}>Добрый день!</p>-->
-<p th:object="${order}" th:text="#{email.order.accepted(*{id})}">Ваш заказ принят</p>
+<p th:object="${order}" th:text="#{email.order.accepted(*{id}, *{date})}">Ваш заказ принят</p>
 
 <u th:text="#{email.order.contents.header}">Состав заказа:</u>
 

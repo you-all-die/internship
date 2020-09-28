@@ -7,10 +7,12 @@ import com.example.internship.entity.Item;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.repository.OrderRepository;
+import com.example.internship.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
+    private final CartService cartService;
     private final OrderRepository orderRepository;
     private final ModelMapper mapper;
 
@@ -66,8 +69,11 @@ public class OrderServiceImpl implements OrderService{
         }
 
         order.setItems(items);
+        order.setDate(new Timestamp(System.currentTimeMillis()));
 
         orderRepository.save(order);
+        System.out.println(order.getCustomerId());
+        cartService.removeAll(order.getCustomerId());
 
         OrderDto orderDto = convertToDto(order);
 

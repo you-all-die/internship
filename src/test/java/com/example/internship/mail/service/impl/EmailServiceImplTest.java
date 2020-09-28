@@ -14,6 +14,7 @@ import org.thymeleaf.context.IContext;
 
 import javax.mail.internet.MimeMessage;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -94,6 +95,7 @@ public class EmailServiceImplTest {
                 "MiddleName",
                 "LastName",
                 "89999999999",
+                "asasas@adasdasd.com",
                 "Region",
                 "City",
                 "District",
@@ -109,7 +111,8 @@ public class EmailServiceImplTest {
                         "Description",
                         "Name",
                         "Picture",
-                        new BigDecimal(3)))
+                        new BigDecimal(3))),
+                new Timestamp(System.currentTimeMillis())
         );
         try {
             assertTrue(emailService.sendOrderDetailsMessage(customer, orderDto));
@@ -141,6 +144,7 @@ public class EmailServiceImplTest {
                 "MiddleName",
                 "LastName",
                 "89999999999",
+                "asasas@adasdasd.com",
                 "Region",
                 "City",
                 "District",
@@ -156,7 +160,8 @@ public class EmailServiceImplTest {
                         "Description",
                         "Name",
                         "Picture",
-                        new BigDecimal(3)))
+                        new BigDecimal(3))),
+                new Timestamp(System.currentTimeMillis())
         );
         assertThrows(MailServiceException.class, () -> emailService.sendOrderDetailsMessage(null, orderDto));
         verify(javaMailSender, never()).send(any(MimeMessage.class));

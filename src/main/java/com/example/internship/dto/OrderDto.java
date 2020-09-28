@@ -3,6 +3,7 @@ package com.example.internship.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -30,6 +31,7 @@ public class OrderDto {
     private String addressComment;
     private String status;
     private List<ItemDto> items;
+    private Timestamp date;
 
     public BigDecimal getTotalPrice() {
         BigDecimal totalPrice = new BigDecimal(0);
@@ -39,6 +41,4 @@ public class OrderDto {
         return totalPrice;
     }
 
-    public OrderDto(long l, String firstName, String middleName, String lastName, String s, String region, String city, String district, String street, String house, String apartmant, String comment, String status, List<ItemDto> itemDtos) {
-    }
 }

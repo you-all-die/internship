@@ -71,11 +71,28 @@ databaseChangeLog:
                   type: VARCHAR
                   constraints:
                     nullable: false
-              - column:
+              -
+                column:
                   name: address_comment
                   type: VARCHAR
-              - column:
+              -
+                column:
                   name: status
                   type: VARCHAR
                   constraints:
                     nullable: false
+              -
+                column:
+                  name: date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        -
+          addForeignKeyConstraint:
+            constraintName: fk_customers_orders
+            baseTableName: orders
+            baseColumnNames: customer_id
+            referencedTableName: customers
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'

@@ -223,7 +223,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @param customer сущность пользователя.
      * @return ДТО пользователя.
      */
-    private CustomerDto convertToDto(Customer customer) {
+    public CustomerDto convertToDto(Customer customer) {
         return mapper.map(customer, CustomerDto.class);
     }
 

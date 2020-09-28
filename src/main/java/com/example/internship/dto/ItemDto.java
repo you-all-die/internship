@@ -22,6 +22,4 @@ public class ItemDto {
     private String itemPicture;
     private BigDecimal itemPrice;
 
-    public ItemDto(long l, int i, long l1, String description, String name, String picture, BigDecimal bigDecimal) {
-    }
 }

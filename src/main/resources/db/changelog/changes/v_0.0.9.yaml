@@ -1,9 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/2020-09-16-01/01-create-orders-table.yaml
+      file: db/changelog/2020-09-10-gs/02-create-categories.yaml
   - include:
-      file: db/changelog/2020-09-16-01/02-change-product-table.yaml
-  - include:
-      file: db/changelog/2020-09-16-01/03-add-not-null-to-product-price.yaml
-  - include:
-      file: db/changelog/2020-09-16-01/04-create-items-table.yaml
+      file: db/changelog/2020-09-10-gs/01-add-products-from-csv.yaml

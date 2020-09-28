@@ -1,7 +1,9 @@
 package com.example.internship.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -41,4 +43,5 @@ public class Order {
             cascade = CascadeType.ALL
     )
     private List<Item> items;
+    private Timestamp date;
 }
