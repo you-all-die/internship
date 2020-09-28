@@ -23,10 +23,11 @@ public interface AddressService {
     /**
      * Добавляет новый адрес для покупателя.
      *
+     * @param customerId идентификатор покупателя
      * @param addressDto новый адрес
      * @return возвращает добавленный адрес, в случае неудачи null
      */
-    AddressDto addAddressToCustomer(AddressDto addressDto);
+    AddressDto addAddressToCustomer(Long customerId, AddressDto addressDto);
 
     /**
      * Удаляет адрес у покупателя.

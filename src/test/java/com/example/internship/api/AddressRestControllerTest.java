@@ -60,8 +60,8 @@ public class AddressRestControllerTest {
 
         when(ADDRESS_SERVICE.getAllByCustomerId(ADDRESS.getCustomerId())).thenReturn(List.of(ADDRESS));
         when(ADDRESS_SERVICE.getAllByCustomerId(0L)).thenReturn(null);
-        when(ADDRESS_SERVICE.addAddressToCustomer(ADDRESS)).thenReturn(ADDRESS);
-        when(ADDRESS_SERVICE.addAddressToCustomer(BAD_ADDRESS)).thenReturn(null);
+        when(ADDRESS_SERVICE.addAddressToCustomer(ADDRESS.getCustomerId(), ADDRESS)).thenReturn(ADDRESS);
+        when(ADDRESS_SERVICE.addAddressToCustomer(BAD_ADDRESS.getCustomerId(), BAD_ADDRESS)).thenReturn(null);
         when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(ADDRESS.getCustomerId(), ADDRESS.getId())).thenReturn(true);
         when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(0L, 0L)).thenReturn(false);
     }

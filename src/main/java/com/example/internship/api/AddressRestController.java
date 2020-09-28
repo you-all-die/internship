@@ -85,9 +85,7 @@ public class AddressRestController {
             return ResponseEntity.badRequest().body(errors.toString());
         }
 
-        address.setCustomerId(customerId);
-
-        AddressDto addressDto = addressService.addAddressToCustomer(address);
+        AddressDto addressDto = addressService.addAddressToCustomer(customerId, address);
 
         return addressDto != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }

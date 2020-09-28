@@ -42,11 +42,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressDto addAddressToCustomer(AddressDto addressDto) {
+    public AddressDto addAddressToCustomer(Long customerId, AddressDto addressDto) {
 
-        if (Objects.isNull(customerService.getByIdRef(addressDto.getCustomerId()))) {
+        if (Objects.isNull(customerService.getByIdRef(customerId))) {
             return null;
         }
+        addressDto.setCustomerId(customerId);
 
         return convertToDto(addressesRepository.save(convertToEntity(addressDto)));
     }

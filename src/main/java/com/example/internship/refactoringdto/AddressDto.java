@@ -27,7 +27,7 @@ public class AddressDto {
     private Long id;
 
     @Schema(description = "id покупателя")
-    @JsonView({View.Public.class, View.Update.class})
+    @JsonView({View.Public.class})
     @NotNull
     private Long customerId;
 
