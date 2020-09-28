@@ -55,7 +55,8 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public boolean deleteAddressFromCustomerByIds(Long customerId, Long addressId) {
 
-        if (Objects.isNull(getAddressFromCustomerByIds(customerId, addressId))) {
+        AddressDto address = getAddressFromCustomerByIds(customerId, addressId);
+        if (Objects.isNull(address) || !address.getCustomerId().equals(customerId)) {
             return false;
         }
 
