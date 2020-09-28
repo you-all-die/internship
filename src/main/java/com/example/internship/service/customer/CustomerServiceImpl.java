@@ -1,6 +1,6 @@
 package com.example.internship.service.customer;
 
-import com.example.internship.api.from.CustomerSearchFrom;
+import com.example.internship.api.dto.CustomerSearchResponse;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
@@ -179,10 +179,10 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
 
     @Override
-    public CustomerSearchFrom search(String firstName, String middleName, String lastName, String email,
-                                     Integer pageSize, Integer pageNumber) {
+    public CustomerSearchResponse search(String firstName, String middleName, String lastName, String email,
+                                         Integer pageSize, Integer pageNumber) {
 
-        CustomerSearchFrom customerSearchFrom = new CustomerSearchFrom();
+        CustomerSearchResponse customerSearchResponse = new CustomerSearchResponse();
         Specification<Customer> specification;
 
         // Формируем условия для запроса
@@ -193,14 +193,14 @@ public class CustomerServiceImpl implements CustomerService {
         specification = draftSpecification(specification,"emailNotNull", "islNotNull");
 
         // Результат поиска
-        customerSearchFrom.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
+        customerSearchResponse.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
                 .stream().map(this::convertToDtoRef)
                 .collect(Collectors.toList()));
-        customerSearchFrom.setPageNumber(pageNumber);
-        customerSearchFrom.setPageSize(pageSize);
-        customerSearchFrom.setTotalCustomers(customerRepository.count(specification));
+        customerSearchResponse.setPageNumber(pageNumber);
+        customerSearchResponse.setPageSize(pageSize);
+        customerSearchResponse.setTotalCustomers(customerRepository.count(specification));
 
-        return customerSearchFrom;
+        return customerSearchResponse;
     }
 
     @Override

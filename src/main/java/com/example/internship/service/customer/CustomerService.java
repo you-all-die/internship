@@ -1,7 +1,7 @@
 package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.api.from.CustomerSearchFrom;
+import com.example.internship.api.dto.CustomerSearchResponse;
 import com.example.internship.entity.Customer;
 import org.springframework.security.core.Authentication;
 
@@ -131,8 +131,8 @@ public interface CustomerService {
      * @param pageNumber номер страницы.
      * @return форму данных поиска.
      */
-    CustomerSearchFrom search(String firstName, String middleName, String lastName, String email,
-                              Integer pageSize, Integer pageNumber);
+    CustomerSearchResponse search(String firstName, String middleName, String lastName, String email,
+                                  Integer pageSize, Integer pageNumber);
 
     //обновление времени последней активности
     void updateLastActivity(Long customerId);

@@ -1,4 +1,4 @@
-package com.example.internship.api.from;
+package com.example.internship.api.dto;
 
 import com.example.internship.refactoringdto.CustomerDto;
 import com.example.internship.refactoringdto.View;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class CustomerSearchFrom {
+public class CustomerSearchResponse {
 
     @Schema(description = "Пользователи")
     @JsonView(View.Public.class)

@@ -1,6 +1,6 @@
 package com.example.internship.api;
 
-import com.example.internship.api.from.CustomerSearchFrom;
+import com.example.internship.api.dto.CustomerSearchResponse;
 import com.example.internship.refactoringdto.CustomerDto;
 import com.example.internship.refactoringdto.View;
 import com.example.internship.service.customer.CustomerService;
@@ -71,23 +71,23 @@ public class CustomerRestController {
      */
     @GetMapping("search")
     @ApiOperation(value = "Поиск пользователей")
-    @Schema(implementation = CustomerSearchFrom.class)
+    @Schema(implementation = CustomerSearchResponse.class)
     @ApiResponse(code = 200, message = "Поиск успешен")
     @JsonView(View.Public.class)
-    public ResponseEntity<CustomerSearchFrom> searchUser(@ApiParam(value = "Поиск по имени")
+    public ResponseEntity<CustomerSearchResponse> searchUser(@ApiParam(value = "Поиск по имени")
                                                          @RequestParam(name = "firstName", required = false) String firstName,
-                                                         @ApiParam(value = "Поиск по отчеству")
+                                                             @ApiParam(value = "Поиск по отчеству")
                                                          @RequestParam(name = "middleName", required = false) String middleName,
-                                                         @ApiParam(value = "Поиск по фамилии")
+                                                             @ApiParam(value = "Поиск по фамилии")
                                                          @RequestParam(name = "lastName", required = false) String lastName,
-                                                         @ApiParam(value = "Поиск по email")
+                                                             @ApiParam(value = "Поиск по email")
                                                          @RequestParam(name = "email", required = false) String email,
-                                                         @ApiParam(value = "Размер страницы")
+                                                             @ApiParam(value = "Размер страницы")
                                                          @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                         @ApiParam(value = "Номер страницы")
+                                                             @ApiParam(value = "Номер страницы")
                                                          @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) {
 
-        CustomerSearchFrom searchFrom = customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
+        CustomerSearchResponse searchFrom = customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
 
         return ResponseEntity.ok(searchFrom);
     }

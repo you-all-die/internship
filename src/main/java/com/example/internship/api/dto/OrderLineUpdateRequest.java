@@ -1,4 +1,4 @@
-package com.example.internship.api.from;
+package com.example.internship.api.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class OrderLineForm {
+public class OrderLineUpdateRequest {
 
     @Schema(description = "id продукта.")
     private Long productId;
