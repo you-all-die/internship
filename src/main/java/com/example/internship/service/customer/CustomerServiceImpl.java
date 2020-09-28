@@ -60,8 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.isPresent()) {
             CustomerDto customerDto = convertToDto(customer.get());
             return Optional.of(customerDto);
-        }
-        else {
+        } else {
             return Optional.empty();
         }
     }
@@ -79,7 +78,9 @@ public class CustomerServiceImpl implements CustomerService {
     public com.example.internship.refactoringdto.CustomerDto update(Long customerId, com.example.internship.refactoringdto.CustomerDto customerDto) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
-        if (Objects.isNull(customer)) return null;
+        if (Objects.isNull(customer)) {
+            return null;
+        }
 
         customer.setFirstName(customerDto.getFirstName());
         customer.setMiddleName(customerDto.getMiddleName());
@@ -176,7 +177,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // TODO: Используется только в CheckoutController, есть смысл написать конвертацию в ДТО CheckoutController!
-    public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
+    public CustomerDto getCustomerDto(Customer customer) {
+        return convertToDto(customer);
+    }
 
     @Override
     public CustomerSearchResponse search(String firstName, String middleName, String lastName, String email,
@@ -186,11 +189,11 @@ public class CustomerServiceImpl implements CustomerService {
         Specification<Customer> specification;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null,"firstName", firstName);
-        specification = draftSpecification(specification,"middleName", middleName);
-        specification = draftSpecification(specification,"lastName", lastName);
-        specification = draftSpecification(specification,"email", email);
-        specification = draftSpecification(specification,"emailNotNull", "islNotNull");
+        specification = draftSpecification(null, "firstName", firstName);
+        specification = draftSpecification(specification, "middleName", middleName);
+        specification = draftSpecification(specification, "lastName", lastName);
+        specification = draftSpecification(specification, "email", email);
+        specification = draftSpecification(specification, "emailNotNull", "islNotNull");
 
         // Результат поиска
         customerSearchResponse.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
@@ -220,12 +223,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     //Метод проверки поля и добавления условия в запрос
+
     /**
      * Проверка полей и добавление в запрос.
      *
      * @param specification ???
-     * @param columnName ???
-     * @param optionalName ???
+     * @param columnName    ???
+     * @param optionalName  ???
      * @return ???
      */
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
@@ -245,7 +249,6 @@ public class CustomerServiceImpl implements CustomerService {
      *
      * @param customer сущность пользователя.
      * @return ДТО пользователя.
-     *
      * @deprecated
      */
     private CustomerDto convertToDto(Customer customer) {
@@ -277,7 +280,6 @@ public class CustomerServiceImpl implements CustomerService {
      *
      * @param customerDto ДТО пользователя.
      * @return сущность пользователя.
-     *
      * @deprecated
      */
     private Customer convertToModel(CustomerDto customerDto) {
