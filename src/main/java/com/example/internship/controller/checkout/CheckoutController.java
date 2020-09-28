@@ -13,11 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 /**
@@ -36,9 +36,10 @@ public class CheckoutController {
 
     //Переход на страницу оформления заказа из корзины
     @GetMapping("/checkout")
-    public String getCheckout(final Model model) {
+    public String getCheckout(CheckoutForm checkoutForm, final Model model) {
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
+        System.out.println("CUSTOMERID: " + customerId.get());
         //Если куки нет, редирект на страницу регистрации
         if (customerId.isEmpty()) {
             return "redirect:/registration";
@@ -46,6 +47,7 @@ public class CheckoutController {
 
         //Ищем пользователя по Id
         Optional<Customer> optionalCustomer = customerService.getById(customerId.get());
+        System.out.println("CUSTOMER: " + optionalCustomer.get().getEmail());
 
         Cart cart = optionalCustomer.get().getCart();
 
@@ -53,17 +55,17 @@ public class CheckoutController {
             return "redirect:/cart";
         }
 
-
-
         CustomerDto customerDto = customerService.convertToDto(optionalCustomer.get());
+//        CustomerDto customerDto = customerService.getDtoById(customerId.get()).get();
         model.addAttribute("customer", customerDto);
+        System.out.println("CUSTOMERDTO: " + customerDto.getEmail());
         return "cart/checkout";
 
     }
 
     // Оформление заказа
     @PostMapping("/checkout")
-    public String postCheckout(@Validated CheckoutForm checkoutForm, BindingResult bindingResult, Model model) {
+    public String postCheckout(@Valid CheckoutForm checkoutForm, BindingResult bindingResult, Model model) {
 
         //Получение куки customerID
         Optional<Long> customerId = customerService.customerIdFromCookie();
