@@ -55,7 +55,7 @@ public class AddressRestController {
 
         List<AddressDto> allById = addressService.getAllByCustomerId(customerId);
 
-        return allById == null || allById.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
+        return allById == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(allById);
     }
 
     /**
@@ -74,10 +74,10 @@ public class AddressRestController {
     })
     @JsonView(View.Public.class)
     public ResponseEntity<?> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
-                                                           @PathVariable Long customerId,
-                                                           @ApiParam(value = "Данные адреса") @JsonView(View.Update.class)
-                                                           @Valid @RequestBody AddressDto address,
-                                                           BindingResult bindingResult) {
+                                                  @PathVariable Long customerId,
+                                                  @ApiParam(value = "Данные адреса") @JsonView(View.Update.class)
+                                                  @Valid @RequestBody AddressDto address,
+                                                  BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             StringBuilder errors = new StringBuilder();
