@@ -109,13 +109,15 @@ public class CustomerRestController {
     })
     @Schema(implementation = CustomerDto.class)
     @JsonView(View.Public.class)
-    public ResponseEntity<CustomerDto> updateUser(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<?> updateUser(@ApiParam(value = "Идентификатор пользователя")
                                                   @PathVariable("id") Long id,
                                                   @ApiParam(value = "Данные для редактирования") @JsonView(View.Update.class)
                                                   @Valid @RequestBody CustomerDto customer, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            StringBuilder errors = new StringBuilder();
+            bindingResult.getAllErrors().forEach(e -> errors.append(e).append("\n"));
+            return ResponseEntity.badRequest().body(errors.toString());
         }
 
         CustomerDto customerDto = customerService.update(id, customer);

@@ -73,14 +73,16 @@ public class AddressRestController {
             @ApiResponse(code = 400, message = "Неправильные данные")
     })
     @JsonView(View.Public.class)
-    public ResponseEntity<AddressDto> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<?> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
                                                            @PathVariable Long customerId,
                                                            @ApiParam(value = "Данные адреса") @JsonView(View.Update.class)
                                                            @Valid @RequestBody AddressDto address,
                                                            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            StringBuilder errors = new StringBuilder();
+            bindingResult.getAllErrors().forEach(e -> errors.append(e).append("\n"));
+            return ResponseEntity.badRequest().body(errors.toString());
         }
 
         address.setCustomerId(customerId);
