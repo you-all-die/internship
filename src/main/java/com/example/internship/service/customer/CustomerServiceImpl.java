@@ -256,7 +256,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return ДТО пользователя.
      * @deprecated
      */
-    private CustomerDto convertToDto(Customer customer) {
+    public CustomerDto convertToDto(Customer customer) {
         return mapper.map(customer, CustomerDto.class);
     }
 

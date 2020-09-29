@@ -144,4 +144,7 @@ public interface CustomerService {
      * @return возращает пользователя, если null пользователь не найден.
      */
     boolean checkEmail(String email);
+
+    public CustomerDto convertToDto(Customer customer);
+
 }
