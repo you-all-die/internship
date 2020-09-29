@@ -28,11 +28,6 @@ public class OrderLineDto {
     @JsonView(View.All.class)
     private Long id;
 
-    @Schema(description = "Корзина")
-    @JsonView(View.Public.class)
-    @NotNull
-    private CartDto cart;
-
     @Schema(description = "Продукт")
     @JsonView(View.Public.class)
     @NotNull

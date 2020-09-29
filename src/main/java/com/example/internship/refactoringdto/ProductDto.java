@@ -26,12 +26,18 @@ import java.math.BigDecimal;
 public class ProductDto {
 
     @Schema(description = "id продукта")
-    @JsonView(View.All.class)
+    @JsonView({View.All.class, View.Public.class})
     private Long id;
 
-    @Schema(description = "Категория")
+    @Schema(description = "id категории")
+    @JsonView(View.Public.class)
     @NotNull
-    private CategoryDto category;
+    private Long categoryId;
+
+    @Schema(description = "Название категории")
+    @JsonView(View.Public.class)
+    @NotNull
+    private String categoryName;
 
     @Schema(description = "Имя")
     @JsonView(View.Public.class)

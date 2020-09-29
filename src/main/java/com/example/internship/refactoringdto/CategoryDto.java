@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * @author Ivan Gubanov
@@ -26,17 +25,20 @@ import java.util.List;
 public class CategoryDto {
 
     @Schema(description = "id категории")
-    @JsonView(View.All.class)
+    @JsonView({View.All.class, View.Public.class})
     private Long id;
 
     @Schema(description = "Название категории")
+    @JsonView(View.Public.class)
     @Size(max = 64)
     @NotNull
     private String name;
 
-    @Schema(description = "Родительская категория")
-    private CategoryDto parent;
+    @Schema(description = "id родительской категории")
+    @JsonView(View.Public.class)
+    private Long parentId;
 
-    @Schema(description = "Подкатегории")
-    private List<CategoryDto> subcategories;
+    @Schema(description = "Название родительской категории")
+    @JsonView(View.Public.class)
+    private String parentName;
 }

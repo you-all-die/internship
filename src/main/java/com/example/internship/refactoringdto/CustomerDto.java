@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 /**
  * @author Ivan Gubanov
@@ -59,12 +58,4 @@ public class CustomerDto {
     @Email
     @Size(max = 64)
     private String email;
-
-    @Schema(description = "Список адресов")
-    @JsonView(View.All.class)
-    private Set<AddressDto> addresses;
-
-    @Schema(description = "Корзина")
-    @JsonView(View.All.class)
-    private CartDto cart;
 }
