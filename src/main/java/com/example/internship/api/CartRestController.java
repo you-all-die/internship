@@ -1,6 +1,6 @@
 package com.example.internship.api;
 
-import com.example.internship.api.dto.OrderLineForm;
+import com.example.internship.api.dto.OrderLineUpdateRequest;
 import com.example.internship.dto.OrderLineDto;
 import com.example.internship.service.cart.CartService;
 import io.swagger.annotations.Api;
@@ -43,10 +43,10 @@ public class CartRestController {
     @PostMapping("{customerId}")
     @ApiOperation(value = "Обновляет количество товара в корзине.")
     public ResponseEntity<?> updateQuantity(@PathVariable @ApiParam(value = "id пользователя.") Long customerId,
-                                            @RequestBody @ApiParam(value = "Форма заполнения продукта и его количества.") OrderLineForm orderLineForm) {
+                                            @RequestBody @ApiParam(value = "Форма заполнения продукта и его количества.") OrderLineUpdateRequest orderLineUpdateRequest) {
 
-        return cartService.updateQuantity(orderLineForm.getProductId(),
-                orderLineForm.getProductQuantity(), customerId) ? ResponseEntity.ok().build() :
+        return cartService.updateQuantity(orderLineUpdateRequest.getProductId(),
+                orderLineUpdateRequest.getProductQuantity(), customerId) ? ResponseEntity.ok().build() :
                 ResponseEntity.badRequest().build();
     }
 

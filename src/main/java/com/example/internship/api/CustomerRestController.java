@@ -1,83 +1,128 @@
 package com.example.internship.api;
 
-import com.example.internship.dto.CustomerSearchResult;
-import com.example.internship.entity.Customer;
+import com.example.internship.api.dto.CustomerSearchResponse;
+import com.example.internship.refactoringdto.CustomerDto;
+import com.example.internship.refactoringdto.View;
 import com.example.internship.service.customer.CustomerService;
-import io.swagger.annotations.Api;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-/*
+import javax.validation.Valid;
+
+/**
  * @author Romodin Aleksey
+ * <p>
+ * Refactoring by Danil Movenov 25.09.20
  */
 
-/*Rest-контроллер для сущности "Пользовалели/Customers"
-    http://localhost:8080/swagger-ui/
-    Методы:
-            - GET /api/user/{id} - получение пользователя по идентификатору
-            - PUT /api/user/{id} - редактирование данных
-            - GET /api/user/search - поиск пользователей
- */
-
-@AllArgsConstructor
 @RestController
-@RequestMapping("/api/user/")
-@Api( value = "customers")
-
+@RequestMapping("/api/customers/")
+@RequiredArgsConstructor
 public class CustomerRestController {
+
     private final CustomerService customerService;
 
-    //Показать данные конкретного пользователя
+    /**
+     * GET запрос, возвращает данные пользователя по id.
+     *
+     * @param id идентификатор пользователя
+     * @return http status 200 и пользователя или http status 400, если пользователь не найден
+     */
     @GetMapping("{id}")
-    @ApiOperation(value = "Получение данных пользователя по идентификатору", response = Customer.class)
-    public ResponseEntity<?> getUser(@PathVariable Long id) {
-        if(customerService.getById(id).isPresent()) {
-            return new ResponseEntity<>(customerService.getById(id), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+    @ApiOperation(value = "Получение данных пользователя по идентификатору")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь найден"),
+            @ApiResponse(code = 404, message = "Пользователь не найден")
+    })
+    @Schema(implementation = CustomerDto.class)
+    @JsonView(View.Public.class)
+    public ResponseEntity<CustomerDto> getById(@ApiParam(value = "Идентификатор пользователя")
+                                               @PathVariable("id") Long id) {
+
+        CustomerDto customer = customerService.getByIdRef(id);
+
+        return customer != null ? ResponseEntity.ok(customer) : ResponseEntity.notFound().build();
     }
 
-    //Редактирование данных
+    /**
+     * GET запрос, поиск пользователя по критериям.
+     *
+     * @param firstName  имя
+     * @param middleName отчество
+     * @param lastName   фамилия
+     * @param email      email
+     * @param pageSize   размер страницы
+     * @param pageNumber номер страницы
+     * @return пользователь по критериям
+     */
+    @GetMapping("search")
+    @ApiOperation(value = "Поиск пользователей")
+    @Schema(implementation = CustomerSearchResponse.class)
+    @ApiResponse(code = 200, message = "Поиск успешен")
+    @JsonView(View.Public.class)
+    public ResponseEntity<CustomerSearchResponse> searchUser(@ApiParam(value = "Поиск по имени")
+                                                         @RequestParam(name = "firstName", required = false) String firstName,
+                                                             @ApiParam(value = "Поиск по отчеству")
+                                                         @RequestParam(name = "middleName", required = false) String middleName,
+                                                             @ApiParam(value = "Поиск по фамилии")
+                                                         @RequestParam(name = "lastName", required = false) String lastName,
+                                                             @ApiParam(value = "Поиск по email")
+                                                         @RequestParam(name = "email", required = false) String email,
+                                                             @ApiParam(value = "Размер страницы")
+                                                         @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                             @ApiParam(value = "Номер страницы")
+                                                         @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) {
+
+        CustomerSearchResponse searchFrom = customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
+
+        return ResponseEntity.ok(searchFrom);
+    }
+
+    /**
+     * PUT запрос, редактирование данных пользователя.
+     *
+     * @param id       идентификатор пользователя.
+     * @param customer данные пользователя для редактирования.
+     * @return http status 200 если изменения успешны, http status 400, если пользователь не найден
+     * или не удается изменить данные.
+     */
     @PutMapping("{id}")
     @ApiOperation(value = "Редактирование данных")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody Customer customer) {
-        Customer customerOld = customerService.getById(id).orElse(null);
-        if (customerOld!=null) {
-            customerOld.setFirstName(customer.getFirstName());
-            customerOld.setMiddleName(customer.getMiddleName());
-            customerOld.setLastName(customer.getLastName());
-            customerOld.setAddresses(customer.getAddresses());
-            customerOld.setCart(customer.getCart());
-            customerOld.setEmail(customer.getEmail());
-            customerOld.setPassword(customer.getPassword());
-            customerOld.setPhone(customer.getPhone());
-            customerService.save(customerOld);
-            return new ResponseEntity<>("Данные пользователя обновлены!", HttpStatus.OK);
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь обновлен"),
+            @ApiResponse(code = 400, message = "Невалидные данные"),
+            @ApiResponse(code = 404, message = "Пользователь не найден")
+    })
+    @Schema(implementation = CustomerDto.class)
+    @JsonView(View.Public.class)
+    public ResponseEntity<?> updateUser(@ApiParam(value = "Идентификатор пользователя")
+                                                  @PathVariable("id") Long id,
+                                                  @ApiParam(value = "Данные для редактирования") @JsonView(View.Update.class)
+                                                  @Valid @RequestBody CustomerDto customer, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            StringBuilder errors = new StringBuilder();
+            bindingResult.getAllErrors().forEach(e -> errors.append(e.getDefaultMessage()).append("\n"));
+            return ResponseEntity.badRequest().body(errors.toString());
         }
-        return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+
+        CustomerDto customerDto = customerService.update(id, customer);
+
+        return customerDto != null ? ResponseEntity.ok(customerDto) : ResponseEntity.notFound().build();
     }
 
-    //Поиск пользователей
-    @GetMapping("search")
-    @ApiOperation(value = "Поиск пользователей", response = CustomerSearchResult.class)
-    public CustomerSearchResult searchUser(@RequestParam(name = "firstName", required = false)
-                                               @ApiParam(value = "Поиск по имени") String firstName,
-                                           @RequestParam(name = "middleName", required = false)
-                                           @ApiParam(value = "Поиск по отчеству") String middleName,
-                                           @RequestParam(name = "lastName", required = false)
-                                               @ApiParam(value = "Поиск по фамилии") String lastName,
-                                           @RequestParam(name = "email", required = false)
-                                               @ApiParam(value = "Поиск по email") String email,
-                                           @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                               @ApiParam(value = "Размер страницы") Integer pageSize,
-                                           @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                               @ApiParam(value = "Номер страницы") Integer pageNumber) {
-
-        return customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
-
-    }
 }

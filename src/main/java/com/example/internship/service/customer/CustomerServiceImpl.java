@@ -1,7 +1,7 @@
 package com.example.internship.service.customer;
 
+import com.example.internship.api.dto.CustomerSearchResponse;
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.repository.CustomerRepository;
 import com.example.internship.specification.CustomerSpecification;
@@ -48,13 +48,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public com.example.internship.refactoringdto.CustomerDto getByIdRef(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+
+        return customer.map(this::convertToDtoRef).orElse(null);
+    }
+
+    @Override
     public Optional<CustomerDto> getDtoById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isPresent()) {
             CustomerDto customerDto = convertToDto(customer.get());
             return Optional.of(customerDto);
-        }
-        else {
+        } else {
             return Optional.empty();
         }
     }
@@ -66,6 +72,31 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Customer customer = customerRepository.findByEmail(authentication.getName());
         return customer != null ? Optional.of(convertToDto(customer)) : Optional.empty();
+    }
+
+    @Override
+    public com.example.internship.refactoringdto.CustomerDto update(Long customerId, com.example.internship.refactoringdto.CustomerDto customerDto) {
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        boolean existsEmail = checkEmail(customerDto.getEmail());
+
+        if (Objects.isNull(customer)) {
+            return null;
+        }
+
+        if (existsEmail && Objects.isNull(customer.getEmail())) {
+            return null;
+        } else {
+            customer.setEmail(customerDto.getEmail());
+        }
+
+        customerDto.setId(customerId);
+        customer.setFirstName(customerDto.getFirstName());
+        customer.setMiddleName(customerDto.getMiddleName());
+        customer.setLastName(customerDto.getLastName());
+        customer.setPhone(customerDto.getPhone());
+        customerRepository.save(customer);
+
+        return customerDto;
     }
 
     @Override
@@ -151,31 +182,33 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     // TODO: Используется только в CheckoutController, есть смысл написать конвертацию в ДТО CheckoutController!
-    public CustomerDto getCustomerDto (Customer customer) { return convertToDto(customer); }
+    public CustomerDto getCustomerDto(Customer customer) {
+        return convertToDto(customer);
+    }
 
     @Override
-    public CustomerSearchResult search(String firstName, String middleName, String lastName, String email,
-                                       Integer pageSize, Integer pageNumber) {
+    public CustomerSearchResponse search(String firstName, String middleName, String lastName, String email,
+                                         Integer pageSize, Integer pageNumber) {
 
-        CustomerSearchResult customerSearchResult = new CustomerSearchResult();
+        CustomerSearchResponse customerSearchResponse = new CustomerSearchResponse();
         Specification<Customer> specification;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null,"firstName", firstName);
-        specification = draftSpecification(specification,"middleName", middleName);
-        specification = draftSpecification(specification,"lastName", lastName);
-        specification = draftSpecification(specification,"email", email);
-        specification = draftSpecification(specification,"emailNotNull", "islNotNull");
+        specification = draftSpecification(null, "firstName", firstName);
+        specification = draftSpecification(specification, "middleName", middleName);
+        specification = draftSpecification(specification, "lastName", lastName);
+        specification = draftSpecification(specification, "email", email);
+        specification = draftSpecification(specification, "emailNotNull", "islNotNull");
 
         // Результат поиска
-        customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
-                .stream().map(this::convertToDto)
+        customerSearchResponse.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
+                .stream().map(this::convertToDtoRef)
                 .collect(Collectors.toList()));
-        customerSearchResult.setPageNumber(pageNumber);
-        customerSearchResult.setPageSize(pageSize);
-        customerSearchResult.setTotalCustomers(customerRepository.count(specification));
+        customerSearchResponse.setPageNumber(pageNumber);
+        customerSearchResponse.setPageSize(pageSize);
+        customerSearchResponse.setTotalCustomers(customerRepository.count(specification));
 
-        return customerSearchResult;
+        return customerSearchResponse;
     }
 
     @Override
@@ -193,7 +226,6 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean checkEmail(final String email) {
         return customerRepository.existsByEmail(email);
     }
-
 
     //Метод проверки поля и добавления условия в запрос
 
@@ -222,9 +254,20 @@ public class CustomerServiceImpl implements CustomerService {
      *
      * @param customer сущность пользователя.
      * @return ДТО пользователя.
+     * @deprecated
      */
     public CustomerDto convertToDto(Customer customer) {
         return mapper.map(customer, CustomerDto.class);
+    }
+
+    /**
+     * Конвертирует сущность пользователя в ДТО.
+     *
+     * @param customer сущность пользователя.
+     * @return ДТО пользователя.
+     */
+    private com.example.internship.refactoringdto.CustomerDto convertToDtoRef(Customer customer) {
+        return mapper.map(customer, com.example.internship.refactoringdto.CustomerDto.class);
     }
 
     /**
@@ -232,6 +275,17 @@ public class CustomerServiceImpl implements CustomerService {
      *
      * @param customerDto ДТО пользователя.
      * @return сущность пользователя.
+     */
+    private Customer convertToEntity(com.example.internship.refactoringdto.CustomerDto customerDto) {
+        return mapper.map(customerDto, Customer.class);
+    }
+
+    /**
+     * Конвертирует ДТО пользователя в сущность.
+     *
+     * @param customerDto ДТО пользователя.
+     * @return сущность пользователя.
+     * @deprecated
      */
     private Customer convertToModel(CustomerDto customerDto) {
         return mapper.map(customerDto, Customer.class);
