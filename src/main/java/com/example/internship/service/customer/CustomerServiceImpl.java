@@ -82,14 +82,18 @@ public class CustomerServiceImpl implements CustomerService {
             return null;
         }
 
+        if (!checkEmail(customerDto.getEmail()) && Objects.nonNull(customerDto.getEmail())) {
+            customer.setEmail(customerDto.getEmail());
+        } else {
+            customerDto.setEmail(customer.getEmail());
+        }
+
+        customerDto.setId(customerId);
         customer.setFirstName(customerDto.getFirstName());
         customer.setMiddleName(customerDto.getMiddleName());
         customer.setLastName(customerDto.getLastName());
-        customer.setEmail(customerDto.getEmail());
         customer.setPhone(customerDto.getPhone());
         customerRepository.save(customer);
-
-        customerDto.setId(customerId);
 
         return customerDto;
     }
