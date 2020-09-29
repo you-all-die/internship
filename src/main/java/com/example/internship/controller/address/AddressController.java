@@ -1,8 +1,7 @@
 package com.example.internship.controller.address;
 
-import com.example.internship.dto.addressDto.AddressDto;
-import com.example.internship.dto.dadata.DadataAddressDto.ValueOnly;
-import com.example.internship.entity.Customer;
+import com.example.internship.dto.address.AddressDto;
+import com.example.internship.dto.dadata.DadataAddressDto;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
 import com.example.internship.service.dadata.DadataService;
@@ -22,6 +21,7 @@ public class AddressController {
 
     public static final String BASE_MAPPING = "/address";
     public static final String CREATE_ADDRESS_MAPPING = "/create";
+    public static final String SAVE_ADDRESS_MAPPING = "/save";
     public static final String ADDRESS_SUGGESTIONS = "/suggest";
 
     private final CustomerService customerService;
@@ -33,28 +33,24 @@ public class AddressController {
             Model model,
             @RequestParam Long customerId
     ) {
-        final Customer customer = customerService.findById(customerId).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("Customer with id = %d not found", customerId)
-                )
-        );
-        model.addAttribute("customerId", customer.getId());
-        return "/address/editor";
+        if (customerService.existsById(customerId)) {
+            final AddressDto.ForEditor dto = new AddressDto.ForEditor();
+            dto.setCustomerId(customerId);
+            model.addAttribute("address", dto);
+            return "/address/editor";
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    String.format("Customer with id %d is not exists.", customerId));
+        }
     }
 
-    @PostMapping
-    @ResponseBody
+    @PostMapping(SAVE_ADDRESS_MAPPING)
     public String saveAddress(
-            Long id,
-            Long customerId,
-            String address
+            @ModelAttribute AddressDto.ForEditor addressDto
     ) {
-        AddressDto addressDto = new AddressDto();
-        addressDto.setId(id);
-        addressDto.setCustomerId(customerId);
-        addressDto.setComment(address);
-        return "/address";
+        addressService.save(addressDto);
+        return "redirect:/customer/" + addressDto.getCustomerId();
     }
 
     @PostMapping(ADDRESS_SUGGESTIONS)
@@ -62,7 +58,7 @@ public class AddressController {
             Model model,
             @RequestParam String query
     ) {
-        final List<ValueOnly> suggestions = dadataService.getAddressSuggestions(query);
+        final List<DadataAddressDto.ValueOnly> suggestions = dadataService.getAddressSuggestions(query);
         model.addAttribute("suggestions", suggestions);
         return "/address/suggestions :: widget";
     }

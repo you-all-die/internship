@@ -12,17 +12,16 @@
         <div th:replace="/common/main :: header">Header</div>
 
         <div class="ui main grid container">
-            <div class="row">
-                <div class="column">
-                    <form class="ui form" method="post" th:action="@{/address}">
-                        <input th:field="${customerId}" type="hidden">
-                        <!--                        <input th:field="*{id}" type="hidden">-->
-                        <div class="field">
-                            <label>Адрес</label>
-                            <input id="address" name="address" type="text">
-                        </div>
-                    </form>
-                </div>
+            <div class="column">
+                <form class="ui form" method="post" th:action="@{/address/save}" th:object="${address}">
+                    <input th:field="*{id}" type="hidden">
+                    <input th:field="*{customerId}" th:value="${customerId}" type="hidden">
+                    <div class="field">
+                        <label>Адрес</label>
+                        <input th:field="*{comment}" type="text">
+                    </div>
+                    <button class="ui button" th:text="#{address.editor.save}" type="submit">Save</button>
+                </form>
             </div>
         </div>
 

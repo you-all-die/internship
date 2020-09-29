@@ -1,10 +1,12 @@
 package com.example.internship.service.address;
 
-import com.example.internship.dto.address.AddressDto.Response.ForList;
+import com.example.internship.dto.address.AddressDto.ForEditor;
+import com.example.internship.dto.address.AddressDto.ForList;
 import com.example.internship.dto.addressDto.AddressDto;
 import com.example.internship.entity.Address;
 import com.example.internship.helper.JoinHelper;
 import com.example.internship.repository.AddressRepository;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -20,6 +22,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
+    private final CustomerService customerService;
     private final ModelMapper mapper;
 
     @Override
@@ -48,6 +51,11 @@ public class AddressServiceImpl implements AddressService {
     //============================================================================================================//
 
     @Override
+    public Address save(ForEditor addressDto) {
+        return addressRepository.save(mapper.map(addressDto, Address.class));
+    }
+
+    @Override
     public List<ForList> getAllByCustomerId(Long customerId) {
         return addressRepository.findAddressByCustomerId(customerId)
                 .stream()
@@ -68,6 +76,19 @@ public class AddressServiceImpl implements AddressService {
                 .createTypeMap(Address.class, ForList.class)
                 .addMappings(mapper -> mapper.skip(ForList::setFullAddress))
                 .setPostConverter(addressToForListConverter());
+        mapper
+                .createTypeMap(ForEditor.class, Address.class)
+                .addMappings(mapper -> mapper.skip(Address::setCustomer))
+                .setPostConverter(fromEditorToAddressConverter());
+    }
+
+    private Converter<ForEditor, Address> fromEditorToAddressConverter() {
+        return context -> {
+            final ForEditor dto = context.getSource();
+            final Address entity = context.getDestination();
+            entity.setCustomer(customerService.getById(dto.getCustomerId()).orElseThrow());
+            return entity;
+        };
     }
 
     private Converter<Address, ForList> addressToForListConverter() {
@@ -86,7 +107,8 @@ public class AddressServiceImpl implements AddressService {
                 address.getDistrict(),
                 address.getStreet(),
                 address.getHouse(),
-                address.getApartment()
+                address.getApartment(),
+                address.getComment()
         );
     }
 }

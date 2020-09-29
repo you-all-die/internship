@@ -1,5 +1,6 @@
 package com.example.internship.controller.customer;
 
+import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.service.customer.CustomerService;
@@ -32,7 +33,7 @@ public class CustomerController {
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false) Boolean ascendingOrder
     ) {
-        final SearchResult data = customerService.findByCriteria(
+        final SearchResult<WithFullName> data = customerService.findByCriteria(
                 searchString,
                 pageNumber,
                 pageSize,
@@ -44,7 +45,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public String viewCustomerProfile(@PathVariable Long id, Model model) {
-        Optional<Customer> customer = customerService.getById(id);
+        Optional<WithFullName> customer = customerService.getWithFullNameById(id);
         model.addAttribute("customer", customer.orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found")
         ));
@@ -60,7 +61,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/edit")
     public String editCustomer(@PathVariable Long id, Model model) {
-        Optional<Customer> customer = customerService.getById(id);
+        Optional<WithFullName> customer = customerService.getWithFullNameById(id);
         model.addAttribute("customer", customer.orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found")
         ));

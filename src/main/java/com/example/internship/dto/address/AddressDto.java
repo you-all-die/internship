@@ -5,15 +5,15 @@ import lombok.Data;
 public enum AddressDto {
     ;
 
-    public enum Response {
-        ;
+    private interface CustomerId {
+        Long getCustomerId();
+    }
 
-        @Data
-        public static class ForList implements Id, FullAddress, Comment {
-            private Long id;
-            private String fullAddress;
-            private String Comment;
-        }
+    @Data
+    public static class ForEditor implements Id, CustomerId, Comment {
+        private Long id;
+        private Long customerId;
+        private String comment;
     }
 
     private interface Id {
@@ -22,6 +22,13 @@ public enum AddressDto {
 
     private interface Customer {
         Customer getCustomer();
+    }
+
+    @Data
+    public static class ForList implements Id, FullAddress, Comment {
+        private Long id;
+        private String fullAddress;
+        private String Comment;
     }
 
     private interface Region {

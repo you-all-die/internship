@@ -2,7 +2,7 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
-import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
+import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 
@@ -18,6 +18,9 @@ public interface CustomerService {
     Collection<WithFullName> getAllWithFullNames();
 
     Optional<Customer> getById(long id);
+
+    Optional<WithFullName> getWithFullNameById(Long id);
+
     Optional<CustomerDto> getDtoById(Long id);
 
     void save(Customer customer);
@@ -59,4 +62,6 @@ public interface CustomerService {
     void deleteAll();
 
     Optional<Customer> findById(Long id);
+
+    boolean existsById(Long id);
 }

@@ -1,37 +1,28 @@
 package com.example.internship.dto.customer;
 
+import com.example.internship.dto.address.AddressDto;
 import lombok.Data;
+
+import java.util.List;
 
 public enum CustomerDto {
     ;
 
+    private interface Addresses {
+        List<AddressDto.ForList> getAddresses();
+    }
 
-    public enum Response {
-        ;
-
-        /**
-         * ОПД с основными полями
-         */
-        @Data
-        public static class AllExceptPassword implements Id, Names, Phone, Email {
-            Long id;
-            String firstName;
-            String middleName;
-            String lastName;
-            String phone;
-            String email;
-        }
-
-        /**
-         * ОПД для вывода списка покупателей
-         */
-        @Data
-        public static class WithFullName implements Id, FullName, Phone, Email {
-            Long id;
-            String fullName;
-            String phone;
-            String email;
-        }
+    /**
+     * ОПД с основными полями
+     */
+    @Data
+    public static class AllExceptPassword implements Id, Names, Phone, Email {
+        Long id;
+        String firstName;
+        String middleName;
+        String lastName;
+        String phone;
+        String email;
     }
 
     private interface Id {
@@ -54,5 +45,20 @@ public enum CustomerDto {
 
     private interface FullName {
         String getFullName();
+    }
+
+    /**
+     * ОПД для вывода списка покупателей
+     */
+    @Data
+    public static class WithFullName implements Id, Names, FullName, Phone, Email, Addresses {
+        Long id;
+        String firstName;
+        String middleName;
+        String lastName;
+        String fullName;
+        String phone;
+        String email;
+        List<AddressDto.ForList> addresses;
     }
 }

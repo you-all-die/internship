@@ -2,7 +2,8 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.CustomerSearchResult;
-import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
+import com.example.internship.dto.address.AddressDto;
+import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Customer_;
@@ -30,8 +31,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Service
@@ -45,12 +46,20 @@ public class CustomerServiceImpl implements CustomerService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper mapper;
 
+    @Override
     public final Iterable<Customer> getAll() {
         return customerRepository.findAll();
     }
 
+    @Override
     public final Optional<Customer> getById(long id) {
         return customerRepository.findById(id);
+    }
+
+    @Override
+    public Optional<WithFullName> getWithFullNameById(Long id) {
+        final Optional<Customer> customerOptional = customerRepository.findById(id);
+        return customerOptional.map(customer -> mapper.map(customer, WithFullName.class));
     }
 
     @Override
@@ -190,7 +199,7 @@ public class CustomerServiceImpl implements CustomerService {
         // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
                 .stream().map(this::convertToDto)
-                .collect(Collectors.toList()));
+                .collect(toList()));
         customerSearchResult.setPageNumber(pageNumber);
         customerSearchResult.setPageSize(pageSize);
         customerSearchResult.setTotalCustomers(customerRepository.count(specification));
@@ -258,24 +267,35 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return customerRepository.existsById(id);
+    }
+
     @PostConstruct
     private void configureCustomerMapper() {
         mapper
                 .createTypeMap(Customer.class, WithFullName.class)
                 .addMappings(mapper -> mapper.skip(WithFullName::setFullName))
-                .setPostConverter(toWithFullNameConverter());
+                .setPostConverter(customerToWithFullNameConverter());
     }
 
     private WithFullName convertToWithFullName(Customer customer) {
         return mapper.map(customer, WithFullName.class);
     }
 
-    private Converter<Customer, WithFullName> toWithFullNameConverter() {
+    private Converter<Customer, WithFullName> customerToWithFullNameConverter() {
         return context -> {
             Customer customer = context.getSource();
             WithFullName withFullName = context.getDestination();
             withFullName.setFullName(
                     JoinHelper.join(" ", customer.getLastName(), customer.getFirstName(), customer.getMiddleName())
+            );
+            withFullName.setAddresses(
+                    customer.getAddresses()
+                            .stream()
+                            .map(a -> mapper.map(a, AddressDto.ForList.class))
+                            .collect(toList())
             );
             return withFullName;
         };

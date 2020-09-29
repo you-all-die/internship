@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="address : ${addresses}" th:unless="#lists.isEmpty(${addresses})">
+            <tr th:each="address : ${addresses}" th:unless="${#lists.isEmpty(addresses)}">
                 <td th:text="${address.fullAddress}">New York City, 5th Avenue, 220b</td>
                 <td th:text="${address.comment}">Sherlock Holmes wasn't there</td>
             </tr>

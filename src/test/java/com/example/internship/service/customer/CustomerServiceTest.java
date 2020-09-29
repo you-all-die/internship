@@ -1,6 +1,6 @@
 package com.example.internship.service.customer;
 
-import com.example.internship.dto.customer.CustomerDto.Response.WithFullName;
+import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
 import com.example.internship.entity.Customer;
 import org.junit.jupiter.api.AfterAll;
