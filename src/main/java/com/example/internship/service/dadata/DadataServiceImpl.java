@@ -28,10 +28,11 @@ public class DadataServiceImpl implements DadataService {
         if (StringUtils.isBlank(query)) {
             return emptyList();
         }
-        return Objects.requireNonNull(dadataClient.suggestAddress(AddressRequestBuilder.create(query).build())
+        final List<Suggestion<Address>> suggestionList = dadataClient
+                .suggestAddress(AddressRequestBuilder.create(query).build())
                 .collectList()
-                .block())
-                .stream()
+                .block();
+        return Objects.requireNonNull(suggestionList).stream()
                 .map(this::convertSuggestionAddressToValueOnly)
                 .collect(toUnmodifiableList());
     }
