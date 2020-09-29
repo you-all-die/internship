@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -55,7 +57,8 @@ public class CustomerDto {
 
     @Schema(description = "Почта")
     @JsonView({View.Public.class, View.Update.class})
-    @Email
+    @NotBlank
+    @Email()
     @Size(max = 64)
     private String email;
 }

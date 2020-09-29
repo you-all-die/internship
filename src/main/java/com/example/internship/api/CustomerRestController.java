@@ -116,7 +116,7 @@ public class CustomerRestController {
 
         if (bindingResult.hasErrors()) {
             StringBuilder errors = new StringBuilder();
-            bindingResult.getAllErrors().forEach(e -> errors.append(e).append("\n"));
+            bindingResult.getAllErrors().forEach(e -> errors.append(e.getDefaultMessage()).append("\n"));
             return ResponseEntity.badRequest().body(errors.toString());
         }
 

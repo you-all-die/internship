@@ -77,15 +77,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public com.example.internship.refactoringdto.CustomerDto update(Long customerId, com.example.internship.refactoringdto.CustomerDto customerDto) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
+        boolean existsEmail = checkEmail(customerDto.getEmail());
 
         if (Objects.isNull(customer)) {
             return null;
         }
 
-        if (!checkEmail(customerDto.getEmail()) && Objects.nonNull(customerDto.getEmail())) {
-            customer.setEmail(customerDto.getEmail());
+        if (existsEmail && Objects.isNull(customer.getEmail())) {
+            return null;
         } else {
-            customerDto.setEmail(customer.getEmail());
+            customer.setEmail(customerDto.getEmail());
         }
 
         customerDto.setId(customerId);
