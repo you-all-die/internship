@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2020-09-16
+      author: Sergey Lapshin
+      comment: create items table
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: items
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_items
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_quantity
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_category_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_description
+                  type: VARCHAR
+              - column:
+                  name: item_name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              -
+                column:
+                  name: item_picture
+                  type: VARCHAR
+              -
+                column:
+                  name: item_price
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        -
+          addForeignKeyConstraint:
+            constraintName: fk_orders_items
+            baseTableName: items
+            baseColumnNames: order_id
+            referencedTableName: orders
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'
+                    
