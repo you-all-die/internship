@@ -107,3 +107,113 @@ databaseChangeLog:
             schemaName: public
             tableName: customers
             validate: true
+  - changeSet:
+      id: 2020-09-25-01
+      comment: Create comment table
+      author: Romodin Aleksey
+      changes:
+        - createTable:
+            tableName: feedback
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date_publication
+                  type: DATE
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: feedback_text
+                  type: VARCHAR(500)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    - nullable: true
+              - column:
+                  name: author_name
+                  type: VARCHAR(64)
+                  constraints:
+                    - nullable: false
+  - changeSet:
+      id: 2020-09-25-02
+      comment: Add product to feedback relation
+      author: Romodin Aleksey
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_product_feedback
+            baseTableName: feedback
+            baseColumnNames: product_id
+            referencedTableName: product
+            referencedColumnNames: id
+            onDelete: 'CASCADE'
+            onUpdate: 'RESTRICT'
+  - changeSet:
+      id: 2020-09-25-04
+      comment: Updating the price value if it is null
+      author: Romodin Aleksey
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 0
+                sql: select count(*) from product;
+      changes:
+        - sql: UPDATE Product SET price = 9000 WHERE price is null;
+  - changeSet:
+      id: 2020-09-25-05
+      comment: Insert and update default category
+      author: Romodin Aleksey
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 0
+                sql: select count(*) from category;
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: UTF-8
+            path: db/changelog/default-values/category.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true
+  - changeSet:
+      id: 2020-09-27-01
+      author: Romodin Aleksey
+      comment: modifyDataType
+      changes:
+        - modifyDataType:
+            columnName: description
+            newDataType: VARCHAR(1500)
+            tableName: product
+  - changeSet:
+      id: 2020-09-27-02
+      comment: Update description product
+      author: Romodin Aleksey
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: 0
+                sql: select count(*) from product;
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: UTF-8
+            path: db/changelog/default-values/product_update_description.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true
