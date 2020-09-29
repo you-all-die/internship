@@ -50,28 +50,11 @@ public class ProductServiceImpl implements ProductService {
                 (null == pageNumber || pageNumber < 1) ? null : pageNumber).block());
 
         // Create pagination
-        if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
-
-            result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
-
-            if (result.getPageNumber() != 0) {
-
-                result.setPrevPage(result.getPageNumber());
-
-                if (result.getPrevPage() > 1) {
-                    result.setFirstPage(1);
-                }
-            }
-
-            result.setPageNumber(result.getPageNumber() + 1);
-
-            if (result.getPageNumber() < result.getTotalPages()) {
-
-                result.setNextPage(result.getPageNumber() + 1);
-
-                if (result.getNextPage() < result.getTotalPages()) {
-                    result.setLastPage(result.getTotalPages().intValue());
-                }
+        if (null != result) {
+            if (result.getTotalProducts() / result.getPageSize() > 0) {
+                result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
+            } else {
+                result.setTotalPages(0L);
             }
         }
 
