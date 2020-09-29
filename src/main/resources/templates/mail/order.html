@@ -2,24 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:object="${order}" th:text="#{email.order.title(*{id})}">Новый заказ</title>
+    <title th:object="${order}" th:text="#{*{id}}">Новый заказ</title>
+    <style>
+        #center {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<p th:object="${customer}" th:text="*{firstName != null} ? #{email.order.welcome.registered(*{firstName})} : #{email.order.welcome.anonymous}">Добрый день!</p>
-<p th:object="${order}" th:text="#{email.order.accepted(*{id}, *{date})}">Ваш заказ принят
-</p>
+<p th:object="${order}"
+   th:text="*{customerFirstName != null} ? #{email.order.welcome.registered(*{customerFirstName})} : #{email.order.welcome.anonymous}">
+    Добрый день!</p>
+<p th:object="${order}" th:text="#{email.order.accepted(*{id}, *{date})}">Ваш заказ принят</p>
+
 <u th:text="#{email.order.contents.header}">Состав заказа:</u>
-<th:block th:each="orderLine : ${orderLines}">
-    <p th:text="#{email.order.contents.order_line(${orderLine?.id}, ${orderLine?.productName}, ${orderLine?.productQuantity}, ${orderLine?.price})}">
-        Товар
-    </p>
-</th:block>
-<u th:text="#{email.order.comment}">Комментарий к заказу:</u>
-<p th:object="${order}" th:text="*{comment}"></p>
-<p th:object="${order}" th:text="#{email.order.total_cost}"><b>Общая стоимость заказа:</b> [[*{totalPrice}]]</p>
-<p th:object="${order}" th:test="#{email.order.additional_info(*{id})}">
-    Пожалуйста, при обращении к администрации магазина указывайте номер Ващего заказа
-</p>
-<p th:text="#{email.order.thanks}">Спасибо за покупку!</p>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Наименование товара</th>
+        <th>Кол-во</th>
+        <th>Стоимость</th>
+    </tr>
+    <tr th:block th:each="item : ${order.items}">
+        <td id="center" th:text="${item.id}"></td>
+        <td id="center" th:text="${item.itemName}"></td>
+        <td id="center" th:text="${item.itemQuantity}"></td>
+        <td id="center" th:text="${item.itemPrice}"></td>
+    </tr>
+</table>
+
+<u>Комментарий к заказу:</u>
+<p th:object="${order}" th:text="*{addressComment}"></p>
+
+<u>Общая стоимость заказа:</u>
+<p th:text="${totalPrice}"></p>
+
+<p th:object="${order}" th:text="#{email.order.additional_info(*{id})}"></p>
+<p th:text="#{email.order.thanks}"></p>
 </body>
 </html>

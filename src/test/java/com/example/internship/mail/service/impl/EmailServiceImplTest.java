@@ -1,27 +1,24 @@
 package com.example.internship.mail.service.impl;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.mail.dto.TestOrderDto;
-import com.example.internship.mail.dto.TestOrderLineDto;
+import com.example.internship.dto.ItemDto;
+import com.example.internship.dto.OrderDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
-
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -92,8 +89,31 @@ public class EmailServiceImplTest {
         CustomerDto customer = new CustomerDto();
         customer.setEmail("a@a.com");
         customer.setFirstName("name");
-        TestOrderDto orderDto = new TestOrderDto(1L, "date",
-                List.of(new TestOrderLineDto(1L, "name", 2L, 3L)), "comment", 600L);
+        OrderDto orderDto = new OrderDto(
+                1L,
+                "FirstName",
+                "MiddleName",
+                "LastName",
+                "89999999999",
+                "asasas@adasdasd.com",
+                "Region",
+                "City",
+                "District",
+                "Street",
+                "House",
+                "Apartmant",
+                "Comment",
+                "Status",
+                List.of(new ItemDto(
+                        1L,
+                        2,
+                        2L,
+                        "Description",
+                        "Name",
+                        "Picture",
+                        new BigDecimal(3))),
+                new Timestamp(System.currentTimeMillis())
+        );
         try {
             assertTrue(emailService.sendOrderDetailsMessage(customer, orderDto));
         } catch (MailServiceException e) {
@@ -118,8 +138,31 @@ public class EmailServiceImplTest {
      */
     @Test
     public void testSendOrderDetailsMessageNullCustomer() {
-        TestOrderDto orderDto = new TestOrderDto(1L, "date",
-                List.of(new TestOrderLineDto(1L, "name", 2L, 3L)), "comment", 600L);
+        OrderDto orderDto = new OrderDto(
+                1L,
+                "FirstName",
+                "MiddleName",
+                "LastName",
+                "89999999999",
+                "asasas@adasdasd.com",
+                "Region",
+                "City",
+                "District",
+                "Street",
+                "House",
+                "Apartmant",
+                "Comment",
+                "Status",
+                List.of(new ItemDto(
+                        1L,
+                        2,
+                        2L,
+                        "Description",
+                        "Name",
+                        "Picture",
+                        new BigDecimal(3))),
+                new Timestamp(System.currentTimeMillis())
+        );
         assertThrows(MailServiceException.class, () -> emailService.sendOrderDetailsMessage(null, orderDto));
         verify(javaMailSender, never()).send(any(MimeMessage.class));
     }
