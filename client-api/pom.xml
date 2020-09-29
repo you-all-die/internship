@@ -122,7 +122,7 @@
             </goals>
             <configuration>
               <inputSpec>http://localhost:8080/v3/api-docs.yaml</inputSpec>
-              <output>${project.build.directory}</output>
+              <!--output>${project.build.directory}</output-->
               <groupId>com.example</groupId>
               <artifactId>open-api-client</artifactId>
               <apiPackage>com.example.internship.client.api</apiPackage>
@@ -132,6 +132,7 @@
               <generatorName>java</generatorName>
               <generateApis>true</generateApis>
               <generateSupportingFiles>true</generateSupportingFiles>
+              <generateApiTests>false</generateApiTests>
               <generateModelTests>false</generateModelTests>
               <generateModelDocumentation>false</generateModelDocumentation>
               <generateApiDocumentation>false</generateApiDocumentation>

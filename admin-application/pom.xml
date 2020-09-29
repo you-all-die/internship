@@ -94,7 +94,6 @@
 			<groupId>com.example</groupId>
 			<artifactId>open-api-client</artifactId>
 			<version>0.1</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
