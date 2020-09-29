@@ -1,10 +1,10 @@
 package com.example.internship.api;
 
-import com.example.internship.dto.addressDto.AddressDto;
-import com.example.internship.service.AddressService;
+import com.example.internship.refactoringdto.AddressDto;
+import com.example.internship.service.address.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,140 +15,149 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Роман Каравашкин
+ * <p>
+ * Refactoring by Ivan Gubanov 25.09.20
  */
 
 public class AddressRestControllerTest {
 
-    AddressService addressService = mock(AddressService.class);
+    private static final AddressService ADDRESS_SERVICE = mock(AddressService.class);
 
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new AddressRestController(ADDRESS_SERVICE)).build();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private static final AddressDto ADDRESS = new AddressDto();
 
-    @BeforeEach
-    public void setUp() {
-        AddressRestController addressRestController = new AddressRestController(addressService);
-        mockMvc = MockMvcBuilders.standaloneSetup(addressRestController).build();
+    private static final AddressDto BAD_ADDRESS = new AddressDto();
+
+    private static final Long CUSTOMER_ID = 12L;
+
+    @BeforeAll
+    public static void beforeAll() {
+
+        ADDRESS.setRegion("Region");
+        ADDRESS.setDistrict("District");
+        ADDRESS.setCity("City");
+        ADDRESS.setStreet("Street");
+        ADDRESS.setHouse("House");
+        ADDRESS.setApartment("Apartment");
+        ADDRESS.setComment("Comment");
+
+        BAD_ADDRESS.setCustomerId(0L);
+
+        when(ADDRESS_SERVICE.getAllByCustomerId(CUSTOMER_ID)).thenReturn(List.of(ADDRESS));
+        when(ADDRESS_SERVICE.getAllByCustomerId(0L)).thenReturn(null);
+        when(ADDRESS_SERVICE.addAddressToCustomer(CUSTOMER_ID, ADDRESS)).thenReturn(ADDRESS);
+        when(ADDRESS_SERVICE.addAddressToCustomer(BAD_ADDRESS.getCustomerId(), BAD_ADDRESS)).thenReturn(null);
+        when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(CUSTOMER_ID, 1L)).thenReturn(true);
+        when(ADDRESS_SERVICE.deleteAddressFromCustomerByIds(0L, 0L)).thenReturn(false);
     }
 
-
     /**
-     * Тест на получения аддреса по CustomerID
+     * Тест успешного получения списка всех адресов покупателя.
      *
-     * @throws Exception
+     * @throws Exception mockMvc.perform
      */
-
     @Test
-    public void testGetAddressByUserId() throws Exception {
+    public void getAllAddressesByCustomerIdSucessTest() throws Exception {
 
-        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Mordoviya");
-        final List<AddressDto> addressDtoList = List.of(addressDtoOne);
-        Long customerId = addressDtoOne.getCustomerId();
-
-        when(addressService.getAllById(anyLong())).thenReturn(addressDtoList);
-
-        mockMvc.perform(get("/api/user/{id}/address", customerId)
+        mockMvc.perform(get("/api/customers/{customerId}/addresses", CUSTOMER_ID)
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.isA(ArrayList.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].customerId", is(2)))
-                .andExpect(jsonPath("$[0].region", is("Mordoviya")))
-                .andExpect(jsonPath("$[0].city", is("City1")))
-                .andExpect(jsonPath("$[0].district", is("district1")))
-                .andExpect(jsonPath("$[0].street", is("street1")))
-                .andExpect(jsonPath("$[0].house", is("1")))
-                .andExpect(jsonPath("$[0].apartment", is("11")))
-                .andExpect(jsonPath("$[0].comment", is("test1")))
-                .andReturn();
+                .andExpect(jsonPath("$[0].region", is("Region")))
+                .andExpect(jsonPath("$[0].city", is("City")))
+                .andExpect(jsonPath("$[0].district", is("District")))
+                .andExpect(jsonPath("$[0].street", is("Street")))
+                .andExpect(jsonPath("$[0].house", is("House")))
+                .andExpect(jsonPath("$[0].apartment", is("Apartment")))
+                .andExpect(jsonPath("$[0].comment", is("Comment")));
 
-        verify(addressService, times(1)).getAllById(customerId);
-
-    }
-
-    @Test
-    public void testGetNullAddress() throws Exception{
-
-        when(addressService.getAllById(anyLong())).thenReturn(new ArrayList<>());
-
-        mockMvc.perform(get("/api/user/{id}/address",15)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is4xxClientError());
+        verify(ADDRESS_SERVICE, times(1)).getAllByCustomerId(CUSTOMER_ID);
     }
 
     /**
-     * Тест на добавление аддреса по CustomerId
+     * Тест получения списка всех адресов для несуществующего покупателя.
      *
-     * @throws Exception
+     * @throws Exception mockMvc.perform
      */
     @Test
-    public void testPostAddress() throws Exception {
-        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
+    public void getAllAddressesByCustomerIdNotFoundTest() throws Exception {
 
-        final List<AddressDto> addressDtoList = List.of(addressDtoOne);
+        mockMvc.perform(get("/api/customers/{customerId}/addresses", 0)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
-        Long customerId = addressDtoOne.getCustomerId();
+        verify(ADDRESS_SERVICE, times(1)).getAllByCustomerId(0L);
+    }
 
-        when(addressService.getAllById(customerId)).thenReturn(addressDtoList);
+    /**
+     * Тест успешного добавления нового адреса для покупателя.
+     *
+     * @throws Exception mockMvc.perform
+     */
+    @Test
+    public void addAddressToCustomerSuccessTest() throws Exception {
 
-
-        mockMvc.perform(post("/api/user/{id}/address", customerId)
-                .content(objectMapper.writeValueAsString(addressDtoOne))
+        mockMvc.perform(post("/api/customers/{customerId}/addresses", CUSTOMER_ID)
+                .content(objectMapper.writeValueAsString(ADDRESS))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(addressService, times(1)).addAddress(addressDtoOne);
     }
 
     /**
-     * Удаление аддреса по id
+     * Тест добавления нового адреса для несуществующего покупателя.
      *
-     * @throws Exception
+     * @throws Exception mockMvc.perform
      */
-
     @Test
-    public void testDeleteAddress() throws Exception {
-        AddressDto addressDtoOne = createNewAddressDto(1L, 2L, "Miami");
+    public void addAddressToCustomerErrorTest() throws Exception {
 
-
-        Long customerId = addressDtoOne.getCustomerId();
-        Long id = addressDtoOne.getId();
-
-        mockMvc.perform(delete("/api/user/{id}/address/{addressId}", customerId, id)
-                .content(objectMapper.writeValueAsString(addressDtoOne))
+        mockMvc.perform(post("/api/customers/{customerId}/addresses", 0L)
+                .content(objectMapper.writeValueAsString(BAD_ADDRESS))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-        verify(addressService, times(1)).deleteAddress(customerId, id);
+                .andExpect(status().isBadRequest());
     }
 
-    private static AddressDto createNewAddressDto(Long id, Long customerId, String region) {
-        AddressDto addressDtoOne = new AddressDto();
-        addressDtoOne.setId(id);
-        addressDtoOne.setCustomerId(customerId);
-        addressDtoOne.setRegion(region);
-        addressDtoOne.setCity("City1");
-        addressDtoOne.setDistrict("district1");
-        addressDtoOne.setStreet("street1");
-        addressDtoOne.setHouse("1");
-        addressDtoOne.setApartment("11");
-        addressDtoOne.setComment("test1");
-        return addressDtoOne;
-
+    /**
+     * Тест удаления адреса у покупателя.
+     *
+     * @throws Exception mockMvc.perform
+     */
+    @Test
+    public void deleteAddressFromCustomerByIdsSuccessTest() throws Exception {
+        mockMvc.perform(delete("/api/customers/{customerId}/addresses/{addressId}", CUSTOMER_ID, 1L)
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
+    /**
+     * Тест удаления адреса у несуществующего покупателя.
+     *
+     * @throws Exception mockMvc.perform
+     */
+    @Test
+    public void deleteAddressFromCustomerByIdsErrorTest() throws Exception {
+        mockMvc.perform(delete("/api/customers/{customerId}/addresses/{addressId}", 0L, 0L)
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }
 
 
