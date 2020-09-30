@@ -5,11 +5,11 @@ import com.example.internship.refactoringdto.CustomerDto;
 import com.example.internship.refactoringdto.View;
 import com.example.internship.service.customer.CustomerService;
 import com.fasterxml.jackson.annotation.JsonView;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -43,14 +43,14 @@ public class CustomerRestController {
      * @return http status 200 и пользователя или http status 400, если пользователь не найден
      */
     @GetMapping("{id}")
-    @ApiOperation(value = "Получение данных пользователя по идентификатору")
+    @Operation(description = "Получение данных пользователя по идентификатору")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь найден"),
-            @ApiResponse(code = 404, message = "Пользователь не найден")
+            @ApiResponse(responseCode = "200", description = "Пользователь найден"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
     })
     @Schema(implementation = CustomerDto.class)
     @JsonView(View.Public.class)
-    public ResponseEntity<CustomerDto> getById(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<CustomerDto> getById(@Parameter(description = "Идентификатор пользователя")
                                                @PathVariable("id") Long id) {
 
         CustomerDto customer = customerService.getByIdRef(id);
@@ -70,21 +70,21 @@ public class CustomerRestController {
      * @return пользователь по критериям
      */
     @GetMapping("search")
-    @ApiOperation(value = "Поиск пользователей")
+    @Operation(description = "Поиск пользователей")
     @Schema(implementation = CustomerSearchResponse.class)
-    @ApiResponse(code = 200, message = "Поиск успешен")
+    @ApiResponse(responseCode = "200", description = "Поиск успешен")
     @JsonView(View.Public.class)
-    public ResponseEntity<CustomerSearchResponse> searchUser(@ApiParam(value = "Поиск по имени")
+    public ResponseEntity<CustomerSearchResponse> searchUser(@Parameter(description = "Поиск по имени")
                                                          @RequestParam(name = "firstName", required = false) String firstName,
-                                                             @ApiParam(value = "Поиск по отчеству")
+                                                             @Parameter(description = "Поиск по отчеству")
                                                          @RequestParam(name = "middleName", required = false) String middleName,
-                                                             @ApiParam(value = "Поиск по фамилии")
+                                                             @Parameter(description = "Поиск по фамилии")
                                                          @RequestParam(name = "lastName", required = false) String lastName,
-                                                             @ApiParam(value = "Поиск по email")
+                                                             @Parameter(description = "Поиск по email")
                                                          @RequestParam(name = "email", required = false) String email,
-                                                             @ApiParam(value = "Размер страницы")
+                                                             @Parameter(description = "Размер страницы")
                                                          @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                             @ApiParam(value = "Номер страницы")
+                                                             @Parameter(description = "Номер страницы")
                                                          @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) {
 
         CustomerSearchResponse searchFrom = customerService.search(firstName, middleName, lastName, email, pageSize, pageNumber);
@@ -101,17 +101,17 @@ public class CustomerRestController {
      * или не удается изменить данные.
      */
     @PutMapping("{id}")
-    @ApiOperation(value = "Редактирование данных")
+    @Operation(description = "Редактирование данных")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь обновлен"),
-            @ApiResponse(code = 400, message = "Невалидные данные"),
-            @ApiResponse(code = 404, message = "Пользователь не найден")
+            @ApiResponse(responseCode = "200", description = "Пользователь обновлен"),
+            @ApiResponse(responseCode = "400", description = "Невалидные данные"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
     })
     @Schema(implementation = CustomerDto.class)
     @JsonView(View.Public.class)
-    public ResponseEntity<?> updateUser(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<?> updateUser(@Parameter(description = "Идентификатор пользователя")
                                                   @PathVariable("id") Long id,
-                                                  @ApiParam(value = "Данные для редактирования") @JsonView(View.Update.class)
+                                                  @Parameter(description = "Данные для редактирования") @JsonView(View.Update.class)
                                                   @Valid @RequestBody CustomerDto customer, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

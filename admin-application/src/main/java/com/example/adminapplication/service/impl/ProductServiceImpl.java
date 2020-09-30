@@ -3,10 +3,11 @@ package com.example.adminapplication.service.impl;
 import com.example.adminapplication.dto.ProductDto;
 import com.example.adminapplication.dto.ProductSearchResult;
 import com.example.adminapplication.service.ProductService;
+import com.example.internship.client.api.ProductRestControllerApi;
+import com.example.internship.client.model.Product;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 
@@ -17,99 +18,58 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final WebClient webClient;
+    private final ModelMapper modelMapper;
+    private final ProductRestControllerApi productApi;
 
-    private String uri = "/product";
 
     @Override
     public void removeProduct(Long id) {
-
-        webClient.post()
-                .uri(uri +"/remove-product")
-                .bodyValue(id)
-                .retrieve()
-                .toBodilessEntity()
-                .block();
+        productApi.removeProduct(id).block();
     }
 
     @Override
     public void saveProduct(ProductDto product) {
-
-        webClient.post()
-                .uri(uri + "/save-product")
-                .bodyValue(product)
-                .retrieve()
-                .toBodilessEntity()
-                .block();
+        productApi.saveProduct(convertToModel(product)).block();
     }
 
     @Override
     public ProductDto findByIdProduct(Long id) {
-
-        return webClient.post()
-                .uri(uri + "/find-by-id")
-                .bodyValue(id)
-                .retrieve()
-                .bodyToMono(ProductDto.class)
-                .block();
+        return productApi.findById(id).map(this::convertToDto).block();
     }
 
     @Override
     public ProductSearchResult productSearch(String searchText, Long categoryId, BigDecimal priceFrom,
                                              BigDecimal priceTo, Integer pageSize, Integer pageNumber) {
 
-        StringBuilder uri = new StringBuilder(this.uri).append("/search?");
-
-        if (StringUtils.isNotBlank(searchText)) {
-            uri.append("searchText=").append(searchText).append("&");
-        }
-        if (categoryId != null && categoryId > 0) {
-            uri.append("categoryId=").append(categoryId).append("&");
-        }
-        if (priceFrom != null && priceFrom.compareTo(BigDecimal.ZERO) > 0) {
-            uri.append("priceFrom=").append(priceFrom).append("&");
-        }
-        if (priceTo != null && priceTo.compareTo(BigDecimal.ZERO) > 0) {
-            uri.append("priceTo=").append(priceTo).append("&");
-        }
-        if (pageSize != null && pageSize > 0) {
-            uri.append("pageSize=").append(pageSize).append("&");
-        }
-        if (pageNumber != null && pageNumber > 0) {
-            uri.append("pageNumber=").append(pageNumber - 1).append("&");
-        }
-        ProductSearchResult result = webClient.get()
-                .uri(uri.toString())
-                .retrieve()
-                .bodyToMono(ProductSearchResult.class)
-                .block();
+        ProductSearchResult result = convertSearchResult(productApi.productSearch(
+                (null == searchText || searchText.isBlank()) ? null : searchText,
+                (null == categoryId || categoryId < 1) ? null : categoryId,
+                (null == priceFrom || priceFrom.compareTo(BigDecimal.ONE) < 0) ? null : priceFrom,
+                (null == priceTo || priceTo.compareTo(BigDecimal.ONE) < 0) ? null : priceTo,
+                (null == pageSize || pageSize < 1) ? null : pageSize,
+                (null == pageNumber || pageNumber < 1) ? null : pageNumber).block());
 
         // Create pagination
-        if (result != null && result.getTotalProducts() / result.getPageSize() > 0) {
-
-            result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
-
-            if (result.getPageNumber() != 0) {
-
-                result.setPrevPage(result.getPageNumber());
-
-                if (result.getPrevPage() > 1) {
-                    result.setFirstPage(1);
-                }
-            }
-
-            result.setPageNumber(result.getPageNumber() + 1);
-
-            if (result.getPageNumber() < result.getTotalPages()) {
-
-                result.setNextPage(result.getPageNumber() + 1);
-
-                if (result.getNextPage() < result.getTotalPages()) {
-                    result.setLastPage(result.getTotalPages().intValue());
-                }
+        if (null != result) {
+            if (result.getTotalProducts() / result.getPageSize() > 0) {
+                result.setTotalPages((long) Math.ceil((float) result.getTotalProducts() / result.getPageSize()));
+            } else {
+                result.setTotalPages(0L);
             }
         }
 
         return result;
+    }
+
+    private ProductDto convertToDto(Product product) {
+        return modelMapper.map(product, ProductDto.class);
+    }
+
+    private Product convertToModel(ProductDto productDto) {
+        return modelMapper.map(productDto, Product.class);
+    }
+
+    private ProductSearchResult convertSearchResult(com.example.internship.client.model.ProductSearchResult result) {
+        return modelMapper.map(result, ProductSearchResult.class);
     }
 }
