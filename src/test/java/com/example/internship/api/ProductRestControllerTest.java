@@ -271,11 +271,9 @@ public class ProductRestControllerTest {
     }
 
     /**
-     * Проверка методов saveProduct, findById, removeProduct, findAll:
+     * Проверка методов saveProduct, findById:
      * - Сохраняет продукт в БД
      * - Возвращает объект продукта по значению его id
-     * - Удаляет продукт по id
-     * - Возвращает все продукты
      */
     @Test
     /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -283,7 +281,7 @@ public class ProductRestControllerTest {
      * Добавлена аннотация @Transactional.
      +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= */
     @Transactional
-    public void testSaveProductAndFindByIdAndRemoveProductAndFindAll() {
+    public void testSaveProductAndFindById() {
         productRestController.saveProduct(product);
         assertEquals(product, productRestController.findById(3L));
     }
