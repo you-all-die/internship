@@ -1,7 +1,6 @@
 package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
-import com.example.internship.entity.Customer;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +62,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public String saveCustomer(@ModelAttribute Customer customer) {
+    public String saveCustomer(@ModelAttribute CustomerDto customer) {
         customerService.save(customer);
         return "redirect:" + BASE_MAPPING;
     }
