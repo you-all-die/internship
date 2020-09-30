@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,10 +36,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber) {
         FeedbackSearchResult feedbackSearchResult = new FeedbackSearchResult();
-        Specification<Feedback> specification;
+        Specification<Feedback> specification = null;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null, "productId", productId.toString());
+        if (productId != null) {
+            specification = draftSpecification(null, "productId", productId.toString());
+        }
         if (authorId != null) {
             specification = draftSpecification(specification, "authorId", authorId.toString());
         }
@@ -104,6 +107,13 @@ public class FeedbackServiceImpl implements FeedbackService {
      */
     private FeedbackDto convertToDto(Feedback feedback) {
         return modelMapper.map(feedback, FeedbackDto.class);
+    }
+    @Override
+    public Optional<FeedbackDto> getFeedbackById(Long id) {
+        if (feedbackRepository.findById(id).isPresent()) {
+            return Optional.of(convertToDto(feedbackRepository.findById(id).get()));
+        }
+        return Optional.empty();
     }
 
 }
