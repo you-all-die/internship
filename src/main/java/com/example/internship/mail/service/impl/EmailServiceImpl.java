@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Async
+    @Async()
     @Override
     public Future<Boolean> sendOrderDetailsMessage(CustomerDto customer, OrderDto order) throws MailServiceException {
         if (null == customer) {
@@ -91,6 +91,7 @@ public class EmailServiceImpl implements EmailService {
         return sendHtmlMessage(order.getCustomerEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
     }
 
+    @Async()
     @Override
     public Future<Boolean> sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
         if (null == customer) {
