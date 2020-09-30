@@ -40,8 +40,8 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public Category addCategory(CategoryDto category) {
-       return categoryRepository.save(this.convertToEntity(category));
+    public void addCategory(CategoryDto category) {
+       categoryRepository.save(this.convertToEntity(category));
     }
 
     public List<CategoryDto> findByName(String name) {

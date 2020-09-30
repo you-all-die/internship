@@ -37,8 +37,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product addProduct(ProductDto productDto) {
-        return productRepo.save(convertToModel(productDto));
+    public void addProduct(ProductDto productDto) {
+        productRepo.save(convertToModel(productDto));
     }
 
     @Override

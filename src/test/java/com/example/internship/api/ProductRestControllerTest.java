@@ -6,6 +6,7 @@ import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.ProductStatus;
+import com.example.internship.repository.CategoryRepository;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Ivan Gubanov
  */
+
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
 public class ProductRestControllerTest {
@@ -43,20 +45,23 @@ public class ProductRestControllerTest {
     private static final ProductSearchResult expected = new ProductSearchResult();
 
     @BeforeAll
-    public static void beforeAll(@Autowired ProductService productService,
-                                 @Autowired CategoryService categoryService,
-                                 @Autowired ProductStatusService productStatusService,
-                                 @Autowired ModelMapper mapper) {
+    public static void beforeAll(@Autowired ProductStatusService productStatusService,
+                                 @Autowired CategoryRepository categoryRepository,
+                                 @Autowired ProductRepository productRepository, @Autowired ModelMapper mapper) {
 
         categoryOne.setName("Best phones");
         categoryOne.setParentId(null);
         categoryOne.setParentName(null);
-        categoryOne.setId(categoryService.addCategory(categoryOne).getId());
+
+        Category categoryOneSave = categoryRepository.save(mapper.map(categoryOne, Category.class));
+        categoryOne.setId(categoryOneSave.getId());
 
         categoryTwo.setName("Super best phones");
         categoryTwo.setParentId(null);
         categoryTwo.setParentName(null);
-        categoryTwo.setId(categoryService.addCategory(categoryTwo).getId());
+
+        Category categoryTwoSave = categoryRepository.save(mapper.map(categoryTwo, Category.class));
+        categoryTwo.setId(categoryTwoSave.getId());
 
         Category categoryThree = new Category();
         categoryThree.setName("Super best phones");
@@ -72,7 +77,9 @@ public class ProductRestControllerTest {
         productOne.setPicture("iphone1.jpg");
         productOne.setPrice(new BigDecimal("100.00"));
         productOne.setStatus(productStatus);
-        productOne.setId(productService.addProduct(productOne).getId());
+
+        Product productOneSave = productRepository.save(mapper.map(productOne, Product.class));
+        productOne.setId(productOneSave.getId());
 
         productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
@@ -80,7 +87,9 @@ public class ProductRestControllerTest {
         productTwo.setPicture("iphone2.jpg");
         productTwo.setPrice(new BigDecimal("200.00"));
         productTwo.setStatus(productStatus);
-        productTwo.setId(productService.addProduct(productTwo).getId());
+
+        Product productTwoSave = productRepository.save(mapper.map(productTwo, Product.class));
+        productTwo.setId(productTwoSave.getId());
 
         product.setCategory(categoryThree);
         product.setName("Iphone 3");
@@ -276,7 +285,8 @@ public class ProductRestControllerTest {
      * - Возвращает объект продукта по значению его id
      */
     @Test
-    /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+    /**
+     * +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
      * Здесь происходит много операций по работе с бд. Hibernate не успевает все подгрузить.
      * Добавлена аннотация @Transactional.
      +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= */
