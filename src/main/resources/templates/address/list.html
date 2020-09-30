@@ -1,0 +1,20 @@
+<div th:fragment="widget (addresses)" xmlns:th="http://www.thymeleaf.org">
+    <h4 class="ui horizontal divider header" th:text="#{address.list.shipping_addresses}">Addresses</h4>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th th:text="#{address.list.address}">Address</th>
+            </tr>
+        </thead>
+        <tbody th:unless="${#lists.isEmpty(addresses)}">
+            <tr th:each="address : ${addresses}">
+                <td th:text="${address.comment}">Address</td>
+            </tr>
+        </tbody>
+        <tbody th:if="${#lists.isEmpty(addresses)}">
+            <tr>
+                <td th:text="#{address.list.empty}">Empty list</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
