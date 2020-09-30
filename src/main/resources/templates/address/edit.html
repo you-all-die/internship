@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="/common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
+        <meta charset="UTF-8">
+        <meta content="Самохвалов Юрий Алексеевич" name="author">
+        <title th:text="#{address.edit.header}">Title</title>
+        <!-- Подключение подсказок dadata.ru -->
+        <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css"
+              rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
+        <script th:src="@{/js/address.js}"></script>
+    </head>
+    <body>
+        <div th:replace="/common/main :: header"></div>
+        <div class="ui main container">
+            <form class="ui form" method="post" th:action="@{/address/save}" th:object="${address}">
+                <div class="ui field">
+                    <label th:text="#{address.edit.address}">Address</label>
+                    <input id="comment" th:field="*{comment}">
+                </div>
+                <button class="ui primary button" th:text="#{address.edit.save}" type="submit">Save</button>
+            </form>
+        </div>
+    </body>
+</html>

@@ -45,7 +45,7 @@
                 <div class="column">
                     <div th:replace="/address/list :: widget (${addresses})"></div>
                     <a class="ui secondary button"
-                       th:href="@{/address/add(customerId=${customer.id})}" th:text="#{customer.view.add_address}">Add
+                       th:href="@{/address/add}" th:text="#{customer.view.add_address}">Add
                         Address</a>
                 </div>
             </div>
