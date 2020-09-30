@@ -7,7 +7,7 @@
     <body>
         <div th:replace="common/main :: header"></div>
 
-        <div class="ui main container segment">
+        <div class="ui main container">
             <form class="ui form" th:action="@{/customer}" th:object="${customer}" method="post">
 
                 <h3 class="ui dividing header" th:text="#{customer.profile.header}">Customer profile</h3>
@@ -40,14 +40,7 @@
                     </div>
                 </div>
 
-                <div class="ui two buttons">
-                    <button class="ui blue button" type="submit" th:text="#{customer.profile.save}">Save</button>
-                    <a th:if="*{id}"
-                       class="ui red button"
-                       th:text="#{customer.profile.delete}"
-                       th:href="@{/customer/{id}/delete(id=*{id})}">Delete
-                    </a>
-                </div>
+                <button class="ui blue button" th:text="#{customer.profile.save}" type="submit">Save</button>
             </form>
         </div>
         <footer th:replace="common/main::footer"></footer>

@@ -8,7 +8,7 @@
         <div th:replace="common/main :: header"></div>
         <div class="ui main container">
             <div class="ui container">
-                <div class="row">
+                <div class="column">
                     <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
                         Header
                     </h4>
@@ -42,8 +42,11 @@
                        th:text="#{customer.view.edit}">Edit profile
                     </a>
                 </div>
-                <div class="row">
+                <div class="column">
                     <div th:replace="/address/list :: widget (${addresses})"></div>
+                    <a class="ui secondary button"
+                       th:href="@{/address/add(customerId=${customer.id})}" th:text="#{customer.view.add_address}">Add
+                        Address</a>
                 </div>
             </div>
         </div>
