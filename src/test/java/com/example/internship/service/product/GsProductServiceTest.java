@@ -1,11 +1,12 @@
 package com.example.internship.service.product;
 
-import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.SearchResult;
 import com.example.internship.entity.Category;
+import com.example.internship.entity.Product;
 import com.example.internship.helper.PageHelper;
-import com.example.internship.service.category.GsCategoryService;
+import com.example.internship.repository.CategoryRepository;
+import com.example.internship.repository.ProductRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -48,41 +49,39 @@ class GsProductServiceTest {
 
     @BeforeAll
     static void beforeAll(
-            @Autowired GsCategoryService categoryService,
-            @Autowired GsProductService productService
+            @Autowired CategoryRepository categoryRepository,
+            @Autowired ProductRepository productRepository
     ) {
         // Одна общая категория
-        final CategoryDto.Response.AllWithParentId categoryDto = new CategoryDto.Response.AllWithParentId();
-        categoryDto.setName(CATEGORY_NAME);
-        final Category category = categoryService.save(categoryDto);
-        categoryId = category.getId();
+        final Category category = new Category();
+        category.setName(CATEGORY_NAME);
+        categoryId = categoryRepository.save(category).getId();
 
         // Субкатегория для проверки крошек
-        final CategoryDto.Response.AllWithParentId subcategoryDto = new CategoryDto.Response.AllWithParentId();
-        subcategoryDto.setParentId(categoryId);
-        subcategoryDto.setName("Sub" + CATEGORY_NAME);
-        final Category subcategory = categoryService.save(subcategoryDto);
-        subcategoryId = subcategory.getId();
+        final Category subcategory = new Category();
+        subcategory.setName("Sub" + CATEGORY_NAME);
+        subcategory.setParent(category);
+        subcategoryId = categoryRepository.save(subcategory).getId();
 
         // Генерация списка продуктов
         for (long i = 1; i <= PRODUCT_NUMBER; i++) {
-            final ProductDto.Response.AllWithCategoryId productDto = new ProductDto.Response.AllWithCategoryId();
-            productDto.setCategoryId(categoryId);
-            productDto.setName("Phone " + i);
-            productDto.setDescription("Description " + i);
-            productDto.setPrice(BigDecimal.valueOf(i));
-            productService.save(productDto);
+            final Product product = new Product();
+            product.setCategory(category);
+            product.setName("Phone " + i);
+            product.setDescription("Description " + i);
+            product.setPrice(BigDecimal.valueOf(i));
+            productRepository.save(product);
         }
     }
 
     @AfterAll
     static void afterAll(
-            @Autowired GsCategoryService categoryService,
-            @Autowired GsProductService productService
+            @Autowired CategoryRepository categoryRepository,
+            @Autowired ProductRepository productRepository
     ) {
         // Удаляем следы пребывания в тестовой базе
-        productService.deleteAll();
-        categoryService.deleteAll();
+        productRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
