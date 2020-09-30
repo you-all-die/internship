@@ -5,6 +5,7 @@ import com.example.internship.dto.CustomerSearchResult;
 import com.example.internship.dto.address.AddressDto;
 import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
+import com.example.internship.entity.Address;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Customer_;
 import com.example.internship.helper.JoinHelper;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
@@ -73,10 +76,17 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
     public final void save(Customer customer) {
         customerRepository.save(customer);
     }
 
+    @Override
+    public Customer save(WithFullName customerDto) {
+        return customerRepository.save(mapper.map(customerDto, Customer.class));
+    }
+
+    @Override
     public final void delete(long id) {
         customerRepository.deleteById(id);
     }
@@ -194,7 +204,7 @@ public class CustomerServiceImpl implements CustomerService {
         specification = draftSpecification(specification, "middleName", middleName);
         specification = draftSpecification(specification, "lastName", lastName);
         specification = draftSpecification(specification, "email", email);
-        specification = draftSpecification(specification,"emailNotNull", "islNotNull");
+        specification = draftSpecification(specification, "emailNotNull", "islNotNull");
 
         // Результат поиска
         customerSearchResult.setCustomers(customerRepository.findAll(specification, PageRequest.of(pageNumber, pageSize))
@@ -210,7 +220,7 @@ public class CustomerServiceImpl implements CustomerService {
     //Метод проверки поля и добавления условия в запрос
     private Specification<Customer> draftSpecification(Specification<Customer> specification, String columnName,
                                                        String optionalName) {
-        if (optionalName!=null) {
+        if (optionalName != null) {
             if (specification == null) {
                 specification = Specification.where(new CustomerSpecification(columnName, optionalName));
             } else {
@@ -223,6 +233,7 @@ public class CustomerServiceImpl implements CustomerService {
     //======================================================================================================
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public Collection<WithFullName> getAllWithFullNames() {
         return customerRepository
                 .findAll()
@@ -232,6 +243,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     public SearchResult<WithFullName> findByCriteria(
             String searchString,
             Integer pageNumber,
@@ -278,6 +290,10 @@ public class CustomerServiceImpl implements CustomerService {
                 .createTypeMap(Customer.class, WithFullName.class)
                 .addMappings(mapper -> mapper.skip(WithFullName::setFullName))
                 .setPostConverter(customerToWithFullNameConverter());
+        mapper
+                .createTypeMap(WithFullName.class, Customer.class)
+                .addMappings(mapper -> mapper.skip(Customer::setAddresses))
+                .setPostConverter(withFullNameToCustomerConverter());
     }
 
     private WithFullName convertToWithFullName(Customer customer) {
@@ -286,18 +302,32 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Converter<Customer, WithFullName> customerToWithFullNameConverter() {
         return context -> {
-            Customer customer = context.getSource();
-            WithFullName withFullName = context.getDestination();
-            withFullName.setFullName(
-                    JoinHelper.join(" ", customer.getLastName(), customer.getFirstName(), customer.getMiddleName())
+            Customer entity = context.getSource();
+            WithFullName dto = context.getDestination();
+            dto.setFullName(
+                    JoinHelper.join(" ", entity.getLastName(), entity.getFirstName(), entity.getMiddleName())
             );
-            withFullName.setAddresses(
-                    customer.getAddresses()
+            dto.setAddresses(
+                    entity.getAddresses()
                             .stream()
-                            .map(a -> mapper.map(a, AddressDto.ForList.class))
+                            .map(address -> mapper.map(address, AddressDto.ForList.class))
                             .collect(toList())
             );
-            return withFullName;
+            return dto;
+        };
+    }
+
+    private Converter<WithFullName, Customer> withFullNameToCustomerConverter() {
+        return context -> {
+            final WithFullName dto = context.getSource();
+            final Customer entity = context.getDestination();
+            entity.setAddresses(dto
+                    .getAddresses()
+                    .stream()
+                    .map(addressDto -> mapper.map(addressDto, Address.class))
+                    .collect(toList())
+            );
+            return entity;
         };
     }
 }

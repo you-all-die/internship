@@ -196,6 +196,7 @@ public class CustomerRestControllerIntegrationTest {
 
     //Метод добавления новых пользователей
     private Customer createNewCustomer(String lastName, String email){
+        // TODO переделать на DTO
         Customer customer = new Customer();
         customer.setFirstName("Петр");
         customer.setMiddleName("Петрович");

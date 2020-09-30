@@ -2,7 +2,6 @@ package com.example.internship.service.customer;
 
 import com.example.internship.dto.customer.CustomerDto.WithFullName;
 import com.example.internship.dto.customer.SearchResult;
-import com.example.internship.entity.Customer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource("classpath:test.properties")
 class CustomerServiceTest {
 
-    private static final String MSG_NAMES_ARE = "Ожидалось %s";
     private static final String MSG_CUSTOMERS_SIZE_IS = "Длина списка покупателей должна быть %d";
     private static final String MSG_PAGE_NUMBER_IS = "Номер страницы должен быть %d";
     private static final String MSG_PAGE_SIZE_IS = "Размер страницы должен быть %d";
@@ -31,23 +31,24 @@ class CustomerServiceTest {
 
     @BeforeAll
     static void beforeAll(
-            @Autowired CustomerService customerService
+            @Autowired CustomerService service
     ) {
         for (int i = 1; i <= 100; i++) {
-            Customer customer = new Customer();
+            WithFullName customer = new WithFullName();
             customer.setLastName("Customer");
             customer.setFirstName(Integer.toString(i));
             customer.setEmail("Customer" + i + "@mail.mu");
             customer.setPhone(String.format("+7 000 %03d-00-00", i));
-            customerService.save(customer);
+            customer.setAddresses(Collections.emptyList());
+            service.save(customer);
         }
     }
 
     @AfterAll
-    static void tearDown(
-            @Autowired CustomerService customerService
+    static void afterAll(
+            @Autowired CustomerService service
     ) {
-        customerService.deleteAll();
+        service.deleteAll();
     }
 
     @Test

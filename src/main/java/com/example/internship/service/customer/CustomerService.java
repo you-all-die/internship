@@ -25,6 +25,8 @@ public interface CustomerService {
 
     void save(Customer customer);
 
+    Customer save(WithFullName customerDto);
+
     void delete(long id);
     // Создание нового анонимного покупателя
     CustomerDto createAnonymousCustomer();
