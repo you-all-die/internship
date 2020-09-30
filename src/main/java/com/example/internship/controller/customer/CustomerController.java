@@ -28,16 +28,6 @@ public class CustomerController {
     private final CustomerService customerService;
     private final AddressService addressService;
 
-/*
-    @GetMapping
-    public String viewCustomerList(Model model) {
-        Iterable<Customer> customers = customerService.getAll();
-        model.addAttribute("customers", customers);
-        return BASE_MAPPING + "/index";
-    }
-*/
-
-    //TODO: Удалить при рефакторинге PathVariable id;
     @GetMapping
     public String viewCustomerProfile(
             Authentication authentication,
@@ -49,19 +39,12 @@ public class CustomerController {
             CustomerDto customer = customerOptional.get();
             Long customerId = customer.getId();
             model
-                    .addAttribute("customerOptional", customerId)
+                    .addAttribute("customer", customer)
                     .addAttribute("addresses", addressService.getAllByCustomerId(customerId));
             return BASE_MAPPING + "/view";
         }
 
         throw new EntityNotFoundException("Customer not found");
-    }
-
-    @GetMapping("/add")
-    public String addCustomer(Model model) {
-        Customer customer = new Customer();
-        model.addAttribute("customer", customer);
-        return BASE_MAPPING + "/profile";
     }
 
     @GetMapping("/{id}/edit")
