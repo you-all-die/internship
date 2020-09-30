@@ -15,7 +15,10 @@
         <div class="ui main container">
             <form class="ui form" method="post" th:action="@{/address/save}" th:object="${address}">
                 <input th:field="*{id}" type="hidden">
-                <input th:field="*{customerId}" type="hidden">
+                <input id="customerId"
+                       name="customerId"
+                       th:value="*{customerId} ?: ${#authentication.principal.getUserId()}"
+                       type="hidden">
                 <div class="ui field">
                     <label th:text="#{address.edit.address}">Address</label>
                     <input id="comment" th:field="*{comment}">
