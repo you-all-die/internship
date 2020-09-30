@@ -16,6 +16,8 @@ import javax.mail.internet.MimeMessage;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,8 +61,8 @@ public class EmailServiceImplTest {
         customer.setEmail("a@a.com");
         customer.setFirstName("name");
         try {
-            assertTrue(emailService.sendRegistrationWelcomeMessage(customer));
-        } catch (MailServiceException e) {
+            assertTrue(emailService.sendRegistrationWelcomeMessage(customer).get());
+        } catch (MailServiceException | InterruptedException | ExecutionException e) {
             Assert.fail(e.getMessage());
             verify(javaMailSender, never()).send(any(MimeMessage.class));
         }
@@ -74,8 +76,8 @@ public class EmailServiceImplTest {
     public void testSendRegistrationWelcomeMessageNullEmail() {
         CustomerDto customer = new CustomerDto();
         try {
-            assertTrue(emailService.sendRegistrationWelcomeMessage(customer));
-        } catch (MailServiceException e) {
+            assertTrue(emailService.sendRegistrationWelcomeMessage(customer).get());
+        } catch (MailServiceException | InterruptedException | ExecutionException e) {
             verify(javaMailSender, never()).send(any(MimeMessage.class));
         }
     }
@@ -115,8 +117,8 @@ public class EmailServiceImplTest {
                 new Timestamp(System.currentTimeMillis())
         );
         try {
-            assertTrue(emailService.sendOrderDetailsMessage(customer, orderDto));
-        } catch (MailServiceException e) {
+            assertTrue(emailService.sendOrderDetailsMessage(customer, orderDto).get());
+        } catch (MailServiceException | InterruptedException | ExecutionException e) {
             Assert.fail(e.getMessage());
             verify(javaMailSender, never()).send(any(MimeMessage.class));
         }
