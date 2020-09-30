@@ -61,7 +61,7 @@
 
                     <div sec:authorize="isAuthenticated()">
                         <!-- ссылка на  профиль пользователя -->
-                        <a class="item" th:href="@{/customer/{id} (id=${#authentication.principal.getUserId()})}">
+                        <a class="item" th:href="@{/customer}">
                             <span th:text="${#authentication.principal.getUsername()}"></span>
                         </a>
                         <!-- ссылка на выход из системы -->
