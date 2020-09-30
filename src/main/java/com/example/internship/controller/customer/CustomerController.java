@@ -58,15 +58,9 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping
     public String saveCustomer(@ModelAttribute Customer customer) {
         customerService.save(customer);
         return "redirect:" + BASE_MAPPING;
-    }
-
-    @GetMapping("/{id}/delete")
-    public String deleteCustomer(@PathVariable Long id) {
-        customerService.delete(id);
-        return "redirect:/" + BASE_MAPPING;
     }
 }
