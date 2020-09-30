@@ -2,8 +2,9 @@ package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
+import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,27 +20,37 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping(CustomerController.BASE_MAPPING)
+@RequiredArgsConstructor
 public class CustomerController {
 
     public static final String BASE_MAPPING = "/customer";
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
+    private final AddressService addressService;
 
+/*
     @GetMapping
     public String viewCustomerList(Model model) {
         Iterable<Customer> customers = customerService.getAll();
         model.addAttribute("customers", customers);
         return BASE_MAPPING + "/index";
     }
+*/
 
     //TODO: Удалить при рефакторинге PathVariable id;
-    @GetMapping("/{id}")
-    public String viewCustomerProfile(@PathVariable Long id, Authentication authentication, Model model) {
-        Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+    @GetMapping
+    public String viewCustomerProfile(
+            Authentication authentication,
+            Model model
+    ) {
+        Optional<CustomerDto> customerOptional = customerService.getFromAuthentication(authentication);
 
-        if (customer.isPresent()) {
-            model.addAttribute("customer", customer.get());
+        if (customerOptional.isPresent()) {
+            CustomerDto customer = customerOptional.get();
+            Long customerId = customer.getId();
+            model
+                    .addAttribute("customerOptional", customerId)
+                    .addAttribute("addresses", addressService.getAllByCustomerId(customerId));
             return BASE_MAPPING + "/view";
         }
 
