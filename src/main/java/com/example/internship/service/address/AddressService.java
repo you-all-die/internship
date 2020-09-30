@@ -51,4 +51,6 @@ public interface AddressService {
     Address save(AddressDto addressDto);
 
     AddressDto getById(Long addressId);
+
+    void deleteById(Long addressId);
 }

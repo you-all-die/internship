@@ -58,4 +58,12 @@ public class AddressController {
         addressService.save(addressDto);
         return "redirect:" + CustomerController.BASE_MAPPING;
     }
+
+    @GetMapping("/{addressId}/delete")
+    public String deleteShippingAddress(
+            @PathVariable @NotNull Long addressId
+    ) {
+        addressService.deleteById(addressId);
+        return "redirect:" + CustomerController.BASE_MAPPING;
+    }
 }

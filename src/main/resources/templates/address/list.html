@@ -4,6 +4,7 @@
         <thead>
             <tr>
                 <th th:text="#{address.list.address}">Address</th>
+                <th></th>
             </tr>
         </thead>
         <tbody th:unless="${#lists.isEmpty(addresses)}">
@@ -12,11 +13,17 @@
                     <a th:href="@{/address/{addressId}/edit(addressId=${address.id})}"
                        th:text="${address.comment}">New York 5th Avenue 222bis</a>
                 </td>
+                <td>
+                    <a th:href="@{/address/{addressId}/delete(addressId=${address.id})}">
+                        <i class="ui red trash icon"></i>
+                    </a>
+                </td>
             </tr>
         </tbody>
         <tbody th:if="${#lists.isEmpty(addresses)}">
             <tr>
                 <td th:text="#{address.list.empty}">Empty list</td>
+                <td></td>
             </tr>
         </tbody>
     </table>

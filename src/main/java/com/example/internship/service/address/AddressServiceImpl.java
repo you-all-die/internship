@@ -95,6 +95,11 @@ public class AddressServiceImpl implements AddressService {
         return convertToDto(addressOptional.get());
     }
 
+    @Override
+    public void deleteById(Long addressId) {
+        addressesRepository.deleteById(addressId);
+    }
+
     private AddressDto convertToDto(Address address) {
 
         return modelMapper.map(address, AddressDto.class);
