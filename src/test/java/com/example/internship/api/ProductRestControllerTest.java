@@ -6,6 +6,7 @@ import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.ProductStatus;
+import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
 import com.example.internship.service.category.CategoryService;
@@ -37,6 +38,8 @@ public class ProductRestControllerTest {
     private static final Product product = new Product();
     private static final ProductDto productOne = new ProductDto();
     private static final ProductDto productTwo = new ProductDto();
+    private static final CategoryDto categoryOne = new CategoryDto();
+    private static final CategoryDto categoryTwo = new CategoryDto();
     private static final ProductSearchResult expected = new ProductSearchResult();
 
     @BeforeAll
@@ -44,17 +47,16 @@ public class ProductRestControllerTest {
                                  @Autowired CategoryService categoryService,
                                  @Autowired ProductStatusService productStatusService,
                                  @Autowired ModelMapper mapper) {
-        CategoryDto categoryOne = new CategoryDto();
+
         categoryOne.setName("Best phones");
         categoryOne.setParentId(null);
         categoryOne.setParentName(null);
-        categoryService.addCategory(categoryOne);
+        categoryOne.setId(categoryService.addCategory(categoryOne).getId());
 
-        CategoryDto categoryTwo = new CategoryDto();
         categoryTwo.setName("Super best phones");
         categoryTwo.setParentId(null);
         categoryTwo.setParentName(null);
-        categoryService.addCategory(categoryTwo);
+        categoryTwo.setId(categoryService.addCategory(categoryTwo).getId());
 
         Category categoryThree = new Category();
         categoryThree.setName("Super best phones");
@@ -70,7 +72,7 @@ public class ProductRestControllerTest {
         productOne.setPicture("iphone1.jpg");
         productOne.setPrice(new BigDecimal("100.00"));
         productOne.setStatus(productStatus);
-        productService.addProduct(productOne);
+        productOne.setId(productService.addProduct(productOne).getId());
 
         productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
@@ -78,7 +80,7 @@ public class ProductRestControllerTest {
         productTwo.setPicture("iphone2.jpg");
         productTwo.setPrice(new BigDecimal("200.00"));
         productTwo.setStatus(productStatus);
-        productService.addProduct(productTwo);
+        productTwo.setId(productService.addProduct(productTwo).getId());
 
         product.setCategory(categoryThree);
         product.setName("Iphone 3");
@@ -87,8 +89,6 @@ public class ProductRestControllerTest {
         product.setPrice(new BigDecimal("300.00"));
         product.setStatus(productStatus);
 
-        productOne.setId(1L);
-        productTwo.setId(2L);
     }
 
     @AfterAll
@@ -157,7 +157,7 @@ public class ProductRestControllerTest {
     public void testProductSearchCategoryId() {
         expected.setTotalProducts(1L);
         expected.setProducts(List.of(productOne));
-        assertEquals(expected, productRestController.productSearch(null, 1L, null,
+        assertEquals(expected, productRestController.productSearch(null, categoryOne.getId(), null,
                 null, null, null));
     }
 
@@ -286,7 +286,5 @@ public class ProductRestControllerTest {
     public void testSaveProductAndFindByIdAndRemoveProductAndFindAll() {
         productRestController.saveProduct(product);
         assertEquals(product, productRestController.findById(3L));
-        productRestController.removeProduct(3L);
-        assertEquals(expected.getProducts(), productRestController.findAll());
     }
 }
