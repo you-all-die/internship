@@ -5,12 +5,13 @@ import com.example.internship.entity.Customer;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -47,15 +48,18 @@ public class CustomerController {
         throw new EntityNotFoundException("Customer not found");
     }
 
-    @GetMapping("/{id}/edit")
-    public String editCustomer(@PathVariable Long id, Model model) {
-        Optional<Customer> customer = customerService.getById(id);
-        if (customer.isPresent()) {
-            model.addAttribute("customer", customer.get());
+    @GetMapping("/edit")
+    public String editCustomer(
+            Authentication authentication,
+            Model model
+    ) {
+        Optional<CustomerDto> customerOptional = customerService.getFromAuthentication(authentication);
+        if (customerOptional.isPresent()) {
+            CustomerDto customerDto = customerOptional.get();
+            model.addAttribute("customer", customerDto);
             return BASE_MAPPING + "/profile";
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
+        throw new EntityNotFoundException("Customer not found");
     }
 
     @PostMapping
