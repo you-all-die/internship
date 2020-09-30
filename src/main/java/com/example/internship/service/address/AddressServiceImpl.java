@@ -77,6 +77,12 @@ public class AddressServiceImpl implements AddressService {
         return address.map(this::convertToDto).orElse(null);
     }
 
+    @Override
+    public Address save(AddressDto addressDto) {
+        return addressesRepository.save(
+                convertToEntity(addressDto)
+        );
+    }
 
     private AddressDto convertToDto(Address address) {
 

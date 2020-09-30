@@ -15,6 +15,9 @@
         <div class="ui main container">
             <form class="ui form" method="post" th:action="@{/address/save}" th:object="${address}">
                 <div class="ui field">
+                    <input th:field="*{customerId}" type="hidden">
+                </div>
+                <div class="ui field">
                     <label th:text="#{address.edit.address}">Address</label>
                     <input id="comment" th:field="*{comment}">
                 </div>

@@ -1,5 +1,6 @@
 package com.example.internship.service.address;
 
+import com.example.internship.entity.Address;
 import com.example.internship.refactoringdto.AddressDto;
 
 import java.util.List;
@@ -46,4 +47,6 @@ public interface AddressService {
      * @return возвращает адрес, в случае неудачи null
      */
     AddressDto getAddressFromCustomerByIds(Long customerId, Long addressId);
+
+    Address save(AddressDto addressDto);
 }
