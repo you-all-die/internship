@@ -8,7 +8,10 @@
         </thead>
         <tbody th:unless="${#lists.isEmpty(addresses)}">
             <tr th:each="address : ${addresses}">
-                <td th:text="${address.comment}">Address</td>
+                <td>
+                    <a th:href="@{/address/{addressId}/edit(addressId=${address.id})}"
+                       th:text="${address.comment}">New York 5th Avenue 222bis</a>
+                </td>
             </tr>
         </tbody>
         <tbody th:if="${#lists.isEmpty(addresses)}">

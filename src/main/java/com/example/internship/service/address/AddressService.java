@@ -49,4 +49,6 @@ public interface AddressService {
     AddressDto getAddressFromCustomerByIds(Long customerId, Long addressId);
 
     Address save(AddressDto addressDto);
+
+    AddressDto getById(Long addressId);
 }

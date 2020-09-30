@@ -9,12 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Controller
@@ -39,6 +37,16 @@ public class AddressController {
         final CustomerDto customerDto = customerDtoOptional.get();
         final AddressDto addressDto = new AddressDto();
         addressDto.setCustomerId(customerDto.getId());
+        model.addAttribute("address", addressDto);
+        return "/address/edit";
+    }
+
+    @GetMapping("/{addressId}/edit")
+    public String editShippingAddress(
+            @PathVariable @NotNull Long addressId,
+            Model model
+    ) {
+        final AddressDto addressDto = addressService.getById(addressId);
         model.addAttribute("address", addressDto);
         return "/address/edit";
     }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,6 +84,15 @@ public class AddressServiceImpl implements AddressService {
         return addressesRepository.save(
                 convertToEntity(addressDto)
         );
+    }
+
+    @Override
+    public AddressDto getById(@NotNull Long addressId) {
+        final Optional<Address> addressOptional = addressesRepository.findById(addressId);
+        if (addressOptional.isEmpty()) {
+            throw new EntityNotFoundException("Address not found");
+        }
+        return convertToDto(addressOptional.get());
     }
 
     private AddressDto convertToDto(Address address) {
