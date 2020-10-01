@@ -105,6 +105,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer save(CustomerDto customerDto) {
+        return customerRepository.save(convertToModel(customerDto));
+    }
+
+    @Override
     public final void delete(Long id) {
         customerRepository.deleteById(id);
     }

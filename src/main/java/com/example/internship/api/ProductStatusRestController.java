@@ -3,9 +3,9 @@ package com.example.internship.api;
 
 import com.example.internship.entity.ProductStatus;
 import com.example.internship.service.ProductStatusService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +21,8 @@ public class ProductStatusRestController {
 
     private final ProductStatusService productStatusService;
 
-    @GetMapping("/find-all")
-    @ApiOperation(value = "Возвращает все статусы", response = ProductStatus.class)
+    @PostMapping("/find-all")
+    @Operation(summary = "Возвращает все статусы")
     public List<ProductStatus> findAll() {
         return productStatusService.findAll();
     }

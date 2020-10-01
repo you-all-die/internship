@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header (~{::title}, _, _)">
+    <title th:text="#{exception.error.title}"></title>
+</head>
+<body>
+<div class="ui main container">
+
+    <div class="ui center aligned container">
+
+        <img class="ui centered circular large image" th:src="@{/images/headerLogo.png}" alt="Logo">
+
+        <h1 class="ui blue big header">404</h1>
+
+        <h2 th:text="#{exception.error.header}"></h2>
+
+        <h3 class="ui grey header" th:text="#{exception.error.message}"></h3>
+
+        <a href="/">
+            <button class="ui black big button" th:text="#{exception.error.button}"></button>
+        </a>
+
+    </div>
+
+</div>
+</body>
+</html>

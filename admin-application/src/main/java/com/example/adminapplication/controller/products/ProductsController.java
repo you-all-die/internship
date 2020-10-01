@@ -35,7 +35,7 @@ public class ProductsController {
                               @RequestParam(value = "categoryId", required = false) Long categoryId,
                               Model model) {
 
-        model.addAttribute("categories", categoryService.findAllSortById());
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("searchName", searchName);
         model.addAttribute("priceFrom", priceFrom);
         model.addAttribute("priceTo", priceTo);
@@ -69,7 +69,7 @@ public class ProductsController {
         ProductDto product = productService.findByIdProduct(id);
         model.addAttribute("product", product);
         model.addAttribute("product_status", productStatusService.findAll());
-        model.addAttribute("selectcategory", categoryService.findAllSortById());
+        model.addAttribute("selectcategory", categoryService.findAll());
 
         return "products/productsave";
     }
@@ -86,7 +86,7 @@ public class ProductsController {
         ProductDto product = new ProductDto();
         model.addAttribute("product", product);
         model.addAttribute("product_status", productStatusService.findAll());
-        model.addAttribute("selectcategory", categoryService.findAllSortById());
+        model.addAttribute("selectcategory", categoryService.findAll());
 
         return "products/productsave";
     }
