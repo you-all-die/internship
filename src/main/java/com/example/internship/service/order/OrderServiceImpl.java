@@ -6,7 +6,6 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Item;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
-import com.example.internship.refactoringdto.CustomerDto;
 import com.example.internship.repository.OrderRepository;
 import com.example.internship.service.cart.CartService;
 import com.example.internship.service.customer.CustomerService;
@@ -93,25 +92,23 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderDto addOrderToCustomer(Long customerId, OrderDto orderDto) {
-        CustomerDto customer = customerService.getByIdRef(customerId);
-        if (null == customer) {
-            return null;
-        } else {
+        if (customerService.existsById(customerId)) {
             Order order = mapper.map(orderDto, Order.class);
             order.setCustomerId(customerId);
             return mapper.map(orderRepository.save(order), OrderDto.class);
+        } else {
+            return null;
         }
     }
 
     @Override
     public List<OrderDto> getCustomerOrders(Long customerId, Pageable pageable) {
-        CustomerDto customer = customerService.getByIdRef(customerId);
-        if (null == customer) {
-            return null;
-        } else {
+        if (customerService.existsById(customerId)) {
             return orderRepository.findByCustomerId(customerId,
                     PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "date"))
                     .stream().map(this::convertToDto).collect(Collectors.toList());
+        } else {
+            return null;
         }
     }
 

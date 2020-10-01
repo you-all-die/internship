@@ -260,6 +260,11 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.map(customer, CustomerDto.class);
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        return customerRepository.existsById(id);
+    }
+
     /**
      * Конвертирует сущность пользователя в ДТО.
      *
