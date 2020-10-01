@@ -22,8 +22,10 @@ public class OrderController {
     private static final String ENTER_MAPPING = "/enter";
     private static final String SHIPPING_MAPPING = "/shipping";
     private static final String PAYMENT_MAPPING = "/payment";
+    private static final String CONFIRM_MAPPING = "/confirm";
 
     private static final String TEMPLATE_DIR = "/order";
+
     private static final String ENTER_TEMPLATE = TEMPLATE_DIR + "/enter";
     private static final String SHIPPING_TEMPLATE = TEMPLATE_DIR + "/shipping";
     private static final String PAYMENT_TEMPLATE = TEMPLATE_DIR + "/payment";
@@ -39,11 +41,11 @@ public class OrderController {
             Authentication authentication,
             Model model
     ) {
-        if (authentication.isAuthenticated()) {
+        if (null != authentication && authentication.isAuthenticated()) {
             final Optional<CustomerDto> optionalCustomerDto = customerService.getFromAuthentication(authentication);
             model.addAttribute("customer", optionalCustomerDto.orElse(new CustomerDto()));
         } else {
-            model.addAttribute(new CustomerDto());
+            model.addAttribute("customer", new CustomerDto());
         }
         return ENTER_TEMPLATE;
     }
@@ -64,7 +66,7 @@ public class OrderController {
     /**
      * Покупатель выбирает способ оплаты заказа и вводит данные карты, если необходимо.
      */
-    @GetMapping("/payment")
+    @GetMapping(PAYMENT_MAPPING)
     public String choosePaymentMethod() {
         return PAYMENT_TEMPLATE;
     }
@@ -72,7 +74,7 @@ public class OrderController {
     /**
      * Покупатель проверяет данные заказа и подтверждает его.
      */
-    @GetMapping("/confirm")
+    @GetMapping(CONFIRM_MAPPING)
     public String confirmOrder() {
         return CONFIRM_TEMPLATE;
     }

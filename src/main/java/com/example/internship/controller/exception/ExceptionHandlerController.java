@@ -18,7 +18,7 @@ public class ExceptionHandlerController {
     public String connectionError(Exception exception) {
 
         log.error(exception.getMessage());
-
+        log.error("### Exception", exception);
         return "exception/error";
     }
 
@@ -26,7 +26,7 @@ public class ExceptionHandlerController {
     public String connectionError(EntityNotFoundException exception) {
 
         log.error(exception.getMessage());
-
+        log.error("### Exception", exception);
         return "exception/notFound";
     }
 }
