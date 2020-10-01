@@ -1,7 +1,7 @@
 package com.example.internship.service.customer;
 
-import com.example.internship.dto.CustomerDto;
 import com.example.internship.api.dto.CustomerSearchResponse;
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.entity.Customer;
 import org.springframework.security.core.Authentication;
 
@@ -64,6 +64,8 @@ public interface CustomerService {
      * @param customer пользователь.
      */
     void save(Customer customer);
+
+    Customer save(CustomerDto customerDto);
 
     /**
      * Удаляет пользователя по id.

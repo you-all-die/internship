@@ -4,12 +4,14 @@ import com.example.internship.dto.category.CategoryDto;
 import com.example.internship.dto.product.ProductDto;
 import com.example.internship.dto.product.ProductDto.Response.AllWithCategoryId;
 import com.example.internship.dto.product.SearchResult;
+import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.helper.PageHelper;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.category.GsCategoryService;
 import com.example.internship.specification.product.ProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -74,6 +76,13 @@ public class GsProductServiceImpl implements GsProductService {
     @Override
     public void save(Product product) {
         productRepository.save(product);
+    }
+
+    @Override
+    public Product save(AllWithCategoryId productDto) {
+        return productRepository.save(
+                modelMapper.map(productDto, Product.class)
+        );
     }
 
     @Override
@@ -174,6 +183,24 @@ public class GsProductServiceImpl implements GsProductService {
                 .addMappings(mapper -> mapper.map(Product::getId, ProductDto.Response.Ids::setId));
         modelMapper
                 .createTypeMap(AllWithCategoryId.class, Product.class)
-                .addMappings(mapper -> mapper.map(dto -> categoryService.findById(dto.getCategoryId()), Product::setCategory));
+                .addMappings(mapper -> mapper.skip(Product::setCategory))
+                .setPostConverter(allWithCategoryIdToCategoryConverter());
+    }
+
+    private Converter<AllWithCategoryId, Product> allWithCategoryIdToCategoryConverter() {
+        return mappingContext -> {
+            final AllWithCategoryId allWithCategoryId = mappingContext.getSource();
+            final Product product = mappingContext.getDestination();
+            final Long categoryId = allWithCategoryId.getCategoryId();
+            if (null != categoryId) {
+                final Optional<Category> categoryOptional = categoryService.findById(categoryId);
+                product.setCategory(categoryOptional.orElseThrow(
+                        () -> new IllegalStateException("Category not found."))
+                );
+            } else {
+                throw new IllegalStateException("AllWithCategoryId::getCategoryId() should not be null.");
+            }
+            return product;
+        };
     }
 }

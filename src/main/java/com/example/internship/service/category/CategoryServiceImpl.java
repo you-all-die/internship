@@ -40,8 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public void addCategory(CategoryDto category) {
-        System.out.println(category);
-        categoryRepository.save(this.convertToEntity(category));
+       categoryRepository.save(this.convertToEntity(category));
     }
 
     public List<CategoryDto> findByName(String name) {
