@@ -58,8 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/webjars/**",
                             "/v3/api-docs/**",
                             "/v3/api-docs.yaml",
-
-                            "/order"
+                            "/order/**"
                     ).permitAll()
                     .anyRequest().authenticated()
                 .and()
