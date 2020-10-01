@@ -102,10 +102,10 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderDto> getCustomerOrders(Long customerId, Pageable pageable) {
+    public List<OrderDto> getCustomerOrders(Long customerId, Integer pageNumber, Integer pageSize) {
         if (customerService.existsById(customerId)) {
             return orderRepository.findByCustomerId(customerId,
-                    PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "date"))
+                    PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, "date"))
                     .stream().map(this::convertToDto).collect(Collectors.toList());
         } else {
             return null;

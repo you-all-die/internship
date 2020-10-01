@@ -15,5 +15,5 @@ public interface OrderService {
     OrderDto makeOrder(Customer customer, CheckoutForm checkoutForm);
     OrderDto findById(Long id);
     OrderDto addOrderToCustomer(Long customerId, OrderDto orderDto);
-    List<OrderDto> getCustomerOrders(Long customerId, Pageable pageable);
+    List<OrderDto> getCustomerOrders(Long customerId, Integer pageNumber, Integer pageSize);
 }
