@@ -1,20 +1,36 @@
-<div class="ui fluid steps"
+<div class="ui fluid mini steps"
      th:fragment="widget"
      xmlns:th="http://www.thymeleaf.org">
     <!-- Покупатель регистрируется или входит в систему -->
     <div class="step">
         <i class="ui user icon"></i>
+        <div class="content">
+            <div class="title" th:text="#{order.steps.enter.title}">Enter or register</div>
+            <div class="description" th:text="#{order.steps.enter.description}">Description</div>
+        </div>
     </div>
     <!-- Выбор способа доставки и адреса -->
     <div class="step">
         <i class="ui truck icon"></i>
+        <div class="content">
+            <div class="title" th:text="#{order.steps.shipping.title}">Shipping</div>
+            <div class="description" th:text="#{order.steps.shipping.description}">Description</div>
+        </div>
     </div>
     <!-- Выбор способа оплаты и ввод данных карты -->
     <div class="step">
         <i class="ui credit card icon"></i>
+        <div class="content">
+            <div class="title" th:text="#{order.steps.payment.title}">Payment</div>
+            <div class="description" th:text="#{order.steps.payment.description}">Description</div>
+        </div>
     </div>
     <!-- Проверка и подтверждение заказа -->
     <div class="step">
         <i class="ui handshake icon"></i>
+        <div class="content">
+            <div class="title" th:text="#{order.steps.confirm.title}">Confirmation</div>
+            <div class="description" th:text="#{order.steps.confirm.description}">Description</div>
+        </div>
     </div>
 </div>

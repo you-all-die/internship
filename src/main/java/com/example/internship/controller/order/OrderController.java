@@ -1,5 +1,6 @@
 package com.example.internship.controller.order;
 
+import com.example.internship.controller.product.ProductController;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -87,5 +88,10 @@ public class OrderController {
     @GetMapping(CONFIRM_MAPPING)
     public String confirmOrder() {
         return CONFIRM_TEMPLATE;
+    }
+
+    @PostMapping(CONFIRM_MAPPING)
+    public String submitOrder() {
+        return "redirect:" + ProductController.BASE_URL;
     }
 }
