@@ -8,35 +8,46 @@
         <div th:replace="common/main :: header"></div>
         <div class="ui main container">
             <div class="ui container">
+                <div class="column">
+                    <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
+                        Header
+                    </h4>
 
-                <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
-                    Header
-                </h4>
-
-                <table class="ui definition table">
-                    <tbody>
-                        <tr>
-                            <td class="two wide column" th:text="#{customer.view.last_name}">Last Name</td>
-                            <td class="four wide column" th:text="${customer.lastName}">last</td>
-                        </tr>
-                        <tr>
-                            <td th:text="#{customer.view.first_name}">First Name</td>
-                            <td th:text="${customer.firstName}">first</td>
-                        </tr>
-                        <tr>
-                            <td th:text="#{customer.view.middle_name}">Middle Name</td>
-                            <td th:text="${customer.middleName}">middle</td>
-                        </tr>
-                        <tr>
-                            <td th:text="#{customer.view.email}">Email</td>
-                            <td th:text="${customer.email}">nobody@nowhere.com</td>
-                        </tr>
-                        <tr>
-                            <td th:text="#{customer.view.phone}">Phone</td>
-                            <td th:text="${customer.phone}">322-33-22</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class="ui definition table">
+                        <tbody>
+                            <tr>
+                                <td class="two wide column" th:text="#{customer.view.last_name}">Last Name</td>
+                                <td class="four wide column" th:text="${customer.lastName}">last</td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{customer.view.first_name}">First Name</td>
+                                <td th:text="${customer.firstName}">first</td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{customer.view.middle_name}">Middle Name</td>
+                                <td th:text="${customer.middleName}">middle</td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{customer.view.email}">Email</td>
+                                <td th:text="${customer.email}">nobody@nowhere.com</td>
+                            </tr>
+                            <tr>
+                                <td th:text="#{customer.view.phone}">Phone</td>
+                                <td th:text="${customer.phone}">322-33-22</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="ui primary button"
+                       th:href="@{/customer/edit}"
+                       th:text="#{customer.view.edit}">Edit profile
+                    </a>
+                </div>
+                <div class="column">
+                    <div th:replace="/address/list :: widget (${addresses})"></div>
+                    <a class="ui secondary button"
+                       th:href="@{/address/add}" th:text="#{customer.view.add_address}">Add
+                        Address</a>
+                </div>
             </div>
         </div>
         <footer th:replace="common/main::footer"></footer>
