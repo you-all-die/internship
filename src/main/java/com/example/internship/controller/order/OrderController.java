@@ -12,15 +12,7 @@ public class OrderController {
     private static final String TEMPLATE_DIR = "/order";
 
     /**
-     * Показать заказ
-     */
-    @GetMapping("/show")
-    public String showOrder() {
-        return TEMPLATE_DIR + "/show";
-    }
-
-    /**
-     * Покупатель регистрируется или входит в систему
+     * Покупатель регистрируется или входит в систему.
      */
     @GetMapping("/enter")
     public String enterToSystem() {
@@ -28,7 +20,7 @@ public class OrderController {
     }
 
     /**
-     * Покупатель выбирает способ доставки заказа и, если надо, адрес
+     * Покупатель выбирает способ доставки заказа и, если надо, адрес.
      */
     @GetMapping("/shipping")
     public String chooseShippingMethod() {
@@ -36,7 +28,15 @@ public class OrderController {
     }
 
     /**
-     * Покупатель проверяет данные заказа и подтверждает его
+     * Покупатель выбирает способ оплаты заказа и вводит данные карты, если необходимо.
+     */
+    @GetMapping("/payment")
+    public String choosePaymentMethod() {
+        return TEMPLATE_DIR + "/payment";
+    }
+
+    /**
+     * Покупатель проверяет данные заказа и подтверждает его.
      */
     @GetMapping("/confirm")
     public String confirmOrder() {
