@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,7 +73,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public void addFeedback(Long productId, Long authorId, String authorName, String feedbackText) {
         Feedback feedback = new Feedback();
-        feedback.setDatePublication(new Date());
+        feedback.setDatePublication(new Timestamp(System.currentTimeMillis()));
         feedback.setProductId(productId);
         feedback.setAuthorId(authorId);
         feedback.setAuthorName(authorName);

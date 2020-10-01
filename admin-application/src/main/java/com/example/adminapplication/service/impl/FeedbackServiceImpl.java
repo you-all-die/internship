@@ -28,9 +28,9 @@ public class FeedbackServiceImpl implements FeedbackService {
                 request.getPageNumber(),
                 request.getPageSize(),
                 request.getStartDate().isBlank() ? null : new SimpleDateFormat("yyyy-MM-dd").parse(request.getStartDate()).
-                        toInstant().atOffset(ZoneOffset.UTC),
+                        toInstant().atOffset(ZoneOffset.of("+04:00")),
                 request.getEndDate().isBlank() ? null : new SimpleDateFormat("yyyy-MM-dd").parse(request.getEndDate()).
-                        toInstant().atOffset(ZoneOffset.UTC))
+                        toInstant().atOffset(ZoneOffset.of("+04:00")))
                 .block(), FeedbackSearchResult.class);
 
     }

@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * @author Romodin Aleksey
@@ -26,7 +26,7 @@ public class FeedbackDto {
 
     @Schema(description = "Дата публикации")
     @JsonView({View.Public.class})
-    private Date datePublication;
+    private Timestamp datePublication;
 
     @Schema(description = "Текст комментария")
     @Size(max = 500)

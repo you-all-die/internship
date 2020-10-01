@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * @author Romodin Aleksey
@@ -22,7 +22,7 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "date_publication")
-    private Date datePublication;
+    private Timestamp datePublication;
     @Column(name = "feedback_text")
     private String feedbackText;
     @Column(name = "product_id")
