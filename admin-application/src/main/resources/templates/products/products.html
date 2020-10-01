@@ -85,7 +85,12 @@
                    (${pr.description.length() > 30} ? ${pr.description.substring(0, 30)} + ' ...' : ${pr.description})"/>
             <td th:text="${pr.price}"/>
             <td>
-                <img th:src="'/img/' + ${pr.picture}" class="ui mini rounded image">
+                <div th:if="${pr.picture == null or pr.picture.isEmpty()}">
+                    <img th:src="'/img/' + ${@environment.getProperty('default.image')}" class="ui mini rounded image">
+                </div>
+                <div th:unless="${pr.picture == null or pr.picture.isEmpty()}">
+                    <img th:src="'/img/' + ${pr.id} + '/catalog.' + ${pr.picture}" class="ui mini rounded image">
+                </div>
                 <div class="content">
                     <div class="sub header" th:text="${pr.picture}"/>
                 </div>
