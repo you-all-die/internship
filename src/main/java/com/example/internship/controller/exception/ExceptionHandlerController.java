@@ -16,8 +16,17 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     public String connectionError(Exception exception) {
+
         log.error(exception.getMessage());
-        return "exception/notFound";
+
+        return "exception/error";
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public String connectionError(EntityNotFoundException exception) {
+
+        log.error(exception.getMessage());
+
+        return "exception/notFound";
+    }
 }
