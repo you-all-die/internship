@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="/common/main :: common_header (~{::title}, _, _)">
+    <head th:replace="/common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
         <meta charset="UTF-8">
         <meta content="Самохвалов Юрий Алексеевич" name="author">
         <title>Title</title>
+        <!-- Подключение подсказок dadata.ru -->
+        <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css"
+              rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
+        <script th:src="@{/js/address.js}"></script>
     </head>
     <body>
         <header th:replace="/common/main :: header"></header>
@@ -14,9 +19,23 @@
                     <div th:replace="/order/steps :: widget ('shipping')"></div>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="two column centered row">
+                <div class="column">
+                    <div class="ui two item menu">
+                        <a class="active item">Доставка из магазина</a>
+                        <a class="item">Самовывоз</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two column centered row">
                 <div class="column">
                     <div th:replace="/order/address :: widget (${addresses})"></div>
+                </div>
+
+                <div class="column">
+                    <div th:replace="/order/outlets :: widget (${outlets})"></div>
                 </div>
             </div>
         </div>

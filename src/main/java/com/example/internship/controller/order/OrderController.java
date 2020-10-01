@@ -2,7 +2,9 @@ package com.example.internship.controller.order;
 
 import com.example.internship.controller.product.ProductController;
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.outlet.OutletDto;
 import com.example.internship.refactoringdto.AddressDto;
+import com.example.internship.service.OutletService;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ public class OrderController {
 
     private final CustomerService customerService;
     private final AddressService addressService;
+    private final OutletService outletService;
 
     /**
      * Покупатель регистрируется или входит в систему.
@@ -77,6 +80,8 @@ public class OrderController {
                 model.addAttribute("addresses", addresses);
             }
         }
+        final List<OutletDto.Response.Full> outlets = outletService.getOutlets();
+        model.addAttribute("outlets", outlets);
         return SHIPPING_TEMPLATE;
     }
 

@@ -1,0 +1,15 @@
+<div th:fragment="widget (outlets)"
+     xmlns:th="http://www.thymeleaf.org">
+
+    <h3 class="ui horizontal divider header" th:text="#{order.outlets.header}">Outlets</h3>
+
+    <div class="ui selection list" th:unless="${#lists.isEmpty(outlets)}">
+        <div class="item" th:each="outlet : ${outlets}">
+            <div class="content">
+                <div class="header" th:text="${outlet.name}">Outlet Name</div>
+                <div class="description" th:text="${outlet.address}">Outlet Address</div>
+            </div>
+        </div>
+    </div>
+
+</div>

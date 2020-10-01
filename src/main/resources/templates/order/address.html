@@ -1,11 +1,20 @@
 <div th:fragment="widget (addresses)"
      xmlns:th="http://www.thymeleaf.org">
 
-    <div class="ui selection list" th:unless="${#lists.isEmpty(addresses)}">
-        <div class="item"
-             th:each="address : ${addresses}"
-             th:text="${address.comment}">Address
+    <form class="ui form">
+        <h3 class="ui horizontal divider header" th:text="#{order.address.header}">Addresses</h3>
+        <div class="ui selection list" th:unless="${#lists.isEmpty(addresses)}">
+            <div class="item" th:each="address : ${addresses}">
+                <div class="content">
+                    <div class="header" th:text="${address.comment}">Address</div>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="field" th:action="@{/order/shipping}">
+            <label th:text="#{order.address.address.label}">Address</label>
+            <input th:field="${address}">
+        </div>
+        <button class="ui primary button" th:text="#{order.address.button.submit}">Submit</button>
+    </form>
 
 </div>

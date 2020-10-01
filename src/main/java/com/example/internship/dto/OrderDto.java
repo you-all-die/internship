@@ -34,7 +34,7 @@ public class OrderDto {
     private Timestamp date;
 
     public BigDecimal getTotalPrice() {
-        BigDecimal totalPrice = new BigDecimal(0);
+        BigDecimal totalPrice = BigDecimal.ZERO;
         for (ItemDto item : items) {
             totalPrice = totalPrice.add(item.getItemPrice().multiply(new BigDecimal(item.getItemQuantity())));
         }
