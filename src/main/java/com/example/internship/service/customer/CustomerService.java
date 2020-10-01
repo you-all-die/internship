@@ -149,4 +149,6 @@ public interface CustomerService {
 
     public CustomerDto convertToDto(Customer customer);
 
+    boolean existsById(Long Id);
+
 }
