@@ -14,7 +14,7 @@ public class OrderController {
     /**
      * Покупатель регистрируется или входит в систему.
      */
-    @GetMapping("/enter")
+    @GetMapping
     public String enterToSystem() {
         return TEMPLATE_DIR + "/enter";
     }
