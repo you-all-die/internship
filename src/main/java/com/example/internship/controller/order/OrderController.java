@@ -50,7 +50,7 @@ public class OrderController {
         return ENTER_TEMPLATE;
     }
 
-    @PostMapping
+    @PostMapping(ENTER_MAPPING)
     public String submitCustomerData() {
         return "redirect:" + BASE_MAPPING + SHIPPING_MAPPING;
     }
@@ -63,12 +63,22 @@ public class OrderController {
         return SHIPPING_TEMPLATE;
     }
 
+    @PostMapping(SHIPPING_MAPPING)
+    public String submitShippingMethod() {
+        return "redirect:" + BASE_MAPPING + PAYMENT_MAPPING;
+    }
+
     /**
      * Покупатель выбирает способ оплаты заказа и вводит данные карты, если необходимо.
      */
     @GetMapping(PAYMENT_MAPPING)
     public String choosePaymentMethod() {
         return PAYMENT_TEMPLATE;
+    }
+
+    @PostMapping(PAYMENT_MAPPING)
+    public String submitPaymentMethod() {
+        return "redirect:" + BASE_MAPPING + CONFIRM_MAPPING;
     }
 
     /**
