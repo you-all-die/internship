@@ -1,6 +1,7 @@
 package com.example.internship.service.order;
 
 import com.example.internship.controller.checkout.CheckoutForm;
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Item;
@@ -8,13 +9,18 @@ import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
 import com.example.internship.repository.OrderRepository;
 import com.example.internship.service.cart.CartService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -27,6 +33,7 @@ public class OrderServiceImpl implements OrderService{
 
     private final CartService cartService;
     private final OrderRepository orderRepository;
+    private final CustomerService customerService;
     private final ModelMapper mapper;
 
     @Override
@@ -77,6 +84,30 @@ public class OrderServiceImpl implements OrderService{
         OrderDto orderDto = convertToDto(order);
 
         return orderDto;
+    }
+
+    @Override
+    public List<OrderDto> findAllByCustomerId(Long customerId) {
+        if (Objects.isNull(customerId)) {
+            return null;
+        }
+
+        List<Order> orders = orderRepository.findAllByCustomerId(customerId);
+
+        return orders != null ? orders.stream().map(this::convertToDto).collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+    @Override
+    public OrderDto findByOrderId(Long orderId, Authentication authentication) {
+        Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+
+        if (customer.isEmpty()) {
+            return null;
+        }
+
+        Order order = orderRepository.findByIdAndCustomerId(orderId, customer.get().getId());
+
+        return order != null ? convertToDto(order) : null;
     }
 
     private OrderDto convertToDto(Order order) {
