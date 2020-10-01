@@ -2,12 +2,17 @@
      xmlns:th="http://www.thymeleaf.org">
     <form class="ui form" method="post" th:action="/login">
         <div class="field">
-            <label th:text="#{order.login.label.email}">Email</label>
-            <input th:field="${email}">
+            <label th:text="#{order.login.email.label}">Email</label>
+            <input th:field="${email}" th:placeholder="#{order.login.email.placeholder}"
+                   type="text">
         </div>
         <div class="field">
             <label th:text="#{order.login.label.password">Password</label>
-            <input th:field="${password}">
+            <input th:field="${password}" th:placeholder="#{order.login.email.placeholder}"
+                   type="password">
         </div>
+        <button class="ui primary button" th:text="#{order.login.button.submit}"
+                type="submit">Submit
+        </button>
     </form>
 </div>
