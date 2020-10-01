@@ -1,10 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header (~{::title}, _, _)">
+    <title th:text="#{show.order.title}"></title>
 </head>
 <body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
 
+    <div class="ui container">
+        <a class="ui small left black button" th:href="@{/customer}">
+            <i class="left chevron icon"></i>
+            <label th:text="#{show.order.back.to.profile.button}"></label>
+        </a>
+    </div>
+
+    <div class="ui container">
+
+        <div class="column">
+
+            <h4 class="ui horizontal divider header" th:text="#{show.order.details.title}"></h4>
+
+            <table class="ui definition table">
+                <tbody>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.details.number}"></td>
+                    <td class="four wide column" th:text="${order?.getId()}"></td>
+                </tr>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.details.status}"></td>
+                    <td class="four wide column" th:text="${order?.getStatus()}"></td>
+                </tr>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.details.date}"></td>
+                    <td class="four wide column"
+                        th:text="${order?.getDate().toLocaleString()}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <h4 class="ui horizontal divider header" th:text="#{show.order.customer.title}"></h4>
+
+            <table class="ui definition table">
+                <tbody>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.customer.last_name}"></td>
+                    <td class="four wide column" th:text="${order?.getCustomerLastName()}"></td>
+                </tr>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.customer.first_name}"></td>
+                    <td class="four wide column" th:text="${order?.getCustomerFirstName()}"></td>
+                </tr>
+                <tr th:if="${!order?.customerMiddleName?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.customer.middle_name}"></td>
+                    <td class="four wide column" th:text="${order?.getCustomerMiddleName()}"></td>
+                </tr>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.customer.email}"></td>
+                    <td class="four wide column" th:text="${order?.getCustomerEmail()}"></td>
+                </tr>
+                <tr>
+                    <td class="two wide column" th:text="#{show.order.customer.phone}"></td>
+                    <td class="four wide column" th:text="${order?.getCustomerPhone()}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <h4 class="ui horizontal divider header" th:text="#{show.order.address.title}"></h4>
+
+            <table class="ui definition table">
+                <tbody>
+                <tr th:if="${!order?.addressRegion?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.region}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressRegion()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressCity?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.city}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressCity()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressDistrict?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.district}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressDistrict()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressStreet?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.street}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressStreet()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressHouse?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.house}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressHouse()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressApartment?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.apartment}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressApartment()}"></td>
+                </tr>
+                <tr th:if="${!order?.addressComment?.isBlank()}">
+                    <td class="two wide column" th:text="#{show.order.address.comments}"></td>
+                    <td class="four wide column" th:text="${order?.getAddressComment()}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <h4 class="ui horizontal divider header" th:text="#{show.order.item.title}"></h4>
+
+            <div class="ui segment" th:each="item : ${items}">
+
+                <table class="ui definition table">
+                    <tr>
+                        <td class="two wide column" th:text="#{show.order.item.name}"></td>
+                        <td class="four wide column" th:text="${item?.getItemName()}"></td>
+                    </tr>
+                    <tr>
+                        <td class="two wide column" th:text="#{show.order.item.description}"></td>
+                        <td class="four wide column" th:text="${item?.getItemDescription()}"></td>
+                    </tr>
+                    <tr>
+                        <td class="two wide column" th:text="#{show.order.item.quantity}"></td>
+                        <td class="four wide column" th:text="${item?.getItemQuantity()}"></td>
+                    </tr>
+                    <tr>
+                        <td class="two wide column" th:text="#{show.order.item.price.per.unit}"></td>
+                        <td class="four wide column" th:text="${item?.getItemPrice()}"></td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+        </div>
+
+        <div class="ui right horizontal statistic">
+            <div class="value" th:text="${totalPrice}">
+            </div>
+            <div class="label">
+                <label th:text="#{show.order.total.price}"></label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</div>
+
+
+</div>
+<footer th:replace="common/main::footer"></footer>
 </body>
 </html>
+
+
+
+
+

@@ -83,12 +83,11 @@
 
 
                             <div class="extra">
-
-                                <button class="ui small right floated primary button">
+                                <a class="ui small right floated primary button"
+                                   th:href="@{/customer/order/{id}(id=${order.getId()})}">
                                     <label th:text="#{customer.view.order.more.button}"></label>
                                     <i class="right chevron icon"></i>
-                                </button>
-
+                                </a>
                             </div>
 
                         </div>

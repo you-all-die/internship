@@ -1,6 +1,7 @@
 package com.example.internship.controller.customer;
 
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.ItemDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.service.address.AddressService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,10 +56,7 @@ public class CustomerController {
     }
 
     @GetMapping("/edit")
-    public String editCustomer(
-            Authentication authentication,
-            Model model
-    ) {
+    public String editCustomer(Authentication authentication, Model model) {
         Optional<CustomerDto> customerOptional = customerService.getFromAuthentication(authentication);
         if (customerOptional.isPresent()) {
             CustomerDto customerDto = customerOptional.get();
@@ -73,14 +72,20 @@ public class CustomerController {
         return "redirect:" + BASE_MAPPING;
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/order/{id}")
     public String showOrder(@PathVariable("id") Long orderId, Authentication authentication, Model model) {
-
         OrderDto order = orderService.findByOrderId(orderId, authentication);
 
         if (Objects.isNull(order)) {
             throw new EntityNotFoundException("Customer not found");
         }
+
+        List<ItemDto> items = order.getItems();
+        BigDecimal totalPrice = orderService.getTotalPrice(items);
+
+        model.addAttribute("order", order);
+        model.addAttribute("items", items);
+        model.addAttribute("totalPrice", totalPrice);
 
         return "customer/showOrder";
     }
