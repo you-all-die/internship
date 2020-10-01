@@ -136,6 +136,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void saveRating(Long productId, Long customerId, Long rating) {
         ProductRating productRating = new ProductRating();
+        if (productRatingRepository.existsByCustomerIdAndProductId(customerId,productId)){
+        productRating = productRatingRepository.getByCustomerIdAndProductId(customerId,productId);
+        productRatingRepository.deleteById(productRating.getId());
+        }
         productRating.setProductId(productId);
         productRating.setCustomerId(customerId);
         productRating.setRating(rating);

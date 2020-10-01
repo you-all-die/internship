@@ -41,5 +41,5 @@ public interface ProductService {
      */
     Double getProductRating(Long productId);
 
-    void saveRating(Long productId,Long customerId,Long rate);
+    void saveRating(Long productId, Long customerId, Long rate);
 }

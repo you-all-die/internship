@@ -2,7 +2,7 @@ package com.example.internship.controller.product;
 
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.product.SearchResult;
-import com.example.internship.entity.Customer;
+
 import com.example.internship.service.ProductService;
 import com.example.internship.service.customer.CustomerService;
 import com.example.internship.service.product.GsProductService;
@@ -11,7 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -36,7 +40,7 @@ public class ProductController {
      * @author Роман Каравашкин
      */
     @GetMapping("/{id}") // убрал ненужный /product (СЮА)
-    public String showProduct(@PathVariable("id") Long id, Model model, Authentication authentication) {
+    public String showProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.getProductById(id));
         model.addAttribute("rate", productService.getProductRating(id));
 
@@ -61,15 +65,17 @@ public class ProductController {
         return BASE_URL + "/index";
     }
 
-    @PostMapping("/{id}/rate_product")
-    public String addRate(@PathVariable("id") Long id,Authentication authentication,
-                          @RequestParam Long rating,Model model){
-        Long customerId = customerService.getFromAuthentication(authentication).get().getId();
-        if(customerId != null){
-            productService.saveRating(id,customerId,rating);
-            return "products/product";
-        }else{
-         model.addAttribute("errorMessage","Авторизуйтесь.");
+    @PostMapping("/add")
+    public String addRate(@RequestParam("productId") Long id, @RequestParam("rating") Long rating, Authentication authentication,
+                          Model model) {
+        Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+        if (customer.isPresent()) {
+            productService.saveRating(id, customer.get().getId(), rating);
+            return "redirect:/product/" + id;
+        } else {
+            model.addAttribute("product", productService.getProductById(id));
+            model.addAttribute("rate", productService.getProductRating(id));
+            model.addAttribute("errorMessageRating", "please Authentication");
             return "products/product";
         }
         }
