@@ -11,23 +11,25 @@
         <div class="column left aligned">
             <div th:if="${param.error}">
                 <div class="ui warning message">
-                    Invalid username or password.
+                    <label th:text="#{login.index.message.error}"></label>
                 </div>
             </div>
             <div  th:if="${param.logout}">
                 <div class="ui warning message">
-                    You have been logged out.
+                    <label th:text="#{login.index.message.logout}"></label>
                 </div>
             </div>
 
             <form class="ui form" th:action="@{/login}" method="post">
                 <div class="field">
-                    <label> User Name : <input type="text" name="username" placeholder="username" autofocus="autofocus"/> </label>
+                    <label th:text="#{login.index.mail}"></label>
+                    <input type="text" name="username" th:placeholder="#{login.index.mail.placeholder}" autofocus="autofocus"/>
                 </div>
                 <div class="field">
-                    <label> Password: <input type="password" name="password" placeholder="password"/> </label>
+                    <label th:text="#{login.index.password}"></label>
+                    <input type="password" name="password" th:placeholder="#{login.index.password.placeholder}"/>
                 </div>
-                <button class="ui primary button" type="submit">
+                <button class="ui primary button" type="submit" th:text="#{login.index.signin.button}">
                     Sign In
                 </button>
             </form>
