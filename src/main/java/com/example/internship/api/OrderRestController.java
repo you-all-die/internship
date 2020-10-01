@@ -77,7 +77,7 @@ public class OrderRestController {
                                                @RequestParam(name = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
                                                @RequestParam(name = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
 
-        List<OrderDto> orders = orderService.getCustomerOrders(customerId, PageRequest.of(pageNumber, pageSize));
+        List<OrderDto> orders = orderService.getCustomerOrders(customerId, pageNumber, pageSize);
 
         return orders != null ? ResponseEntity.ok(orders) : ResponseEntity.notFound().build();
     }
