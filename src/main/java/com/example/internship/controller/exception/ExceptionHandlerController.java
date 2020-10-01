@@ -14,10 +14,19 @@ import javax.persistence.EntityNotFoundException;
 @Slf4j
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public String connectionError(EntityNotFoundException exception) {
+    @ExceptionHandler(Exception.class)
+    public String connectionError(Exception exception) {
+
         log.error(exception.getMessage());
-        return "exception/notFound";
+
+        return "exception/error";
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public String connectionError(EntityNotFoundException exception) {
+
+        log.error(exception.getMessage());
+
+        return "exception/notFound";
+    }
 }
