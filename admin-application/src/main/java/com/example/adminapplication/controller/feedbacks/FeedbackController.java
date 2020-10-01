@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.ParseException;
+
 
 /*
 *@author Romodin Aleksey
@@ -31,7 +33,7 @@ public class FeedbackController {
      */
     @GetMapping
     public String getFeedbacks(
-            @ModelAttribute("feedbackSearchRequest") FeedbackSearchRequest feedbackSearchRequest, Model model) {
+            @ModelAttribute("feedbackSearchRequest") FeedbackSearchRequest feedbackSearchRequest, Model model) throws ParseException {
         model.addAttribute("feedbackSearchRequest", feedbackSearchRequest);
         FeedbackSearchResult feedbackSearchResult = feedbackService.searchResult(feedbackSearchRequest);
         //Определяем количество страниц

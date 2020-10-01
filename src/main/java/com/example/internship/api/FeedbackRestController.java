@@ -5,11 +5,11 @@ import com.example.internship.dto.FeedbackSearchResult;
 import com.example.internship.refactoringdto.View;
 import com.example.internship.service.feedback.FeedbackService;
 import com.fasterxml.jackson.annotation.JsonView;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -41,24 +41,24 @@ public class FeedbackRestController {
      * @return комментарии по критериям
      */
     @GetMapping
-    @ApiOperation(value = "Поиск комментариев по параметрам")
+    @Operation(description = "Поиск комментариев по параметрам")
     @Schema(implementation = FeedbackSearchResult.class)
-    @ApiResponse(code = 200, message = "Поиск успешен")
+    @ApiResponse(responseCode = "200", description = "Поиск успешен")
     @JsonView(View.Public.class)
     public ResponseEntity<FeedbackSearchResult> searchResult(@RequestParam(name = "productId", required = false)
-                                                                 @ApiParam(value = "Код продукта") Long productId,
+                                                                 @Parameter(description = "Код продукта") Long productId,
                                                              @RequestParam(name = "customerId", required = false)
-                                                                 @ApiParam(value = "Код пользователя") Long customerId,
+                                                                 @Parameter(description = "Код пользователя") Long customerId,
                                                              @RequestParam(name = "pageNumber", defaultValue = "0")
-                                                                 @ApiParam(value = "Номер страницы (0 - первая страница)") Integer pageNumber,
+                                                                 @Parameter(description = "Номер страницы (0 - первая страница)") Integer pageNumber,
                                                              @RequestParam(name = "pageSize", defaultValue = "10")
-                                                                 @ApiParam(value = "Размер страницы") Integer pageSize,
+                                                                 @Parameter(description = "Размер страницы") Integer pageSize,
                                                              @RequestParam(name = "startDate", required = false)
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                 @ApiParam(value = "Начальная дата (yyyy-MM-dd)") Date startDate,
+                                                                 @Parameter(description = "Начальная дата (yyyy-MM-dd)") Date startDate,
                                                              @RequestParam(name = "endDate", required = false)
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                 @ApiParam(value = "Конечная дата (yyyy-MM-dd)") Date endDate) {
+                                                                 @Parameter(description = "Конечная дата (yyyy-MM-dd)") Date endDate) {
         return ResponseEntity.ok(feedbackService.searchResult(productId, customerId, pageSize, pageNumber, startDate, endDate));
     }
 
@@ -68,14 +68,14 @@ public class FeedbackRestController {
      * @return http status 200 и комментарий или http status 404, если комментарий не найден
      */
     @GetMapping("/{id}")
-    @ApiOperation(value = "Поиск комментария по id.")
+    @Operation(description = "Поиск комментария по id.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Комментарий найден"),
-            @ApiResponse(code = 404, message = "Комментарий не найден")
+            @ApiResponse(responseCode = "200", description = "Комментарий найден"),
+            @ApiResponse(responseCode = "404", description = "Комментарий не найден")
     })
     @Schema(implementation = FeedbackDto.class)
     @JsonView(View.Public.class)
-    public ResponseEntity<FeedbackDto> getFeedback(@ApiParam(value = "Идентификатор комментария")
+    public ResponseEntity<FeedbackDto> getFeedback(@Parameter(description = "Идентификатор комментария")
                                                        @PathVariable("id") Long id) {
         Optional<FeedbackDto> feedbackDto = feedbackService.getFeedbackById(id);
         return feedbackDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -87,10 +87,10 @@ public class FeedbackRestController {
      * @return  http status 200 или http status 404, если комментарий не найден
      */
     @DeleteMapping("/delete/{id}")
-    @ApiOperation(value = "Удаление комментария по ID.")
+    @Operation(description = "Удаление комментария по ID.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Комментарий удален"),
-            @ApiResponse(code = 404, message = "Комментарий не найден")
+            @ApiResponse(responseCode = "200", description = "Комментарий удален"),
+            @ApiResponse(responseCode = "404", description = "Комментарий не найден")
     })
     @JsonView(View.Public.class)
     public ResponseEntity<?> deleteFeedbackById(@PathVariable("id") Long id) {

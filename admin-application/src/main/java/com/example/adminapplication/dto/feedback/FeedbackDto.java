@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 /**
  * @author Romodin Aleksey
@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class FeedbackDto {
     private Long id;
-    private Date datePublication;
+    private OffsetDateTime datePublication;
     @Size(max = 500)
     @NotNull
     private String feedbackText;
