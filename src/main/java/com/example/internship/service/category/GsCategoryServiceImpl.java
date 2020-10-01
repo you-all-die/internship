@@ -5,11 +5,13 @@ import com.example.internship.entity.Category;
 import com.example.internship.repository.CategoryRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -119,6 +121,13 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     }
 
     @Override
+    public Category save(CategoryDto.Response.All categoryDto) {
+        return categoryRepository.save(
+                modelMapper.map(categoryDto, Category.class)
+        );
+    }
+
+    @Override
     public void delete(long id) {
         categoryRepository.deleteById(id);
     }
@@ -126,6 +135,30 @@ public class GsCategoryServiceImpl implements GsCategoryService {
     @Override
     public void deleteAll() {
         categoryRepository.deleteAll();
+    }
+
+    @PostConstruct
+    private void configureModelMapper() {
+        modelMapper
+                .createTypeMap(CategoryDto.Response.AllWithParentId.class, Category.class)
+                .addMappings(mapper -> mapper.skip(Category::setParent))
+                .setPostConverter(allWithParentIdToCategoryPostConverter());
+    }
+
+    private Converter<CategoryDto.Response.AllWithParentId, Category> allWithParentIdToCategoryPostConverter() {
+        return mappingContext -> {
+            final CategoryDto.Response.AllWithParentId allWithParentId = mappingContext.getSource();
+            final Category category = mappingContext.getDestination();
+            final Long parentId = allWithParentId.getParentId();
+            if (null != parentId && categoryRepository.existsById(parentId)) {
+                category.setParent(categoryRepository.findById(parentId).orElseThrow(
+                        () -> new IllegalStateException("Category with parentId=" + parentId + " should be exists.")
+                ));
+            } else {
+                category.setParent(null);
+            }
+            return category;
+        };
     }
 
     private CategoryDto.Response.All convertToAllDto(Category category) {
