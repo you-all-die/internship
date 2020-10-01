@@ -3,10 +3,18 @@ package com.example.internship.api;
 import com.example.internship.dto.CategoryDto;
 import com.example.internship.dto.CategorySearchResult;
 import com.example.internship.service.category.CategoryService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,77 +28,72 @@ public class CategoryRestController {
 
     private final CategoryService categoryService;
 
-    @GetMapping(value = "/find-all-sort-by-id")
-    @ApiOperation(value = "Возвращает все категории отсортированные по id.", response = List.class)
-    public List<CategoryDto> findAllSortById() {
-        return categoryService.findAllSortById();
-    }
-
-    @PostMapping(value = "/find-by-name")
-    @ApiOperation(value = "Возвращает категорию по ее названию", response = List.class)
-    public List<CategoryDto> findByName(@RequestBody String name) {
-        return categoryService.findByName(name);
-    }
-
-    @DeleteMapping(value = "/remove/{id}")
-    @ApiOperation(value = "Удаляем категорию по id")
-    public void removeCategory(@PathVariable Long id) {
-        categoryService.removeCategory(id);
-    }
-
-    @GetMapping(value = "/find-all")
-    @ApiOperation(value = "Возвращает все категории", response = List.class)
-    public List<CategoryDto> findAll() {
+    @GetMapping(value = "/all")
+    @Operation(summary = "Возвращает все категории")
+    public List<CategoryDto> findAllCategories() {
         return categoryService.findAll();
     }
 
-    @PostMapping(value = "/find-by-id")
-    @ApiOperation(value = "Возвращает категорию по id",
-            response = CategoryDto.class)
-    public CategoryDto findById(@RequestBody Long id) {
+    @GetMapping("/{id}")
+    @Operation(summary = "Возвращает информацию о категории по значениею id",
+            parameters = {
+                    @Parameter(in = ParameterIn.PATH,
+                            description = "Id категории, по которой запрашивается информация",
+                            name = "id",
+                            required = true)
+            })
+    public CategoryDto getCategory(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
-    @PostMapping(value = "/add-category")
-    @ApiOperation(value = "Сохраняет категорию в БД")
+    @PostMapping(value = "/")
+    @Operation(summary = "Сохраняет категорию в БД")
     public void addCategory(@RequestBody CategoryDto category) {
+        System.out.println(category);
         categoryService.addCategory(category);
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Возвращает информацию о категории, по значению id.",
-            response = CategoryDto.class)
-    public CategoryDto categoryData(@PathVariable Long id) {
-        return categoryService.findById(id);
+    @GetMapping(value = "/findByName")
+    @Operation(summary = "Возвращает категорию по ее названию",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY,
+                            description = "Имя категории",
+                            name = "name",
+                            required = true)
+            })
+    public List<CategoryDto> findCategoryByName(@RequestParam(name = "name") String name) {
+        return categoryService.findByName(name);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @Operation(summary = "Удаляем категорию по id")
+    public void deleteCategory(@PathVariable Long id) {
+        categoryService.removeCategory(id);
     }
 
     @GetMapping("/search")
-    @ApiOperation(value = "Возвращает список категории согласно заданным критериям поиска.",
-            notes = "В запросе search могут указываться:\n" +
-                    "- pageSize количество возвращаемых категорий (значение по умолчанию 20)\n" +
-                    "- pageNumber номер страницы (значение по умолчанию 1)\n" +
-                    "- parentId поиск по id parent('0'- поиск категорий без родителя)\n" +
-                    "- searchText - поиск по наименованию",
-            response = CategorySearchResult.class)
-    public CategorySearchResult categorySearch(@RequestParam(name = "searchText", required = false)
-                                               @ApiParam(value = "поиск по наименованию")
-                                                       String searchText,
-                                               @RequestParam(name = "parentId", required = false)
-                                               @ApiParam(value = "поиск id parent")
-                                                       Long parentId,
-                                               @RequestParam(name = "pageSize", required = false, defaultValue = "20")
-                                               @ApiParam(value = "размер страницы")
-                                                       Integer pageSize,
-                                               @RequestParam(name = "pageNumber", required = false, defaultValue = "0")
-                                               @ApiParam(value = "номер страницы")
-                                                       Integer pageNumber) {
+    @Operation(summary = "Возвращает список категории согласно заданным критериям поиска",
+            parameters = {
+                    @Parameter(description = "Имя категории",
+                            name = "name"),
+                    @Parameter(description = "Родителская категория",
+                            name = "parentId"),
+                    @Parameter(description = "Количество записей на странице",
+                            name = "pageSize"),
+                    @Parameter(description = "Номер страницы",
+                            name = "pageNumber")
+            })
+    public CategorySearchResult categorySearch(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "parentId", required = false) Long parentId,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+            @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer pageNumber) {
 
-        return categoryService.search(searchText, parentId, pageSize, pageNumber);
+        return categoryService.search(name, parentId, pageSize, pageNumber);
     }
 
     @GetMapping("/parentCategoriesWithChildren")
-    @ApiOperation(value = "Возвращает список родительских категорий, у которых есть наследники",
-            response = CategoryDto.class)
+    @Operation(summary = "Возвращает список родительских категорий, у которых есть наследники")
     public List<CategoryDto> searchParentCategories() {
         return categoryService.getParentCategoriesWithChildren();
     }

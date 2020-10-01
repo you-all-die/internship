@@ -55,7 +55,7 @@ public class CategoriesController {
     @GetMapping({"categories/add"})
     public String addNewCategory(Model model) {
         model.addAttribute("category", new CategoryDto());
-        List<CategoryDto> parentCategories = categoryService.findAllSortById();
+        List<CategoryDto> parentCategories = categoryService.findAll();
         model.addAttribute("parentCategories", parentCategories);
         return "categories/category";
     }
@@ -64,7 +64,7 @@ public class CategoriesController {
     public String editExistingCategory(@RequestParam("categoryId") Long id, Model model) {
         CategoryDto category = categoryService.findById(id);
         model.addAttribute("category", category);
-        List<CategoryDto> parentCategories = categoryService.findAllSortById();
+        List<CategoryDto> parentCategories = categoryService.findAll();
         model.addAttribute("parentCategories", parentCategories);
         return "categories/category";
     }

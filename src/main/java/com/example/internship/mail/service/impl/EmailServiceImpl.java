@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
@@ -16,6 +17,8 @@ import org.thymeleaf.context.Context;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 /**
  * @author Murashov A.A
@@ -44,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
         this.orderEmail = orderEmail;
     }
 
-    private boolean sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
+    private Future<Boolean> sendHtmlMessage(String to, String from, String subject, String htmlBody) throws MailServiceException {
 
         MimeMessage message = emailSender.createMimeMessage();
         try {
@@ -56,15 +59,16 @@ public class EmailServiceImpl implements EmailService {
             emailSender.send(message);
             log.info("Email sent!\n" + "Subject: " + subject + "\nTo: " +
                     to + "\nFrom: " + from + "\nMessage:\n" + htmlBody);
-            return true;
+            return CompletableFuture.completedFuture(Boolean.TRUE);
         } catch (Exception e) {
             log.error("Error sending e-mail to {}, exception {}", to, e.toString());
             throw new MailServiceException("Error sending e-mail " + subject + " to " + to + " from " + from, e);
         }
     }
 
+    @Async()
     @Override
-    public boolean sendOrderDetailsMessage(CustomerDto customer, OrderDto order) throws MailServiceException {
+    public Future<Boolean> sendOrderDetailsMessage(CustomerDto customer, OrderDto order) throws MailServiceException {
         if (null == customer) {
             throw new MailServiceException("Invalid customer", new NullPointerException());
         }
@@ -87,8 +91,9 @@ public class EmailServiceImpl implements EmailService {
         return sendHtmlMessage(order.getCustomerEmail(), orderEmail, ORDER_EMAIL_SUBJECT + order.getId(), htmlBody);
     }
 
+    @Async()
     @Override
-    public boolean sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
+    public Future<Boolean> sendRegistrationWelcomeMessage(CustomerDto customer) throws MailServiceException {
         if (null == customer) {
             throw new MailServiceException("Invalid customer", new NullPointerException());
         }
