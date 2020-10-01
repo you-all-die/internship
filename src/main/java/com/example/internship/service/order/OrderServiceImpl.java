@@ -6,15 +6,22 @@ import com.example.internship.entity.Customer;
 import com.example.internship.entity.Item;
 import com.example.internship.entity.Order;
 import com.example.internship.entity.OrderLine;
+import com.example.internship.refactoringdto.CustomerDto;
 import com.example.internship.repository.OrderRepository;
 import com.example.internship.service.cart.CartService;
+import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -28,6 +35,7 @@ public class OrderServiceImpl implements OrderService{
     private final CartService cartService;
     private final OrderRepository orderRepository;
     private final ModelMapper mapper;
+    private final CustomerService customerService;
 
     @Override
     public OrderDto makeOrder(Customer customer, CheckoutForm checkoutForm) {
@@ -74,9 +82,37 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
         cartService.removeAll(order.getCustomerId());
 
-        OrderDto orderDto = convertToDto(order);
+        return convertToDto(order);
+    }
 
-        return orderDto;
+    @Override
+    public OrderDto findById(Long id) {
+        Optional<Order> order = orderRepository.findById(id);
+        return order.map(this::convertToDto).orElse(null);
+    }
+
+    @Override
+    public OrderDto addOrderToCustomer(Long customerId, OrderDto orderDto) {
+        CustomerDto customer = customerService.getByIdRef(customerId);
+        if (null == customer) {
+            return null;
+        } else {
+            Order order = mapper.map(orderDto, Order.class);
+            order.setCustomerId(customerId);
+            return mapper.map(orderRepository.save(order), OrderDto.class);
+        }
+    }
+
+    @Override
+    public List<OrderDto> getCustomerOrders(Long customerId, Pageable pageable) {
+        CustomerDto customer = customerService.getByIdRef(customerId);
+        if (null == customer) {
+            return null;
+        } else {
+            return orderRepository.findByCustomerId(customerId,
+                    PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "date"))
+                    .stream().map(this::convertToDto).collect(Collectors.toList());
+        }
     }
 
     private OrderDto convertToDto(Order order) {
