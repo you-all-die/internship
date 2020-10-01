@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-    <head th:fragment="common_header(title,links,scripts)">
-        <meta charset="UTF-8">
-        <meta name="author" content="Самохвалов Юрий Алексеевич">
-        <title th:replace="${title}">Interstellar Ship</title>
+<head th:fragment="common_header(title,links,scripts)">
+    <meta charset="UTF-8">
+    <meta name="author" content="Самохвалов Юрий Алексеевич">
+    <title th:replace="${title}">Interstellar Ship</title>
 
         <!-- Common styles and scripts -->
         <link href="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.css" rel="stylesheet" type="text/css">
@@ -26,9 +26,9 @@
                 <!-- Изменил ссылку с /products на /product (СЮА) -->
                 <a class="item" th:href="@{/product}" th:text="#{common.main.menu.products}">Products</a>
 
-                <a class="item" th:href="@{/about}" th:text="#{common.main.menu.about}">
-                    About us
-                </a>
+        <a class="item" th:href="@{/about}" th:text="#{common.main.menu.about}">
+            About us
+        </a>
 
                 <div class="right menu">
 
@@ -42,24 +42,24 @@
                         </div>
                     </div>
 
-                    <a class="item" th:href="@{/cart}">
-                        <i class="shopping cart icon"></i>
-                    </a>
+            <a class="item" th:href="@{/cart}">
+                <i class="shopping cart icon"></i>
+            </a>
 
-                    <div class="ui right dropdown item">
-                        <i class="user icon"></i>
+            <div class="ui right dropdown item">
+                <i class="user icon"></i>
 
                 <div class="menu">
                     <div sec:authorize="isAnonymous()">
                         <!-- ссылка на вход в систему -->
                         <a class="item" th:href="@{/login}">
                             <i class="sign-in icon"></i>
-                            Log in
+                            <label th:text="#{common.main.menu.login}"></label>
                         </a>
-                        <!-- ссылка на регистрацию в систему -->
+
                         <a class="item" th:href="@{/registration}">
                             <i class="user plus icon"></i>
-                            Registration
+                            <label th:text="#{common.main.menu.registration}"></label>
                         </a>
                     </div>
 
@@ -68,27 +68,27 @@
                         <a class="item" th:href="@{/customer}">
                             <span th:text="${#authentication.principal.getUsername()}"></span>
                         </a>
-                        <!-- ссылка на выход из системы -->
+
                         <a class="item" th:href="@{/logout}">
                             <i class="sign-in icon"></i>
-                            Log out
+                            <label th:text="#{common.main.menu.logout}"></label>
                         </a>
                     </div>
 
                 </div>
 
-                    </div>
-
-                </div>
             </div>
 
-            <script>$('.ui.dropdown').dropdown();</script>
-        </header>
+        </div>
+    </div>
 
-        <footer th:fragment="footer">
-            <div class="ui container">
-                <label>2020 © Online electronics store. All rights reserved!</label>
-            </div>
-        </footer>
-    </body>
+    <script>$('.ui.dropdown').dropdown();</script>
+</header>
+
+<footer th:fragment="footer">
+    <div class="ui container">
+        <label>2020 © Online electronics store. All rights reserved!</label>
+    </div>
+</footer>
+</body>
 </html>
