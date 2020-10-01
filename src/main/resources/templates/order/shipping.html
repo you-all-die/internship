@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="/common/main :: common_header (~{::title}, _, _)">
         <meta charset="UTF-8">
+        <meta content="Самохвалов Юрий Алексеевич" name="author">
         <title>Title</title>
     </head>
     <body>
+        <header th:replace="/common/main :: header"></header>
 
+        <div class="ui main grid container">
+            <div class="row">
+                <div class="column">
+                    <div th:replace="/order/steps :: widget ('shipping')"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <div th:replace="/order/address :: widget (${addresses})"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

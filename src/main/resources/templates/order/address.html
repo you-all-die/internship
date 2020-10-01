@@ -1,0 +1,11 @@
+<div th:fragment="widget (addresses)"
+     xmlns:th="http://www.thymeleaf.org">
+
+    <div class="ui selection list" th:unless="${#lists.isEmpty(addresses)}">
+        <div class="item"
+             th:each="address : ${addresses}"
+             th:text="${address.comment}">Address
+        </div>
+    </div>
+
+</div>

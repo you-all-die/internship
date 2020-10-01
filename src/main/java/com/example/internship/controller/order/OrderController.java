@@ -2,6 +2,8 @@ package com.example.internship.controller.order;
 
 import com.example.internship.controller.product.ProductController;
 import com.example.internship.dto.CustomerDto;
+import com.example.internship.refactoringdto.AddressDto;
+import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,6 +37,7 @@ public class OrderController {
     private static final String CONFIRM_TEMPLATE = TEMPLATE_DIR + "/confirm";
 
     private final CustomerService customerService;
+    private final AddressService addressService;
 
     /**
      * Покупатель регистрируется или входит в систему.
@@ -60,7 +65,18 @@ public class OrderController {
      * Покупатель выбирает способ доставки заказа и, если надо, адрес.
      */
     @GetMapping(SHIPPING_MAPPING)
-    public String chooseShippingMethod() {
+    public String chooseShippingMethod(
+            Authentication authentication,
+            Model model
+    ) {
+        model.addAttribute("addresses", Collections.emptyList());
+        if (null != authentication && authentication.isAuthenticated()) {
+            final Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+            if (customer.isPresent()) {
+                final List<AddressDto> addresses = addressService.getAllByCustomerId(customer.get().getId());
+                model.addAttribute("addresses", addresses);
+            }
+        }
         return SHIPPING_TEMPLATE;
     }
 
