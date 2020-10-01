@@ -1,18 +1,20 @@
 package com.example.internship.controller.product;
 
+import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.product.SearchResult;
+import com.example.internship.entity.Customer;
 import com.example.internship.service.ProductService;
+import com.example.internship.service.customer.CustomerService;
 import com.example.internship.service.product.GsProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 
 /**
@@ -28,13 +30,16 @@ public class ProductController {
 
     private final ProductService productService;
     private final GsProductService gsProductService;
+    private final CustomerService customerService;
 
     /**
      * @author Роман Каравашкин
      */
     @GetMapping("/{id}") // убрал ненужный /product (СЮА)
-    public String showProduct(@PathVariable("id") long id, Model model) {
+    public String showProduct(@PathVariable("id") Long id, Model model, Authentication authentication) {
         model.addAttribute("product", productService.getProductById(id));
+        model.addAttribute("rate", productService.getProductRating(id));
+
         return "products/product";
     }
 
@@ -55,4 +60,18 @@ public class ProductController {
         model.addAttribute("data", data);
         return BASE_URL + "/index";
     }
-}
+
+    @PostMapping("/{id}/rate_product")
+    public String addRate(@PathVariable("id") Long id,Authentication authentication,
+                          @RequestParam Long rating,Model model){
+        Long customerId = customerService.getFromAuthentication(authentication).get().getId();
+        if(customerId != null){
+            productService.saveRating(id,customerId,rating);
+            return "products/product";
+        }else{
+         model.addAttribute("errorMessage","Авторизуйтесь.");
+            return "products/product";
+        }
+        }
+    }
+

@@ -107,3 +107,36 @@ databaseChangeLog:
             schemaName: public
             tableName: customers
             validate: true
+  - changeSet:
+      id: 2020-09-29-009
+      author: Roman Karavashkin
+      comment: create table product_rating
+      preConditions:
+      - onFail: MARK_RAN
+      changes:
+      -  createTable:
+          catalogName: internship
+          columns:
+          - column:
+              name: id
+              type: BIGINT
+              autoIncrement: true
+              constraints:
+                nullable: false
+          - column:
+              name: product_id
+              type: BIGINT
+              constraints:
+                nullable: false
+          - column:
+              name: customer_id
+              type: BIGINT
+              constraints:
+                nullable: false
+          - column:
+              name: rating
+              type: BIGINT
+              constraints:
+                nullable: true
+          shemeName: public
+          tableName: product_rate

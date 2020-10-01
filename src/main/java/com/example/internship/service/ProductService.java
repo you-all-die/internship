@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.ProductDto;
+import com.example.internship.dto.ProductRatingDto;
 import com.example.internship.entity.Product;
 import com.example.internship.dto.ProductSearchResult;
 
@@ -33,4 +34,12 @@ public interface ProductService {
     ProductSearchResult search(String name, Long categoryId, BigDecimal priceFrom, BigDecimal priceTo, Integer pageSize,
                                Integer pageNumber);
 
+    /**
+     * Рейтинг товара.
+     * @param productId id товара.
+     * @return если у товраа нет рейтинга (null) возращает 0.0
+     */
+    Double getProductRating(Long productId);
+
+    void saveRating(Long productId,Long customerId,Long rate);
 }
