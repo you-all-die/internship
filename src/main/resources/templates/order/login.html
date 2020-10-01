@@ -3,8 +3,11 @@
     <form class="ui form" method="post" th:action="/login">
         <div class="field">
             <label th:text="#{order.login.label.email}">Email</label>
-            <input th:field="*{email}">
+            <input th:field="${email}">
         </div>
-        <
+        <div class="field">
+            <label th:text="#{order.login.label.password">Password</label>
+            <input th:field="${password}">
+        </div>
     </form>
 </div>
