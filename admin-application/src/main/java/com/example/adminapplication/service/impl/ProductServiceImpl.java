@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     public void removeProduct(Long id) {
 
         webClient.post()
-                .uri(uri +"/remove-product")
+                .uri(uri + "/remove-product")
                 .bodyValue(id)
                 .retrieve()
                 .toBodilessEntity()
@@ -33,13 +33,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveProduct(ProductDto product) {
+    public ProductDto saveProduct(ProductDto product) {
 
-        webClient.post()
+        return webClient.post()
                 .uri(uri + "/save-product")
                 .bodyValue(product)
                 .retrieve()
-                .toBodilessEntity()
+                .bodyToMono(ProductDto.class)
                 .block();
     }
 
