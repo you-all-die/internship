@@ -1,0 +1,29 @@
+<div th:fragment="widget (customer)"
+     xmlns:th="http://www.thymeleaf.org">
+    <form class="ui form" method="post" th:action="@{/order/enter}" th:object="${customer}">
+        <div class="required field">
+            <label th:text="#{order.customer.lastName.label}">Last Name</label>
+            <input th:field="*{lastName}" type="text">
+        </div>
+        <div class="field">
+            <label th:text="#{order.customer.firstName.label}">First Name</label>
+            <input th:field="*{firstName}" type="text">
+        </div>
+        <div class="field">
+            <label th:text="#{order.customer.middleName.label}">Middle Name</label>
+            <input th:field="*{middleName}" type="text">
+        </div>
+        <div class="required field">
+            <label th:text="#{order.customer.email.label}">Email</label>
+            <input th:field="*{email}" type="email">
+        </div>
+        <div class="required field">
+            <label th:text="#{order.customer.phone.label}">Phone</label>
+            <input th:field="*{phone}" type="tel">
+        </div>
+        <button class="ui primary button"
+                th:text="#{order.customer.button.submit}"
+                type="submit">Continue
+        </button>
+    </form>
+</div>

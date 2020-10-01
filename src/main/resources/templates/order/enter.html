@@ -8,8 +8,17 @@
     <body>
         <header th:replace="/common/main :: header"></header>
 
-        <div class="ui main container">
-            <div th:replace="/order/steps :: widget"></div>
+        <div class="ui main grid container">
+            <div class="row">
+                <div class="column">
+                    <div th:replace="/order/steps :: widget"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <div th:replace="/order/customer :: widget (${customer})"></div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
