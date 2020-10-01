@@ -12,7 +12,6 @@ import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -96,9 +95,8 @@ public class OrderServiceImpl implements OrderService{
             Order order = mapper.map(orderDto, Order.class);
             order.setCustomerId(customerId);
             return mapper.map(orderRepository.save(order), OrderDto.class);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -107,9 +105,8 @@ public class OrderServiceImpl implements OrderService{
             return orderRepository.findByCustomerId(customerId,
                     PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, "date"))
                     .stream().map(this::convertToDto).collect(Collectors.toList());
-        } else {
-            return null;
         }
+        return null;
     }
 
     private OrderDto convertToDto(Order order) {
