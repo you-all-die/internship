@@ -4,11 +4,11 @@ import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.refactoringdto.View;
 import com.example.internship.service.address.AddressService;
 import com.fasterxml.jackson.annotation.JsonView;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -43,15 +43,15 @@ public class AddressRestController {
      * @return возвращает список всех адресов покупателя если они есть, иначе http status 404
      */
     @GetMapping
-    @ApiOperation(value = "Получение всех адресов пользователя")
+    @Operation(description = "Получение всех адресов пользователя")
     @Schema(implementation = AddressDto.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Адреса найдены"),
-            @ApiResponse(code = 404, message = "Адреса не найдены")
+            @ApiResponse(responseCode = "200", description = "Адреса найдены"),
+            @ApiResponse(responseCode = "404", description = "Адреса не найдены")
     })
     @JsonView(View.Public.class)
-    public ResponseEntity<List<AddressDto>> getAllAddressesByCustomerId(@ApiParam(value = "Идентификатор пользователя")
-                                                                        @PathVariable Long customerId) {
+    public ResponseEntity<List<AddressDto>> getAllAddressesByCustomerId(@Parameter(description = "Идентификатор пользователя")
+                                                                            @PathVariable Long customerId) {
 
         List<AddressDto> allById = addressService.getAllByCustomerId(customerId);
 
@@ -66,16 +66,16 @@ public class AddressRestController {
      * @return http status 200, если адрес добавлен, иначе http status 400
      */
     @PostMapping
-    @ApiOperation(value = "Добавление адреса пользователя")
+    @Operation(description = "Добавление адреса пользователя")
     @Schema(implementation = AddressDto.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Адреса добавлен"),
-            @ApiResponse(code = 400, message = "Неправильные данные")
+            @ApiResponse(responseCode = "200", description = "Адреса добавлен"),
+            @ApiResponse(responseCode = "400", description = "Неправильные данные")
     })
     @JsonView(View.Public.class)
-    public ResponseEntity<?> addAddressToCustomer(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<?> addAddressToCustomer(@Parameter(description = "Идентификатор пользователя")
                                                   @PathVariable Long customerId,
-                                                  @ApiParam(value = "Данные адреса") @JsonView(View.Update.class)
+                                                  @Parameter(description = "Данные адреса") @JsonView(View.Update.class)
                                                   @Valid @RequestBody AddressDto address,
                                                   BindingResult bindingResult) {
 
@@ -98,16 +98,16 @@ public class AddressRestController {
      * @return http status 200, если адрес удален, иначе http status 400
      */
     @DeleteMapping("/{addressId}")
-    @ApiOperation(value = "Удаление адреса у пользователя")
+    @Operation(description = "Удаление адреса у пользователя")
     @Schema(implementation = AddressDto.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Адрес удален"),
-            @ApiResponse(code = 400, message = "Неправильные данные")
+            @ApiResponse(responseCode = "200", description = "Адрес удален"),
+            @ApiResponse(responseCode = "400", description = "Неправильные данные")
     })
     @JsonView(View.Public.class)
-    public ResponseEntity<?> deleteAddressFromCustomerByIds(@ApiParam(value = "Идентификатор пользователя")
+    public ResponseEntity<?> deleteAddressFromCustomerByIds(@Parameter(description = "Идентификатор пользователя")
                                                             @PathVariable Long customerId,
-                                                            @ApiParam(value = "Идентификатор адреса")
+                                                            @Parameter(description = "Идентификатор адреса")
                                                             @PathVariable Long addressId) {
 
         return addressService.deleteAddressFromCustomerByIds(customerId, addressId) ? ResponseEntity.ok().build()

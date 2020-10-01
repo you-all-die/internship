@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public void addCategory(CategoryDto category) {
+        System.out.println(category);
         categoryRepository.save(this.convertToEntity(category));
     }
 
@@ -57,17 +57,20 @@ public class CategoryServiceImpl implements CategoryService {
         Specification<Category> specification;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null,"name", name);
-
+        specification = draftSpecification(null, "name", name);
         /*Условие для поиска по родительской категории
          * Если получаем 0 -> поиск категории без потомков
          * Если пулучаем значение больше 0 -> поиск по выбранному родителю
          */
         if (parentId != null) {
-            if (parentId > 0) specification =
-                    draftSpecification(specification, "parentId", parentId.toString());
-            if (parentId == 0) specification =
-                    draftSpecification(specification, "parentIdNull", parentId.toString());
+            if (parentId > 0) {
+                specification =
+                        draftSpecification(specification, "parentId", parentId.toString());
+            }
+            if (parentId == 0) {
+                specification =
+                        draftSpecification(specification, "parentIdNull", parentId.toString());
+            }
         }
 
         categorySearchResult.setCategory(categoryRepository.findAll(specification,
@@ -115,11 +118,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     //Метод проверки поля и добавления условия в запрос
     private Specification<Category> draftSpecification(Specification<Category> specification, String columnName,
-                                                       String optionalName ){
-        if(optionalName !=null){
-            if(specification == null){
+                                                       String optionalName) {
+        if (optionalName != null) {
+            if (specification == null) {
                 specification = Specification.where(new CategorySpecification(columnName, optionalName));
-            }else {
+            } else {
                 specification = specification.and(new CategorySpecification(columnName, optionalName));
             }
         }
@@ -127,7 +130,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     //Поиск родительских категорий в общем списке
-    public List<CategoryDto> getParentCategoriesWithChildren(){
+    public List<CategoryDto> getParentCategoriesWithChildren() {
         return categoryRepository.getParentCategoriesWithChildren().stream()
                 .map(this::convertFromProjection).collect(Collectors.toList());
     }
