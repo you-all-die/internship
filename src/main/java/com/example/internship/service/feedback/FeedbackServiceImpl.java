@@ -34,16 +34,23 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @return получение результата поиска
      */
     @Override
-    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber) {
+    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize,
+                                             Integer pageNumber, Date startDate, Date endDate) {
         FeedbackSearchResult feedbackSearchResult = new FeedbackSearchResult();
         Specification<Feedback> specification = null;
 
         // Формируем условия для запроса
         if (productId != null) {
-            specification = draftSpecification(null, "productId", productId.toString());
+            specification = draftSpecification(null, "productId", productId);
         }
         if (authorId != null) {
-            specification = draftSpecification(specification, "authorId", authorId.toString());
+            specification = draftSpecification(specification, "authorId", authorId);
+        }
+        if (startDate != null) {
+            specification = draftSpecification(specification, "startDate", startDate);
+        }
+        if (endDate != null) {
+            specification = draftSpecification(specification, "endDate", endDate);
         }
         feedbackSearchResult.setFeedbacks(feedbackRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize, Sort.by("datePublication").ascending()))
@@ -90,7 +97,7 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @return получение спецификации
      */
     private Specification<Feedback> draftSpecification(
-            Specification<Feedback> specification, String columnName, String optionalName) {
+            Specification<Feedback> specification, String columnName, Object optionalName) {
         if (optionalName != null) {
             if (specification == null) {
                 specification = Specification.where(new FeedbackSpecification(columnName, optionalName));
@@ -108,6 +115,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     private FeedbackDto convertToDto(Feedback feedback) {
         return modelMapper.map(feedback, FeedbackDto.class);
     }
+
+    /**
+     *
+     * @param id идентификатор комментария
+     * @return комментарий, либо пустой обьект
+     */
     @Override
     public Optional<FeedbackDto> getFeedbackById(Long id) {
         if (feedbackRepository.findById(id).isPresent()) {

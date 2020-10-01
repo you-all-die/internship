@@ -3,12 +3,14 @@ package com.example.internship.service.feedback;
 import com.example.internship.dto.FeedbackDto;
 import com.example.internship.dto.FeedbackSearchResult;
 
+import java.util.Date;
 import java.util.Optional;
 
 
 public interface FeedbackService {
     //Поиск по параметрам
-    FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber);
+    FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize,
+                                      Integer pageNumber, Date startDate, Date endDate);
     //Сохранение нового комментария
     void addFeedback(Long productId, Long authorId, String authorName, String feedbackText);
     //Удаление комментария автором

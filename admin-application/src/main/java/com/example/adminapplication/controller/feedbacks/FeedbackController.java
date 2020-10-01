@@ -32,6 +32,7 @@ public class FeedbackController {
     @GetMapping
     public String getFeedbacks(
             @ModelAttribute("feedbackSearchRequest") FeedbackSearchRequest feedbackSearchRequest, Model model) {
+        model.addAttribute("feedbackSearchRequest", feedbackSearchRequest);
         FeedbackSearchResult feedbackSearchResult = feedbackService.searchResult(feedbackSearchRequest);
         //Определяем количество страниц
         Long totalFeedbacks = feedbackSearchResult.getTotalFeedbacks();

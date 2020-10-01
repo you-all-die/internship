@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.Optional;
 
 /*
@@ -46,12 +48,18 @@ public class FeedbackRestController {
     public ResponseEntity<FeedbackSearchResult> searchResult(@RequestParam(name = "productId", required = false)
                                                                  @ApiParam(value = "Код продукта") Long productId,
                                                              @RequestParam(name = "customerId", required = false)
-                                                             @ApiParam(value = "Код пользователя") Long customerId,
+                                                                 @ApiParam(value = "Код пользователя") Long customerId,
                                                              @RequestParam(name = "pageNumber", defaultValue = "0")
                                                                  @ApiParam(value = "Номер страницы (0 - первая страница)") Integer pageNumber,
                                                              @RequestParam(name = "pageSize", defaultValue = "10")
-                                                                 @ApiParam(value = "Размер страницы") Integer pageSize) {
-        return ResponseEntity.ok(feedbackService.searchResult(productId, customerId, pageSize, pageNumber));
+                                                                 @ApiParam(value = "Размер страницы") Integer pageSize,
+                                                             @RequestParam(name = "startDate", required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @ApiParam(value = "Начальная дата (yyyy-MM-dd)") Date startDate,
+                                                             @RequestParam(name = "endDate", required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @ApiParam(value = "Конечная дата (yyyy-MM-dd)") Date endDate) {
+        return ResponseEntity.ok(feedbackService.searchResult(productId, customerId, pageSize, pageNumber, startDate, endDate));
     }
 
     /**

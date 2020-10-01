@@ -30,6 +30,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (request.getAuthorId() != null) {
             builder.queryParam("customerId", request.getAuthorId());
         }
+        //Добавление параметра: поиск по начальной дате
+        if (request.getStartDate() != null) {
+            builder.queryParam("startDate", request.getStartDate());
+        }
+        //Добавление параметра: поиск по конечной дате
+        if (request.getEndDate() != null) {
+            builder.queryParam("endDate", request.getEndDate());
+        }
         //Добавление параметра: номер страницы
         builder.queryParam("pageNumber", request.getPageNumber());
         //Добавление параметра: размер страницы
