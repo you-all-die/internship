@@ -1,8 +1,8 @@
 <div class="ui fluid mini steps"
-     th:fragment="widget"
+     th:fragment="widget (active)"
      xmlns:th="http://www.thymeleaf.org">
     <!-- Покупатель регистрируется или входит в систему -->
-    <div class="step">
+    <div class="step" th:classappend="${active == 'enter'} ? 'active'">
         <i class="ui user icon"></i>
         <div class="content">
             <div class="title" th:text="#{order.steps.enter.title}">Enter or register</div>

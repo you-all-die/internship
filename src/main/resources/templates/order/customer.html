@@ -3,23 +3,28 @@
     <form class="ui form" method="post" th:action="@{/order/enter}" th:object="${customer}">
         <div class="required field">
             <label th:text="#{order.customer.lastName.label}">Last Name</label>
-            <input th:field="*{lastName}" type="text">
+            <input th:field="*{lastName}" th:placeholder="#{order.customer.lastName.placeholder}"
+                   type="text">
         </div>
         <div class="field">
             <label th:text="#{order.customer.firstName.label}">First Name</label>
-            <input th:field="*{firstName}" type="text">
+            <input th:field="*{firstName}" th:placeholder="#{order.customer.firstName.placeholder}"
+                   type="text">
         </div>
         <div class="field">
             <label th:text="#{order.customer.middleName.label}">Middle Name</label>
-            <input th:field="*{middleName}" type="text">
+            <input th:field="*{middleName}" th:placeholder="#{order.customer.middleName.placeholder}"
+                   type="text">
         </div>
         <div class="required field">
             <label th:text="#{order.customer.email.label}">Email</label>
-            <input th:field="*{email}" type="email">
+            <input th:field="*{email}" th:placeholder="#{order.customer.email.placeholder}"
+                   type="email">
         </div>
         <div class="required field">
             <label th:text="#{order.customer.phone.label}">Phone</label>
-            <input th:field="*{phone}" type="tel">
+            <input th:field="*{phone}" th:placeholder="#{order.customer.phone.placeholder}"
+                   type="tel">
         </div>
         <button class="ui primary button"
                 th:text="#{order.customer.button.submit}"
