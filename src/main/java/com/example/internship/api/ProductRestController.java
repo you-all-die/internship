@@ -79,7 +79,7 @@ public class ProductRestController {
     }
 
     @PostMapping("/save-product")
-    @Operation(value = "Сохраняет продукт")
+    @Operation(description = "Сохраняет продукт")
     public Product saveProduct(@RequestBody Product product) {
 
         return productService.saveProduct(product);
