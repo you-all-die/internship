@@ -12,14 +12,17 @@ import com.example.internship.service.cart.CartService;
 import com.example.internship.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -33,8 +36,8 @@ public class OrderServiceImpl implements OrderService{
 
     private final CartService cartService;
     private final OrderRepository orderRepository;
-    private final CustomerService customerService;
     private final ModelMapper mapper;
+    private final CustomerService customerService;
 
     @Override
     public OrderDto makeOrder(Customer customer, CheckoutForm checkoutForm) {
@@ -81,9 +84,33 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
         cartService.removeAll(order.getCustomerId());
 
-        OrderDto orderDto = convertToDto(order);
+        return convertToDto(order);
+    }
 
-        return orderDto;
+    @Override
+    public OrderDto findById(Long id) {
+        Optional<Order> order = orderRepository.findById(id);
+        return order.map(this::convertToDto).orElse(null);
+    }
+
+    @Override
+    public OrderDto addOrderToCustomer(Long customerId, OrderDto orderDto) {
+        if (customerService.existsById(customerId)) {
+            Order order = mapper.map(orderDto, Order.class);
+            order.setCustomerId(customerId);
+            return mapper.map(orderRepository.save(order), OrderDto.class);
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrderDto> getCustomerOrders(Long customerId, Integer pageNumber, Integer pageSize) {
+        if (customerService.existsById(customerId)) {
+            return orderRepository.findByCustomerId(customerId,
+                    PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, "date"))
+                    .stream().map(this::convertToDto).collect(Collectors.toList());
+        }
+        return null;
     }
 
     @Override
