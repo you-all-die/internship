@@ -51,7 +51,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
                 return true;
             } catch (IOException e) {
-                LOG.error(e.getMessage());
+                LOG.error(e.getMessage(), e);
 
                 return false;
             }
@@ -70,7 +70,7 @@ public class ProductImageServiceImpl implements ProductImageService {
                     .map(Path::toFile)
                     .forEach(File::delete);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
 
             return false;
         }
