@@ -1,0 +1,44 @@
+databaseChangeLog:
+  -
+    include:
+      file: db/changelog/2020-09-16-01/01-create-orders-table.yaml
+  #  -
+  #    include:
+  #      file: db/changelog/2020-09-16-01/02-change-product-table.yaml
+  -
+    include:
+      file: db/changelog/2020-09-16-01/03-add-not-null-to-product-price.yaml
+  -
+    include:
+      file: db/changelog/2020-09-16-01/04-create-items-table.yaml
+
+  - changeSet:
+      id: 2020-10-01-001
+      author: Ivan Gubanov
+      comment: New product images structure
+      changes:
+        - update:
+            tableName: product
+            columns:
+              - column:
+                  name: picture
+                  value: jpg
+  - changeSet:
+      id: 2020-10-02-001
+      author: Ivan Gubanov
+      comment: Rename column picture to extension
+      changes:
+        - renameColumn:
+            tableName: product
+            oldColumnName: picture
+            newColumnName: extension
+            columnDataType: varchar(64)
+  - changeSet:
+      id: 2020-10-01-03
+      author: Romodin Aleksey
+      comment: modifyDataType
+      changes:
+        - modifyDataType:
+            columnName: date_publication
+            newDataType: TIMESTAMP (0) WITH TIME ZONE
+            tableName: feedback

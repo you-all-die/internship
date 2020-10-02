@@ -1,7 +1,7 @@
 <!-- Роман Каравашкин-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="common/fomain :: common_header(~{::title},_,~{::script})">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,~{::script})">
     <meta charset="UTF-8">
     <meta name="author" content="Роман Каравашкин">
     <title th:text="${product.name}"></title>
@@ -11,17 +11,41 @@
 <body>
 <div th:replace="/common/main :: header"></div>
 
-<div th:each="pr: ${product}" class="ui main container">
+<div th:each="pr: ${product}" class="ui container">
+    <!-- Дерево предков категорий -->
+    <div class="row">
+        <div class="ui breadcrumb">
+            <a th:href="@{/product}" class="section">Каталог</a>
+            <th:block th:each="category : ${breadcrumb}">
+                <i class="right angle icon divider"></i>
+                <a th:href="@{/product?categoryId=} + ${category.id}" class="section" th:text="${category.name}">Child</a>
+            </th:block>
+        </div>
+    </div>
 
-    <h1 class="ui header " th:text="'Смартфон  '+${product.name}"/>
+    <!-- Название и код товара -->
+    <h1 class="ui header " th:text="${product.name}"></h1>
+    <h10 class="ui header " th:text="'Код товара: ' + ${product.id}"></h10><br><br>
 
     <div class="ui two column divided grid">
         <div class="stretched row">
             <div class="column">
                 <div class="ui segment">
                     <img class="ui fluid image" src="/images/p1.jpg" th:src="'/img/' + ${product.picture}"/>
+    <div class="ui two column grid">
+
+        <!--Блок с изображением-->
+        <div class="column">
+            <div class="ui raised segment">
+                <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
+                <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
+                    <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                </div>
+                <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
+                    <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
                 </div>
             </div>
+        </div>
 
             <div class="column">
                 <div class="ui segment">
@@ -43,6 +67,36 @@
                         </div>
                     </div>
 
+        <!--Блок c описанием-->
+        <div class="column">
+            <div class="ui segment">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <p><b>Цена:</b></p>
+                        <div>
+                            <h2><span class="ui header" th:text="${product?.price}"></span><i class="ruble sign icon"></i></h2>
+                        </div>
+                        <div class="ui teal tag label" th:if="${product.status.id == 1}">В наличии</div><br>
+                        <div class="ui red tag label" th:if="${product.status.id == 2}">Нет в наличии</div><br><br>
+                        <button class="ui yellow button" th:onclick="|testOne(${product.id})|" th:if="${product.status.id == 1}">
+                            <i class="shopping cart icon" ></i>  Добавить в корзину
+                        </button>
+                    </div>
+                    <!--Предоставляемые сервисы-->
+                    <div class="column"><br>
+                        <div class="item">
+                            <h4><i class="shipping fast icon"></i>  Быстрая доставка</h4>
+                        </div><br>
+                        <div class="item">
+                            <h4><i class="wrench icon"></i>  Гарантия 24месяца</h4>
+                        </div><br>
+                        <div class="item">
+                            <h4><i class="credit card outline icon"></i>  Visa, MasterCard, МИР</h4>
+                        </div><br>
+                        <div class="item">
+                            <h4><i class="credit card icon"></i>  Покупка в кредит</h4>
+                        </div>
+                    </div>
                 </div>
 
         <input type="hidden" id="productId" name="productId" th:value="${product.id}">
@@ -93,5 +147,6 @@
 
 
 <footer th:replace="common/main::footer"></footer>
+
 </body>
 </html>

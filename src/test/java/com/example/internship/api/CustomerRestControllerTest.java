@@ -1,166 +1,130 @@
 package com.example.internship.api;
 
-import com.example.internship.entity.Customer;
+import com.example.internship.refactoringdto.CustomerDto;
+import com.example.internship.refactoringdto.View;
 import com.example.internship.service.customer.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/*
-* @author Romodin Aleksey
-*
-* Тестирование Rest контроллера CustomerRestController.
-*
-* Тест: показать данные конкретного пользователя по id
-* Тест: показать данные несуществующего пользователя, обработка ошибки 404
-* Тест: редактирование данных пользователя
-* Тест: редактирование данных пользователя, обработка ошибки 404
+/**
+ * @author Romodin Aleksey
+ * *
+ * Refactoring by Danil Movenov 28.09.20
  */
 
 public class CustomerRestControllerTest {
-    //Макеты
-    private final CustomerService customerService = mock(CustomerService.class);
-    private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper;
+    private static final CustomerService CUSTOMER_SERVICE = mock(CustomerService.class);
 
-    //Настройки MockMVC
-    @BeforeEach
-    public void setup(){
-        CustomerRestController customerRestController=new CustomerRestController(customerService);
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(customerRestController)
-                .build();
+    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new CustomerRestController(CUSTOMER_SERVICE)).build();
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final CustomerDto CUSTOMER = new CustomerDto();
+
+    private static final CustomerDto CUSTOMER_UPDATE = new CustomerDto();
+
+    private static final Long CUSTOMER_ID = 1L;
+
+    private static final Long CUSTOMER_NOT_FOUND = 0L;
+
+    @BeforeAll
+    public static void beforeAll() {
+
+        CUSTOMER.setId(CUSTOMER_ID);
+        CUSTOMER.setFirstName("Иван");
+        CUSTOMER.setMiddleName("Иванович");
+        CUSTOMER.setLastName("Иванов");
+        CUSTOMER.setPhone("+79271234567");
+        CUSTOMER.setEmail("mail@mail.com");
+        CUSTOMER.setPassword("password");
+
+        CUSTOMER_UPDATE.setFirstName("Николай");
+        CUSTOMER_UPDATE.setMiddleName("Николаевич");
+        CUSTOMER_UPDATE.setLastName("Николаев");
+        CUSTOMER_UPDATE.setPhone("+72345678912");
+        CUSTOMER_UPDATE.setEmail("user@user.com");
+
+        when(CUSTOMER_SERVICE.getByIdRef(CUSTOMER_ID)).thenReturn(CUSTOMER);
+        when(CUSTOMER_SERVICE.getByIdRef(CUSTOMER_NOT_FOUND)).thenReturn(null);
+        when(CUSTOMER_SERVICE.update(CUSTOMER_ID, CUSTOMER_UPDATE)).thenReturn(CUSTOMER_UPDATE);
+        when(CUSTOMER_SERVICE.update(CUSTOMER_NOT_FOUND, CUSTOMER_UPDATE)).thenReturn(null);
     }
 
-    //Тест: показать данные конкретного пользователя по id
+    /**
+     * Тест успешного получения пользователя.
+     *
+     * @throws Exception mockMvc.perform
+     */
     @Test
-    public void testGetUser() throws Exception {
-        //Создание нового пользователя
-        Customer customer = createNewCustomer("Петров", "petr@gmail.com");
-        //Получение Id для поиска
-        long id = customer.getId();
+    public void getByCustomerByIdSuccessTest() throws Exception {
 
-        //Обработка метода, подстановка объекта
-        when(customerService.getById(anyLong())).thenReturn(Optional.of(customer));
-
-        //Get запрос: получение данных о пользователе id=1
-        mockMvc.perform(get("/api/user/{id}",id)
+        mockMvc.perform(get("/api/customers/{CUSTOMER_ID}", CUSTOMER_ID)
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo (print ())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.firstName", is("Петр")))
-                .andExpect(jsonPath("$.middleName", is("Петрович")))
-                .andExpect(jsonPath("$.lastName", is("Петров")))
-                .andExpect(jsonPath("$.phone", is("+79271234567")))
-                .andExpect(jsonPath("$.email", is("petr@gmail.com")))
-                .andExpect(jsonPath("$.password", is("password")));
+                .andExpect(content().json(objectMapper.writerWithView(View.Public.class).writeValueAsString(CUSTOMER)));
 
-        //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(2)).getById(1L);
-        verifyNoMoreInteractions(customerService);
+        verify(CUSTOMER_SERVICE, times(1)).getByIdRef(CUSTOMER_ID);
     }
 
-
-    //Тест: показать данные несуществующего пользователя, обработка ошибки 404
+    /**
+     * Тест провального получения пользователя.
+     *
+     * @throws Exception mockMvc.perform
+     */
     @Test
-    public void testGetUserNotFound() throws Exception{
-        //Get запрос: получение данных о пользователе id=1
-        mockMvc.perform(get("/api/user/{id}",1)
+    public void getByCustomerByIdFailedTest() throws Exception {
+
+        mockMvc.perform(get("/api/customers/{CUSTOMER_NOT_FOUND}", CUSTOMER_NOT_FOUND)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
-        //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(1)).getById(1L);
-        verifyNoMoreInteractions(customerService);
+        verify(CUSTOMER_SERVICE, times(1)).getByIdRef(CUSTOMER_NOT_FOUND);
     }
 
-
-    //Тест: редактирование данных пользователя
+    /**
+     * Тест успешного обновления данных пользователя.
+     *
+     * @throws Exception mockMvc.perform
+     */
     @Test
-    public void testUpdateUser() throws Exception{
-        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+    public void updateCustomerSuccessTest() throws Exception {
 
-        objectMapper = new ObjectMapper();
-        //Создание нового пользователя
-        Customer customer = createNewCustomer("Петров", "petr@gmail.com");
-
-        //Получение Id для поиска
-        long id = customer.getId();
-
-        //Одновление данных пользователя
-        //Изменяем фамилию и E-mail
-        Customer customerUpdate = createNewCustomer("Иванов", "petrivanov@gmail.com");
-        //Обработка метода, подстановка объекта
-        when(customerService.getById(id)).thenReturn(Optional.of(customer));
-        doNothing().when(customerService).save(customer);
-
-        //Put запрос: внесение изменений в данные пользователя
-        mockMvc.perform(put("/api/user/{id}",id)
-                .content(objectMapper.writeValueAsString(customerUpdate))
+        mockMvc.perform(put("/api/customers/{CUSTOMER_ID}", CUSTOMER_ID)
+                .content(objectMapper.writeValueAsString(CUSTOMER_UPDATE))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(1)).getById(id);
-        verify(customerService, times(1)).save(customer);
-        verifyNoMoreInteractions(customerService);
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writerWithView(View.Public.class).writeValueAsString(CUSTOMER_UPDATE)));
 
-        //Проверка сохраненных данных
-        verify(customerService).save(customerArgumentCaptor.capture());
-        Customer customerSaved = customerArgumentCaptor.getValue();
-        assertSame(customerSaved.getId(), id);
-        assertEquals(customerSaved.getLastName(), customerUpdate.getLastName());
-        assertEquals(customerSaved.getEmail(), customerUpdate.getEmail());
+        verify(CUSTOMER_SERVICE, times(1)).update(CUSTOMER_ID, CUSTOMER_UPDATE);
     }
 
-    //Тест: редактирование данных пользователя, обработка ошибки 404
+    /**
+     * Тест провального обновления данных пользователя.
+     *
+     * @throws Exception mockMvc.perform
+     */
     @Test
-    public void testUpdateUserNotFound() throws Exception{
-        objectMapper = new ObjectMapper();
-        //Обновление данных пользователя
-        Customer customerUpdate = createNewCustomer("Петров", "petr@gmail.com");
-        long id = 3;
-        //Обработка метода, подстановка объекта
-        when(customerService.getById(anyLong())).thenReturn(Optional.empty());
-        //Put запрос: внесение изменений в данные пользователя
-        mockMvc.perform(put("/api/user/{id}",id)
-                .content(objectMapper.writeValueAsString(customerUpdate))
+    public void updateCustomerFailedTest() throws Exception {
+
+        mockMvc.perform(put("/api/customers/{CUSTOMER_NOT_FOUND}", CUSTOMER_NOT_FOUND)
+                .content(objectMapper.writeValueAsString(CUSTOMER_UPDATE))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
-        //Проверка: сколько раз вызывался каждый метод, больше никаких взаимодействий с сервисом не было.
-        verify(customerService, times(1)).getById(id);
-        verifyNoMoreInteractions(customerService);
+        verify(CUSTOMER_SERVICE, times(1)).update(CUSTOMER_NOT_FOUND, CUSTOMER_UPDATE);
     }
-
-
-    private Customer createNewCustomer(String lastName, String email){
-        Customer customer = new Customer();
-        customer.setId((long) 1);
-        customer.setFirstName("Петр");
-        customer.setMiddleName("Петрович");
-        customer.setLastName(lastName);
-        customer.setPhone("+79271234567");
-        customer.setEmail(email);
-        customer.setPassword("password");
-        return customer;
-    }
-
 }

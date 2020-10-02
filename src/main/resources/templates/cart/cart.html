@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common/main :: common_header(~{::title},_,_)">
-    <title>Cart</title>
+    <title th:text="#{cart.title}"></title>
 </head>
 <body>
 <div th:replace="common/main :: header"></div>
@@ -11,13 +11,13 @@
         <div class="ui placeholder segment">
             <div class="ui icon header">
                 <i class="shopping cart icon"></i>
-                Cart is empty!
+                <label th:text="#{cart.lable.empty}"></label>
             </div>
-            <!--            Изменил ссылку с "products" на "product" (Р.Карвашкин)-->
+
             <form method="get" th:action="@{/product}">
                 <div class="inline">
                     <button type="submit" class="ui button">
-                        Go to products!
+                        <label th:text="#{cart.go.products.button}"></label>
                     </button>
                 </div>
             </form>
@@ -31,7 +31,12 @@
             <div class="ui divided items">
                 <div class="item" th:each="orderLine : ${orderLines}">
                     <div class="image">
-                        <img th:src="@{/img/{img}(img=${orderLine.product.picture})}">
+                        <div th:if="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                        </div>
+                        <div th:unless="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${orderLine.product.id} + '/catalog.' + ${orderLine.product.extension}">
+                        </div>
                     </div>
                     <div class="content">
                         <a class="header" th:text="${orderLine?.product?.name}"></a>
@@ -43,25 +48,26 @@
                             <p th:text="${orderLine?.product?.description}"></p>
                         </div>
                         <div class="extra">
-                                <div class="ui right floated">
+                            <div class="ui right floated">
                                 <form method="post" th:action="@{/cart/remove}">
                                     <input type="hidden" th:name="productId" th:value="${orderLine.product.id}">
                                     <button class="ui black icon button">
                                         <i class="trash icon"></i>
                                     </button>
                                 </form>
-                                </div>
-                            <form method="post" th:action="@{/cart/update}">
-                            <div class="ui right floated">
-                                <div class="ui action input">
-                                    <input type="text" name="productQuantity" th:value="${orderLine?.productQuantity}">
-                                    <input type="hidden" th:name="productId" th:value="${orderLine.product.id}">
-                                    <button class="ui teal right labeled icon button">
-                                        Items
-                                        <i class="redo icon"></i>
-                                    </button>
-                                </div>
                             </div>
+                            <form method="post" th:action="@{/cart/update}">
+                                <div class="ui right floated">
+                                    <div class="ui action input">
+                                        <input type="text" name="productQuantity"
+                                               th:value="${orderLine?.productQuantity}">
+                                        <input type="hidden" th:name="productId" th:value="${orderLine.product.id}">
+                                        <button class="ui teal right labeled icon button">
+                                            <label th:text="#{cart.update.product.quantity.button}"></label>
+                                            <i class="redo icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -72,12 +78,12 @@
             <div class="value" th:text="${totalPrice}">
             </div>
             <div class="label">
-                Total Price
+                <label th:text="#{cart.total.price}"></label>
             </div>
         </div>
 
         <a th:href="@{/cart/checkout}">
-            <button class="ui right floated positive button" >Checkout</button>
+            <button class="ui right floated positive button" th:text="#{cart.checkout.button}"></button>
         </a>
 
     </div>

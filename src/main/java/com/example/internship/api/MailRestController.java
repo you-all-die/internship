@@ -4,7 +4,7 @@ import com.example.internship.dto.CustomerDto;
 import com.example.internship.mail.exception.MailServiceException;
 import com.example.internship.mail.service.EmailService;
 import com.example.internship.service.customer.CustomerService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +26,7 @@ public class MailRestController {
     private final CustomerService customerService;
 
     @GetMapping("/{id}/welcome")
-    @ApiOperation(value = "Отправляет приветственное письмо пользователю",
-            notes = "В запросе указывается id пользователя.\n" +
-                    "Возвращает HTTP 400 если пользователь анонимный\n" +
-                    "Возвращает HTTP 404 если пользователь не найден\n" +
-                    "Возвращает HTTP 500 при ошибке отправки письма\n",
-            response = String.class)
+    @Operation(summary = "Отправляет приветственное письмо пользователю")
     public ResponseEntity<String> sendWelcomeEmail(@PathVariable Long id) {
         Optional<CustomerDto> customer = customerService.getDtoById(id);
         if (customer.isPresent()) {

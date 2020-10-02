@@ -12,14 +12,23 @@
 
                 <!-- Фотография с ценой на ленточке -->
                 <div class="image">
-                    <div class="ui orange right ribbon label" th:text="*{price}">999.99$</div>
-                    <img src="/img/default.jpg" th:src="@{/img/{pic}(pic=*{picture})}">
+                    <a th:href="@{product/} + ${product.id}" class="ui medium image">
+                        <div class="ui orange right ribbon label">
+                            <b><span th:text="*{price} + ' '"/></b><i class="ruble sign icon"></i>
+                        </div>
+                        <div th:if="${product.extension == null or product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                        </div>
+                        <div th:unless="${product.extension == null or product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${product.id} + '/catalog.' + ${product.extension}">
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Описание -->
                 <div class="content">
-                    <h4 class="header" th:text="*{name}">Name</h4>
-                    <div th:text="*{description}">Description</div>
+                    <h3><a th:href="@{product/} + ${product.id}" class="header" th:text="*{name}">Name</a></h3>
+                    <div th:text="'Код товара: ' + *{id}">ID</div>
                 </div>
 
                 <!-- Кнопка добавления в корзину -->
@@ -42,7 +51,12 @@
                     <!-- Содержание диалога (фото) -->
                     <div class="content">
                         <div class="ui centered medium image">
-                            <img src="/img/default.png" th:src="@{/img/{pic}(pic=*{picture})}">
+                            <div th:if="${product.extension == null or product.extension.isEmpty()}">
+                                <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                            </div>
+                            <div th:unless="${product.extension == null or product.extension.isEmpty()}">
+                                <img th:src="'/img/' + ${product.id} + '/product.' + ${product.extension}">
+                            </div>
                         </div>
                     </div>
 

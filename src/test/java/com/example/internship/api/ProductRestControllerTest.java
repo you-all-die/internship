@@ -6,6 +6,8 @@ import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Category;
 import com.example.internship.entity.Product;
 import com.example.internship.entity.ProductStatus;
+import com.example.internship.repository.CategoryRepository;
+import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.service.ProductStatusService;
 import com.example.internship.service.category.CategoryService;
@@ -27,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Ivan Gubanov
  */
+
 @TestPropertySource(locations = "classpath:test.properties")
 @SpringBootTest
 public class ProductRestControllerTest {
@@ -37,24 +40,28 @@ public class ProductRestControllerTest {
     private static final Product product = new Product();
     private static final ProductDto productOne = new ProductDto();
     private static final ProductDto productTwo = new ProductDto();
+    private static final CategoryDto categoryOne = new CategoryDto();
+    private static final CategoryDto categoryTwo = new CategoryDto();
     private static final ProductSearchResult expected = new ProductSearchResult();
 
     @BeforeAll
-    public static void beforeAll(@Autowired ProductService productService,
-                                 @Autowired CategoryService categoryService,
-                                 @Autowired ProductStatusService productStatusService,
-                                 @Autowired ModelMapper mapper) {
-        CategoryDto categoryOne = new CategoryDto();
+    public static void beforeAll(@Autowired ProductStatusService productStatusService,
+                                 @Autowired CategoryRepository categoryRepository,
+                                 @Autowired ProductRepository productRepository, @Autowired ModelMapper mapper) {
+
         categoryOne.setName("Best phones");
         categoryOne.setParentId(null);
         categoryOne.setParentName(null);
-        categoryService.addCategory(categoryOne);
 
-        CategoryDto categoryTwo = new CategoryDto();
+        Category categoryOneSave = categoryRepository.save(mapper.map(categoryOne, Category.class));
+        categoryOne.setId(categoryOneSave.getId());
+
         categoryTwo.setName("Super best phones");
         categoryTwo.setParentId(null);
         categoryTwo.setParentName(null);
-        categoryService.addCategory(categoryTwo);
+
+        Category categoryTwoSave = categoryRepository.save(mapper.map(categoryTwo, Category.class));
+        categoryTwo.setId(categoryTwoSave.getId());
 
         Category categoryThree = new Category();
         categoryThree.setName("Super best phones");
@@ -67,28 +74,30 @@ public class ProductRestControllerTest {
         productOne.setCategory(mapper.map(categoryOne, CategoryDto.class));
         productOne.setName("Iphone 1");
         productOne.setDescription("Iphone 1 is best phone");
-        productOne.setPicture("iphone1.jpg");
+        productOne.setExtension("iphone1.jpg");
         productOne.setPrice(new BigDecimal("100.00"));
         productOne.setStatus(productStatus);
-        productService.addProduct(productOne);
+
+        Product productOneSave = productRepository.save(mapper.map(productOne, Product.class));
+        productOne.setId(productOneSave.getId());
 
         productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
         productTwo.setDescription("Iphone 2 is best Iphone 1");
-        productTwo.setPicture("iphone2.jpg");
+        productTwo.setExtension("iphone2.jpg");
         productTwo.setPrice(new BigDecimal("200.00"));
         productTwo.setStatus(productStatus);
-        productService.addProduct(productTwo);
+
+        Product productTwoSave = productRepository.save(mapper.map(productTwo, Product.class));
+        productTwo.setId(productTwoSave.getId());
 
         product.setCategory(categoryThree);
         product.setName("Iphone 3");
         product.setDescription("Iphone 3 is best Iphone 2");
-        product.setPicture("iphone3.jpg");
+        product.setExtension("iphone3.jpg");
         product.setPrice(new BigDecimal("300.00"));
         product.setStatus(productStatus);
 
-        productOne.setId(1L);
-        productTwo.setId(2L);
     }
 
     @AfterAll
@@ -157,7 +166,7 @@ public class ProductRestControllerTest {
     public void testProductSearchCategoryId() {
         expected.setTotalProducts(1L);
         expected.setProducts(List.of(productOne));
-        assertEquals(expected, productRestController.productSearch(null, 1L, null,
+        assertEquals(expected, productRestController.productSearch(null, categoryOne.getId(), null,
                 null, null, null));
     }
 
@@ -271,22 +280,19 @@ public class ProductRestControllerTest {
     }
 
     /**
-     * Проверка методов saveProduct, findById, removeProduct, findAll:
+     * Проверка методов saveProduct, findById:
      * - Сохраняет продукт в БД
      * - Возвращает объект продукта по значению его id
-     * - Удаляет продукт по id
-     * - Возвращает все продукты
      */
     @Test
-    /** +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+    /**
+     * +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
      * Здесь происходит много операций по работе с бд. Hibernate не успевает все подгрузить.
      * Добавлена аннотация @Transactional.
      +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+= */
     @Transactional
-    public void testSaveProductAndFindByIdAndRemoveProductAndFindAll() {
+    public void testSaveProductAndFindById() {
         productRestController.saveProduct(product);
         assertEquals(product, productRestController.findById(3L));
-        productRestController.removeProduct(3L);
-        assertEquals(expected.getProducts(), productRestController.findAll());
     }
 }

@@ -13,7 +13,7 @@ public interface CategoryService {
 
     CategoryDto findById(Long id);
 
-    List<CategoryDto> findAllSortById();
+    List<CategoryDto> findAll();
 
     void removeCategory(Long id);
 
