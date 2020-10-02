@@ -21,21 +21,27 @@
             </div>
 
             <div class="two column centered row">
-                <div class="column">
-                    <div class="ui two item menu">
-                        <a class="active item">Доставка из магазина</a>
-                        <a class="item">Самовывоз</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="two column centered row">
-                <div class="column">
-                    <div th:replace="/order/address :: widget (${addresses})"></div>
-                </div>
 
                 <div class="column">
-                    <div th:replace="/order/outlets :: widget (${outlets})"></div>
+
+                    <form class="ui form">
+
+                        <div class="ui two item menu" id="shippingMethod">
+                            <a class="active item">Доставка из магазина</a>
+                            <a class="item">Самовывоз</a>
+                        </div>
+
+                        <input id="comment" name="address" th:placeholder="#{order.shipping.address.placeholder}"
+                               type="text">
+
+                        <div th:replace="/order/address :: widget (${addresses})"></div>
+                        <div th:replace="/order/outlets :: widget (${outlets})"></div>
+
+                        <button class="ui primary button" th:text="#{order.shipping.button.submit}"
+                                type="submit">Submit
+                        </button>
+                    </form>
+
                 </div>
             </div>
         </div>
