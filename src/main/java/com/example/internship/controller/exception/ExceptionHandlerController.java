@@ -1,5 +1,6 @@
 package com.example.internship.controller.exception;
 
+import com.example.internship.exception.OrderNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,7 +16,7 @@ import javax.persistence.EntityNotFoundException;
 public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
-    public String connectionError(Exception exception) {
+    public String serverError(Exception exception) {
 
         log.error(exception.getMessage());
 
@@ -23,10 +24,18 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public String connectionError(EntityNotFoundException exception) {
+    public String userNotFoundError(EntityNotFoundException exception) {
 
         log.error(exception.getMessage());
 
-        return "exception/notFound";
+        return "exception/userNotFound";
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public String orderNotFoundError(OrderNotFoundException exception) {
+
+        log.error(exception.getMessage());
+
+        return "exception/orderNotFound";
     }
 }

@@ -3,6 +3,7 @@ package com.example.internship.controller.customer;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.ItemDto;
 import com.example.internship.dto.OrderDto;
+import com.example.internship.exception.OrderNotFoundException;
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
@@ -77,7 +78,7 @@ public class CustomerController {
         OrderDto order = orderService.findByOrderId(orderId, authentication);
 
         if (Objects.isNull(order)) {
-            throw new EntityNotFoundException("Customer not found");
+            throw new OrderNotFoundException("Order not found");
         }
 
         List<ItemDto> items = order.getItems();

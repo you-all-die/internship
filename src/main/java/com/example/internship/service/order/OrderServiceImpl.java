@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -122,7 +123,8 @@ public class OrderServiceImpl implements OrderService {
 
         List<Order> orders = orderRepository.findAllByCustomerId(customerId);
 
-        return orders != null ? orders.stream().map(this::convertToDto).collect(Collectors.toList()) : new ArrayList<>();
+        return orders != null ? orders.stream()
+                .map(this::convertToDto).collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
