@@ -3,7 +3,7 @@
     <head th:replace="/common/main :: common_header (~{::title}, ~{::link}, ~{::script})">
         <meta charset="UTF-8">
         <meta content="Самохвалов Юрий Алексеевич" name="author">
-        <title>Title</title>
+        <title th:text="#{order.shipping.title}">Title</title>
         <!-- Подключение подсказок dadata.ru -->
         <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css"
               rel="stylesheet"/>
@@ -24,7 +24,7 @@
 
                 <div class="column">
 
-                    <form class="ui form">
+                    <form class="ui form" method="post" th:action="@{/order/shipping}">
 
                         <div class="ui two item menu" id="shippingMethod">
                             <a class="active item">Доставка из магазина</a>

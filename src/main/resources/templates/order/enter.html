@@ -3,7 +3,7 @@
     <head th:replace="/common/main :: common_header (~{::title}, _, _)">
         <meta charset="UTF-8">
         <meta content="Самохвалов Юрий Алексеевич" name="author">
-        <title>Title</title>
+        <title th:text="#{order.enter.title}">Title</title>
     </head>
     <body>
         <header th:replace="/common/main :: header"></header>
