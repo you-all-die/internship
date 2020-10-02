@@ -16,7 +16,7 @@
         <div class="ui main grid container">
             <div class="row">
                 <div class="column">
-                    <div th:replace="/order/steps :: widget ('shipping')"></div>
+                    <div th:replace="/order/widgets/steps :: widget ('shipping')"></div>
                 </div>
             </div>
 
@@ -34,8 +34,8 @@
                         <input id="comment" name="address" th:placeholder="#{order.shipping.address.placeholder}"
                                type="text">
 
-                        <div th:replace="/order/address :: widget (${addresses})"></div>
-                        <div th:replace="/order/outlets :: widget (${outlets})"></div>
+                        <div th:replace="/order/widgets/address :: widget (${addresses})"></div>
+                        <div th:replace="/order/widgets/outlets :: widget (${outlets})"></div>
 
                         <button class="ui primary button" th:text="#{order.shipping.button.submit}"
                                 type="submit">Submit

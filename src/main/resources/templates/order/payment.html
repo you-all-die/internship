@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="/common/main :: common_header (~{::title}, _, _)">
         <meta charset="UTF-8">
-        <title>Title</title>
+        <meta content="Самохвалов Юрий Алексеевич" name="author">
+        <title th:text="#{order.payment.title}">Title</title>
     </head>
     <body>
+        <header th:replace="/common/main :: header"></header>
 
+        <div class="ui main grid container">
+            <div class="row">
+                <div class="column">
+                    <div th:replace="/order/widgets/steps :: widget ('payment')"></div>
+                </div>
+            </div>
+
+            <div class="two column centered row">
+                <div class="column">
+
+                    <form class="ui form" method="post" th:action="@{/order/payment}">
+                        <button class="ui primary button" th:text="#{order.payment.button.submit}"
+                                type="submit">Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </body>
 </html>
