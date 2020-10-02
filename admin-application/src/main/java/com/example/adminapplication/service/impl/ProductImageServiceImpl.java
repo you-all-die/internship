@@ -30,11 +30,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     public boolean saveOrUpdate(Long productId, MultipartFile image) {
 
         if (!image.isEmpty()) {
-            if (!createNewDirectory(productId)) {
-                if (!delete(productId) || !createNewDirectory(productId)) {
+            if (!prepareDirectory(productId)) {
 
-                    return false;
-                }
+                return false;
             }
             String imagePath = UPLOAD_PATH + productId + "/";
             String imageExtension = fileExtension(image);
@@ -100,13 +98,14 @@ public class ProductImageServiceImpl implements ProductImageService {
         return thumbnailImg;
     }
 
-    private boolean createNewDirectory(Long productId) {
+    private boolean prepareDirectory(Long productId) {
 
         File directory = new File(UPLOAD_PATH + productId + "/");
-        if (!directory.exists()) {
-            return directory.mkdir();
+
+        if (directory.exists()) {
+            delete(productId);
         }
 
-        return false;
+        return directory.mkdir();
     }
 }
