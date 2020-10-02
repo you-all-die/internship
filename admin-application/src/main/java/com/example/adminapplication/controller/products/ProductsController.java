@@ -104,7 +104,7 @@ public class ProductsController {
             productId = newProduct.getId();
         }
         if (productImageService.saveOrUpdate(productId, pictureNew)) {
-            product.setPicture(productImageService.fileExtension(pictureNew));
+            product.setExtension(productImageService.fileExtension(pictureNew));
             productService.saveProduct(product);
         }
 

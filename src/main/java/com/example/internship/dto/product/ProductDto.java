@@ -23,8 +23,8 @@ public enum ProductDto {
         String getDescription();
     }
 
-    private interface Picture {
-        String getPicture();
+    private interface Extension {
+        String getExtension();
     }
 
     private interface Price {
@@ -39,11 +39,11 @@ public enum ProductDto {
         ;
 
         @Data
-        public static class All implements Id, Name, Description, Picture, Price {
+        public static class All implements Id, Name, Description, Extension, Price {
             Long id;
             String name;
             String description;
-            String picture;
+            String extension;
             BigDecimal price;
         }
 
@@ -63,11 +63,11 @@ public enum ProductDto {
         }
 
         @Data
-        public static class All implements Id, Name, Description, Picture, Price {
+        public static class All implements Id, Name, Description, Extension, Price {
             private Long id;
             private String name;
             private String description;
-            private String picture;
+            private String extension;
             private BigDecimal price;
         }
 

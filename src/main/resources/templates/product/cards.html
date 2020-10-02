@@ -16,11 +16,11 @@
                         <div class="ui orange right ribbon label">
                             <b><span th:text="*{price} + ' '"/></b><i class="ruble sign icon"></i>
                         </div>
-                        <div th:if="${product.picture == null or product.picture.isEmpty()}">
+                        <div th:if="${product.extension == null or product.extension.isEmpty()}">
                             <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
                         </div>
-                        <div th:unless="${product.picture == null or product.picture.isEmpty()}">
-                            <img th:src="'/img/' + ${product.id} + '/catalog.' + ${product.picture}">
+                        <div th:unless="${product.extension == null or product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${product.id} + '/catalog.' + ${product.extension}">
                         </div>
                     </a>
                 </div>
@@ -51,11 +51,11 @@
                     <!-- Содержание диалога (фото) -->
                     <div class="content">
                         <div class="ui centered medium image">
-                            <div th:if="${product.picture == null or product.picture.isEmpty()}">
+                            <div th:if="${product.extension == null or product.extension.isEmpty()}">
                                 <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
                             </div>
-                            <div th:unless="${product.picture == null or product.picture.isEmpty()}">
-                                <img th:src="'/img/' + ${product.id} + '/product.' + ${product.picture}">
+                            <div th:unless="${product.extension == null or product.extension.isEmpty()}">
+                                <img th:src="'/img/' + ${product.id} + '/product.' + ${product.extension}">
                             </div>
                         </div>
                     </div>

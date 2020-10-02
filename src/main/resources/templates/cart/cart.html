@@ -31,11 +31,11 @@
             <div class="ui divided items">
                 <div class="item" th:each="orderLine : ${orderLines}">
                     <div class="image">
-                        <div th:if="${orderLine.product.picture == null or orderLine.product.picture.isEmpty()}">
+                        <div th:if="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
                             <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
                         </div>
-                        <div th:unless="${orderLine.product.picture == null or orderLine.product.picture.isEmpty()}">
-                            <img th:src="'/img/' + ${orderLine.product.id} + '/catalog.' + ${orderLine.product.picture}">
+                        <div th:unless="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${orderLine.product.id} + '/catalog.' + ${orderLine.product.extension}">
                         </div>
                     </div>
                     <div class="content">

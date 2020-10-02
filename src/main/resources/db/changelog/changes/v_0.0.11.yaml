@@ -23,3 +23,13 @@ databaseChangeLog:
               - column:
                   name: picture
                   value: jpg
+  - changeSet:
+      id: 2020-10-02-001
+      author: Ivan Gubanov
+      comment: Rename column picture to extension
+      changes:
+        - renameColumn:
+            tableName: product
+            oldColumnName: picture
+            newColumnName: extension
+            columnDataType: varchar(64)
