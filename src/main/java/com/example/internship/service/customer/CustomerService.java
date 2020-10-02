@@ -147,7 +147,7 @@ public interface CustomerService {
      */
     boolean checkEmail(String email);
 
-    public CustomerDto convertToDto(Customer customer);
+    CustomerDto convertToDto(Customer customer);
 
     boolean existsById(Long Id);
 

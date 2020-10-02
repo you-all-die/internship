@@ -1,55 +1,105 @@
 <!-- Самохвалов Юрий Алексеевич -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="common/main :: common_header (~{::title}, _, _)">
-        <title th:text="#{customer.view.page_title}">Customer Profile</title>
-    </head>
-    <body>
-        <div th:replace="common/main :: header"></div>
-        <div class="ui main container">
-            <div class="ui container">
-                <div class="column">
-                    <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
-                        Header
-                    </h4>
+<head th:replace="common/main :: common_header (~{::title}, _, _)">
+    <title th:text="#{customer.view.page_title}">Customer Profile</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+<div class="ui main container">
+    <div class="ui container">
+        <div class="column">
+            <h4 class="ui horizontal divider header" th:utext="#{customer.view.header}">
+                Header
+            </h4>
 
-                    <table class="ui definition table">
-                        <tbody>
-                            <tr>
-                                <td class="two wide column" th:text="#{customer.view.last_name}">Last Name</td>
-                                <td class="four wide column" th:text="${customer.lastName}">last</td>
-                            </tr>
-                            <tr>
-                                <td th:text="#{customer.view.first_name}">First Name</td>
-                                <td th:text="${customer.firstName}">first</td>
-                            </tr>
-                            <tr>
-                                <td th:text="#{customer.view.middle_name}">Middle Name</td>
-                                <td th:text="${customer.middleName}">middle</td>
-                            </tr>
-                            <tr>
-                                <td th:text="#{customer.view.email}">Email</td>
-                                <td th:text="${customer.email}">nobody@nowhere.com</td>
-                            </tr>
-                            <tr>
-                                <td th:text="#{customer.view.phone}">Phone</td>
-                                <td th:text="${customer.phone}">322-33-22</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <a class="ui primary button"
-                       th:href="@{/customer/edit}"
-                       th:text="#{customer.view.edit}">Edit profile
-                    </a>
-                </div>
-                <div class="column">
-                    <div th:replace="/address/list :: widget (${addresses})"></div>
-                    <a class="ui secondary button"
-                       th:href="@{/address/add}" th:text="#{customer.view.add_address}">Add
-                        Address</a>
+            <table class="ui definition table">
+                <tbody>
+                <tr>
+                    <td class="two wide column" th:text="#{customer.view.last_name}">Last Name</td>
+                    <td class="four wide column" th:text="${customer.lastName}">last</td>
+                </tr>
+                <tr>
+                    <td th:text="#{customer.view.first_name}">First Name</td>
+                    <td th:text="${customer.firstName}">first</td>
+                </tr>
+                <tr>
+                    <td th:text="#{customer.view.middle_name}">Middle Name</td>
+                    <td th:text="${customer.middleName}">middle</td>
+                </tr>
+                <tr>
+                    <td th:text="#{customer.view.email}">Email</td>
+                    <td th:text="${customer.email}">nobody@nowhere.com</td>
+                </tr>
+                <tr>
+                    <td th:text="#{customer.view.phone}">Phone</td>
+                    <td th:text="${customer.phone}">322-33-22</td>
+                </tr>
+                </tbody>
+            </table>
+            <a class="ui primary button"
+               th:href="@{/customer/edit}"
+               th:text="#{customer.view.edit}">Edit profile
+            </a>
+        </div>
+        <div class="column">
+            <div th:replace="/address/list :: widget (${addresses})"></div>
+            <a class="ui secondary button"
+               th:href="@{/address/add}" th:text="#{customer.view.add_address}">Add
+                Address</a>
+        </div>
+
+        <div class="column">
+            <h4 class="ui horizontal divider header" th:text="#{customer.view.order.header}"></h4>
+
+            <div class="ui container" th:if="${orders?.isEmpty()}">
+                <div class="ui center aligned header">
+                    <label th:text="#{customer.view.order.empty}"></label>
                 </div>
             </div>
+
+            <div class="ui segment" th:if="${!orders?.isEmpty()}">
+                <div class="ui divided items">
+
+                    <div class="item" th:each="order : ${orders}">
+                        <div class="content">
+                            <div class="header">
+                                <label th:text="#{customer.view.order.number} + ': ' + ${order.getId()}"></label>
+                            </div>
+
+                            <div class="ui right floated">
+                                <div class="ui large teal right horizontal label" th:text="${order?.getStatus()}"></div>
+                            </div>
+
+                            <div class="description">
+                                <label>
+                                    <label th:text="#{customer.view.order.address.title} + ': '"></label>
+                                    <label th:text="#{customer.view.order.city.title} + ${order?.getAddressCity()} + ','"></label>
+                                    <label th:text="#{customer.view.order.street.title} + ${order?.getAddressStreet()} + ','"></label>
+                                    <label th:text="#{customer.view.order.house.title} + ${order?.getAddressHouse()} + ','"></label>
+                                    <label th:text="#{customer.view.order.apartment.title} + ${order?.getAddressApartment()}"></label>
+                                </label>
+                            </div>
+
+
+                            <div class="extra">
+                                <a class="ui small right floated primary button"
+                                   th:href="@{/customer/order/{id}(id=${order.getId()})}">
+                                    <label th:text="#{customer.view.order.more.button}"></label>
+                                    <i class="right chevron icon"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <footer th:replace="common/main::footer"></footer>
-    </body>
+
+    </div>
+
+</div>
+<footer th:replace="common/main::footer"></footer>
+</body>
 </html>

@@ -1,6 +1,8 @@
 package com.example.internship.service.order;
 
 import com.example.internship.controller.checkout.CheckoutForm;
+import com.example.internship.dto.CustomerDto;
+import com.example.internship.dto.ItemDto;
 import com.example.internship.dto.OrderDto;
 import com.example.internship.entity.Customer;
 import com.example.internship.entity.Item;
@@ -13,22 +15,26 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 /**
- * @author  Sergey Lapshin
+ * @author Sergey Lapshin
  */
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private final CartService cartService;
     private final OrderRepository orderRepository;
@@ -60,7 +66,7 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus("CREATED");
         order.setCustomerId(customer.getId());
 
-        for (OrderLine orderLine: orderLines) {
+        for (OrderLine orderLine : orderLines) {
             Item item = new Item();
 
             item.setOrder(order);
@@ -107,6 +113,44 @@ public class OrderServiceImpl implements OrderService{
                     .stream().map(this::convertToDto).collect(Collectors.toList());
         }
         return null;
+    }
+
+    @Override
+    public List<OrderDto> findAllByCustomerId(Long customerId) {
+        if (Objects.isNull(customerId)) {
+            return null;
+        }
+
+        List<Order> orders = orderRepository.findAllByCustomerId(customerId);
+
+        return orders != null ? orders.stream()
+                .map(this::convertToDto).collect(Collectors.toList()) : Collections.emptyList();
+    }
+
+    @Override
+    public OrderDto findByOrderId(Long orderId, Authentication authentication) {
+        Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
+
+        if (customer.isEmpty()) {
+            return null;
+        }
+
+        Order order = orderRepository.findByIdAndCustomerId(orderId, customer.get().getId());
+
+        return order != null ? convertToDto(order) : null;
+    }
+
+    @Override
+    public BigDecimal getTotalPrice(List<ItemDto> items) {
+        if (items.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        return items.stream()
+                .filter(value -> value.getItemPrice() != null
+                        && value.getItemPrice().compareTo(BigDecimal.ZERO) > 0)
+                .map(value -> value.getItemPrice().multiply(BigDecimal.valueOf(value.getItemQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private OrderDto convertToDto(Order order) {
