@@ -33,12 +33,12 @@
                         <br>
                         <div sec:authorize="isAuthenticated()">
                             <div class="content">
-                                <div class="ui huge black rating" id="rate_for_aut" th:data-rating="${rate}"  data-max-rating="10"></div>
+                                <div class="ui huge red rating" id="rate_for_aut"  th:data-rating="${rate}" data-max-rating="5"></div>
                             </div>
                         </div>
                         <div sec:authorize="isAnonymous()">
                             <div class="content">
-                                <div class="ui huge red rating" id="rate_for_anon" th:data-rating="${rate}"  data-max-rating="10"></div>
+                                <div class="ui huge black rating" id="rate_for_anon" th:data-rating="${rate}"   data-max-rating="5"></div>
                             </div>
                         </div>
                     </div>

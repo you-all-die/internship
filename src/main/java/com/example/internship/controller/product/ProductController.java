@@ -68,15 +68,13 @@ public class ProductController {
     }
 
     @PostMapping("/{id}/{rate}")
-    public String addRate(@PathVariable("id") Long productId, @PathVariable("rate") Long rate,Model model,
+    public String addRate(@PathVariable("id") Long productId, @PathVariable("rate") Long rate,
                           Authentication authentication) {
         Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
         if (customer.isPresent()) {
             productService.saveRating(productId, customer.get().getId(), rate);
-            return "redirect:/product/" + productId;
+            return "redirect:/login";
         } else {
-            model.addAttribute("product", productService.getProductById(productId));
-            model.addAttribute("rate", productService.getProductRating(productId));
             return "products/product";
         }
         }
