@@ -1,9 +1,9 @@
 package com.example.internship.controller.customer;
 
+import com.example.internship.exception.EntityNotFoundException;
 import com.example.internship.dto.CustomerDto;
 import com.example.internship.dto.ItemDto;
 import com.example.internship.dto.OrderDto;
-import com.example.internship.exception.OrderNotFoundException;
 import com.example.internship.refactoringdto.AddressDto;
 import com.example.internship.service.address.AddressService;
 import com.example.internship.service.customer.CustomerService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +42,7 @@ public class CustomerController {
         CustomerDto customer = customerService.getFromAuthentication(authentication).orElse(null);
 
         if (Objects.isNull(customer)) {
-            throw new EntityNotFoundException("Customer not found");
+            throw EntityNotFoundException.customerNotFound();
         }
 
         List<OrderDto> orders = orderService.findAllByCustomerId(customer.getId());
@@ -64,7 +63,7 @@ public class CustomerController {
             model.addAttribute("customer", customerDto);
             return BASE_MAPPING + "/profile";
         }
-        throw new EntityNotFoundException("Customer not found");
+        throw EntityNotFoundException.customerNotFound();
     }
 
     @PostMapping
@@ -78,7 +77,7 @@ public class CustomerController {
         OrderDto order = orderService.findByOrderId(orderId, authentication);
 
         if (Objects.isNull(order)) {
-            throw new OrderNotFoundException("Order not found");
+            throw EntityNotFoundException.orderNotFound();
         }
 
         List<ItemDto> items = order.getItems();
