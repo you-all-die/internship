@@ -1,12 +1,11 @@
 <!-- Роман Каравашкин-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="common/fomain :: common_header(~{::title},_,~{::script})">
     <meta charset="UTF-8">
     <meta name="author" content="Роман Каравашкин">
     <title th:text="${product.name}"></title>
     <script th:src="@{/js/addToCart.js}"></script>
-<!--    <script th:src="@{/js/rating.js}"></script>-->
 
 </head>
 <body>
@@ -28,33 +27,29 @@
                 <div class="ui segment">
                     <h1 class="ui header" th:text="${product.price}+' Руб.'"/>
 
-                    <button class="ui yellow button" th:onclick="|testOne(${product.id}|">Добавить в корзину</button>
-                    <form method="post" th:action="@{/product/add}">
-                        <input  type="hidden" th:name="productId" th:value="${product.id}">
-                        <input  type="text" th:name="rating">
+                    <button class="ui yellow button" th:onclick="|testOne(${product.id})|">Добавить в корзину</button>
 
-                        <div class="ui form error" th:if="${errorMessageRating}">
-                            <div class="ui error message">
-                                <div class="header">Ошибка регистрации</div>
-                                <p th:text="${errorMessageRating}"></p>
+                    <div id="ratingStar">
+                        <br>
+                        <div sec:authorize="isAuthenticated()">
+                            <div class="content">
+                                <div class="ui huge black rating" id="rate_for_aut" th:data-rating="${rate}"  data-max-rating="10"></div>
                             </div>
                         </div>
-                        <button class="ui red button">Rating</button>
-                    </form>
-
-
-<!--                    <button class="ui red button" th:onclick="|rate(${product.id},${product.id})|">Rating</button>-->
-    <br>
-    <br>
-    <br>
-                    <div class="content">
-                        <div class="ui huge black rating" th:data-rating="${rate}" data-max-rating="10"></div>
+                        <div sec:authorize="isAnonymous()">
+                            <div class="content">
+                                <div class="ui huge red rating" id="rate_for_anon" th:data-rating="${rate}"  data-max-rating="10"></div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
+
+        <input type="hidden" id="productId" name="productId" th:value="${product.id}">
+
                 <div class="ui segment">
 
-                    <h3 class="ui header" th:text="'ID: '+${product?.id}"/>
+                    <h3 class="ui header" th:text="'ID: '+${product.id}"/>
                     <h3 class="ui header" th:text="'Description: '+${product.description}"></h3>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
                         the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
@@ -64,18 +59,39 @@
                         and more recently with desktop publishing software like Aldus PageMaker including versions of
                         Lorem Ipsum.</p>
                 </div>
-
-
             </div>
-
         </div>
     </div>
 </div>
+
 <script>
-    $('.rating')
-        .rating('enable')
-     ;
+    $('#rate_for_anon')
+            .rating(
+            'disable'
+            );
 </script>
+
+
+<script>
+    $('#rate_for_aut')
+        .rating({
+            onRate: function (value){
+                let ptId =  $('#productId').val();
+                let url = '/product/'+unescape(ptId)+'/'+unescape(value);
+                console.log(value);
+                $.ajax({
+                    url: url,
+                    method: 'POST'
+                }).then(function (){
+                    showToast('rate done')
+                }).catch(function (){
+                    showToast('Error')
+                })
+            }
+        });
+</script>
+
+
 <footer th:replace="common/main::footer"></footer>
 </body>
 </html>

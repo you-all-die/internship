@@ -32,6 +32,7 @@ public class ProductController {
 
     public static final String BASE_URL = "/product";
 
+
     private final ProductService productService;
     private final GsProductService gsProductService;
     private final CustomerService customerService;
@@ -40,9 +41,10 @@ public class ProductController {
      * @author Роман Каравашкин
      */
     @GetMapping("/{id}") // убрал ненужный /product (СЮА)
-    public String showProduct(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        model.addAttribute("rate", productService.getProductRating(id));
+    public String showProduct(@PathVariable("id") Long productId, Model model) {
+
+        model.addAttribute("product", productService.getProductById(productId));
+        model.addAttribute("rate", productService.getProductRating(productId));
 
         return "products/product";
     }
@@ -65,17 +67,16 @@ public class ProductController {
         return BASE_URL + "/index";
     }
 
-    @PostMapping("/add")
-    public String addRate(@RequestParam("productId") Long id, @RequestParam("rating") Long rating, Authentication authentication,
-                          Model model) {
+    @PostMapping("/{id}/{rate}")
+    public String addRate(@PathVariable("id") Long productId, @PathVariable("rate") Long rate,Model model,
+                          Authentication authentication) {
         Optional<CustomerDto> customer = customerService.getFromAuthentication(authentication);
         if (customer.isPresent()) {
-            productService.saveRating(id, customer.get().getId(), rating);
-            return "redirect:/product/" + id;
+            productService.saveRating(productId, customer.get().getId(), rate);
+            return "redirect:/product/" + productId;
         } else {
-            model.addAttribute("product", productService.getProductById(id));
-            model.addAttribute("rate", productService.getProductRating(id));
-            model.addAttribute("errorMessageRating", "please Authentication");
+            model.addAttribute("product", productService.getProductById(productId));
+            model.addAttribute("rate", productService.getProductRating(productId));
             return "products/product";
         }
         }
