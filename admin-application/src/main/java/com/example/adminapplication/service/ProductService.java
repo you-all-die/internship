@@ -12,7 +12,7 @@ public interface ProductService {
 
     void removeProduct(Long id);
 
-    void saveProduct(ProductDto product);
+    ProductDto saveProduct(ProductDto product);
 
     ProductDto findByIdProduct(Long id);
 

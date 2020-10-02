@@ -23,7 +23,7 @@ public class ProductDto {
     @Size(max = 64)
     private String description;
     @Size(max = 64)
-    private String picture;
+    private String extension;
     private BigDecimal price;
     @NotEmpty
     private ProductStatusDto status;

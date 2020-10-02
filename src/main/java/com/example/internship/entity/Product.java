@@ -29,7 +29,7 @@ public class Product {
 
     private String description;
 
-    private String picture;
+    private String extension;
 
     private BigDecimal price;
 

@@ -31,7 +31,12 @@
             <div class="ui divided items">
                 <div class="item" th:each="orderLine : ${orderLines}">
                     <div class="image">
-                        <img th:src="@{/img/{img}(img=${orderLine.product.picture})}">
+                        <div th:if="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                        </div>
+                        <div th:unless="${orderLine.product.extension == null or orderLine.product.extension.isEmpty()}">
+                            <img th:src="'/img/' + ${orderLine.product.id} + '/catalog.' + ${orderLine.product.extension}">
+                        </div>
                     </div>
                     <div class="content">
                         <a class="header" th:text="${orderLine?.product?.name}"></a>

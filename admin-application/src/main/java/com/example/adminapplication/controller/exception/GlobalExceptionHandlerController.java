@@ -19,7 +19,7 @@ public class GlobalExceptionHandlerController {
 
     @ExceptionHandler({ConnectException.class})
     public String connectionError(ConnectException exception) {
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
         return "/errors/connection";
     }
 }

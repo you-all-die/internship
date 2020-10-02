@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
             item.setItemCategoryId(orderLine.getProduct().getCategory().getId());
             item.setItemDescription(orderLine.getProduct().getDescription());
             item.setItemName(orderLine.getProduct().getName());
-            item.setItemPicture(orderLine.getProduct().getPicture());
+            item.setItemPicture(orderLine.getProduct().getExtension());
             item.setItemPrice(orderLine.getProduct().getPrice());
             item.setItemQuantity(orderLine.getProductQuantity());
 

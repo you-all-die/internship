@@ -28,8 +28,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveProduct(ProductDto product) {
-        productApi.saveProduct(convertToModel(product)).block();
+    public ProductDto saveProduct(ProductDto product) {
+        return productApi.saveProduct(convertToModel(product)).map(this::convertToDto).block();
     }
 
     @Override

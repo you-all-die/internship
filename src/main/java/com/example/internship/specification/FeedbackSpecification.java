@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 
 
 @AllArgsConstructor
@@ -23,9 +24,13 @@ public class FeedbackSpecification implements Specification<Feedback> {
                                  @NonNull CriteriaBuilder criteriaBuilder) {
         switch (key) {
             case "productId":
-                return criteriaBuilder.equal(root.get("productId"), value.toString());
+                return criteriaBuilder.equal(root.get("productId"), value);
             case "authorId":
-                return criteriaBuilder.equal(root.get("authorId"), value.toString());
+                return criteriaBuilder.equal(root.get("authorId"), value);
+            case "startDate":
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("datePublication"), (Date) value);
+            case "endDate":
+                return criteriaBuilder.lessThanOrEqualTo(root.get("datePublication"), (Date) value);
             default: throw new RuntimeException("unreachable");
         }
     }

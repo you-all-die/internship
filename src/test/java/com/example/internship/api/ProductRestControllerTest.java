@@ -74,7 +74,7 @@ public class ProductRestControllerTest {
         productOne.setCategory(mapper.map(categoryOne, CategoryDto.class));
         productOne.setName("Iphone 1");
         productOne.setDescription("Iphone 1 is best phone");
-        productOne.setPicture("iphone1.jpg");
+        productOne.setExtension("iphone1.jpg");
         productOne.setPrice(new BigDecimal("100.00"));
         productOne.setStatus(productStatus);
 
@@ -84,7 +84,7 @@ public class ProductRestControllerTest {
         productTwo.setCategory(mapper.map(categoryTwo, CategoryDto.class));
         productTwo.setName("Iphone 2");
         productTwo.setDescription("Iphone 2 is best Iphone 1");
-        productTwo.setPicture("iphone2.jpg");
+        productTwo.setExtension("iphone2.jpg");
         productTwo.setPrice(new BigDecimal("200.00"));
         productTwo.setStatus(productStatus);
 
@@ -94,7 +94,7 @@ public class ProductRestControllerTest {
         product.setCategory(categoryThree);
         product.setName("Iphone 3");
         product.setDescription("Iphone 3 is best Iphone 2");
-        product.setPicture("iphone3.jpg");
+        product.setExtension("iphone3.jpg");
         product.setPrice(new BigDecimal("300.00"));
         product.setStatus(productStatus);
 
