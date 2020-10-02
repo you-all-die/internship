@@ -24,7 +24,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductImageServiceImpl.class);
 
-    private static final String UPLOAD_PATH = System.getProperty("user.dir") + "/img_product/";
+    private static final String UPLOAD_PATH = System.getProperty("user.dir") + File.separator + "img_product" + File.separator;
 
     @Override
     public boolean saveOrUpdate(Long productId, MultipartFile image) {
@@ -34,7 +34,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
                 return false;
             }
-            String imagePath = UPLOAD_PATH + productId + "/";
+            String imagePath = UPLOAD_PATH + productId + File.separator;
             String imageExtension = fileExtension(image);
             try {
                 image.transferTo(new File(imagePath + "original." + imageExtension));
@@ -63,7 +63,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     public boolean delete(Long productId) {
 
         try {
-            Files.walk(Path.of(UPLOAD_PATH + productId + "/"))
+            Files.walk(Path.of(UPLOAD_PATH + productId + File.separator))
                     .sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
                     .forEach(File::delete);
@@ -100,7 +100,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     private boolean prepareDirectory(Long productId) {
 
-        File directory = new File(UPLOAD_PATH + productId + "/");
+        File directory = new File(UPLOAD_PATH + productId + File.separator);
 
         if (directory.exists()) {
             delete(productId);
