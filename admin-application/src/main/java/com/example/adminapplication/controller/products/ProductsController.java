@@ -105,11 +105,17 @@ public class ProductsController {
             productId = newProduct.getId();
         }
 
-        if (!productImageService.saveOrUpdate(productId, pictureNew)) {
-            product.setExtension(null);
-            product.setId(productId);
-            productService.saveProduct(product);
+        if (!pictureNew.isEmpty()) {
+            if (!productImageService.saveOrUpdate(productId,
+                    productImageService.createTempFile(pictureNew),
+                    productImageService.fileExtension(pictureNew))) {
+
+                product.setExtension(null);
+                product.setId(productId);
+                productService.saveProduct(product);
+            }
         }
+
 
         return "redirect:/products";
     }

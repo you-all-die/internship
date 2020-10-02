@@ -10,7 +10,10 @@ import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -27,25 +30,24 @@ public class ProductImageServiceImpl implements ProductImageService {
     private static final String UPLOAD_PATH = System.getProperty("user.dir") + File.separator + "img_product" + File.separator;
 
     @Override
-    public boolean saveOrUpdate(Long productId, MultipartFile image) {
+    public boolean saveOrUpdate(Long productId, File image, String extension) {
 
-        if (!image.isEmpty()) {
+        if (image != null && image.exists()) {
             if (!prepareDirectory(productId)) {
 
                 return false;
             }
             String imagePath = UPLOAD_PATH + productId + File.separator;
-            String imageExtension = fileExtension(image);
             try {
-                image.transferTo(new File(imagePath + "original." + imageExtension));
+                copyFileUsingChannel(image, new File(imagePath + "original." + extension));
 
                 ImageIO.write(createThumbnail(image, 189, 189),
-                        imageExtension,
-                        new File(imagePath + "catalog." + imageExtension));
+                        extension,
+                        new File(imagePath + "catalog." + extension));
 
                 ImageIO.write(createThumbnail(image, 520, 520),
-                        imageExtension,
-                        new File(imagePath + "product." + imageExtension));
+                        extension,
+                        new File(imagePath + "product." + extension));
 
                 return true;
             } catch (IOException e) {
@@ -89,9 +91,32 @@ public class ProductImageServiceImpl implements ProductImageService {
         return "jpg";
     }
 
-    private BufferedImage createThumbnail(MultipartFile image, int width, int height) throws IOException {
+    @Override
+    public File createTempFile(MultipartFile image) {
 
-        Image thumbnail = ImageIO.read(image.getInputStream()).getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH);
+        File file = null;
+        try {
+            file = File.createTempFile("upload_", ".tmp");
+            image.transferTo(file);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        return file;
+    }
+
+    private static void copyFileUsingChannel(File source, File dest) throws IOException {
+
+        try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
+             FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
+            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+        }
+    }
+
+
+    private BufferedImage createThumbnail(File image, int width, int height) throws IOException {
+
+        Image thumbnail = ImageIO.read(image).getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH);
         BufferedImage thumbnailImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         thumbnailImg.createGraphics().drawImage((thumbnail), 0, 0, null);
 
