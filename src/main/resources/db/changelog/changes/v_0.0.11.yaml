@@ -33,3 +33,12 @@ databaseChangeLog:
             oldColumnName: picture
             newColumnName: extension
             columnDataType: varchar(64)
+  - changeSet:
+      id: 2020-10-01-03
+      author: Romodin Aleksey
+      comment: modifyDataType
+      changes:
+        - modifyDataType:
+            columnName: date_publication
+            newDataType: TIMESTAMP (0) WITH TIME ZONE
+            tableName: feedback
