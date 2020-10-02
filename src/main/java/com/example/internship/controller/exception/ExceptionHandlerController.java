@@ -18,7 +18,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(Exception.class)
     public String serverError(Exception exception) {
 
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
 
         return "exception/error";
     }
@@ -26,7 +26,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(EntityNotFoundException.class)
     public String userNotFoundError(EntityNotFoundException exception) {
 
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
 
         return "exception/userNotFound";
     }
@@ -34,7 +34,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(OrderNotFoundException.class)
     public String orderNotFoundError(OrderNotFoundException exception) {
 
-        log.error(exception.getMessage());
+        log.error(exception.getMessage(), exception);
 
         return "exception/orderNotFound";
     }
