@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/main :: common_header(~{::title},_,_)">
+    <title>Комментарии</title>
+</head>
+<body>
+<div th:replace="common/main :: header"></div>
+
+<div class="ui container">
+    <h1 class="ui center aligned header">Список комментариев к товарам</h1>
+
+    <!--Блок поиска по заданным параметрам-->
+    <table class="ui celled table">
+        <tbody>
+        <thead>
+    <tr>
+        <th colspan="5">Меню поиска с параметрами</th>
+        <th colspan="1">Всего найдего:</th>
+        <th colspan="1" th:text="${feedbacksList.totalFeedbacks}"></th>
+    </tr>
+    <tr>
+        <th>ID продукта</th>
+        <th>ID автора</th>
+        <th>Дата с:</th>
+        <th>Дата по:</th>
+        <th>Размер страницы</th>
+        <th colspan="2">Действие</th>
+    </tr>
+    </thead>
+        <tbody>
+        <form class="ui form" th:action="@{/feedbacks}" th:object="${feedbackSearchRequest}">
+        <tr>
+            <td>
+                <div class="ui input">
+                    <input class="ui input" type="number" min="1" th:field="*{productId}"/>
+                </div>
+            </td>
+            <td>
+                <div class="ui input">
+                    <input class="ui input" type="number" min="1" th:field="*{authorId}"/>
+                </div>
+            </td>
+            <td>
+                <div class="ui input">
+                    <input class="ui input" type="date" min="2019-01-01" th:field="*{startDate}"/>
+                </div>
+            </td>
+            <td>
+                <div class="ui input">
+                    <input class="ui input" type="date" min="2019-01-01" th:field="*{endDate}"/>
+                </div>
+            </td>
+            <td>
+                <div class="ui input">
+                    <input class="ui input" type="number" min="1" th:field="*{pageSize}"/>
+                </div>
+            </td>
+            <td colspan="2">
+                <button class="ui button" type="submit">
+                    Показать
+                </button>
+            </td>
+        </tr>
+        </form>
+        </tbody>
+
+    </table>
+
+    <div th:replace="/common/paginator :: widget (${feedbackSearchRequest.pageNumber}, ${totalPage})"></div><br><br>
+
+    <!--Поиск не дал результатов-->
+    <div class="ui container" th:if="${#arrays.isEmpty(feedbacksList.feedbacks)}">
+        <h4>По вашему запросу ничего не найдено...</h4>
+        <a th:href="@{/feedbacks}">Показать полный список</a><br>
+    </div>
+
+    <!--Таблица с результатами поиска-->
+    <div class="ui container" th:unless="${#arrays.isEmpty(feedbacksList.feedbacks)}">
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID автора</th>
+                    <th rowspan="2">ID продукта</th>
+                    <th rowspan="2">Текст комментария</th>
+                    <th rowspan="2">Удаление</th>
+                </tr>
+                <tr>
+                    <th>Дата</th>
+                    <th>Имя автора</th>
+                </tr>
+            </thead>
+            <tbody th:each="f:${feedbacksList.feedbacks}">
+            <tr>
+                <td class="active" th:text="${f.id}" style="font-weight: bold;"></td>
+                <td class="active" th:text="${f.authorId} ? ${f.authorId} : 'Без ID/аноним'" style="font-weight: bold;"></td>
+                <td rowspan="2" th:text="${f.productId}"></td>
+                <td rowspan="2"  th:text="${f.feedbackText}"></td>
+                <td rowspan="2">
+                    <form th:action="@{/feedbacks/delete}" method="post">
+                        <button type="submit" name="feedbackId" th:value="${f.id}"
+                                class="ui negative basic button">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td th:text="${#temporals.format(f.datePublication.toLocalDateTime(), 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="${f.authorName}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+    </div>
+</div>
+
+
+
+<footer th:replace="common/main::footer"></footer>
+
+</body>
+</html>

@@ -75,7 +75,7 @@ public class ProductController {
          * - Без привязки к автору
          * - Отображение с пагинацией
          */
-        FeedbackSearchResult feedbackSearchResult = feedbackService.searchResult(id, null, 10, pageNumber);
+        FeedbackSearchResult feedbackSearchResult = feedbackService.searchResult(id, null, 10, pageNumber, null, null);
         Long totalCategory = feedbackSearchResult.getTotalFeedbacks();
         long totalPage = 0;
         if (feedbackSearchResult.getTotalFeedbacks() > feedbackSearchResult.getPageSize()) {

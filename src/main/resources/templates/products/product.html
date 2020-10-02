@@ -93,7 +93,7 @@
             <div class="content">
                 <div class="author"><label th:text="${f.authorName}"></label></div>
                 <div class="metadata">
-                    <span class="date" th:text="'Дата: ' + ${f.datePublication.toString().substring(0, 10)}"></span>
+                    <span class="date" th:text="'Дата: ' + ${#temporals.format(f.datePublication.toLocalDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
                 </div>
                 <div class="text" th:text="${f.feedbackText}"></div><br><hr>
                 <div class="actions" th:if=

@@ -11,3 +11,14 @@ databaseChangeLog:
   -
     include:
       file: db/changelog/2020-09-16-01/04-create-items-table.yaml
+
+
+  - changeSet:
+      id: 2020-10-01-03
+      author: Romodin Aleksey
+      comment: modifyDataType
+      changes:
+        - modifyDataType:
+            columnName: date_publication
+            newDataType: TIMESTAMP (0) WITH TIME ZONE
+            tableName: feedback

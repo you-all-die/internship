@@ -12,7 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,14 +35,23 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @return получение результата поиска
      */
     @Override
-    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize, Integer pageNumber) {
+    public FeedbackSearchResult searchResult(Long productId, Long authorId, Integer pageSize,
+                                             Integer pageNumber, Date startDate, Date endDate) {
         FeedbackSearchResult feedbackSearchResult = new FeedbackSearchResult();
-        Specification<Feedback> specification;
+        Specification<Feedback> specification = null;
 
         // Формируем условия для запроса
-        specification = draftSpecification(null, "productId", productId.toString());
+        if (productId != null) {
+            specification = draftSpecification(null, "productId", productId);
+        }
         if (authorId != null) {
-            specification = draftSpecification(specification, "authorId", authorId.toString());
+            specification = draftSpecification(specification, "authorId", authorId);
+        }
+        if (startDate != null) {
+            specification = draftSpecification(specification, "startDate", startDate);
+        }
+        if (endDate != null) {
+            specification = draftSpecification(specification, "endDate", endDate);
         }
         feedbackSearchResult.setFeedbacks(feedbackRepository.findAll(specification,
                 PageRequest.of(pageNumber, pageSize, Sort.by("datePublication").ascending()))
@@ -62,7 +73,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public void addFeedback(Long productId, Long authorId, String authorName, String feedbackText) {
         Feedback feedback = new Feedback();
-        feedback.setDatePublication(new Date());
+        feedback.setDatePublication(new Timestamp(System.currentTimeMillis()));
         feedback.setProductId(productId);
         feedback.setAuthorId(authorId);
         feedback.setAuthorName(authorName);
@@ -87,7 +98,7 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @return получение спецификации
      */
     private Specification<Feedback> draftSpecification(
-            Specification<Feedback> specification, String columnName, String optionalName) {
+            Specification<Feedback> specification, String columnName, Object optionalName) {
         if (optionalName != null) {
             if (specification == null) {
                 specification = Specification.where(new FeedbackSpecification(columnName, optionalName));
@@ -104,6 +115,19 @@ public class FeedbackServiceImpl implements FeedbackService {
      */
     private FeedbackDto convertToDto(Feedback feedback) {
         return modelMapper.map(feedback, FeedbackDto.class);
+    }
+
+    /**
+     *
+     * @param id идентификатор комментария
+     * @return комментарий, либо пустой обьект
+     */
+    @Override
+    public Optional<FeedbackDto> getFeedbackById(Long id) {
+        if (feedbackRepository.findById(id).isPresent()) {
+            return Optional.of(convertToDto(feedbackRepository.findById(id).get()));
+        }
+        return Optional.empty();
     }
 
 }
