@@ -1,32 +1,43 @@
 package com.example.internship.controller.exception;
 
+import com.example.internship.exception.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Locale;
+
 
 /**
  * @author Modenov D.A
  */
 
 @ControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(Exception.class)
-    public String connectionError(Exception exception) {
+    private final MessageSource messageSource;
 
-        log.error(exception.getMessage());
+    @ExceptionHandler(Exception.class)
+    public String serverError(Exception exception) {
+
+        log.error(exception.getMessage(), exception);
 
         return "exception/error";
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public String connectionError(EntityNotFoundException exception) {
+    public String userNotFoundError(EntityNotFoundException exception, Model model) {
 
-        log.error(exception.getMessage());
+        model.addAttribute("header", messageSource.getMessage(exception.getMessageCode(), null, Locale.getDefault()));
+
+        log.error(exception.getMessage(), exception);
 
         return "exception/notFound";
     }
+
 }

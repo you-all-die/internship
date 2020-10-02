@@ -38,10 +38,7 @@ public class Order {
 //    Статус заказа (для процессинга)
     private String status;
 
-    @OneToMany(
-            mappedBy = "id",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Item> items;
     private Timestamp date;
 }
