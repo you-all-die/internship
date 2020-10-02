@@ -8,7 +8,10 @@
         <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css"
               rel="stylesheet"/>
         <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
+
+        <link href="@{/css/order/styles.css}" rel="stylesheet">
         <script th:src="@{/js/address.js}"></script>
+        <script th:src="@{/js/order.js}"></script>
     </head>
     <body>
         <header th:replace="/common/main :: header"></header>
@@ -20,22 +23,30 @@
                 </div>
             </div>
 
-            <div class="two column centered row">
+            <div class="two column centered row" style="height:100%">
 
                 <div class="column">
 
                     <form class="ui form" method="post" th:action="@{/order/shipping}">
 
                         <div class="ui two item menu" id="shippingMethod">
-                            <a class="active item">Доставка из магазина</a>
-                            <a class="item">Самовывоз</a>
+                            <a class="item" id="delivery" onclick="selectDelivery()">Доставка из магазина</a>
+                            <a class="item" id="pickup" onclick="selectPickup()">Самовывоз</a>
                         </div>
 
-                        <input id="comment" name="address" th:placeholder="#{order.shipping.address.placeholder}"
+                        <input id="comment" name="address" style="margin-bottom:2em"
+                               th:placeholder="#{order.shipping.address.placeholder}"
                                type="text">
 
-                        <div th:replace="/order/widgets/address :: widget (${addresses})"></div>
-                        <div th:replace="/order/widgets/outlets :: widget (${outlets})"></div>
+                        <div class="fix-and-scroll"
+                             id="deliveryTab"
+                             th:include="/order/widgets/address :: widget (${addresses})">
+                        </div>
+
+                        <div class="fix-and-scroll"
+                             id="pickupTab"
+                             th:include="/order/widgets/outlets :: widget (${outlets})">
+                        </div>
 
                         <button class="ui primary button" th:text="#{order.shipping.button.submit}"
                                 type="submit">Submit
@@ -45,5 +56,7 @@
                 </div>
             </div>
         </div>
+
+        <footer th:replace="/common/main :: footer"></footer>
     </body>
 </html>

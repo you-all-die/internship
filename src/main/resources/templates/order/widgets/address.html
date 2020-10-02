@@ -1,13 +1,17 @@
 <div th:fragment="widget (addresses)"
      xmlns:th="http://www.thymeleaf.org">
 
-        <h3 class="ui horizontal divider header" th:text="#{order.address.header}">Addresses</h3>
-        <div class="ui selection list" th:unless="${#lists.isEmpty(addresses)}">
-            <div class="item" th:each="address : ${addresses}">
-                <div class="content">
-                    <div class="header" th:text="${address.comment}">Address</div>
-                </div>
+    <h3 class="ui horizontal divider header" th:text="#{order.shipping.address.header}">Addresses</h3>
+    <div class="ui selection list" th:unless="${#lists.isEmpty(addresses)}">
+        <div class="item" th:each="address : ${addresses}">
+            <div class="content">
+                <div class="header" th:text="${address.comment}">Address</div>
             </div>
         </div>
+    </div>
+    <div class="ui placeholder"
+         th:if="${#lists.isEmpty(addresses)}"
+         th:text="#{order.shipping.address.empty}">No Addresses
+    </div>
 
 </div>
