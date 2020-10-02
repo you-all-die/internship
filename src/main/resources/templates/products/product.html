@@ -33,7 +33,12 @@
         <div class="column">
             <div class="ui raised segment">
                 <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
-                <img class="ui fluid image" src="/img/default.jpg" th:src="'/img/' + ${pr.picture}"/>
+                <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
+                    <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                </div>
+                <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
+                    <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
+                </div>
             </div>
         </div>
 

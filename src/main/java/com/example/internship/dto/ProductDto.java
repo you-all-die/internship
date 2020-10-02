@@ -18,7 +18,7 @@ public class ProductDto {
     private CategoryDto category;
     private String name;
     private String description;
-    private String picture;
+    private String extension;
     private BigDecimal price;
     private ProductStatus status;
 }

@@ -80,7 +80,8 @@ public class ProductRestController {
 
     @PostMapping("/save-product")
     @Operation(description = "Сохраняет продукт")
-    public void saveProduct(@RequestBody Product product) {
-        productService.saveProduct(product);
+    public Product saveProduct(@RequestBody Product product) {
+
+        return productService.saveProduct(product);
     }
 }

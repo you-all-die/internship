@@ -53,7 +53,7 @@ public class ProductDto {
     @Schema(description = "Изображение")
     @JsonView(View.Public.class)
     @Size(max = 64)
-    private String picture;
+    private String extension;
 
     @Schema(description = "Цена")
     @JsonView(View.Public.class)
