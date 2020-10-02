@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 @Controller
@@ -94,19 +93,19 @@ public class ProductsController {
     //Общий метод на добавление и редактирование товара
     @PostMapping(value = "/product/save")
     public String saveProduct(@ModelAttribute("product") ProductDto product,
-                              @RequestParam("picture_file") MultipartFile pictureNew,
-                              Model model) throws IOException {
+                              @RequestParam("picture_file") MultipartFile pictureNew) {
 
+        if (!pictureNew.isEmpty()) {
+            product.setExtension(productImageService.fileExtension(pictureNew));
+        }
         ProductDto newProduct = productService.saveProduct(product);
 
         Long productId = product.getId();
         if (productId == null && newProduct != null) {
             productId = newProduct.getId();
         }
-        if (productImageService.saveOrUpdate(productId, pictureNew)) {
-            product.setExtension(productImageService.fileExtension(pictureNew));
-            productService.saveProduct(product);
-        }
+
+        productImageService.saveOrUpdate(productId, pictureNew);
 
         return "redirect:/products";
     }
