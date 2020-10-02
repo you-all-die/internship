@@ -1,6 +1,6 @@
 <!-- Роман Каравашкин-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="common/main :: common_header(~{::title},_,~{::script})">
     <meta charset="UTF-8">
     <meta name="author" content="Роман Каравашкин">
@@ -29,44 +29,18 @@
 
     <div class="ui two column divided grid">
         <div class="stretched row">
-            <div class="column">
-                <div class="ui segment">
-                    <img class="ui fluid image" src="/images/p1.jpg" th:src="'/img/' + ${product.picture}"/>
-    <div class="ui two column grid">
-
         <!--Блок с изображением-->
         <div class="column">
             <div class="ui raised segment">
-                <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
-                <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
-                    <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
-                </div>
-                <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
-                    <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
-                </div>
-            </div>
-        </div>
-
-            <div class="column">
-                <div class="ui segment">
-                    <h1 class="ui header" th:text="${product.price}+' Руб.'"/>
-
-                    <button class="ui yellow button" th:onclick="|testOne(${product.id})|">Добавить в корзину</button>
-
-                    <div id="ratingStar">
-                        <br>
-                        <div sec:authorize="isAuthenticated()">
-                            <div class="content">
-                                <div class="ui huge red rating" id="rate_for_aut"  th:data-rating="${rate}" data-max-rating="5"></div>
-                            </div>
+                    <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
+                        <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
+                             <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
                         </div>
-                        <div sec:authorize="isAnonymous()">
-                            <div class="content">
-                                <div class="ui huge black rating" id="rate_for_anon" th:data-rating="${rate}"   data-max-rating="5"></div>
-                            </div>
+                        <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
+                            <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
                         </div>
                     </div>
-
+        </div>
         <!--Блок c описанием-->
         <div class="column">
             <div class="ui segment">
@@ -81,6 +55,19 @@
                         <button class="ui yellow button" th:onclick="|testOne(${product.id})|" th:if="${product.status.id == 1}">
                             <i class="shopping cart icon" ></i>  Добавить в корзину
                         </button>
+                        <div id="ratingStar">
+                            <br>
+                            <div sec:authorize="isAuthenticated()">
+                                <div class="content">
+                                    <div class="ui huge red rating" id="rate_for_aut"  th:data-rating="${rate}" data-max-rating="5"></div>
+                                </div>
+                            </div>
+                            <div sec:authorize="isAnonymous()">
+                                <div class="content">
+                                    <div class="ui huge black rating" id="rate_for_anon" th:data-rating="${rate}"   data-max-rating="5"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!--Предоставляемые сервисы-->
                     <div class="column"><br>
@@ -98,20 +85,10 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
         <input type="hidden" id="productId" name="productId" th:value="${product.id}">
-
                 <div class="ui segment">
-
-                    <h3 class="ui header" th:text="'ID: '+${product.id}"/>
                     <h3 class="ui header" th:text="'Description: '+${product.description}"></h3>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                        of type and scrambled it to make a type specimen book. It has survived not only five centuries,
-                        but also the leap into electronic typesetting, remaining essentially unchanged. It was
-                        popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of
-                        Lorem Ipsum.</p>
                 </div>
             </div>
         </div>
@@ -147,6 +124,11 @@
 
 
 <footer th:replace="common/main::footer"></footer>
+
+    </div>
+                </div>
+            </div>
+        </div>
 
 </body>
 </html>
