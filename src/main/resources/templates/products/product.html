@@ -1,6 +1,6 @@
 <!-- Роман Каравашкин-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="common/main :: common_header(~{::title},_,~{::script})">
     <meta charset="UTF-8">
     <meta name="author" content="Роман Каравашкин">
@@ -27,21 +27,20 @@
     <h1 class="ui header " th:text="${product.name}"></h1>
     <h10 class="ui header " th:text="'Код товара: ' + ${product.id}"></h10><br><br>
 
-    <div class="ui two column grid">
-
+    <div class="ui two column divided grid">
+        <div class="stretched row">
         <!--Блок с изображением-->
         <div class="column">
             <div class="ui raised segment">
-                <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
-                <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
-                    <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
-                </div>
-                <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
-                    <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
-                </div>
-            </div>
+                    <div class="ui red ribbon label"><p>ТОВАР МЕСЯЦА</p></div>
+                        <div th:if="${pr.extension == null or pr.extension.isEmpty()}">
+                             <img class="ui fluid image" th:src="'/img/' + ${@environment.getProperty('default.image')}">
+                        </div>
+                        <div th:unless="${pr.extension == null or pr.extension.isEmpty()}">
+                            <img class="ui fluid image" th:src="'/img/' + ${pr.id} + '/product.' + ${pr.extension}">
+                        </div>
+                    </div>
         </div>
-
         <!--Блок c описанием-->
         <div class="column">
             <div class="ui segment">
@@ -56,6 +55,19 @@
                         <button class="ui yellow button" th:onclick="|testOne(${product.id})|" th:if="${product.status.id == 1}">
                             <i class="shopping cart icon" ></i>  Добавить в корзину
                         </button>
+                        <div id="ratingStar">
+                            <br>
+                            <div sec:authorize="isAuthenticated()">
+                                <div class="content">
+                                    <div class="ui huge red rating" id="rate_for_aut"  th:data-rating="${rate}" data-max-rating="5"></div>
+                                </div>
+                            </div>
+                            <div sec:authorize="isAnonymous()">
+                                <div class="content">
+                                    <div class="ui huge black rating" id="rate_for_anon" th:data-rating="${rate}"   data-max-rating="5"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!--Предоставляемые сервисы-->
                     <div class="column"><br>
@@ -74,70 +86,49 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment">
-                <h3 class="ui header">Описание товара</h3>
-                <p th:text="${product.description}"></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Комментарии к товару-->
-<div  class="ui main container">
-    <h3><span>Комментарии </span><span th:text="'(' + ${feedbacksList.totalFeedbacks} + ')'"
-                                       th:if="${feedbacksList.totalFeedbacks != null}"></span></h3><hr>
-    <div class="ui container" th:if="${#arrays.isEmpty(feedbacksList.feedbacks)}">
-        <br><h4>Ни одного комментария не найдено... Будь первым.</h4><br>
-    </div>
-    <!--Блок отображения существующих комментариев к товару-->
-    <div class="ui comments" th:unless="${#arrays.isEmpty(feedbacksList.feedbacks)}">
-        <div th:each="f:${feedbacksList.feedbacks}" class="comment">
-            <div class="avatar">
-                <img src="/img/comment_icon.png">
-            </div>
-            <div class="content">
-                <div class="author"><label th:text="${f.authorName}"></label></div>
-                <div class="metadata">
-                    <span class="date" th:text="'Дата: ' + ${#temporals.format(f.datePublication.toLocalDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
+        <input type="hidden" id="productId" name="productId" th:value="${product.id}">
+                <div class="ui segment">
+                    <h3 class="ui header" th:text="'Description: '+${product.description}"></h3>
                 </div>
-                <div class="text" th:text="${f.feedbackText}"></div><br><hr>
-                <div class="actions" th:if=
-                        "${(customerId == f.authorId and customerId != null) or
-                           (aCustomerId == f.authorId and aCustomerId != null)}">
-                    <form th:action="@{'/product/' + ${product.id} + '/deleteFeedback'}" method="post">
-                        <button type="submit" name="feedbackId" th:value="${f.id}" class="circular ui icon button">
-                            <i class="trash alternate icon"></i>
-                        </button>
-                        <span class="reply">  Вы можете удалить свой отзыв.</span>
-                    </form>
-                </div><br>
             </div>
         </div>
-    </div><br><hr>
-
-    <!--Пагинатор для комментариев-->
-    <div th:replace="/common/paginator :: widget (${feedbacksList.pageNumber}, ${totalPage})"></div><br><br>
-
-    <!--Форма добавление нового комментария-->
-    <div class="ui comments">
-        <form class="ui reply form" th:action="@{'/product/' + ${product.id} + '/addNewComment'}" method="post">
-            <h5 class="ui dividing header">Добавить новый комментарий</h5>
-            <div class="field" th:if="${customerId == null}">
-                <label>Ваше имя:</label>
-                <input class="" name="customerName"  type="text" placeholder="Введите Ваше имя" required/>
-            </div>
-            <div class="field">
-                <label>Текст комментария:</label>
-                <textarea name="textComment" required maxlength="500"></textarea>
-            </div>
-            <button class="ui button" type="submit"><i class="icon edit"></i> Добавить</button>
-        </form>
     </div>
-
-
 </div>
+
+<script>
+    $('#rate_for_anon')
+            .rating(
+            'disable'
+            );
+</script>
+
+
+<script>
+    $('#rate_for_aut')
+        .rating({
+            onRate: function (value){
+                let ptId =  $('#productId').val();
+                let url = '/product/'+unescape(ptId)+'/'+unescape(value);
+                console.log(value);
+                $.ajax({
+                    url: url,
+                    method: 'POST'
+                }).then(function (){
+                    showToast('rate done')
+                }).catch(function (){
+                    showToast('Error')
+                })
+            }
+        });
+</script>
+
 
 <footer th:replace="common/main::footer"></footer>
+
+    </div>
+                </div>
+            </div>
+        </div>
 
 </body>
 </html>

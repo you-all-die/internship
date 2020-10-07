@@ -21,3 +21,4 @@ function showToast(message) {
             showProgress: 'bottom'
         })
 }
+

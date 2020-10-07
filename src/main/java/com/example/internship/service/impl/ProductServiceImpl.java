@@ -3,6 +3,8 @@ package com.example.internship.service.impl;
 import com.example.internship.dto.ProductDto;
 import com.example.internship.dto.ProductSearchResult;
 import com.example.internship.entity.Product;
+import com.example.internship.entity.ProductRating;
+import com.example.internship.repository.ProductRatingRepository;
 import com.example.internship.repository.ProductRepository;
 import com.example.internship.service.ProductService;
 import com.example.internship.specification.ProductSpecification;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
+
+    private final ProductRatingRepository productRatingRepository;
 
     private final ModelMapper mapper;
 
@@ -119,6 +123,28 @@ public class ProductServiceImpl implements ProductService {
         searchResult.setTotalProducts(productRepo.count(specification));
 
         return searchResult;
+    }
+
+    @Override
+    public Double getProductRating(Long productId) {
+        Double rate = productRatingRepository.productRating(productId);
+        if (rate == null){
+            return 0.0;
+        }
+        return rate;
+    }
+
+    @Override
+    public void saveRating(Long productId, Long customerId, Long rating) {
+        ProductRating productRating = new ProductRating();
+        if (productRatingRepository.existsByCustomerIdAndProductId(customerId,productId)){
+        productRating = productRatingRepository.getByCustomerIdAndProductId(customerId,productId);
+        productRatingRepository.deleteById(productRating.getId());
+        }
+        productRating.setProductId(productId);
+        productRating.setCustomerId(customerId);
+        productRating.setRating(rating);
+        productRatingRepository.save(productRating);
     }
 
     private ProductDto convertToDto(Product product) {

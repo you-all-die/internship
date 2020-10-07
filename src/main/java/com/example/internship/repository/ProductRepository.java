@@ -36,4 +36,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
      */
     @Query("select max(price) from Product")
     Optional<BigDecimal> findMaximalPrice();
+
+
 }
